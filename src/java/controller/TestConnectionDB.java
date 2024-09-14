@@ -4,7 +4,7 @@
  */
 package controller;
 
-import context.DBContext;
+import db.DBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.Connection;
 
 /**
  *
@@ -21,7 +22,6 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "TestConnectionDB", urlPatterns = {"/test/db/connection"})
 public class TestConnectionDB extends HttpServlet {
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -62,6 +62,7 @@ public class TestConnectionDB extends HttpServlet {
             throws ServletException, IOException {
         try {
             PrintWriter out = response.getWriter();
+
             if (DBContext.checkConnection(getServletContext())) {
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");

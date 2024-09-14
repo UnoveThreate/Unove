@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package context;
+package db;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +32,7 @@ public class DBContext {
         String databaseName = props.getProperty("db.databaseName");
         String username = props.getProperty("db.username");
         String password = props.getProperty("db.password");
-        String portNumber = props.getProperty("db.portNumber", "3306"); // Default MySQL port
+        String portNumber = props.getProperty("db.portNumber", "3306"); 
 
         // Build the connection URL
         String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName;
