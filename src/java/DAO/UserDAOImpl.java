@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 import model.User;
 import jakarta.servlet.ServletContext;
+import java.util.Properties;
 
 public class UserDAOImpl extends MySQLConnect {
 
     public UserDAOImpl(ServletContext context) throws Exception {
         super();
-        connect(context);
+        connect((Properties) context);
     }
 
     public List<User> getAll() {

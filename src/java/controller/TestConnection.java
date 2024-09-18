@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
+import java.util.Properties;
 
 /**
  *
@@ -53,7 +54,7 @@ public class TestConnection extends HttpServlet {
 
         try {
             PrintWriter out = response.getWriter();
-            Connection conn = dbConnect.connect(getServletContext());
+            Connection conn = dbConnect.connect((Properties) getServletContext());
             if (conn != null) {
                 out.println("<!DOCTYPE html>");
                 out.println("<html>");
