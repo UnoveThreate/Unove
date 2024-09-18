@@ -33,6 +33,27 @@ public class User {
 
     public User() {
     }
+    public User(String fullName, String username, String email, String code) {
+            this.fullName = fullName;
+            this.username = username;
+            this.email = email;
+            this.code = code;
+        }
+    
+    public User(String email, String code) {
+        this.email = email;
+        this.code = code;
+    }
+
+    public User(String fullName, String username, String email, String password, String code, int status, String role) {
+        this.fullName = fullName;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.code = code;
+        this.status = status;
+        this.role = role;
+    }
 
     public User(int userID, String avatarLink, String fullName, String username, String email, String password, String bio, Date birthday, String address, boolean isBanned, int levelPremiumID, double accountBalance, int bonusPoint, String province, String district, String commune, String code, int status, String role) {
         this.userID = userID;
