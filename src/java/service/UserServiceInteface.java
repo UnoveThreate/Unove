@@ -23,7 +23,8 @@ public interface UserServiceInteface {
 
     void update(User user); // hàm này cập nhật 1 đối tượng User
 
-    
+    void updatestatus(User user); // hàm này dùng active tài khoản
+
     void delete(int id); // hàm này xóa 1 đối tượng User
 
     boolean register(String fullname, String username, String email, String password, String code); // hàm đăng ký mới cho User
@@ -34,7 +35,5 @@ public interface UserServiceInteface {
 
     boolean checkExistUsername(String username);
 
-    public void updatestatus(User user);
-
-   
+    String hashPassword(String password);
 }

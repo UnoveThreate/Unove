@@ -70,7 +70,7 @@
                                     Remember me
                                 </label>
                             </div>
-                            <a href="/movie/forgetpassword" class="text-body">Forgot password?</a>
+                            <a href="/Unove/forgetpassword" class="text-body">Forgot password?</a>
                         </div>
 
                         <div class="text-center text-lg-start mt-4 pt-2">
@@ -83,7 +83,7 @@
                                 <p class="small fw-bold mt-2 pt-1 mb-0" style="color: red">Wrong username (or email) or password!</p>
                             </c:if>
 
-                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/movie/register"
+                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/Unove/register"
                                                                                               class="link-primary">Register</a></p>
                         </div>
 

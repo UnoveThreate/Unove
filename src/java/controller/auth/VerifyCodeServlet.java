@@ -56,7 +56,7 @@ public class VerifyCodeServlet extends HttpServlet {
             session.setAttribute("timeExpired", false);
         }
         if (user == null) {
-            response.sendRedirect("/movie/register");
+            response.sendRedirect("/Unove/register");
             return;
         }
         request.getRequestDispatcher(new RouterJSP().VERIFY).forward(request, response);

@@ -10,94 +10,103 @@ import model.User;
 import jakarta.servlet.ServletContext;
 import java.util.Properties;
 
+/**
+ * Data Access Object for User management
+ */
 public class UserDAOImpl extends MySQLConnect {
 
     public UserDAOImpl(ServletContext context) throws Exception {
         super();
-        connect((Properties) context);
+        connect(context);
     }
 
     public List<User> getAll() {
         List<User> list = new ArrayList<>();
-        String sql = "SELECT * FROM User";  // Removed brackets
-        
+        String sql = "SELECT * FROM `User`";
         try (PreparedStatement st = connection.prepareStatement(sql);
              ResultSet rs = st.executeQuery()) {
-             
+
             while (rs.next()) {
-                User user = new User(rs.getString("username"), rs.getString("fullName"), rs.getString("password"), rs.getString("email"));
-                list.add(user);
+                User c = new User(
+                    rs.getString("username"),
+                    rs.getString("fullName"),
+                    rs.getString("password"),
+                    rs.getString("email")
+                );
+                list.add(c);
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching all users: " + e.getMessage());
+            System.out.println(e);
         }
         return list;
     }
 
     public User getUserByID(String userName) {
-        String sql = "SELECT * FROM User WHERE username = ?";  // Removed brackets
-        
+        String sql = "SELECT * FROM `User` WHERE `username` = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, userName);
-            
             try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    return new User(rs.getString("username"), rs.getString("fullName"), rs.getString("password"), rs.getString("email"));
+                    return new User(
+                        rs.getString("username"),
+                        rs.getString("name"),
+                        rs.getString("password"),
+                        rs.getString("email")
+                    );
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Error fetching user by ID: " + e.getMessage());
+            System.out.println(e);
         }
         return null;
     }
 
     public void updateStatus(User user) {
-        String sql = "UPDATE User SET status = ?, code = ? WHERE email = ?";  // Removed brackets
-        
+        String sql = "UPDATE `User` SET `status` = ?, `code` = ? WHERE `email` = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setInt(1, user.getStatus());
             st.setString(2, user.getCode());
             st.setString(3, user.getEmail());
-            
             st.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error updating user status: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     public boolean checkExistUsername(String username) {
-        String sql = "SELECT 1 FROM User WHERE username = ?";  // Removed brackets
-        
+        boolean exists = false;
+        String sql = "SELECT 1 FROM `User` WHERE `username` = ?";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, username);
-            
             try (ResultSet rs = st.executeQuery()) {
-                return rs.next();
+                if (rs.next()) {
+                    exists = true;
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Error checking if username exists: " + e.getMessage());
+            e.printStackTrace();
         }
-        return false;
+        return exists;
     }
 
     public boolean checkExistEmail(String email) {
-        String sql = "SELECT 1 FROM User WHERE email = ? AND status = 1";  // Removed brackets
-        
+        boolean exists = false;
+        String sql = "SELECT 1 FROM `User` WHERE `email` = ? AND `status` = 1";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, email);
-            
             try (ResultSet rs = st.executeQuery()) {
-                return rs.next();
+                if (rs.next()) {
+                    exists = true;
+                }
             }
         } catch (SQLException e) {
-            System.err.println("Error checking if email exists: " + e.getMessage());
+            e.printStackTrace();
         }
-        return false;
+        return exists;
     }
 
     public void insertRegister(User user) {
-        String sql = "INSERT INTO User (fullName, username, email, password, code, status, role) VALUES (?, ?, ?, ?, ?, ?, ?)";  // Removed brackets
-        
+        String sql = "INSERT INTO `User` (`Fullname`, `Username`, `Email`, `Password`, `Code`, `Status`, `Role`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement st = connection.prepareStatement(sql)) {
             st.setString(1, user.getFullName());
             st.setString(2, user.getUsername());
@@ -106,14 +115,9 @@ public class UserDAOImpl extends MySQLConnect {
             st.setString(5, user.getCode());
             st.setInt(6, user.getStatus());
             st.setString(7, user.getRole());
-            
             st.executeUpdate();
         } catch (SQLException e) {
-            System.err.println("Error inserting new user: " + e.getMessage());
+            e.printStackTrace();
         }
-    }
-
-    public void updatestatus(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // This method has not been implemented
     }
 }

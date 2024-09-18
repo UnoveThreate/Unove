@@ -38,7 +38,7 @@ public class RegisterServlet extends HttpServlet {
         super.init();
         try {
             // Initialize the UserService instance
-            this.userService = new UserServiceImpl(getServletContext());;
+            this.userService = new UserServiceImpl(getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(VerifyCodeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

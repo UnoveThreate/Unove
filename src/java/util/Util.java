@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package util;
-
+//
 //import com.google.zxing.BarcodeFormat;
 //import com.google.zxing.WriterException;
 //import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -54,7 +54,7 @@ public class Util {
 //        Path path = FileSystems.getDefault().getPath(filePath);
 //        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
 //    }
-
+//
 //    public static String generateQRCodeAndUpload(String qrCodeText, String fileName, String uploadFolder) throws IOException, ServletException {
 //        try {
 //            // Generate QR code and save it as an image file

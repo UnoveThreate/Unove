@@ -14,7 +14,6 @@ import jakarta.servlet.ServletContext;
  * @author VINHNQ
  */
 public class UserServiceImpl implements UserServiceInteface {
-    
 
     UserDAOImpl userDAO;
 
@@ -52,7 +51,13 @@ public class UserServiceImpl implements UserServiceInteface {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-   
+    @Override
+    public boolean register(String fullName, String username, String email, String password, String code) {
+        String hb = hashPassword(password);
+        userDAO.insertRegister(new User(fullName, username, email,hb , code, 0, "USER"));
+        
+        return true;
+    }
 
     @Override
     public boolean checkExistEmail(String email) {
@@ -73,14 +78,14 @@ public class UserServiceImpl implements UserServiceInteface {
     }
 
     @Override
-    public boolean register(String fullname, String username, String email, String password, String code) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void updatestatus(User user) {
+        userDAO.updateStatus(user);
     }
 
     @Override
-    public void updatestatus(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String hashPassword(String password) {
+        String hash = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+        return hash;
     }
-   
 
 }

@@ -10,41 +10,41 @@ package util;
  */
 public class RouterURL {
 
-    public static String HOMEPAGE = "/movie";
+    public static String HOMEPAGE = "/Unove";
 
-    public static String ERORPAGE = "/movie/error";
+    public static String ERORPAGE = "/Unove/error";
 
-    public static String REGISTER = "/movie/register";
+    public static String REGISTER = "/Unove/register";
 
-    public static String LOGIN = "/movie/login";
+    public static String LOGIN = "/Unove/login";
 
-    public static String VERIFY = "/movie/verifycode";
+    public static String VERIFY = "/Unove/verifycode";
 
-    public static String FORGET_PASSWORD = "/movie/forgetpassword";
+    public static String FORGET_PASSWORD = "/Unove/forgetpassword";
 
-    public static String DISPLAY_PROFILE = "/movie/user/information";//For quickly routing to user profile - DuyND
+    public static String DISPLAY_PROFILE = "/Unove/user/information";//For quickly routing to user profile - DuyND
 
-    public static String PAYMENT_VNPAY = "/movie/payment/vnpay";
+    public static String PAYMENT_VNPAY = "/Unove/payment/vnpay";
 
-    public static String BOOKING_SEAT = "/movie/booking/seat";
+    public static String BOOKING_SEAT = "/Unove/booking/seat";
 
-    public static String ADMIN_PAGE = "/movie/admin";
+    public static String ADMIN_PAGE = "/Unove/admin";
 
-    public static String OWNER_PAGE = "/movie/owner";
+    public static String OWNER_PAGE = "/Unove/owner";
 
-    public static String SEARCH_MOVIE = "/movie/searchmovie";
+    public static String SEARCH_MOVIE = "/Unove/searchUnove";
 
-    public static String REGISTER_OWNER = "/movie/RegisterOwnerServlet";
+    public static String REGISTER_OWNER = "/Unove/RegisterOwnerServlet";
 
-    public static String VIEW_ORDER = "/movie/order/view";
+    public static String VIEW_ORDER = "/Unove/order/view";
 
-    public static String OWNER_MOVIES_STATISTIC = "/movie/owner/dashboard/statistic/movies";
+    public static String OWNER_MOVIES_STATISTIC = "/Unove/owner/dashboard/statistic/Unoves";
 
-    public static String OWNER_CINEMAS_STATISTIC = "/movie/owner/dashboard/statistic/cinemas";
+    public static String OWNER_CINEMAS_STATISTIC = "/Unove/owner/dashboard/statistic/cinemas";
     
-    public static String OWNER_DASHBOARD_PAGE = "/movie/owner/dashboard";
+    public static String OWNER_DASHBOARD_PAGE = "/Unove/owner/dashboard";
     
-    public static String OWNER_CITY_STATISTIC = "/movie/OwnerDashboardCityServlet";
+    public static String OWNER_CITY_STATISTIC = "/Unove/OwnerDashboardCityServlet";
 
-    public static String DETAIL_MOVIE_PAGE = "/movie/HandleDisplayMovieInfo";
+    public static String DETAIL_MOVIE_PAGE = "/Unove/HandleDisplayMovieInfo";
 }

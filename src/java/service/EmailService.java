@@ -28,7 +28,7 @@ public class EmailService {
 
         String toEmail = email;
         String fromEmail = "dacphong2092003@gmail.com";  // your email
-        String password = "euft agjr oida gtnz";  // your app password
+        String password = "orbd tzso zkqf xtsa";  // your app password
         String logoUrl = "https://res.cloudinary.com/dsvllb1am/image/upload/v1718269790/sgvvasrlc3tisefkq92j.png";  // URL to your logo
 
         try {
@@ -109,7 +109,7 @@ public class EmailService {
 
         String toEmail = user.getEmail();
         String fromEmail = "dacphong2092003@gmail.com";  // your email
-        String password = "euft agjr oida gtnz";  // your app password
+        String password = "orbd tzso zkqf xtsa";  // your app password
         String logoUrl = "https://res.cloudinary.com/dsvllb1am/image/upload/v1718269790/sgvvasrlc3tisefkq92j.png";  // URL to your logo
 
         try {
