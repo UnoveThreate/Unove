@@ -12,7 +12,7 @@ public class RouterJSP {
 
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
-    public String HOMEPAGE = "/page/home/Home.jsp";
+//    public String HOMEPAGE = "/page/home/Home.jsp";
 
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
 

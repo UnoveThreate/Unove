@@ -10,7 +10,7 @@ package util;
  */
 public class RouterURL {
 
-    public static String HOMEPAGE = "/Unove";
+    public static String LANDING_PAGE = "/Unove";
 
     public static String ERORPAGE = "/Unove/error";
 
@@ -22,7 +22,7 @@ public class RouterURL {
 
     public static String FORGET_PASSWORD = "/Unove/forgetpassword";
 
-    public static String DISPLAY_PROFILE = "/Unove/user/information";//For quickly routing to user profile - DuyND
+    public static String DISPLAY_PROFILE = "/Unove/display";//For quickly routing to user profile - DuyND
 
     public static String PAYMENT_VNPAY = "/Unove/payment/vnpay";
 

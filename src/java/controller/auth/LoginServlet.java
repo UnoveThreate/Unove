@@ -143,7 +143,7 @@ public class LoginServlet extends HttpServlet {
                     System.out.println("redirect to: " + redirectTo);
 
                     if (redirectTo == null) {
-                        response.sendRedirect(RouterURL.HOMEPAGE);
+                        response.sendRedirect(RouterURL.LANDING_PAGE);
                     } else {
                         // Reconstruct the URL with stored parameters
                         StringBuilder redirectUrlWithParams = new StringBuilder(redirectTo);

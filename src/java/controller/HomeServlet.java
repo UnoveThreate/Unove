@@ -49,7 +49,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher(new RouterJSP().HOMEPAGE).forward(request, response);
+        request.getRequestDispatcher(new RouterJSP().LANDING_PAGE).forward(request, response);
     }
 
     /**
