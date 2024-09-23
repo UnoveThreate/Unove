@@ -5,4 +5,4 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
-src/web/WEB-INF/config/private
+web/WEB-INF/config/private
