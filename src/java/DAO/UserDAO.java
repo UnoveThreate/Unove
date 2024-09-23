@@ -4,7 +4,7 @@
  */
 package DAO;
 
-import DB.MySQLConnect;
+import database.MySQLConnect;
 import java.sql.SQLException;
 import jakarta.servlet.ServletContext;
 import java.nio.charset.StandardCharsets;

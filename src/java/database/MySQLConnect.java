@@ -1,4 +1,4 @@
-package DB;
+package database;
 
 import jakarta.servlet.ServletContext;
 import java.io.FileInputStream;
