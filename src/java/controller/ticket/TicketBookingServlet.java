@@ -2,8 +2,8 @@
 package controller.ticket;
 
 import dao.SeatDAO;
-import javax.servlet.*;
-import javax.servlet.http.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;

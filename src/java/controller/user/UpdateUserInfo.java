@@ -1,11 +1,11 @@
 package controller.user;
 
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 import java.io.IOException;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,7 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
 import DAO.UserDAO;
-import jakarta.servlet.annotation.WebServlet;
+import javax.servlet.annotation.WebServlet;
 import util.RouterURL;
 /**
  *
@@ -27,7 +27,7 @@ public class UpdateUserInfo extends HttpServlet {
     public void init() throws ServletException {
         super.init(); 
         try {
-            userDAO= new UserDAO(getServletContext());
+            userDAO= new UserDAO((jakarta.servlet.ServletContext) getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }

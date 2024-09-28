@@ -3,17 +3,5 @@
          xmlns="https://jakarta.ee/xml/ns/jakartaee" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <welcome-file-list>
-        <welcome-file>page/auth/Register.jsp</welcome-file>
-    </welcome-file-list>
-    
-    <servlet>
-    <servlet-name>ShowtimeServlet</servlet-name>
-    <servlet-class>controller.schedule.ShowtimeServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-    <servlet-name>ShowtimeServlet</servlet-name>
-    <url-pattern>/showtimes</url-pattern>
-</servlet-mapping>
-
+ 
 </web-app>

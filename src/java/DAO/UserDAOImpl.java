@@ -17,7 +17,7 @@ public class UserDAOImpl extends MySQLConnect {
 
     public UserDAOImpl(ServletContext context) throws Exception {
         super();
-        connect(context);
+        connect((Properties) context);
     }
 
     public List<User> getAll() {
