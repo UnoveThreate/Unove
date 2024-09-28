@@ -9,26 +9,30 @@ package model;
  * @author nguyendacphong
  */
 public class CinemaChain {
+
     private int cinemaChainID;
     private String name;
     private String information;
-    private int userId;
-    // Constructors
-    public CinemaChain() {}
+    private int userID;
+    private String avatarURL;
 
-    public CinemaChain(int cinemaChainID, String name, String information, int userId) {
+    // Constructors
+    public CinemaChain() {
+    }
+
+    public CinemaChain(int cinemaChainID, String name, String information, int userId, String avatarURL) {
         this.cinemaChainID = cinemaChainID;
         this.name = name;
         this.information = information;
-        this.userId = userId;
+        this.userID = userId;
+        this.avatarURL = avatarURL;
     }
-        public CinemaChain(int userID, String name, String information) {
-        this.userId = userId;
+
+    public CinemaChain(int userID, String name, String information) {
+        this.userID = userID;
         this.name = name;
         this.information = information;
     }
-
-   
 
     public int getCinemaChainID() {
         return cinemaChainID;
@@ -55,17 +59,24 @@ public class CinemaChain {
     }
 
     public int getUserId() {
-        return userId;
+        return userID;
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        this.userID = userId;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarLink(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 
     @Override
     public String toString() {
         return "CinemaChain{" + "cinemaChainID=" + cinemaChainID + ", name=" + name + ", information=" + information + '}';
     }
-
 
 }

@@ -27,5 +27,6 @@ public class Router {
     public String CHANGE_PASSWORD = "page/user/ChangePassword.jsp";
 
     public String OWNER_PAGE = "page/owner/manageCinemaChain.jsp";
+    
     public String OWNER_CMC = "page/owner/createCinemaChain.jsp";
 }

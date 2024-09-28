@@ -128,7 +128,7 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("username", user.getUsername());
                 session.setAttribute("email", user.getEmail());
                 session.setAttribute("role", role);
-
+              
                 System.out.println("role after login: " + session.getAttribute("role"));
 
             } catch (SQLException ex) {
@@ -141,7 +141,7 @@ public class LoginServlet extends HttpServlet {
                     // Retrieve the originally requested URL
                     String redirectTo = (String) session.getAttribute("redirectTo");
                     System.out.println("redirect to: " + redirectTo);
-                    
+
                     System.out.print("USSSSSSERRRR");
 
                     if (redirectTo == null) {
@@ -175,13 +175,11 @@ public class LoginServlet extends HttpServlet {
                     }
 
                 }
-                case "OWNER" ->
-                {  
-                   System.out.print("OWNER LOGINED");
-                   response.sendRedirect(RouterURL.OWNER_PAGE);
-                
+                case "OWNER" -> {
+                    System.out.print("OWNER LOGINED");
+                    response.sendRedirect(RouterURL.OWNER_PAGE);
                 }
-                  
+
                 case "ADMIN" ->
                     request.getRequestDispatcher("/admin").forward(request, response);
             }
