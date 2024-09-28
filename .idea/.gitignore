@@ -1,3 +1,8 @@
-# Default ignored files
-/shelf/
-/workspace.xml
+nbproject/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+web/WEB-INF/config/private
