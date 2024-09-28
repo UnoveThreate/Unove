@@ -12,7 +12,7 @@ public class Router {
 
     public String LANDING_PAGE = "page/landingPage/LandingPage.jsp";
 
-    public String MOVIE_LIST= "page/movie/MovieListComponents.jsp";
+    public String MOVIE_LIST = "page/movie/MovieListComponents.jsp";
 
     public String REGISTER = "page/auth/Register.jsp";
 
@@ -25,6 +25,7 @@ public class Router {
     public String DISPLAY_INFO = "page/user/DisplayUserInfo.jsp";
 
     public String CHANGE_PASSWORD = "page/user/ChangePassword.jsp";
-    
 
+    public String OWNER_PAGE = "page/owner/manageCinemaChain.jsp";
+    public String OWNER_CMC = "page/owner/createCinemaChain.jsp";
 }

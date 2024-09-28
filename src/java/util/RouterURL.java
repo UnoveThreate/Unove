@@ -47,4 +47,4 @@ public class RouterURL {
     public static String OWNER_CITY_STATISTIC = "/Unove/OwnerDashboardCityServlet";
 
     public static String DETAIL_MOVIE_PAGE = "/Unove/HandleDisplayMovieInfo";
-}
+}  

@@ -141,6 +141,8 @@ public class LoginServlet extends HttpServlet {
                     // Retrieve the originally requested URL
                     String redirectTo = (String) session.getAttribute("redirectTo");
                     System.out.println("redirect to: " + redirectTo);
+                    
+                    System.out.print("USSSSSSERRRR");
 
                     if (redirectTo == null) {
                         response.sendRedirect(RouterURL.LANDING_PAGE);
@@ -174,7 +176,12 @@ public class LoginServlet extends HttpServlet {
 
                 }
                 case "OWNER" ->
-                    response.sendRedirect(RouterURL.OWNER_PAGE);
+                {  
+                   System.out.print("OWNER LOGINED");
+                   response.sendRedirect(RouterURL.OWNER_PAGE);
+                
+                }
+                  
                 case "ADMIN" ->
                     request.getRequestDispatcher("/admin").forward(request, response);
             }
