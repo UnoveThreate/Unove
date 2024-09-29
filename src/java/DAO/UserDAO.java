@@ -341,5 +341,6 @@ public ResultSet getData(String table, String atr, Map<String, String> condition
 
     return duplicate;
 }
+    
 
 }

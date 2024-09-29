@@ -53,13 +53,12 @@ public class MySQLConnect {
             this.connection = DriverManager.getConnection(url, username, password); 
             return connection; 
         }
-//    public static void main(String[] args) {
+//   public static void main(String[] args) {
 //        MySQLConnect mySQLConnect = new MySQLConnect();
 //        Properties props = new Properties();
-//
-//        // Set database properties for testing
+//     
 //        props.setProperty("db.serverName", "localhost");
-//        props.setProperty("db.databaseName", "Unove");
+//        props.setProperty("db.databaseName", "dbnew");
 //        props.setProperty("db.username", "root");
 //        props.setProperty("db.password", "Password.1");
 //
