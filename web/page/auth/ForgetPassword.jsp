@@ -14,6 +14,112 @@
         <title>Forget Password</title>
 
         <style>
+         body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(270deg, #FFE6E6, #F2D1D1);
+    animation: gradient-animation 10s ease infinite;
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.bg-light {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease; /* Thêm hiệu ứng chuyển động cho .bg-light */
+}
+
+.bg-light:hover {
+    transform: translateY(-5px); /* Hiệu ứng hover cho .bg-light */
+}
+
+h2 {
+    font-family: 'Arial', sans-serif;
+    font-size: 1.5rem;
+    color: #333;
+    transition: color 0.3s ease; /* Thêm hiệu ứng chuyển động cho màu chữ */
+}
+
+h2:hover {
+    color: #ff7e5f; /* Thay đổi màu chữ khi hover */
+}
+
+.input-group {
+    border-radius: 5px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease; /* Thêm hiệu ứng chuyển động cho bóng */
+}
+
+.input-group:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng bóng khi hover */
+}
+
+.input-group-text {
+    background: #ff7e5f;
+    color: white;
+}
+
+.form-control {
+    border: 1px solid #ff7e5f;
+    border-radius: 0;
+    transition: border 0.3s, box-shadow 0.3s; /* Thêm hiệu ứng chuyển động cho viền và bóng */
+}
+
+.form-control:focus {
+    border: 2px solid #feb47b;
+    box-shadow: 0 0 5px rgba(254, 180, 123, 0.5); /* Hiệu ứng bóng khi focus */
+}
+
+.btn-primary {
+    background-color: #feb47b;
+    border: none;
+    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển động cho nút */
+}
+
+.btn-primary:hover {
+    background-color: #ff7e5f; /* Thay đổi màu nền khi hover */
+}
+
+/* Thêm hiệu ứng chuyển động cho các nút button */
+.btn {
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Hiệu ứng chuyển động */
+}
+
+/* Hiệu ứng hover cho nút */
+.btn:hover {
+    background-color: #CDC1FF; /* Thay đổi màu nền khi hover */
+    transform: scale(1.05); /* Tăng kích thước khi hover */
+}
+
+/* Hiệu ứng cho background gradient */
+.bg-light {
+    background: linear-gradient(135deg, #E5D9F2, #CDC1FF);
+    border-radius: 10px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    transition: background 0.5s ease; /* Hiệu ứng chuyển động cho background */
+}
+
+/* Thêm hiệu ứng chuyển động cho các trường input */
+.form-control {
+    transition: border-color 0.3s ease;
+}
+
+/* Hiệu ứng khi focus vào trường input */
+.form-control:focus {
+    border-color: #feb47b; /* Đổi màu viền khi focus */
+    box-shadow: 0 0 5px rgba(254, 180, 123, 0.5); /* Hiệu ứng bóng khi focus */
+}
+
 
         </style>
 

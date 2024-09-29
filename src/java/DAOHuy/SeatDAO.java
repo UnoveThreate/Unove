@@ -1,7 +1,8 @@
 // File: SeatDAO.java
-package dao;
+package DAOHuy;
 
 import database.MySQLConnect;
+import jakarta.servlet.ServletContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,8 +13,9 @@ import model.Seat;
 
 public class SeatDAO extends MySQLConnect {
 
-    public SeatDAO() {
+    public SeatDAO(ServletContext context) throws Exception {
         super();
+        connect((ServletContext) context);
     }
 
     public void addSeat(int roomId, String name, int coordinateX, int coordinateY) {

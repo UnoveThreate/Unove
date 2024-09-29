@@ -3,12 +3,11 @@ package model;
 public class Cinema {
     private int cinemaID;
     private int cinemaChainID;
+    private String name; 
     private String address;
     private String province;
     private String district;
     private String commune;
-
- 
 
     public int getCinemaID() {
         return cinemaID;
@@ -24,6 +23,14 @@ public class Cinema {
 
     public void setCinemaChainID(int cinemaChainID) {
         this.cinemaChainID = cinemaChainID;
+    }
+
+    public String getName() { // Thêm phương thức getter cho name
+        return name;
+    }
+
+    public void setName(String name) { // Thêm phương thức setter cho name
+        this.name = name;
     }
 
     public String getAddress() {

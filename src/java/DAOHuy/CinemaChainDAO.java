@@ -1,7 +1,8 @@
-package dao;
+package DAOHuy;
 
 import model.CinemaChain;
 import database.MySQLConnect;
+import jakarta.servlet.ServletContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +13,9 @@ import java.util.List;
 
 public class CinemaChainDAO extends MySQLConnect {
 
-    public CinemaChainDAO() {
+    public CinemaChainDAO(ServletContext context) throws Exception {
         super(); 
+        connect((ServletContext) context);
     }
 
     public List<CinemaChain> getAllCinemaChains() {

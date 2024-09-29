@@ -1,7 +1,8 @@
-package dao;
+package DAOHuy;
 
 import model.Movie;
 import database.MySQLConnect;
+import jakarta.servlet.ServletContext;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,8 +13,9 @@ import java.util.List;
 
 public class MovieDAO extends MySQLConnect {
 
-    public MovieDAO() {
+    public MovieDAO(ServletContext context) throws Exception {
         super(); 
+        connect((ServletContext) context);
     }
 
     public List<Movie> getMoviesByCinema(int cinemaID) {

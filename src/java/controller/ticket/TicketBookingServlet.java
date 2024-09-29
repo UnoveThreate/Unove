@@ -1,7 +1,7 @@
 // File: TicketBookingServlet.java
 package controller.ticket;
 
-import dao.SeatDAO;
+import DAOHuy.SeatDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
@@ -11,7 +11,11 @@ import model.Seat;
 
 public class TicketBookingServlet extends HttpServlet {
     private HashMap<String, Boolean> seats = new HashMap<>();
-    private SeatDAO seatDAO = new SeatDAO();
+    private final SeatDAO seatDAO;
+
+    public TicketBookingServlet() throws Exception {
+        this.seatDAO = new SeatDAO(getServletContext());
+    }
 
     @Override
     public void init() {
