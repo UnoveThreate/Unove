@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Lịch Chiếu Phim</title>
-    <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Thay đổi đường dẫn cho phù hợp -->
+    <link rel="stylesheet" href="path/to/your/styles.css">
     <style>
         body {
     font-family: 'Arial', sans-serif;
