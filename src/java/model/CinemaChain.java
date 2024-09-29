@@ -13,6 +13,7 @@ public class CinemaChain {
     private String name;
     private String information;
     private int userId;
+    private String avatarURL;
     // Constructors
     public CinemaChain() {}
 
@@ -26,6 +27,14 @@ public class CinemaChain {
         this.userId = userId;
         this.name = name;
         this.information = information;
+    }
+
+    public CinemaChain(int cinemaChainID, String name, String information, int userId, String avatarURL) {
+        this.cinemaChainID = cinemaChainID;
+        this.name = name;
+        this.information = information;
+        this.userId = userId;
+        this.avatarURL = avatarURL;
     }
 
    
@@ -62,10 +71,20 @@ public class CinemaChain {
         this.userId = userId;
     }
 
-    @Override
-    public String toString() {
-        return "CinemaChain{" + "cinemaChainID=" + cinemaChainID + ", name=" + name + ", information=" + information + '}';
+    public String getAvatarURL() {
+        return avatarURL;
     }
 
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
+
+    @Override
+    public String toString() {
+        return "CinemaChain{" + "cinemaChainID=" + cinemaChainID + ", name=" + name + ", information=" + information + ", userId=" + userId + ", avatarURL=" + avatarURL + '}';
+    }
+
+    
+   
 
 }

@@ -12,7 +12,7 @@ public class RouterURL {
 
     public static String LANDING_PAGE = "/Unove";
 
-    public static String ERORPAGE = "/Unove/error";
+    public static String ERROR_PAGE = "/Unove/error";
 
     public static String REGISTER = "/Unove/register";
 
@@ -41,10 +41,14 @@ public class RouterURL {
     public static String OWNER_MOVIES_STATISTIC = "/Unove/owner/dashboard/statistic/Unoves";
 
     public static String OWNER_CINEMAS_STATISTIC = "/Unove/owner/dashboard/statistic/cinemas";
-    
+
     public static String OWNER_DASHBOARD_PAGE = "/Unove/owner/dashboard";
-    
+
     public static String OWNER_CITY_STATISTIC = "/Unove/OwnerDashboardCityServlet";
 
     public static String DETAIL_MOVIE_PAGE = "/Unove/HandleDisplayMovieInfo";
-}  
+
+    public static String OWNER_CREATE_CINEMA = "/Unove/owner/create/cinema";
+    
+    public static String OWNER_EDIT_CINEMA = "/Unove/owner/edit/cinema";
+}

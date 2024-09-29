@@ -28,4 +28,5 @@ public class Router {
 
     public String OWNER_PAGE = "page/owner/manageCinemaChain.jsp";
     public String OWNER_CMC = "page/owner/createCinemaChain.jsp";
+    
 }

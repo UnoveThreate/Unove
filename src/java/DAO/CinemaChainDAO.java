@@ -33,11 +33,12 @@ public class CinemaChainDAO extends MySQLConnect {
 
 
     public boolean createCinemaChain(CinemaChain cinemaChain) throws SQLException {
-        String sql = "INSERT INTO CinemaChain (UserID, Name, Information) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO CinemaChain (UserID, Name, Information, AvatarURL) VALUES (?, ?, ?,?)";
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setInt(1, cinemaChain.getUserId());
         stmt.setString(2, cinemaChain.getName());
         stmt.setString(3, cinemaChain.getInformation());
+        stmt.setString(4, cinemaChain.getInformation());
         return stmt.executeUpdate() > 0;
     }
 
