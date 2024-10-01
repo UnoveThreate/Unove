@@ -3,7 +3,7 @@ package model;
 public class Cinema {
     private int cinemaID;
     private int cinemaChainID;
-    private String name; 
+    private String name;
     private String address;
     private String province;
     private String district;

@@ -26,16 +26,16 @@ public class RouterJSP {
 
     public static String BOOKING_SEAT = "/page/cinema_room/BookingSeat.jsp";
 
-    //for example, must replace when get real page content schedule component
+    // for example, must replace when get real page content schedule component
     public String SCHEDULE_MOIVE = "components/schedule/Schedule.jsp";
 
-    public String USER = "/page/landingPage/LandingPage.jsp";//templatefor testing login by role
+    public String USER = "/page/landingPage/LandingPage.jsp";// templatefor testing login by role
 
-    public String CINEMA_CHAIN_ITEM = "/page/cinemaChain/CinemaDetail.jsp";//templatefor testing login by role
+    public String CINEMA_CHAIN_ITEM = "/page/cinemaChain/CinemaDetail.jsp";// templatefor testing login by role
 
-    public String STAFF = "/page/staff/Staff.jsp";//templatefor testing login by role
+    public String STAFF = "/page/staff/Staff.jsp";// templatefor testing login by role
 
-    public String ADMIN = "/page/admin/AdminPage.jsp";//templatefor testing login by role
+    public String ADMIN = "/page/admin/AdminPage.jsp";// templatefor testing login by role
 
     public String CHANGE_PASSWORD = "/page/user/ChangePassword.jsp";
 
@@ -129,4 +129,15 @@ public class RouterJSP {
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
 
     public static String SHOWTIME_PAGE = "/page/showtime/showtime.jsp";
+
+    public static String OWNER_PAGE = "/page/owner/ownerDashBoard.jsp";
+
+    public static String OWNER_CMC = "/page/owner/createCinemaChain.jsp";
+
+    public static String OWNER_CREATE_CINEMA_PAGE = "/page/owner/createCinemaPage.jsp";
+
+    public static String OWNER_EDIT_CINEMA_PAGE = "/page/owner/editCinemaPage.jsp";
+
+    public static String OWNER_MANAGE_CINEMACHAIN_PAGE = "/page/owner/manageCinemaChain.jsp";
+
 }

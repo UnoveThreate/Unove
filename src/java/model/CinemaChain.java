@@ -1,11 +1,45 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
+/**
+ *
+ * @author nguyendacphong
+ */
 public class CinemaChain {
+
     private int cinemaChainID;
     private String name;
     private String information;
+    private int userId;
+    private String avatarURL;
 
-    // Constructors, getters, setters
+    // Constructors
+    public CinemaChain() {
+    }
+
+    public CinemaChain(int cinemaChainID, String name, String information, int userId) {
+        this.cinemaChainID = cinemaChainID;
+        this.name = name;
+        this.information = information;
+        this.userId = userId;
+    }
+
+    public CinemaChain(int userID, String name, String information) {
+        this.userId = userId;
+        this.name = name;
+        this.information = information;
+    }
+
+    public CinemaChain(int cinemaChainID, String name, String information, int userId, String avatarURL) {
+        this.cinemaChainID = cinemaChainID;
+        this.name = name;
+        this.information = information;
+        this.userId = userId;
+        this.avatarURL = avatarURL;
+    }
 
     public int getCinemaChainID() {
         return cinemaChainID;
@@ -30,4 +64,27 @@ public class CinemaChain {
     public void setInformation(String information) {
         this.information = information;
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
+
+    @Override
+    public String toString() {
+        return "CinemaChain{" + "cinemaChainID=" + cinemaChainID + ", name=" + name + ", information=" + information
+                + ", userId=" + userId + ", avatarURL=" + avatarURL + '}';
+    }
+
 }
