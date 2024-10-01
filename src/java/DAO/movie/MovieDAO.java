@@ -1,4 +1,4 @@
-package DAO;
+package DAO.movie;
 
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.Movie;
+import model.Review;
 
 /**
  *
@@ -45,7 +46,7 @@ public class MovieDAO extends MySQLConnect {
                 String linkTrailer = rs.getString("LinkTrailer");
 
                 // Create a new Movie object using the constructor
-                movie = new Movie(title, datePublished, rating, imageURL, synopsis, country, linkTrailer, null);
+                movie = new Movie(rs.getInt("MovieID"), title,datePublished, imageURL, synopsis, country, rating, linkTrailer, null);
                 
                 // Lấy danh sách thể loại của bộ phim từ bảng MovieInGenre
                 List<String> genres = new ArrayList<>();
@@ -75,4 +76,43 @@ public class MovieDAO extends MySQLConnect {
 
     return movie; // Return the Movie object (or null if not found)
 }
+    public ArrayList<Review> getReviewsByMovieID(int movieID, ServletContext context) throws Exception {
+
+        database.MySQLConnect dbConnect = new MySQLConnect();
+
+        java.sql.Connection connection = dbConnect.connect(context);
+
+        ArrayList<Review> reviews = new ArrayList<>();
+        String sql = "SELECT moviereview.*, [User].AvatarLink, [User].Username "
+                + "FROM Review "
+                + "JOIN [User] ON moviereview.UserID = [User].UserID "
+                + "WHERE moviereview.MovieID = ?";
+
+        try {
+            // Tạo một PreparedStatement từ kết nối và truy vấn SQL
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, movieID);
+            // Thực thi truy vấn và lấy kết quả
+            ResultSet resultSet = preparedStatement.executeQuery();
+            // Lặp qua các kết quả và tạo đối tượng Review cho mỗi kết quả
+            while (resultSet.next()) {
+//                int reviewID = 1; //resultSet.getInt("ReviewID"); please change again!
+                int userID = resultSet.getInt("UserID");
+                int rating = resultSet.getInt("Rating");
+                Date timeCreated = resultSet.getTimestamp("TimeCreated");
+                String content = resultSet.getString("Content");
+                String userAvatarLink = resultSet.getString("AvatarLink");
+                String username = resultSet.getString("Username");
+
+                // Tạo đối tượng Review và thêm vào danh sách
+                Review review = new Review(userID, movieID, rating, timeCreated, content, userAvatarLink, username);
+                reviews.add(review);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return reviews; // Trả về danh sách các review của bộ phim có movieID tương ứng dưới dạng ArrayList
+    }
 }

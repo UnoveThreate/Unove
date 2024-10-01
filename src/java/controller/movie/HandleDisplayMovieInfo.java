@@ -1,6 +1,6 @@
 package controller.movie;
 
-import DAO.MovieDAO;
+import DAO.movie.MovieDAO;
 import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -37,8 +37,8 @@ public class HandleDisplayMovieInfo extends HttpServlet {
 
 //            String cinemaID = request.getParameter("cinemaID");
 //            String movieID = request.getParameter("movieID");
-            String cinemaID = "2";
-            String movieID = "2";
+            String cinemaID = "1";
+            String movieID = "1";
 
             //kiem tra chuoi có null hay khong
             if (cinemaID == null || cinemaID.isEmpty() || movieID == null || movieID.isEmpty()) {
@@ -57,7 +57,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
                 return;
             }
 
-            Movie movie = movieDAO.getMovieByCinemaIDAndMovieID(movieIDInt, cinemaIDInt);
+            Movie movie = movieDAO.getMovieByCinemaIDAndMovieID(cinemaIDInt,movieIDInt);
             System.out.println("Looking for Movie with CinemaID: " + cinemaIDInt + " and MovieID: " + movieIDInt);
 
 //             If movie is null, handle the case

@@ -1,10 +1,10 @@
 package model;
+
 import java.util.Date;
 import java.util.List;
 
+public class Movie {
 
-public class Movie  {
-    
     private int movieID;
     private int cinemaID;
     private String title;
@@ -15,36 +15,37 @@ public class Movie  {
     private String country;
     private String linkTrailer;
     private List<String> genres;
-    private String status ; 
+    private String status;
 
-    // Constructor
-    public Movie() {
-        
-    }
-
-    public Movie(String title, Date datePublished, float rating, String imageURL, String synopsis, String country, String linkTrailer, List<String> genres) {
+    public Movie(int movieID, String title, Date datePublished, String imageURL, String synopsis, String country, float rating, String linkTrailer, List<String> genres) {
+        this.movieID = movieID;
         this.title = title;
         this.datePublished = datePublished;
         this.rating = rating;
         this.imageURL = imageURL;
         this.synopsis = synopsis;
         this.country = country;
-        this.linkTrailer = linkTrailer;
         this.genres = genres;
     }
 
-   
+    // Constructor
+    public Movie(int movieID, String title, String synopsis, Date datePublished, String imageURL, float rating, String status, String country, List<String> genres) {
+        this.movieID = movieID;
+        this.title = title;
+        this.datePublished = datePublished;
+        this.rating = rating;
+        this.imageURL = imageURL;
+        this.synopsis = synopsis;
+        this.country = country;
+        this.status = status;
+        this.genres = genres;
+    }
 
-   
-    
-    
     // lay ra chuoi cac the loai : 
-     public String getGenresAsString() {
+    public String getGenresAsString() {
         return String.join(", ", genres);
     }
-    
-    
-   
+
     public String getStatus() {
         return status;
     }
@@ -94,9 +95,10 @@ public class Movie  {
         this.rating = rating;
     }
 
-    public String getImageURL(){
+    public String getImageURL() {
         return imageURL;
     }
+
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
     }

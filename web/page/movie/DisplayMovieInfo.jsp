@@ -10,7 +10,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${movie.title}</title>
+        <title><%= movie.getTitle()%></title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body, html {
@@ -26,22 +26,21 @@
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
-                flex-wrap: wrap; /* Adjust for smaller screens */
+                flex-wrap: wrap;
                 justify-content: space-between;
                 align-items: flex-start;
                 width: 100%;
-                max-width: 1200px; /* Added a max-width for better layout control */
-                margin: 0 auto; /* Center container */
+                max-width: 1200px;
+                margin: 0 auto;
                 padding: 20px;
             }
             .poster {
                 position: relative;
                 width: 30%;
-                min-width: 250px; /* Make sure the poster doesn't get too small */
+                min-width: 250px;
                 height: 450px;
                 background-size: cover;
                 background-position: center;
-               
             }
             .poster .play-button {
                 position: absolute;
@@ -89,38 +88,31 @@
                 margin: 20px 0;
                 line-height: 1.5;
             }
-
             .metadata {
                 display: flex;
                 margin-top: 20px;
             }
-
             .metadata .publicdate,
-            .metadata .genre
-            .metadata .country{
-                flex-basis: 15%; /* Adjusts the width of each section to share space */
+            .metadata .genre,
+            .metadata .country {
+                flex-basis: 15%;
             }
-
             .metadata .publicdate span,
             .metadata .genre span,
-            .metadata .country span
-            {
-                display: block; /* Moves the value (date/genre) to a new line */
-                font-size: 15px; /* Font size for the date/genre */
-                margin-top: 5px; /* Adds a little space between the label and the value */
-                color: lightgray; /* Text color for the date/genre */
+            .metadata .country span {
+                display: block;
+                font-size: 15px;
+                margin-top: 5px;
+                color: lightgray;
             }
-            .metadata .country{
-                margin-left:33px;
+            .metadata .country {
+                margin-left: 33px;
             }
-
             .metadata strong {
-                font-size: 15px; /* Font size for the labels */
-                color: white; /* Label text color */
+                font-size: 15px;
+                color: white;
                 display: block;
             }
-
-
             .buttons {
                 margin-top: 20px;
             }
@@ -139,25 +131,21 @@
                 top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0,0,0,0.8); /* Màu nền tối */
+                background-color: rgba(0, 0, 0, 0.8);
                 justify-content: center;
                 align-items: center;
             }
-
-            /* Nội dung của modal */
             .modal-content {
                 background-color: #fff;
                 padding: 20px;
                 border-radius: 10px;
                 position: relative;
                 text-align: center;
-
             }
-            /* Nút "Xem Trailer" */
             #reviewBtn,
             #trailerBtn {
                 background-color: #ff5733;
-                margin-top:57px;
+                margin-top: 57px;
                 color: #fff;
                 padding: 14px 13px;
                 border: none;
@@ -168,48 +156,49 @@
                 transition: all 0.3s ease;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             }
+            #btnYeuThich {
+                background-color: transparent;
+                margin-left:412px;
+                border: none;
+                color: red;
+                font-size: 24px;
+                cursor: pointer;
+                transition: transform 0.3s ease, color 0.3s ease;
+            }
+
+            #btnYeuThich:hover {
+                color: darkred;
+            }
             #reviewBtn {
-                margin-left:15px;
+                margin-left: 15px;
             }
-
-
-            /* Hiệu ứng hover cho nút */
-            #reviewBtn,
+            #reviewBtn:hover,
             #trailerBtn:hover {
-                background-color: #ff6f47; /* Màu nền thay đổi khi hover */
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Tăng cường hiệu ứng đổ bóng */
-                transform: translateY(-3px); /* Đẩy nút lên khi hover */
+                background-color: #ff6f47;
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+                transform: translateY(-3px);
             }
-
-            /* Hiệu ứng khi nút bị nhấn */
-            #reviewBtn,
+            #reviewBtn:active,
             #trailerBtn:active {
-                transform: translateY(1px); /* Đẩy nút xuống nhẹ khi nhấn */
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Giảm bóng khi nhấn */
+                transform: translateY(1px);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             }
-
-
-            /* Nút đóng modal */
             .close {
                 position: absolute;
                 top: 10px;
                 right: 20px;
                 color: #000;
-                font-size: 60px; /* Tăng kích thước của dấu X */
+                font-size: 60px;
                 font-weight: bold;
                 cursor: pointer;
-                transition: color 0.5s ease; /* Hiệu ứng khi hover */
+                transition: color 0.5s ease;
             }
-
-            /* Hiệu ứng hover cho dấu X */
             .close:hover {
-                color: red; /* Đổi màu khi di chuột qua */
+                color: red;
             }
-
-            /* Responsive adjustments */
             @media (max-width: 768px) {
                 .container {
-                    flex-direction: column; /* Stack the poster and details on top of each other */
+                    flex-direction: column;
                     align-items: center;
                 }
                 .movie-details {
@@ -217,32 +206,28 @@
                     padding-left: 0;
                 }
                 .poster {
-                    width: 100%; /* Full width for smaller screens */
-                    height: 350px; /* Adjust height for responsiveness */
+                    width: 100%;
+                    height: 350px;
                 }
             }
         </style>
     </head>
     <body>
-
         <div class="container">
-            <!-- Movie Poster -->
-          <div class="poster" style="background-image: url('<%= movie.getImageURL() %>');">
-                
-                <button type="button" class="btn btn-danger play-button" data-toggle="modal" data-target="#trailerModal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 28px 32px;">
-                    <i class="fa fa-play"></i> 
+            <div class="poster" style="background-image: url('<%= movie.getImageURL()%>');">
+                <button type="button" class="play-button">
+                    <i class="fa fa-play"></i>
                 </button>
             </div>
-
 
             <div class="movie-details">
                 <h1 class="movie-title"><%= movie.getTitle()%></h1>
                 <div class="ratings">
                     <div class="rating">
-                        <i class="fa fa-star"></i> <%= movie.getRating()%> 
+                        <i class="fa fa-star"></i> <%= movie.getRating()%>
                     </div>
                 </div>
-                <p class="description">
+                    <p class="mb-4 tracking-wide">
                     <strong>Nội dung:</strong> <%= movie.getSynopsis()%>
                 </p>
 
@@ -251,66 +236,54 @@
                         <span>Ngày chiếu:</span>
                         <strong><%= movie.getDatePublished()%></strong>
                     </div>
-
                     <div class="genre">
                         <span>Thể loại:</span>
                         <strong><%= movie.getGenresAsString()%></strong>
                     </div>
                     <div class="country">
-                        <span> Quốc Gia:</span>
+                        <span>Quốc Gia:</span>
                         <strong><%= movie.getCountry()%></strong>
-                       
                     </div>
                 </div>
 
-                <!-- code chuc nang xem trailer-->
-                <button id="trailerBtn"> Xem Trailer</button>
-                <button id="reviewBtn"> Xem Review</button>
-                <button id="favoriteBtn"></button>
+                <button id="trailerBtn">Xem Trailer</button>
+                <button id="reviewBtn">Xem Review</button>
+                <button id="btnYeuThich" onclick="addToFavorites(1)">
+                    <i class="fa fa-heart"></i>
+                </button>
 
-                <!-- Modal để chứa video -->
+
                 <div id="trailerModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <iframe width="560" height="315" src="https://www.youtube.com/embed/t9qQRG2ZMhQ?si=GnQTvvbeGQ4IT5lt" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                        <iframe id="trailerVideo" width="560" height="315" src="<%= movie.getLinkTrailer()%>" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
-
-                <script src="script.js"></script>
-
-
-
             </div>
         </div>
 
-    </body>
-    <script>
-        // Lấy các phần tử DOM
-        const trailerBtn = document.getElementById("trailerBtn");
-        const trailerModal = document.getElementById("trailerModal");
-        const closeBtn = document.querySelector(".close");
-        const trailerVideo = document.getElementById("trailerVideo");
+        <script>
+            const trailerBtn = document.getElementById("trailerBtn");
+            const trailerModal = document.getElementById("trailerModal");
+            const closeBtn = document.querySelector(".close");
+            const trailerVideo = document.getElementById("trailerVideo");
 
-// Khi nhấn nút "Xem Trailer", mở modal
-        trailerBtn.onclick = function () {
-            trailerModal.style.display = "flex";
-            trailerVideo.src += "?autoplay=1";  // Bật tự động phát video
-        }
+            trailerBtn.onclick = function () {
+                trailerModal.style.display = "flex";
+                trailerVideo.src += "?autoplay=1";
+            };
 
-// Khi nhấn vào dấu X, đóng modal và dừng video
-        closeBtn.onclick = function () {
-            trailerModal.style.display = "none";
-            trailerVideo.src = trailerVideo.src.split("?")[0]; // Dừng video
-        }
-
-// Khi nhấn ra ngoài modal, đóng modal và dừng video
-        window.onclick = function (event) {
-            if (event.target == trailerModal) {
+            closeBtn.onclick = function () {
                 trailerModal.style.display = "none";
-                trailerVideo.src = trailerVideo.src.split("?")[0]; // Dừng video
-            }
-        }
+                trailerVideo.src = trailerVideo.src.split("?")[0];
+            };
 
-
-    </script>
+            window.onclick = function (event) {
+                if (event.target == trailerModal) {
+                    trailerModal.style.display = "none";
+                    trailerVideo.src = trailerVideo.src.split("?")[0];
+                }
+            };
+        </script>
+    </body>
 </html>

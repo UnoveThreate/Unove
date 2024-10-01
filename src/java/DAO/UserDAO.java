@@ -341,6 +341,16 @@ public ResultSet getData(String table, String atr, Map<String, String> condition
 
     return duplicate;
 }
+     public List<String> getGenresFromMovieID(int movieID) throws SQLException {
+        List<String> genres = new ArrayList<>();
+        String sqlQueryGenres = "select  Genre from Movie join MovieInGenre on Movie.MovieID = MovieInGenre.MovieID where Movie.MovieID = " + movieID;
+        ResultSet genresRs = getResultSet(sqlQueryGenres);
+        while (genresRs.next()) {
+            genres.add(genresRs.getString("Genre"));
+        }
+        return genres;
+    }
+
     
 
 }
