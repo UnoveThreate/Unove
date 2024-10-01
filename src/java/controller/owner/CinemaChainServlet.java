@@ -11,8 +11,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import DAO.CinemaChainDAO;
-import DAO.CinemaDAO;
+import DAO.cinemaChainOwnerDAO.CinemaChainDAO;
+import DAO.cinemaChainOwnerDAO.CinemaDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.annotation.MultipartConfig;
 import model.CinemaChain;
@@ -36,7 +36,7 @@ import util.RouterURL;
  *
  * @author nguyendacphong
  */
-@WebServlet("/owner")
+@WebServlet("/owner/manageCinemaChain")
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 5, // 5 MB
@@ -83,7 +83,7 @@ public class CinemaChainServlet extends HttpServlet {
                 List<Cinema> cinemas = cinemaDAO.getCinemasByCinemaChainID(cinemaChain.getCinemaChainID());
                 request.setAttribute("cinemas", cinemas); // Thiết lập danh sách cinemas vào request
                 request.setAttribute("cinemaChain", cinemaChain);
-                request.getRequestDispatcher(router.OWNER_PAGE).forward(request, response);
+                request.getRequestDispatcher(router.OWNER_MANAGE_CINEMACHAIN_PAGE).forward(request, response);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class CinemaChainServlet extends HttpServlet {
             if (existingCinemaChain != null) {
                 // Nếu đã có CinemaChain, điều hướng tới trang quản lý CinemaChain
                 request.setAttribute("cinemaChain", existingCinemaChain);
-                request.getRequestDispatcher(router.OWNER_PAGE).forward(request, response);
+                request.getRequestDispatcher(router.OWNER_MANAGE_CINEMACHAIN_PAGE).forward(request, response);
             } else {
                 // Nếu chưa có, xử lý việc tạo mới
                 String name = request.getParameter("name");
@@ -145,7 +145,7 @@ public class CinemaChainServlet extends HttpServlet {
 
                 cinemaChainDAO.createCinemaChain(cinemaChain);
 
-                response.sendRedirect(RouterURL.OWNER_PAGE);
+                response.sendRedirect(RouterURL.MANAGE_CINEMA);
             }
         } catch (SQLException e) {
             e.printStackTrace();

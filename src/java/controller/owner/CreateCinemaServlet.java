@@ -4,12 +4,13 @@
  */
 package controller.owner;
 
-import DAO.CinemaChainDAO;
-import DAO.CinemaDAO;
+import DAO.cinemaChainOwnerDAO.CinemaChainDAO;
+import DAO.cinemaChainOwnerDAO.CinemaDAO;
 import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Cinema;
 import model.CinemaChain;
+import util.FileUploader;
 import util.Role;
 import util.RouterJSP;
 import util.RouterURL;
@@ -29,11 +31,17 @@ import util.RouterURL;
  * @author Per
  */
 @WebServlet(name = "CreateCinemaServlet", urlPatterns = {"/owner/create/cinema"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 5, // 5 MB
+        maxFileSize = 1024 * 1024 * 30, // 30 MB
+        maxRequestSize = 1024 * 1024 * 100 // 100 MB 
+)
 public class CreateCinemaServlet extends HttpServlet {
 
-    private RouterJSP router = new RouterJSP();
+    private final RouterJSP router = new RouterJSP();
     private CinemaChainDAO cinemaChainDAO;
     private CinemaDAO cinemaDAO;
+
 
     @Override
     public void init() throws ServletException {
@@ -55,22 +63,7 @@ public class CreateCinemaServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CreateCinemaServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CreateCinemaServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+   
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -97,19 +90,19 @@ public class CreateCinemaServlet extends HttpServlet {
         }
         try {
             CinemaChain cinemaChain = cinemaChainDAO.getCinemaChainByUserID(userID);
-            System.out.print("bbbbbb");
+         
             if (cinemaChain == null) {
                 // Nếu user chưa có CinemaChain, yêu cầu tạo mới
-                System.out.print("ccccccc");
+           
                 request.getRequestDispatcher(router.OWNER_CMC).forward(request, response);
             } else {
                 // Nếu đã có, chuyển hướng tới trang quản lý
-                System.out.print("ddddddd");
-                request.setAttribute("cinemaChain", cinemaChain);
+
+                 String cinemaChainIDStr = request.getParameter("cinemaChainID");
+                request.setAttribute("cinemaChainID", cinemaChainIDStr);
                 request.getRequestDispatcher(RouterJSP.OWNER_CREATE_CINEMA_PAGE).forward(request, response);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             response.sendRedirect(RouterURL.ERROR_PAGE);
         }
     }
@@ -122,49 +115,34 @@ public class CreateCinemaServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-  @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Integer userID = (Integer) session.getAttribute("userID");
-        String role = (String) session.getAttribute("role");
-
-        if (userID == null || !Role.isRoleValid(role, Role.OWNER)) {
-            response.sendRedirect(RouterURL.LOGIN);
-            return;
-        }
+        String address = request.getParameter("address");
+        String province = request.getParameter("provinceName"); // Sử dụng tên tỉnh
+        String district = request.getParameter("districtName"); // Sử dụng tên quận/huyện
+        String commune = request.getParameter("communeName"); // Sử dụng tên xã/phường
+        String cinemaChainIDStr = request.getParameter("cinemaChainID");
+        int cinemaChainID = Integer.parseInt(cinemaChainIDStr);
+        
+        // Tạo đối tượng Cinema
+        Cinema cinema = new Cinema();
+        cinema.setAddress(address);
+        cinema.setProvince(province);
+        cinema.setDistrict(district);
+        cinema.setCommune(commune);
+        cinema.setCinemaChainID(cinemaChainID);
+        
 
         try {
-            CinemaChain cinemaChain = cinemaChainDAO.getCinemaChainByUserID(userID);
-            if (cinemaChain == null) {
-                response.sendRedirect(RouterURL.ERROR_PAGE);
-                return;
-            }
-
-            String address = request.getParameter("address");
-            String province = request.getParameter("province");
-            String district = request.getParameter("district");
-            String commune = request.getParameter("commune");
-
-            Cinema cinema = new Cinema();
-            cinema.setCinemaChainID(cinemaChain.getCinemaChainID());
-            cinema.setAddress(address);
-            cinema.setProvince(province);
-            cinema.setDistrict(district);
-            cinema.setCommune(commune);
-
-            boolean success = cinemaDAO.createCinema(cinema);
-            if (success) {
-                response.sendRedirect(RouterURL.OWNER_PAGE);
-            } else {
-                response.sendRedirect(RouterURL.ERROR_PAGE);
-            }
+            // Lưu cinema vào cơ sở dữ liệu
+            cinemaDAO.createCinema(cinema);
+            response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect to owner page after creation
         } catch (SQLException e) {
-            e.printStackTrace();
-            response.sendRedirect(RouterURL.ERROR_PAGE);
+            Logger.getLogger(CreateCinemaServlet.class.getName()).log(Level.SEVERE, null, e);
+            response.sendRedirect(RouterURL.ERROR_PAGE); // Redirect to error page if there's an issue
         }
     }
-
 
     /**
      * Returns a short description of the servlet.

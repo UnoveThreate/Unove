@@ -112,7 +112,7 @@
                     </c:forEach>
                 </tbody>
             </table>
-            <a href="<%= RouterURL.OWNER_CREATE_CINEMA %>">Add New Cinema</a>
+            <a href="<%= RouterURL.OWNER_CREATE_CINEMA %>?cinemaChainID=${cinemaChain.cinemaChainID}">Add New Cinema</a>
         </div>
     </body>
 </html>

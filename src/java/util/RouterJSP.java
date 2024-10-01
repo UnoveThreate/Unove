@@ -127,11 +127,18 @@ public class RouterJSP {
 
     public static String OWNER_VIEW_MOVIE_REQUEST = "/page/owner/viewMovieRequests/ViewRequests.jsp";
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
-    
-    public static String OWNER_PAGE = "/page/owner/manageCinemaChain.jsp";
-    
+
+    public static String OWNER_PAGE = "/page/owner/ownerDashBoard.jsp";
+
     public static String OWNER_CMC = "/page/owner/createCinemaChain.jsp";
-    
+
     public static String OWNER_CREATE_CINEMA_PAGE = "/page/owner/createCinemaPage.jsp";
+
     public static String OWNER_EDIT_CINEMA_PAGE = "/page/owner/editCinemaPage.jsp";
+    
+    public static String OWNER_MANAGE_CINEMACHAIN_PAGE = "/page/owner/manageCinemaChain.jsp";
+
+
+
 }
+

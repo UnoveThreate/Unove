@@ -51,4 +51,9 @@ public class RouterURL {
     public static String OWNER_CREATE_CINEMA = "/Unove/owner/create/cinema";
     
     public static String OWNER_EDIT_CINEMA = "/Unove/owner/edit/cinema";
+    
+    public static String OWNER_DELETE_CINEMA = "/Unove/owner/delete/cinema";
+    
+    public static String MANAGE_CINEMA = "/Unove/owner/manageCinemaChain";
 }
+
