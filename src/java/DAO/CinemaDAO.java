@@ -5,6 +5,7 @@
 package DAO;
 
 import database.MySQLConnect;
+import jakarta.servlet.ServletContext;
 import model.Cinema;
 import model.CinemaReview;
 
@@ -20,20 +21,19 @@ import java.util.List;
  *
  * @author Kaan
  */
-public class CinemaDAO {
+public class CinemaDAO extends MySQLConnect {
 
-    private MySQLConnect mySQLConnect;
-
-    public CinemaDAO(MySQLConnect mySQLConnect) {
-        this.mySQLConnect = mySQLConnect;
+    public CinemaDAO(ServletContext context) throws Exception {
+        super();
+        connect(context);
     }
 
     public Cinema getCinemaById(int id) {
         Cinema cinema = null;
-        String sql = "SELECT * FROM Cinema WHERE CinemaID = ?";
+        String sql = "SELECT * FROM Cinema WHERE CinemaID = ? ";
 
-        try (Connection connection = mySQLConnect.connect(null); // Thay null bằng ServletContext nếu cần
-                 PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (// Thay null bằng ServletContext nếu cần
+            PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -58,7 +58,7 @@ public class CinemaDAO {
         List<CinemaReview> reviews = new ArrayList<>();
         String sql = "SELECT * FROM CinemaReview WHERE CinemaID = ?";
 
-        try (Connection connection = mySQLConnect.connect(null); // Thay null bằng ServletContext nếu cần
+        try (
                  PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaId);
             ResultSet rs = pstmt.executeQuery();

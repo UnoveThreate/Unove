@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.cinema;
+package controller.user.cinema;
 
 import DAO.CinemaDAO;
+import controller.user.UpdateUserInfo;
 import model.Cinema;
 import model.CinemaReview;
 import database.MySQLConnect;
@@ -16,7 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import util.RouterJSP;
 
 /**
  *
@@ -24,21 +27,27 @@ import java.util.List;
  */
 @WebServlet("/cinemaDetail")
 public class CinemaDetailServlet extends HttpServlet {
+
     private CinemaDAO cinemaDAO;
+    private RouterJSP router;
 
     @Override
     public void init() throws ServletException {
-        MySQLConnect mySQLConnect = new MySQLConnect();
-        cinemaDAO = new CinemaDAO(mySQLConnect);
+
+        try {
+            cinemaDAO = new DAO.CinemaDAO(getServletContext());
+        } catch (Exception ex) {
+            Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int cinemaId = Integer.parseInt(request.getParameter("id"));
+        int cinemaId = Integer.parseInt(request.getParameter("1"));
         Cinema cinema = cinemaDAO.getCinemaById(cinemaId);
         List<CinemaReview> reviews = cinemaDAO.getReviewsByCinemaId(cinemaId);
 
         request.setAttribute("cinema", cinema);
         request.setAttribute("reviews", reviews);
-        request.getRequestDispatcher("cinemaDetail.jsp").forward(request, response);
+        request.getRequestDispatcher(router.CINEMA_DETAIL_PAGE).forward(request, response);
     }
 }

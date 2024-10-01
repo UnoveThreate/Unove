@@ -26,6 +26,9 @@ public class Cinema {
         this.commune = commune;
     }
 
+    public Cinema() {
+    }
+
     public int getCinemaID() {
         return cinemaID;
     }
@@ -48,6 +51,30 @@ public class Cinema {
 
     public String getCommune() {
         return commune;
+    }
+
+    public void setCinemaID(int cinemaID) {
+        this.cinemaID = cinemaID;
+    }
+
+    public void setCinemaChainID(int cinemaChainID) {
+        this.cinemaChainID = cinemaChainID;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public void setCommune(String commune) {
+        this.commune = commune;
     }
 
     @Override

@@ -41,10 +41,12 @@ public class RouterURL {
     public static String OWNER_MOVIES_STATISTIC = "/Unove/owner/dashboard/statistic/Unoves";
 
     public static String OWNER_CINEMAS_STATISTIC = "/Unove/owner/dashboard/statistic/cinemas";
-    
+
     public static String OWNER_DASHBOARD_PAGE = "/Unove/owner/dashboard";
-    
+
     public static String OWNER_CITY_STATISTIC = "/Unove/OwnerDashboardCityServlet";
 
     public static String DETAIL_MOVIE_PAGE = "/Unove/HandleDisplayMovieInfo";
+
+    public static String CINEMA_DETAIL_PAGE = "/Unove/cinemaDetail";
 }
