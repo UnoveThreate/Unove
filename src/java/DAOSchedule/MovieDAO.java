@@ -1,4 +1,4 @@
-package DAOHuy;
+package DAOSchedule;
 
 import model.Movie;
 import database.MySQLConnect;

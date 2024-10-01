@@ -1,4 +1,4 @@
-package DAOHuy;
+package DAOSchedule;
 
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;

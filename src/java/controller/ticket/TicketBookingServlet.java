@@ -1,7 +1,7 @@
 // File: TicketBookingServlet.java
 package controller.ticket;
 
-import DAOHuy.SeatDAO;
+import DAOSchedule.SeatDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;

@@ -1,9 +1,9 @@
 package controller.schedule;
 
-import DAOHuy.CinemaChainDAO;
-import DAOHuy.CinemaDAO;
-import DAOHuy.MovieDAO;
-import DAOHuy.MovieSlotDAO;
+import DAOSchedule.CinemaChainScheduleDAO;
+import DAOSchedule.CinemaScheduleDAO;
+import DAOSchedule.MovieDAO;
+import DAOSchedule.MovieSlotDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,23 +23,26 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import util.RouterJSP;
 
 @WebServlet("/showtimes")
 public class ShowtimeServlet extends HttpServlet {
-    private CinemaChainDAO cinemaChainDAO;
-    private CinemaDAO cinemaDAO;
+
+    private CinemaChainScheduleDAO cinemaChainDAO;
+    private CinemaScheduleDAO cinemaDAO;
     private MovieDAO movieDAO;
     private MovieSlotDAO movieSlotDAO;
 
     @Override
     public void init() throws ServletException {
-        super.init();
         try {
-            ServletContext context = getServletContext();
-            this.cinemaChainDAO = new CinemaChainDAO(context);
-            this.cinemaDAO = new CinemaDAO(context);
-            this.movieDAO = new MovieDAO(context);
-            this.movieSlotDAO = new MovieSlotDAO(context);
+            super.init();
+          
+            this.cinemaChainDAO = new CinemaChainScheduleDAO(getServletContext());
+            this.cinemaDAO = new CinemaScheduleDAO(getServletContext());
+            this.movieDAO = new MovieDAO(getServletContext());
+            this.movieSlotDAO = new MovieSlotDAO(getServletContext());
+            
         } catch (Exception ex) {
             Logger.getLogger(ShowtimeServlet.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServletException("Failed to initialize DAO", ex);
@@ -51,21 +54,22 @@ public class ShowtimeServlet extends HttpServlet {
 
         // Lấy danh sách chuỗi rạp
         List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
-        request.setAttribute("cinemaChains", cinemaChains);
 
         // Kiểm tra xem danh sách chuỗi rạp có rỗng không
         if (cinemaChains.isEmpty()) {
             request.setAttribute("errorMessage", "Không có chuỗi rạp nào.");
-            request.getRequestDispatcher("/page/showtime.jsp").forward(request, response);
+            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
             return; // Dừng xử lý nếu không có chuỗi rạp
         }
+
+        request.setAttribute("cinemaChains", cinemaChains);
 
         // Xác định chuỗi rạp được chọn
         Integer cinemaChainID = (Integer) session.getAttribute("selectedCinemaChainID");
         if (cinemaChainID == null) {
-            cinemaChainID = Integer.parseInt(request.getParameter("cinemaChainID") != null ? 
-                                request.getParameter("cinemaChainID") : 
-                                String.valueOf(cinemaChains.get(0).getCinemaChainID()));
+            cinemaChainID = Integer.parseInt(request.getParameter("cinemaChainID") != null
+                    ? request.getParameter("cinemaChainID")
+                    : String.valueOf(cinemaChains.get(0).getCinemaChainID()));
             session.setAttribute("selectedCinemaChainID", cinemaChainID); // Lưu vào session
         }
 
@@ -76,16 +80,16 @@ public class ShowtimeServlet extends HttpServlet {
         // Kiểm tra xem danh sách rạp có rỗng không
         if (cinemas.isEmpty()) {
             request.setAttribute("errorMessage", "Không có rạp nào cho chuỗi rạp đã chọn.");
-            request.getRequestDispatcher("/page/showtime.jsp").forward(request, response);
+            request.getRequestDispatcher(RouterJSP.SHOWTIME_PAGE).forward(request, response);
             return; // Dừng xử lý nếu không có rạp
         }
 
         // Xác định rạp được chọn
         Integer cinemaID = (Integer) session.getAttribute("selectedCinemaID");
         if (cinemaID == null) {
-            cinemaID = Integer.parseInt(request.getParameter("cinemaID") != null ? 
-                           request.getParameter("cinemaID") : 
-                           String.valueOf(cinemas.get(0).getCinemaID()));
+            cinemaID = Integer.parseInt(request.getParameter("cinemaID") != null
+                    ? request.getParameter("cinemaID")
+                    : String.valueOf(cinemas.get(0).getCinemaID()));
             session.setAttribute("selectedCinemaID", cinemaID); // Lưu vào session
         }
 
@@ -100,16 +104,16 @@ public class ShowtimeServlet extends HttpServlet {
         // Kiểm tra xem danh sách ngày có rỗng không
         if (availableDates.isEmpty()) {
             request.setAttribute("errorMessage", "Không có ngày nào có suất chiếu.");
-            request.getRequestDispatcher("/page/showtime.jsp").forward(request, response);
+            request.getRequestDispatcher(RouterJSP.SHOWTIME_PAGE).forward(request, response);
             return; // Dừng xử lý nếu không có ngày
         }
 
         // Xác định ngày được chọn
         LocalDate selectedDate = (LocalDate) session.getAttribute("selectedDate");
         if (selectedDate == null) {
-            selectedDate = LocalDate.parse(request.getParameter("date") != null ? 
-                                     request.getParameter("date") : 
-                                     availableDates.get(0).toString());
+            selectedDate = LocalDate.parse(request.getParameter("date") != null
+                    ? request.getParameter("date")
+                    : availableDates.get(0).toString());
             session.setAttribute("selectedDate", selectedDate); // Lưu vào session
         }
 
@@ -122,9 +126,9 @@ public class ShowtimeServlet extends HttpServlet {
         // Nhóm các suất chiếu theo phim
         Map<Movie, List<MovieSlot>> movieSlotsByMovie = movieSlots.stream()
                 .collect(Collectors.groupingBy(movieSlot -> movies.stream()
-                        .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
-                        .findFirst()
-                        .orElse(null)));
+                .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
+                .findFirst()
+                .orElse(null)));
 
         // Thêm dữ liệu vào request để hiển thị
         request.setAttribute("selectedCinemaChainID", cinemaChainID);
@@ -134,16 +138,16 @@ public class ShowtimeServlet extends HttpServlet {
         request.setAttribute("movieSlotsByMovie", movieSlotsByMovie);
 
         // Chuyển tiếp đến JSP
-        request.getRequestDispatcher("/page/showtime.jsp").forward(request, response);
+        request.getRequestDispatcher(RouterJSP.SHOWTIME_PAGE).forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Nếu có yêu cầu từ form (nếu có)
         // Xóa dữ liệu trong session nếu người dùng muốn chọn lại
-        HttpSession session = request.getSession();
-        session.removeAttribute("selectedCinemaChainID");
-        session.removeAttribute("selectedCinemaID");
-        session.removeAttribute("selectedDate");
+//        HttpSession session = request.getSession();
+//        session.removeAttribute("selectedCinemaChainID");
+//        session.removeAttribute("selectedCinemaID");
+//        session.removeAttribute("selectedDate");
 
         // Sau đó chuyển tiếp lại về doGet
         doGet(request, response);
