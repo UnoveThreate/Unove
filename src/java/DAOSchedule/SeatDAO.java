@@ -1,4 +1,4 @@
-// File: SeatDAO.java
+
 package DAOSchedule;
 
 import database.MySQLConnect;
