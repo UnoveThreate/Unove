@@ -16,6 +16,7 @@ import DAO.UserDAO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import javax.servlet.ServletContext;
 import util.RouterJSP;
 import util.RouterURL;
 
@@ -32,7 +33,7 @@ public class ChangePasswordServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         try {
-            userDAO = new UserDAO(getServletContext());
+            userDAO = new UserDAO((jakarta.servlet.ServletContext) (ServletContext) getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }

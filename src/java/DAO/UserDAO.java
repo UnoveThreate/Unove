@@ -34,7 +34,7 @@ public class UserDAO extends MySQLConnect {
     
     public UserDAO(ServletContext context) throws Exception {
         super();
-        connect(context);
+        connect((ServletContext) context);
     }
 
     public ResultSet getResultSet(String sqlQuery) throws SQLException {

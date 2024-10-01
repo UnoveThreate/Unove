@@ -7,7 +7,7 @@ package service;
 import DAO.UserDAOImpl;
 import java.util.List;
 import model.User;
-import jakarta.servlet.ServletContext;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserServiceInteface {
     UserDAOImpl userDAO;
 
     public UserServiceImpl(ServletContext context) throws Exception {
-        userDAO = new UserDAOImpl(context);
+        userDAO = new UserDAOImpl((jakarta.servlet.ServletContext) context);
     }
 
     @Override

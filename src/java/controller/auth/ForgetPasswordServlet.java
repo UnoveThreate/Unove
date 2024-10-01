@@ -5,6 +5,7 @@
 package controller.auth;
 
 import DAO.UserDAO;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -105,7 +106,7 @@ public class ForgetPasswordServlet extends HttpServlet {
             confirmPasswordOk = newPassword.equals(confirmPassword);
             if(isValidPassword && confirmPasswordOk) {
                 try {
-                    ud = new UserDAO(request.getServletContext());
+                    ud = new UserDAO((ServletContext) request.getServletContext());
                     ud.updateUserPasswordByEmail(email, newPassword);
                     changePasswordOk = true;
                 } catch (Exception ex) {
@@ -126,7 +127,7 @@ public class ForgetPasswordServlet extends HttpServlet {
         if (OTP != null) {
             boolean verifyOTPOk = false;
             try {
-                ud = new UserDAO(request.getServletContext());
+                ud = new UserDAO((ServletContext) request.getServletContext());
                 if(OTP.equals(ud.getUserCode(email))) verifyOTPOk = true;
                 request.setAttribute("email", email);
                 request.setAttribute("verifyOTPOk", verifyOTPOk);
@@ -143,7 +144,7 @@ public class ForgetPasswordServlet extends HttpServlet {
         boolean isExistedEmail = false;
 
         try {
-            ud = new UserDAO(request.getServletContext());
+            ud = new UserDAO((ServletContext) request.getServletContext());
 //            ud.closeConnection();
             if (ud.checkExistEmail(email)) isExistedEmail = true;
             request.setAttribute("isExistedEmail", isExistedEmail);

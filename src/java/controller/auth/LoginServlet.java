@@ -5,6 +5,7 @@
 package controller.auth;
 
 import DAO.UserDAO;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -37,7 +38,7 @@ public class LoginServlet extends HttpServlet {
     public void init() throws ServletException {
         try {
             super.init();
-            this.userDAO = new UserDAO(getServletContext());
+            this.userDAO = new UserDAO((ServletContext) getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

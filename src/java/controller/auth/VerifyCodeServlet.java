@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import model.User;
 import service.UserServiceImpl;
 import service.UserServiceInteface;
@@ -30,7 +31,7 @@ public class VerifyCodeServlet extends HttpServlet {
         super.init();
         try {
             // Initialize the UserService instance
-            this.userService = new UserServiceImpl(getServletContext());;
+            this.userService = new UserServiceImpl((ServletContext) getServletContext());;
         } catch (Exception ex) {
             Logger.getLogger(VerifyCodeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }

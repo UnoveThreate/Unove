@@ -44,7 +44,7 @@ public class MySQLConnect {
             String portNumber = props.getProperty("db.portNumber", "3306");
 
             // Build the connection URL
-            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName;
+            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName+"?allowPublicKeyRetrieval=true&useSSL=false";
 
             // Load MySQL JDBC Driver
             Class.forName("com.mysql.cj.jdbc.Driver");

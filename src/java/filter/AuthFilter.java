@@ -5,6 +5,7 @@
 package filter;
 
 import DAO.UserDAO;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -121,7 +122,7 @@ public class AuthFilter implements Filter {
         if (role == null) {
             UserDAO userDAO;
             try {
-                userDAO = new UserDAO(httpRequest.getServletContext());
+                userDAO = new UserDAO((ServletContext) httpRequest.getServletContext());
                 role = userDAO.getUserRole(username);
             } catch (Exception ex) {
 
