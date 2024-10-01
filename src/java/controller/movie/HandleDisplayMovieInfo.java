@@ -34,12 +34,9 @@ public class HandleDisplayMovieInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-
-//            String cinemaID = request.getParameter("cinemaID");
-//            String movieID = request.getParameter("movieID");
-            String cinemaID = "1";
-            String movieID = "1";
-
+            String movieID = request.getParameter("movieID");
+            String cinemaID = request.getParameter("cinemaID");
+       
             //kiem tra chuoi có null hay khong
             if (cinemaID == null || cinemaID.isEmpty() || movieID == null || movieID.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "CinemaID or MovieID is missing or empty");

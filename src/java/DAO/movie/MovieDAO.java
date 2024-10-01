@@ -46,7 +46,16 @@ public class MovieDAO extends MySQLConnect {
                 String linkTrailer = rs.getString("LinkTrailer");
 
                 // Create a new Movie object using the constructor
-                movie = new Movie(rs.getInt("MovieID"), title,datePublished, imageURL, synopsis, country, rating, linkTrailer, null);
+                movie = new Movie();
+                movie.setMovieID(rs.getInt("MovieID"));
+                movie.setCinemaID(cinemaID);
+                movie.setLinkTrailer(linkTrailer);
+                movie.setRating(rating);
+                movie.setDatePublished(datePublished);
+                movie.setCountry(country);
+                movie.setImageURL(imageURL);
+                movie.setTitle(title);
+                movie.setSynopsis(synopsis);
                 
                 // Lấy danh sách thể loại của bộ phim từ bảng MovieInGenre
                 List<String> genres = new ArrayList<>();

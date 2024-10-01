@@ -17,9 +17,11 @@ public class Movie {
     private List<String> genres;
     private String status;
 
+    public Movie() {
+    }
 
+    public Movie(String title, String synopsis, Date datePublished, String imageURL, float rating, String country, List<String> genres) {
         this.title = title;
-            
         this.datePublished = datePublished;
         this.rating = rating;
         this.imageURL = imageURL;
@@ -30,8 +32,7 @@ public class Movie {
 
     // Constructor
     public Movie(int movieID, String title, String synopsis, Date datePublished, String imageURL, float rating, String status, String country, List<String> genres) {
-        this.movie
-
+        this.movieID = movieID;
         this.datePublished = datePublished;
         this.rating = rating;
         this.imageURL = imageURL;
@@ -46,20 +47,20 @@ public class Movie {
         return String.join(", ", genres);
     }
 
-    public String getStatus() {
-
-    
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    // Getters and setters
     public int getMovieID() {
         return movieID;
     }
 
     public void setMovieID(int movieID) {
         this.movieID = movieID;
+    }
+
+    public int getCinemaID() {
+        return cinemaID;
+    }
+
+    public void setCinemaID(int cinemaID) {
+        this.cinemaID = cinemaID;
     }
 
     public String getTitle() {
@@ -70,13 +71,6 @@ public class Movie {
         this.title = title;
     }
 
-    public String getSynopsis() {
-     
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
-    }
-
     public Date getDatePublished() {
         return datePublished;
     }
@@ -85,18 +79,28 @@ public class Movie {
         this.datePublished = datePublished;
     }
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-        this.imageURL = imageURL;
-    }
-
     public float getRating() {
         return rating;
     }
 
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public String getSynopsis() {
+        return synopsis;
+    }
+
+    public void setSynopsis(String synopsis) {
+        this.synopsis = synopsis;
     }
 
     public String getCountry() {
@@ -107,7 +111,9 @@ public class Movie {
         this.country = country;
     }
 
-    
+    public String getLinkTrailer() {
+        return linkTrailer;
+    }
 
     public void setLinkTrailer(String linkTrailer) {
         this.linkTrailer = linkTrailer;
@@ -120,5 +126,15 @@ public class Movie {
     public void setGenres(List<String> genres) {
         this.genres = genres;
     }
-}
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
+    
+
+}
