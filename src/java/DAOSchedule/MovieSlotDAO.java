@@ -16,7 +16,7 @@ public class MovieSlotDAO extends MySQLConnect {
 
     public MovieSlotDAO(ServletContext context) throws Exception {
         super(); 
-        connect((ServletContext) context);
+        connect(context);
     }
 
     public List<MovieSlot> getMovieSlotsByCinemaAndDate(int cinemaID, LocalDate date) {

@@ -4,9 +4,11 @@
     Author     : nguyendacphong
 --%>
 
+<%@page import="java.util.List"%>
 <%@page import="util.RouterURL"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
@@ -55,10 +57,10 @@
         </style>
     </head>
     <body>
-
         <div class="container">
-            <h2>Create Cinema Chain</h2>
+            <h2>Create Cinema Chain</h2>      
             <form action="<%= RouterURL.OWNER_PAGE%>" method="POST" enctype="multipart/form-data">
+                
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" class="form-control" id="name" name="name" required>

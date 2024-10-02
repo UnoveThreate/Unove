@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
         <meta charset="UTF-8">
         <title>Lịch Chiếu Phim</title>
-        <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Thay đổi đường dẫn cho phù hợp -->
+        <link rel="stylesheet" href="path/to/your/styles.css"> 
         <style>
             body {
                 font-family: 'Arial', sans-serif;
@@ -125,14 +126,12 @@
 
             <div class="cinema-chain">
                 <h2>Chuỗi Rạp</h2>
+                <div>${cinema}</div>
                 <div id="cinemaChainSelect">
                     <c:forEach var="chain" items="${cinemaChains}">
                         <form action="/Unove/showtimes" method="GET">
                             <input type="hidden" name="cinemaChainID" value="${chain.cinemaChainID}"/>
                             <input type="submit" value="${chain.name}"/>
-<!--                            <div onclick="handle" style="${sessionScope.selectedCinemaChainID == chain.cinemaChainID ? 'font-weight: bold;' : ''}">
-                              
-                            </div>                          -->
                         </form>
                     </c:forEach>
                 </div>
@@ -172,7 +171,7 @@
                         <p><strong>Quốc gia:</strong> ${movie.country}</p>
                         <p><strong>Đánh giá:</strong> ${movie.rating}</p>
                         <img src="${movie.imageURL}" alt="${movie.title}">
-                        <div class="showtimes">
+                        <div class="showtimes">      
                             <c:if test="${not empty movieSlotsByMovie[movie]}">
                                 <c:forEach var="entry" items="${movieSlotsByMovie[movie]}">
                                     <div class="showtime">

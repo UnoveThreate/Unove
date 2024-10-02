@@ -4,7 +4,6 @@ import DAOSchedule.CinemaChainScheduleDAO;
 import DAOSchedule.CinemaScheduleDAO;
 import DAOSchedule.MovieDAO;
 import DAOSchedule.MovieSlotDAO;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +14,6 @@ import model.CinemaChain;
 import model.Cinema;
 import model.Movie;
 import model.MovieSlot;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -37,37 +35,37 @@ public class ShowtimeServlet extends HttpServlet {
     public void init() throws ServletException {
         try {
             super.init();
-          
+
             this.cinemaChainDAO = new CinemaChainScheduleDAO(getServletContext());
             this.cinemaDAO = new CinemaScheduleDAO(getServletContext());
             this.movieDAO = new MovieDAO(getServletContext());
             this.movieSlotDAO = new MovieSlotDAO(getServletContext());
-            
+
         } catch (Exception ex) {
             Logger.getLogger(ShowtimeServlet.class.getName()).log(Level.SEVERE, null, ex);
             throw new ServletException("Failed to initialize DAO", ex);
         }
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(); // Lấy session
 
         // Lấy danh sách chuỗi rạp
         List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
+        request.setAttribute("cinemaChains", cinemaChains);
 
         // Kiểm tra xem danh sách chuỗi rạp có rỗng không
         if (cinemaChains.isEmpty()) {
             request.setAttribute("errorMessage", "Không có chuỗi rạp nào.");
-            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+            request.getRequestDispatcher(RouterJSP.SHOWTIME_PAGE).forward(request, response);
             return; // Dừng xử lý nếu không có chuỗi rạp
         }
-
-        request.setAttribute("cinemaChains", cinemaChains);
 
         // Xác định chuỗi rạp được chọn
         Integer cinemaChainID = (Integer) session.getAttribute("selectedCinemaChainID");
         if (cinemaChainID == null) {
-            cinemaChainID = Integer.parseInt(request.getParameter("cinemaChainID") != null
+            cinemaChainID = Integer.valueOf(request.getParameter("cinemaChainID") != null
                     ? request.getParameter("cinemaChainID")
                     : String.valueOf(cinemaChains.get(0).getCinemaChainID()));
             session.setAttribute("selectedCinemaChainID", cinemaChainID); // Lưu vào session
@@ -87,7 +85,7 @@ public class ShowtimeServlet extends HttpServlet {
         // Xác định rạp được chọn
         Integer cinemaID = (Integer) session.getAttribute("selectedCinemaID");
         if (cinemaID == null) {
-            cinemaID = Integer.parseInt(request.getParameter("cinemaID") != null
+            cinemaID = Integer.valueOf(request.getParameter("cinemaID") != null
                     ? request.getParameter("cinemaID")
                     : String.valueOf(cinemas.get(0).getCinemaID()));
             session.setAttribute("selectedCinemaID", cinemaID); // Lưu vào session
@@ -116,7 +114,6 @@ public class ShowtimeServlet extends HttpServlet {
                     : availableDates.get(0).toString());
             session.setAttribute("selectedDate", selectedDate); // Lưu vào session
         }
-
         // Lấy danh sách phim đang chiếu tại rạp
         List<Movie> movies = movieDAO.getMoviesByCinema(cinemaID);
 
@@ -141,13 +138,22 @@ public class ShowtimeServlet extends HttpServlet {
         request.getRequestDispatcher(RouterJSP.SHOWTIME_PAGE).forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Nếu có yêu cầu từ form (nếu có)
         // Xóa dữ liệu trong session nếu người dùng muốn chọn lại
-//        HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
 //        session.removeAttribute("selectedCinemaChainID");
 //        session.removeAttribute("selectedCinemaID");
 //        session.removeAttribute("selectedDate");
+
+        String cinemaChainID = (String) request.getAttribute("cinemaChainID");
+        
+        if (!cinemaChainID.isEmpty()) {
+            session.setAttribute("cinemaChainID", cinemaChainID);
+        }
+        
+        
 
         // Sau đó chuyển tiếp lại về doGet
         doGet(request, response);
