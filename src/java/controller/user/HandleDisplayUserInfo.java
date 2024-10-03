@@ -31,7 +31,7 @@ public class HandleDisplayUserInfo extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         try {
-            userDAO = new DAO.UserDAO((ServletContext) (javax.servlet.ServletContext) getServletContext());
+            userDAO = new DAO.UserDAO(getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -40,27 +40,35 @@ public class HandleDisplayUserInfo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // tao Servlet Context : 
+        // Tạo Servlet Context
         ServletContext context = getServletContext();
         HttpSession session = request.getSession();
-        
-        // lay userID tu session : 
-        String username = (String)session.getAttribute("username");
 
+        // Lấy userID (username) từ session
+        String username = (String) session.getAttribute("username");
+
+        // Kiểm tra người dùng đã đăng nhập chưa
+        if (username == null || username.isEmpty()) {
+            // Chưa đăng nhập, chuyển hướng về trang đăng nhập
+           request.getRequestDispatcher(router.LOGIN).forward(request, response); // Thay đổi đường dẫn đến trang đăng nhập của bạn
+            return;
+        }
+
+        // Người dùng đã đăng nhập, lấy thông tin user từ database
         User user = new User();
-        
+
         try {
             user = userDAO.getUserByUsername(username);
         } catch (Exception ex) {
             user.setAddress(ex.getMessage());
             Logger.getLogger(HandleDisplayUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("user: "+ user);
-        // them doi tuong user vao request : 
+
+        // Thêm đối tượng user vào request
         request.setAttribute("user", user);
 
+        // Forward tới trang hiển thị thông tin người dùng
         request.getRequestDispatcher(router.DISPLAY_INFO).forward(request, response);
-
     }
 
     @Override

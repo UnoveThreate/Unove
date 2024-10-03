@@ -394,75 +394,57 @@
 
         <script>
             $(document).ready(function () {
-                // Fetch provinces
+                // Lấy danh sách tỉnh từ API
                 $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
                     if (data_tinh.error === 0) {
                         $.each(data_tinh.data, function (key_tinh, val_tinh) {
                             $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
                         });
-
-                        // Set the default selected province text
-                        var defaultProvince = '${user.getProvince()}';
-                        if (defaultProvince) {
-                            $("#tinh").val(defaultProvince);
-                        }
-
-                        // On province change
-                        $("#tinh").change(function () {
-                            var idtinh = $(this).val();
-                            var selectedProvince = $("#tinh option:selected").text();
-                            $("#provinceName").val(selectedProvince); // Update hidden field with selected name
-
-                            // Fetch districts
-                            $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
-                                if (data_quan.error === 0) {
-                                    $("#quan").html('<option value="0">Quận Huyện</option>');
-                                    $("#phuong").html('<option value="0">Phường Xã</option>');
-                                    $.each(data_quan.data, function (key_quan, val_quan) {
-                                        $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                                    });
-
-                                    // Set the default selected district text
-                                    var defaultDistrict = '${user.getDistrict()}';
-                                    if (defaultDistrict) {
-                                        $("#quan").val(defaultDistrict);
-                                    }
-
-                                    // On district change
-                                    $("#quan").change(function () {
-                                        var idquan = $(this).val();
-                                        var selectedDistrict = $("#quan option:selected").text();
-                                        $("#districtName").val(selectedDistrict); // Update hidden field with selected name
-
-                                        // Fetch wards
-                                        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                            if (data_phuong.error === 0) {
-                                                $("#phuong").html('<option value="0">Phường Xã</option>');
-                                                $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                                    $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                                });
-
-                                                // Set the default selected ward text
-                                                var defaultWard = '${user.getCommune()}';
-                                                if (defaultWard) {
-                                                    $("#phuong").val(defaultWard);
-                                                }
-
-                                                // On ward change
-                                                $("#phuong").change(function () {
-                                                    var selectedWard = $("#phuong option:selected").text();
-                                                    $("#communeName").val(selectedWard); // Update hidden field with selected name
-                                                });
-                                            }
-                                        });
-                                    });
-                                }
-                            });
-                        });
                     }
+                });
+
+                // Lấy danh sách quận/huyện theo tỉnh
+                $("#tinh").change(function () {
+                    var idtinh = $(this).val();
+                    $("#quan").empty().append('<option value="">Chọn Quận/Huyện</option>');
+                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                        if (data_quan.error === 0) {
+                            $.each(data_quan.data, function (key_quan, val_quan) {
+                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
+                            });
+                        }
+                    });
+                });
+
+                // Lấy danh sách xã/phường theo quận/huyện
+                $("#quan").change(function () {
+                    var idquan = $(this).val();
+                    $("#phuong").empty().append('<option value="">Chọn Xã/Phường</option>');
+                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
+                        if (data_phuong.error === 0) {
+                            $.each(data_phuong.data, function (key_phuong, val_phuong) {
+                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
+                            });
+                        }
+                    });
+                });
+
+                // Cập nhật các trường ẩn khi người dùng chọn tỉnh, quận và xã
+                $("#tinh").change(function () {
+                    var selectedProvince = $("#tinh option:selected").text();
+                    $("#provinceName").val(selectedProvince);
+                });
+
+                $("#quan").change(function () {
+                    var selectedDistrict = $("#quan option:selected").text();
+                    $("#districtName").val(selectedDistrict);
+                });
+
+                $("#phuong").change(function () {
+                    var selectedCommune = $("#phuong option:selected").text();
+                    $("#communeName").val(selectedCommune);
                 });
             });
         </script>
-
     </body>
 </html>

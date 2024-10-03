@@ -22,6 +22,8 @@ public class MovieDAO extends MySQLConnect {
         connect(context); // Establish the connection from MySQLConnect
     }
 
+    
+
     // Method to get movie by CinemaID and MovieID
     public Movie getMovieByCinemaIDAndMovieID(int cinemaID, int movieID) throws SQLException {
     Movie movie = null;

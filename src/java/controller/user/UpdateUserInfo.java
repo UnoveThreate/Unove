@@ -27,7 +27,7 @@ public class UpdateUserInfo extends HttpServlet {
     public void init() throws ServletException {
         super.init(); 
         try {
-            userDAO= new UserDAO((jakarta.servlet.ServletContext) getServletContext());
+            userDAO= new UserDAO(getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }

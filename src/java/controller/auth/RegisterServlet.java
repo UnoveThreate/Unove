@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
 import service.UserServiceInteface;
 import util.RouterJSP;
 import model.User;
@@ -39,19 +38,13 @@ public class RegisterServlet extends HttpServlet {
         super.init();
         try {
             // Initialize the UserService instance
-            this.userService = new UserServiceImpl((ServletContext) getServletContext());
+            this.userService = new UserServiceImpl(getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(VerifyCodeServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-
-        }
-    }
+   
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
