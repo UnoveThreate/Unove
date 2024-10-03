@@ -41,13 +41,29 @@ public class CinemaDetailServlet extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int cinemaId = Integer.parseInt(request.getParameter("1"));
-        Cinema cinema = cinemaDAO.getCinemaById(cinemaId);
-        List<CinemaReview> reviews = cinemaDAO.getReviewsByCinemaId(cinemaId);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            // Lấy CinemaID từ request
+            int cinemaId = Integer.parseInt(request.getParameter("cinemaId"));
 
-        request.setAttribute("cinema", cinema);
-        request.setAttribute("reviews", reviews);
-        request.getRequestDispatcher(router.CINEMA_DETAIL_PAGE).forward(request, response);
+            // Gọi CinemaDAO để lấy thông tin rạp chiếu và đánh giá
+            Cinema cinema = cinemaDAO.getCinemaById(cinemaId);
+            List<CinemaReview> reviews = cinemaDAO.getReviewsByCinemaId(cinemaId);
+
+            // Đặt các đối tượng Cinema và Review vào request attribute
+            request.setAttribute("cinema", cinema);
+            request.setAttribute("reviews", reviews);
+
+            // Chuyển tiếp tới trang JSP chi tiết của Cinema
+            request.getRequestDispatcher(router.CINEMA_DETAIL_PAGE).forward(request, response);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid CinemaID");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching cinema details");
+        }
     }
+
 }

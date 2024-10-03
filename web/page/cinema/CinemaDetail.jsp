@@ -1,9 +1,3 @@
-<%-- 
-    Document   : CinemaDetail
-    Created on : Sep 28, 2024, 8:36:04 PM
-    Author     : Kaan
---%>
-
 <%@page import="model.Cinema"%>
 <%@page import="model.CinemaReview"%>
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
@@ -21,8 +15,9 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
         }
-        h1 {
+        h1, h2 {
             color: #333;
         }
         ul {
@@ -34,6 +29,19 @@
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
+        }
+        .btn-back {
+            margin-top: 20px;
+        }
+        .btn-back a {
+            text-decoration: none;
+            color: white;
+            background-color: #007BFF;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .btn-back a:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -60,7 +68,9 @@
             <li>Chưa có đánh giá nào.</li>
         <% } %>
     </ul>
+
+    <div class="btn-back">
+        <a href="cinemaList.jsp">Quay lại danh sách rạp</a>
+    </div>
 </body>
 </html>
-
-
