@@ -26,16 +26,16 @@ public class RouterJSP {
 
     public static String BOOKING_SEAT = "/page/cinema_room/BookingSeat.jsp";
 
-    //for example, must replace when get real page content schedule component
+    // for example, must replace when get real page content schedule component
     public String SCHEDULE_MOIVE = "components/schedule/Schedule.jsp";
 
-    public String USER = "/page/landingPage/LandingPage.jsp";//templatefor testing login by role
+    public String USER = "/page/landingPage/LandingPage.jsp";// templatefor testing login by role
 
-    public String CINEMA_CHAIN_ITEM = "/page/cinemaChain/CinemaDetail.jsp";//templatefor testing login by role
+    public String CINEMA_CHAIN_ITEM = "/page/cinemaChain/CinemaDetail.jsp";// templatefor testing login by role
 
-    public String STAFF = "/page/staff/Staff.jsp";//templatefor testing login by role
+    public String STAFF = "/page/staff/Staff.jsp";// templatefor testing login by role
 
-    public String ADMIN = "/page/admin/AdminPage.jsp";//templatefor testing login by role
+    public String ADMIN = "/page/admin/AdminPage.jsp";// templatefor testing login by role
 
     public String CHANGE_PASSWORD = "/page/user/ChangePassword.jsp";
 
@@ -77,7 +77,7 @@ public class RouterJSP {
 
     public static String VIEW_ORDER = "/page/bill/Bill.index.jsp";
 
-    public static String SCHEDULE_MOVIE = "/page/movie/schedule/ScheduleMovie.jsp";
+    public static String SCHEDULE_MOVIEe = "/page/movie/schedule/ScheduleMovie.jsp";
 
     public String UPDATE_CINEMACHAIN = "/page/owner/manage/UpdateCinemaChain.jsp";
 
@@ -128,5 +128,7 @@ public class RouterJSP {
 
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
 
-    public static String SHOWTIME_PAGE = "/page/showtime/showtime.jsp";
+    public static String SCHEDULE_MOVIE = "/page/schedule/showtime.jsp";
+
+    public static String SELECT_SEAT = "/page/seatselect/selectSeat.jsp";
 }

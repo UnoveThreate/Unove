@@ -10,8 +10,9 @@ public class Movie {
     private String imageURL;
     private float rating;
     private String country;
+    private String linkTrailer;
+    private int cinemaID;
 
-    // Constructors, getters, setters
 
     public int getMovieID() {
         return movieID;
@@ -67,5 +68,21 @@ public class Movie {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getLinkTrailer() {
+        return linkTrailer;
+    }
+
+    public void setLinkTrailer(String linkTrailer) {
+        this.linkTrailer = linkTrailer;
+    }
+
+    public int getCinemaID() {
+        return cinemaID;
+    }
+
+    public void setCinemaID(int cinemaID) {
+        this.cinemaID = cinemaID;
     }
 }
