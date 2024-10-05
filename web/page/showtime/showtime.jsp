@@ -1,224 +1,212 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <title>Lịch Chiếu Phim</title>
-        <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Thay đổi đường dẫn cho phù hợp -->
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: #f0f4f8;
-                margin: 0;
-                padding: 20px;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Showtimes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Màu nền sáng */
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); /* Hiệu ứng gradient */
+        }
 
-            .container {
-                max-width: 1200px;
-                margin: auto;
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-                padding: 30px;
-            }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(233, 230, 230, 0.1); /* Bóng đổ cho container */
+        }
 
-            h1 {
-                text-align: center;
-                color: #e91e63;
-                margin-bottom: 20px;
-                font-size: 2.5em;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            background-color: #eceff1; /* Màu nền cho header */
+            color: white; /* Màu chữ trắng cho header */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ cho header */
+            font-family: Arial, sans-serif; /* Kiểu chữ cho header */
+        }
 
-            h2 {
-                color: #333;
-                border-bottom: 2px solid #e91e63;
-                padding-bottom: 10px;
-                margin-bottom: 20px;
-                font-size: 1.8em;
-            }
+        .header select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #343a40; /* Màu nền cho select */
+            color: white; /* Màu chữ trắng cho select */
+        }
 
-            .cinema-chain, .cinema, .date {
-                margin-bottom: 30px;
-            }
+        .title {
+            font-size: 24px;
+            color: #007bff; /* Màu xanh cho tiêu đề */
+            text-align: center;
+        }
 
-            .cinema-chain div, .cinema div, .date div {
-                display: inline-block;
-                padding: 12px 20px;
-                margin: 5px;
-                background: #e0e0e0;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background 0.3s, transform 0.2s;
-                font-weight: bold;
-                color: #333;
-            }
+        .form-group {
+            margin-bottom: 20px;
+        }
 
-            .cinema-chain div:hover, .cinema div:hover, .date div:hover {
-                background: #d1c4e9;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            }
+        .label {
+            font-weight: bold;
+        }
 
-            .movies {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-            }
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #e9ecef; /* Màu nền cho form-select */
+        }
 
-            .movie {
-                background: #fff;
-                border-radius: 10px;
-                padding: 20px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                flex: 1 1 calc(33.333% - 20px);
-                min-width: 250px;
-                transition: transform 0.2s, box-shadow 0.2s;
-            }
+        .movie-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-            .movie:hover {
-                transform: scale(1.05);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            }
+        .movie-item {
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: transform 0.3s ease; /* Hiệu ứng chuyển động */
+        }
 
-            .movie h3 {
-                color: #e91e63;
-                margin: 0 0 10px;
-                font-size: 1.5em;
-            }
+        .movie-item:hover {
+            transform: translateY(-5px); /* Hiệu ứng di chuyển lên khi hover */
+        }
 
-            .movie p {
-                margin: 5px 0;
-                color: #555;
-            }
+        .movie-title {
+            font-size: 20px;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
 
-            .showtime {
-                margin-top: 10px;
-                color: #333;
-                font-weight: bold;
-            }
+        .movie-image {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 5px;
+        }
 
-            img {
-                width: 100%;
-                border-radius: 5px;
-                margin-top: 10px;
-                transition: transform 0.3s;
-            }
+        .slot-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0;
+        }
 
-            img:hover {
-                transform: scale(1.05);
-            }
+        .slot-item {
+            background: #e9ecef;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer; /* Thay đổi con trỏ khi hover */
+            transition: background-color 0.3s ease; /* Hiệu ứng chuyển động */
+        }
 
-            .footer {
-                text-align: center;
-                margin-top: 30px;
-                font-size: 0.9em;
-                color: #777;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Lịch Chiếu Phim</h1>
+        .slot-item:hover {
+            background: #d1d1d1; /* Màu nền khi hover */
+        }
 
-            <div class="cinema-chain">
-                <h2>Chuỗi Rạp</h2>
-                <div id="cinemaChainSelect">
-                    <c:forEach var="chain" items="${cinemaChains}">
-                        <form action="/Unove/showtimes" method="GET">
-                            <input type="hidden" name="cinemaChainID" value="${chain.cinemaChainID}"/>
-                            <input type="submit" value="${chain.name}"/>
-<!--                            <div onclick="handle" style="${sessionScope.selectedCinemaChainID == chain.cinemaChainID ? 'font-weight: bold;' : ''}">
-                              
-                            </div>                          -->
-                        </form>
-                    </c:forEach>
-                </div>
-            </div>
-
-            <div class="cinema">
-                <h2>Rạp</h2>
-                <div id="cinemaSelect">
-                    <c:forEach var="cinema" items="${cinemas}">
-                        <div onclick="updateMovies(${cinema.cinemaID})" 
-                             style="${sessionScope.selectedCinemaID == cinema.cinemaID ? 'font-weight: bold;' : ''}">
-                            ${cinema.name}
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-
-            <div class="date">
-                <h2>Ngày</h2>
-                <div id="dateSelect">
-                    <c:forEach var="date" items="${availableDates}">
-                        <div onclick="updateShowtimes('${date}')" 
-                             style="${sessionScope.selectedDate == date ? 'font-weight: bold;' : ''}">
-                            ${date}
-                        </div>
-                    </c:forEach>
-                </div>
-            </div>
-
-            <h2>Phim</h2>
-            <div class="movies" id="movies">
-                <c:forEach var="movie" items="${movies}">
-                    <div class="movie">
-                        <h3>${movie.title}</h3>
-                        <p><strong>Mô tả:</strong> ${movie.synopsis}</p>
-                        <p><strong>Ngày phát hành:</strong> ${movie.datePublished}</p>
-                        <p><strong>Quốc gia:</strong> ${movie.country}</p>
-                        <p><strong>Đánh giá:</strong> ${movie.rating}</p>
-                        <img src="${movie.imageURL}" alt="${movie.title}">
-                        <div class="showtimes">
-                            <c:if test="${not empty movieSlotsByMovie[movie]}">
-                                <c:forEach var="entry" items="${movieSlotsByMovie[movie]}">
-                                    <div class="showtime">
-                                        <span>${entry.startTime} - ${entry.endTime}</span>
-                                    </div>
-                                </c:forEach>
-                            </c:if>
-                            <c:if test="${empty movieSlotsByMovie[movie]}">
-                                <p>Không có suất chiếu cho phim này.</p>
-                            </c:if>
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Lịch chiếu phim</h1>
         </div>
 
-        <script>
-            function updateCinemas(chainID) {
-                fetch(`/showtimes?cinemaChainID=${chainID}`)
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById("cinemaSelect").innerHTML = data;
-                            updateMovies(document.querySelector("#cinemaSelect div").getAttribute("onclick").split('(')[1].split(')')[0]);
-                        })
-                        .catch(error => console.error('Error:', error));
-            }
+        <form action="showtimes" method="get" class="form-group">
+            <label class="label" for="cinemaChainID">Chọn chuỗi rạp:</label>
+            <select name="cinemaChainID" id="cinemaChainID" class="form-select" onchange="this.form.submit()">
+                <c:forEach var="chain" items="${cinemaChains}">
+                    <option value="${chain.cinemaChainID}" 
+                            <c:if test="${chain.cinemaChainID == selectedCinemaChainID}">selected</c:if>>
+                        ${chain.name}
+                    </option>
+                </c:forEach>
+            </select>
 
-            function updateMovies(cinemaID) {
-                fetch(`/showtimes?cinemaID=${cinemaID}`)
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById("movies").innerHTML = data;
-                            updateShowtimes(document.querySelector("#dateSelect div").innerText);
-                        })
-                        .catch(error => console.error('Error:', error));
-            }
+            <label class="label" for="cinemaID">Chọn rạp:</label>
+            <select name="cinemaID" id="cinemaID" class="form-select" onchange="this.form.submit()">
+                <c:forEach var="cinema" items="${cinemas}">
+                    <option value="${cinema.cinemaID}" 
+                            <c:if test="${cinema.cinemaID == selectedCinemaID}">selected</c:if>>
+                        ${cinema.name}
+                    </option>
+                </c:forEach>
+            </select>
 
-            function updateShowtimes(selectedDate) {
-                const cinemaID = document.querySelector("#cinemaSelect div").getAttribute("onclick").split('(')[1].split(')')[0];
-                fetch(`/showtimes?cinemaID=${cinemaID}&date=${selectedDate}`)
-                        .then(response => response.text())
-                        .then(data => {
-                            document.getElementById("showtimes").innerHTML = data;
-                        })
-                        .catch(error => console.error('Error:', error));
-            }
-        </script>
-    </body>
+            <label class="label" for="date">Chọn ngày:</label>
+            <select name="date" id="date" class="form-select" onchange="this.form.submit()">
+                <c:forEach var="date" items="${availableDates}">
+                    <option value="${date}" 
+                            <c:if test="${date == selectedDate}">selected</c:if>>
+                        ${date}
+                    </option>
+                </c:forEach>
+            </select>
+        </form>
+
+        <h2 class="movie-list-title">Danh sách phim</h2>
+        <div class="movie-list">
+            <c:if test="${not empty movies}">
+                <c:forEach var="movie" items="${movies}">
+                    <div class="movie-item">
+                        <h3 class="movie-title">${movie.title}</h3>
+                        <img src="${movie.imageURL}" alt="${movie.title}" class="movie-image"/>
+
+                        <p><strong>Mô tả:</strong> ${movie.synopsis}</p>
+                        <p><strong>Ngày công chiếu:</strong> ${movie.datePublished != null ? fn:substring(movie.datePublished, 0, 10) : 'Chưa có thông tin'}</p>
+                        <p><strong>Đánh giá:</strong> ${movie.rating != null ? movie.rating : 'Chưa có đánh giá'}</p>
+                        <p><strong>Quốc gia:</strong> ${movie.country != null ? movie.country : 'Chưa có thông tin'}</p>
+
+                        <h4>Suất chiếu:</h4>
+                        <c:if test="${not empty movieSlotsByMovie[movie]}">
+                            <ul class="slot-list">
+                                <c:forEach var="slot" items="${movieSlotsByMovie[movie]}">
+                                    <li class="slot-item" onclick="location.href='selectSeat?movieSlotID=${slot.movieSlotID}'">
+                                        Thời gian: ${slot.startTime} - ${slot.endTime} <br>
+                                        Giá: ${slot.price} VND <br>
+                                        <c:if test="${slot.discount != null}">
+                                            Giảm giá: ${slot.discount}%
+                                        </c:if>
+                                        <c:if test="${slot.discount == null}">
+                                            Giảm giá: Không có giảm giá
+                                        </c:if>
+                                        <br>
+                                        Trạng thái: ${slot.status}
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </c:if>
+                        <c:if test="${empty movieSlotsByMovie[movie]}">
+                            <p>Không có suất chiếu cho phim này.</p>
+                        </c:if>
+                    </div>
+                </c:forEach>
+            </c:if>
+            <c:if test="${empty movies}">
+                <p>Không có phim nào đang chiếu.</p>
+            </c:if>
+
+            <c:if test="${not empty errorMessage}">
+                <p class="error-message">${errorMessage}</p>
+            </c:if>
+        </div>
+    </div>
+</body>
 </html>
