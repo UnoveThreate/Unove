@@ -16,7 +16,7 @@ import model.Review;
  * @author DELL
  */
 public class MovieDAO extends MySQLConnect {
-
+    
     public MovieDAO(ServletContext context) throws Exception {
         super();
         connect(context); // Establish the connection from MySQLConnect

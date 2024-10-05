@@ -15,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
@@ -38,7 +37,7 @@ public class LoginServlet extends HttpServlet {
     public void init() throws ServletException {
         try {
             super.init();
-            this.userDAO = new UserDAO((ServletContext) getServletContext());
+            this.userDAO = new UserDAO((ServletContext) getServletContext());        
         } catch (Exception ex) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -96,6 +95,7 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher(route.LOGIN).forward(request, response);
             return;
         }
+     
         String hash = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
 
         Boolean ok = null;
