@@ -18,18 +18,21 @@ public class CinemaChainDAO extends MySQLConnect {
         connect((ServletContext) context);
     }
 
+    // Lấy tất cả chuỗi rạp chiếu phim
     public List<CinemaChain> getAllCinemaChains() {
         List<CinemaChain> cinemaChains = new ArrayList<>();
         String sql = "SELECT * FROM CinemaChain";
 
-        try (Connection conn = this.connection; 
-             PreparedStatement pstmt = conn.prepareStatement(sql);
+        try (
+             PreparedStatement pstmt = this.connection.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 CinemaChain cinemaChain = new CinemaChain();
                 cinemaChain.setCinemaChainID(rs.getInt("CinemaChainID"));
+                cinemaChain.setUserID(rs.getInt("UserID")); 
                 cinemaChain.setName(rs.getString("Name"));
+                cinemaChain.setAvatarURL(rs.getString("AvatarURL"));  
                 cinemaChain.setInformation(rs.getString("Information"));
                 cinemaChains.add(cinemaChain);
             }
@@ -39,17 +42,43 @@ public class CinemaChainDAO extends MySQLConnect {
         return cinemaChains;
     }
 
+    // Thêm chuỗi rạp chiếu phim mới
     public boolean insertCinemaChain(CinemaChain cinemaChain) {
-        String sql = "INSERT INTO CinemaChain (Name, Information) VALUES (?, ?)";
-        try (Connection conn = this.connection; 
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, cinemaChain.getName());
-            pstmt.setString(2, cinemaChain.getInformation());
+        String sql = "INSERT INTO CinemaChain (UserID, Name, AvatarURL, Information) VALUES (?, ?, ?, ?)";
+        try (
+             PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+             
+            pstmt.setInt(1, cinemaChain.getUserID());  
+            pstmt.setString(2, cinemaChain.getName());
+            pstmt.setString(3, cinemaChain.getAvatarURL());  
+            pstmt.setString(4, cinemaChain.getInformation());
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0; 
         } catch (SQLException e) {
             e.printStackTrace();
             return false; 
         }
+    }
+
+    // Lấy thông tin chuỗi rạp chiếu phim theo ID
+    public CinemaChain getCinemaChainById(int cinemaChainID) {
+        CinemaChain cinemaChain = null;
+        String sql = "SELECT * FROM CinemaChain WHERE CinemaChainID = ?";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setInt(1, cinemaChainID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    cinemaChain = new CinemaChain();
+                    cinemaChain.setCinemaChainID(rs.getInt("CinemaChainID"));
+                    cinemaChain.setUserID(rs.getInt("UserID")); 
+                    cinemaChain.setName(rs.getString("Name"));
+                    cinemaChain.setAvatarURL(rs.getString("AvatarURL")); 
+                    cinemaChain.setInformation(rs.getString("Information"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return cinemaChain; 
     }
 }

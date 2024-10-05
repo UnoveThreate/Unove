@@ -25,9 +25,7 @@ public class MovieDAO extends MySQLConnect {
                      "JOIN Room r ON ms.RoomID = r.RoomID " +
                      "WHERE r.CinemaID = ?";
 
-        try (Connection conn = this.connection; 
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-             
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -39,6 +37,8 @@ public class MovieDAO extends MySQLConnect {
                     movie.setImageURL(rs.getString("ImageURL"));
                     movie.setRating(rs.getFloat("Rating"));
                     movie.setCountry(rs.getString("Country"));
+                    movie.setLinkTrailer(rs.getString("LinkTrailer")); 
+                    movie.setCinemaID(rs.getInt("CinemaID"));
                     movies.add(movie);
                 }
             }
@@ -49,7 +49,8 @@ public class MovieDAO extends MySQLConnect {
     }
 
     public boolean insertMovie(Movie movie) {
-        String sql = "INSERT INTO Movie (Title, Synopsis, DatePublished, ImageURL, Rating, Country) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movie (Title, Synopsis, DatePublished, ImageURL, Rating, Country, LinkTrailer, CinemaID) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = this.connection; 
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
              
@@ -59,6 +60,8 @@ public class MovieDAO extends MySQLConnect {
             pstmt.setString(4, movie.getImageURL());
             pstmt.setFloat(5, movie.getRating());
             pstmt.setString(6, movie.getCountry());
+            pstmt.setString(7, movie.getLinkTrailer()); 
+            pstmt.setInt(8, movie.getCinemaID()); 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0; 
         } catch (SQLException e) {

@@ -2,10 +2,10 @@ package model;
 
 public class CinemaChain {
     private int cinemaChainID;
+    private int userID;
     private String name;
+    private String avatarURL;
     private String information;
-
-    // Constructors, getters, setters
 
     public int getCinemaChainID() {
         return cinemaChainID;
@@ -13,6 +13,14 @@ public class CinemaChain {
 
     public void setCinemaChainID(int cinemaChainID) {
         this.cinemaChainID = cinemaChainID;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getName() {
@@ -23,6 +31,14 @@ public class CinemaChain {
         this.name = name;
     }
 
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
+
     public String getInformation() {
         return information;
     }
@@ -30,4 +46,6 @@ public class CinemaChain {
     public void setInformation(String information) {
         this.information = information;
     }
+
+  
 }

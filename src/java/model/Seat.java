@@ -1,25 +1,21 @@
-// File: Seat.java
 package model;
 
 public class Seat {
-    private int seatID; // ID của ghế
-    private int roomID; // ID của phòng chiếu
-    private String name; // Tên ghế (ví dụ: A1, B2)
-    private int coordinateX; // Tọa độ X
-    private int coordinateY; // Tọa độ Y
-    private boolean booked; // Trạng thái ghế (đã đặt hay chưa)
+    private int seatID;          
+    private int roomID;          
+    private String name;         
+    private int coordinateX;     
+    private int coordinateY;     
+    private boolean available;    
+    private boolean isVIP;        
+    private boolean isSweetbox;   
+    private boolean isRegular;   
 
     // Constructor
-    public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY, boolean booked) {
-        this.seatID = seatID;
-        this.roomID = roomID;
-        this.name = name;
-        this.coordinateX = coordinateX;
-        this.coordinateY = coordinateY;
-        this.booked = booked;
+    public Seat() {
     }
 
-    // Getters and Setters
+    // Getter và Setter
     public int getSeatID() {
         return seatID;
     }
@@ -60,11 +56,35 @@ public class Seat {
         this.coordinateY = coordinateY;
     }
 
-    public boolean isBooked() {
-        return booked;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setBooked(boolean booked) {
-        this.booked = booked;
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public boolean isVIP() {
+        return isVIP;
+    }
+
+    public void setVIP(boolean isVIP) {
+        this.isVIP = isVIP;
+    }
+
+    public boolean isSweetbox() {
+        return isSweetbox;
+    }
+
+    public void setSweetbox(boolean isSweetbox) {
+        this.isSweetbox = isSweetbox;
+    }
+
+    public boolean isRegular() {
+        return isRegular;
+    }
+
+    public void setRegular(boolean isRegular) {
+        this.isRegular = isRegular;
     }
 }
