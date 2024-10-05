@@ -1,10 +1,10 @@
 package controller.schedule;
 
-import DAOHuy.CinemaChainDAO;
-import DAOHuy.CinemaDAO;
-import DAOHuy.MovieDAO;
-import DAOHuy.MovieSlotDAO;
-import DAOHuy.SeatDAO;
+import DAOSchedule.CinemaChainScheduleDAO;
+import DAOSchedule.CinemaScheduleDAO;
+import DAOSchedule.MovieScheduleDAO;
+import DAOSchedule.MovieScheduleSlotDAO;
+import DAOSchedule.SeatDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,10 +29,10 @@ import util.RouterJSP;
 
 @WebServlet("/showtimes")
 public class ShowtimeServlet extends HttpServlet {
-    private CinemaChainDAO cinemaChainDAO;
-    private CinemaDAO cinemaDAO;
-    private MovieDAO movieDAO;
-    private MovieSlotDAO movieSlotDAO;
+    private CinemaChainScheduleDAO cinemaChainDAO;
+    private CinemaScheduleDAO cinemaDAO;
+    private MovieScheduleDAO movieDAO;
+    private MovieScheduleSlotDAO movieSlotDAO;
     private SeatDAO seatDAO;
 
     @Override
@@ -40,10 +40,10 @@ public class ShowtimeServlet extends HttpServlet {
         super.init();
         try {
             ServletContext context = getServletContext();
-            this.cinemaChainDAO = new CinemaChainDAO(context);
-            this.cinemaDAO = new CinemaDAO(context);
-            this.movieDAO = new MovieDAO(context);
-            this.movieSlotDAO = new MovieSlotDAO(context);
+            this.cinemaChainDAO = new CinemaChainScheduleDAO(context);
+            this.cinemaDAO = new CinemaScheduleDAO(context);
+            this.movieDAO = new MovieScheduleDAO(context);
+            this.movieSlotDAO = new MovieScheduleSlotDAO(context);
             this.seatDAO = new SeatDAO(context);
         } catch (Exception ex) {
             Logger.getLogger(ShowtimeServlet.class.getName()).log(Level.SEVERE, null, ex);

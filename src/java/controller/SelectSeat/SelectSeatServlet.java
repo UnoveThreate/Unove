@@ -1,7 +1,7 @@
 package controller.SelectSeat;
 
-import DAOHuy.MovieSlotDAO;
-import DAOHuy.SeatDAO;
+import DAOSchedule.MovieScheduleSlotDAO;
+import DAOSchedule.SeatDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,7 +18,7 @@ import util.RouterJSP;
 @WebServlet("/selectSeat")
 public class SelectSeatServlet extends HttpServlet {
     private SeatDAO seatDAO;
-    private MovieSlotDAO movieSlotDAO;
+    private MovieScheduleSlotDAO movieSlotDAO;
 
     @Override
     public void init() throws ServletException {
@@ -26,7 +26,7 @@ public class SelectSeatServlet extends HttpServlet {
         try {
             ServletContext context = getServletContext();
             this.seatDAO = new SeatDAO(context); 
-            this.movieSlotDAO = new MovieSlotDAO(context); 
+            this.movieSlotDAO = new MovieScheduleSlotDAO(context); 
         } catch (Exception e) {
             throw new ServletException("Failed to initialize DAO", e);
         }

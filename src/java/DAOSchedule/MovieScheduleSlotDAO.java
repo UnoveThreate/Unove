@@ -1,4 +1,4 @@
-package DAOHuy;
+package DAOSchedule;
 
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;
@@ -12,9 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieSlotDAO extends MySQLConnect {
+public class MovieScheduleSlotDAO extends MySQLConnect {
 
-    public MovieSlotDAO(ServletContext context) throws Exception {
+    public MovieScheduleSlotDAO(ServletContext context) throws Exception {
         super(); 
         connect((ServletContext) context);
     }

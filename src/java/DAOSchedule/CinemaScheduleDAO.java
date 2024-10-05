@@ -1,4 +1,4 @@
-package DAOHuy;
+package DAOSchedule;
 
 import model.Cinema;
 import database.MySQLConnect;
@@ -11,9 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CinemaDAO extends MySQLConnect {
+public class CinemaScheduleDAO extends MySQLConnect {
 
-    public CinemaDAO(ServletContext context) throws Exception {
+    public CinemaScheduleDAO(ServletContext context) throws Exception {
         super(); 
         connect((ServletContext) context);
     }
