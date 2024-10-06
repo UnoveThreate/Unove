@@ -139,5 +139,18 @@ public class RouterJSP {
     public static String OWNER_EDIT_CINEMA_PAGE = "/page/owner/editCinemaPage.jsp";
 
     public static String OWNER_MANAGE_CINEMACHAIN_PAGE = "/page/owner/manageCinemaChain.jsp";
+    
+    public static String DETAIL_MOVIE_PAGE = "/page/movie/DisplayMovieInfo.jsp";
+    
+    public static String OWNER_GENRE_FORM_PAGE = "/page/owner/genre-form.jsp";
+    
+    public static String OWNER_GENRE_LIST_PAGE = "/page/owner/genre-list.jsp";
+    
+    public static String OWNER_MOVIE_LIST_PAGE = "/page/owner/owner_movie_list.jsp";
+            
+    public static String OWNER_MANAGE_CINEMA_PAGE = "/page/owner/owner_manage_cinema.jsp";
 
+    public static String OWNER_MOVIE_CREATE_PAGE = "/page/owner/owner_create_movie.jsp";  
+    
+    public static String OWNER_MOVIE_UPDATE_PAGE = "/page/owner/owner_update_movie.jsp";  
 }

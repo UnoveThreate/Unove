@@ -1,118 +1,150 @@
 <%@page import="util.RouterURL"%>
 <%@page import="model.CinemaChain"%>
+<jsp:include page="navbar.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Manage Cinema Chain</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f9;
-                margin: 0;
-                padding: 20px;
-            }
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Cinema Chain</title>
 
-            h2 {
-                color: #333;
-                font-size: 24px;
-                margin-bottom: 20px;
-            }
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 20px;
-            }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
 
-            table, th, td {
-                border: 1px solid #ddd;
-            }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
 
-            th, td {
-                padding: 12px;
-                text-align: left;
-            }
+        h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
 
-            th {
-                background-color: #4CAF50;
-                color: white;
-            }
+        h3 {
+            color: #555;
+            margin-top: 30px;
+        }
 
-            tr:nth-child(even) {
-                background-color: #f2f2f2;
-            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
 
-            a {
-                text-decoration: none;
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 15px;
-                border-radius: 5px;
-            }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
 
-            a:hover {
-                background-color: #45a049;
-            }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
 
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-                background-color: white;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-            }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
 
-            p {
-                color: #666;
-                font-size: 16px;
-            }
+        a {
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
 
-            .no-cinema {
-                color: #ff0000;
-                font-style: italic;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h2>Manage Cinema Chain</h2>
-            <p>Name: ${cinemaChain.name}</p>
-            <p>Information: ${cinemaChain.information}</p>
-            <p>Avatar: <img src="${cinemaChain.avatarURL}" alt="Avatar" style="width: 100px; height: auto; border-radius: 50%;"></p>
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+            margin-right: 5px;
+        }
 
-            <h3>Danh sách Rạp Phim</h3>
-            <table border="1">
-                <thead>
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        img {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        .no-cinema {
+            color: #dc3545;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Manage Cinema Chain</h2>
+        <p><strong>Name:</strong> ${cinemaChain.name}</p>
+        <p><strong>Information:</strong> ${cinemaChain.information}</p>
+        <p><strong>Avatar:</strong> <img src="${cinemaChain.avatarURL}" alt="Avatar"></p>
+
+        <h3>Danh sách Rạp Phim</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cinema ID</th>
+                    <th>Name</th> 
+                    <th>Address</th>
+                    <th>Province</th>
+                    <th>District</th>
+                    <th>Commune</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="cinema" items="${cinemas}">
                     <tr>
-                        <th>Cinema ID</th>
-                        <th>Address</th>
-                        <th>Province</th>
-                        <th>District</th>
-                        <th>Commune</th>
-                        <th>Actions</th>
+                        <td>${cinema.cinemaID}</td>
+                        <td>${cinema.name}</td> 
+                        <td>${cinema.address}</td>
+                        <td>${cinema.province}</td>
+                        <td>${cinema.district}</td>
+                        <td>${cinema.commune}</td>
+                        <td>
+                            
+                            <a href="<%= RouterURL.MANAGE_CINEMA_DETAIL %>?cinemaID=${cinema.cinemaID}" class="btn btn-secondary">Manage Cinema</a>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="cinema" items="${cinemas}">
-                        <tr>
-                            <td>${cinema.cinemaID}</td>
-                            <td>${cinema.address}</td>
-                            <td>${cinema.province}</td>
-                            <td>${cinema.district}</td>
-                            <td>${cinema.commune}</td>
-                            <td>
-                                <a href="<%= RouterURL.OWNER_EDIT_CINEMA %>?cinemaID=${cinema.cinemaID}" class="edit-btn">Edit</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-            <a href="<%= RouterURL.OWNER_CREATE_CINEMA %>?cinemaChainID=${cinemaChain.cinemaChainID}">Add New Cinema</a>
-        </div>
-    </body>
+                </c:forEach>
+            </tbody>
+        </table>
+        <a href="<%= RouterURL.OWNER_CREATE_CINEMA%>?cinemaChainID=${cinemaChain.cinemaChainID}" class="btn btn-success">Add New Cinema</a>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+</body>
 </html>

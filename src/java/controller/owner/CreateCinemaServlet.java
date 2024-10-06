@@ -30,7 +30,7 @@ import util.RouterURL;
  *
  * @author Per
  */
-@WebServlet(name = "CreateCinemaServlet", urlPatterns = {"/owner/create/cinema"})
+@WebServlet("/owner/create/cinema")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 5, // 5 MB
         maxFileSize = 1024 * 1024 * 30, // 30 MB
@@ -118,6 +118,7 @@ public class CreateCinemaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String name = request.getParameter("name");
         String address = request.getParameter("address");
         String province = request.getParameter("provinceName"); // Sử dụng tên tỉnh
         String district = request.getParameter("districtName"); // Sử dụng tên quận/huyện
@@ -127,6 +128,7 @@ public class CreateCinemaServlet extends HttpServlet {
         
         // Tạo đối tượng Cinema
         Cinema cinema = new Cinema();
+        cinema.setName(name);
         cinema.setAddress(address);
         cinema.setProvince(province);
         cinema.setDistrict(district);

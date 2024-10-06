@@ -1,6 +1,7 @@
 package model;
 
 public class Cinema {
+
     private int cinemaID;
     private int cinemaChainID;
     private String name;
@@ -8,6 +9,19 @@ public class Cinema {
     private String province;
     private String district;
     private String commune;
+
+    public Cinema() {
+    }
+
+    public Cinema(int cinemaID, int cinemaChainID, String name, String address, String province, String district, String commune) {
+        this.cinemaID = cinemaID;
+        this.cinemaChainID = cinemaChainID;
+        this.name = name;
+        this.address = address;
+        this.province = province;
+        this.district = district;
+        this.commune = commune;
+    }
 
     public int getCinemaID() {
         return cinemaID;
@@ -64,4 +78,10 @@ public class Cinema {
     public void setCommune(String commune) {
         this.commune = commune;
     }
+
+    @Override
+    public String toString() {
+        return "Cinema{" + "cinemaID=" + cinemaID + ", cinemaChainID=" + cinemaChainID + ", name=" + name + ", address=" + address + ", province=" + province + ", district=" + district + ", commune=" + commune + '}';
+    }
+
 }

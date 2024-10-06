@@ -6,6 +6,8 @@
 
 <%@page import="util.RouterURL"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:include page="navbar.jsp" />
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -58,7 +60,7 @@
 
         <div class="container">
             <h2>Create Cinema Chain</h2>
-            <form action="<%= RouterURL.OWNER_PAGE%>" method="POST" enctype="multipart/form-data">
+            <form action="<%= RouterURL.MANAGE_CINEMA%>" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" class="form-control" id="name" name="name" required>

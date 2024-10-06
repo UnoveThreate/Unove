@@ -68,7 +68,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             request.setAttribute("movie", movie);
 
             // Forward request to DisplayMovieInfo.jsp
-            request.getRequestDispatcher("page/movie/DisplayMovieInfo.jsp").forward(request, response);
+            request.getRequestDispatcher(route.DETAIL_MOVIE_PAGE).forward(request, response);
 
         } catch (SQLException ex) {
             Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);

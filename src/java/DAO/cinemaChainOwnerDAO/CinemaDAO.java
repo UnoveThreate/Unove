@@ -21,21 +21,22 @@ public class CinemaDAO extends MySQLConnect {
     }
 
     // Thêm mới Cinema
-   public boolean createCinema(Cinema cinema) throws SQLException {
-    String sql = "INSERT INTO `Cinema` (`CinemaChainID`, `Address`, `Province`, `District`, `Commune`) VALUES (?, ?, ?, ?, ?)";
-    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-        pstmt.setInt(1, cinema.getCinemaChainID());
-        pstmt.setString(2, cinema.getAddress());
-        pstmt.setString(3, cinema.getProvince()); // Tên tỉnh
-        pstmt.setString(4, cinema.getDistrict()); // Tên quận
-        pstmt.setString(5, cinema.getCommune()); // Tên xã
-        int result = pstmt.executeUpdate();
-        return result > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+    public boolean createCinema(Cinema cinema) throws SQLException {
+        String sql = "INSERT INTO `Cinema` (`CinemaChainID`, `Name`, `Address`, `Province`, `District`, `Commune`) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, cinema.getCinemaChainID());
+            pstmt.setString(2, cinema.getName()); // New name field
+            pstmt.setString(3, cinema.getAddress());
+            pstmt.setString(4, cinema.getProvince());
+            pstmt.setString(5, cinema.getDistrict());
+            pstmt.setString(6, cinema.getCommune());
+            int result = pstmt.executeUpdate();
+            return result > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
 
     // Lấy tất cả Cinemas
     public List<Cinema> getAllCinemas() throws SQLException {
@@ -47,6 +48,7 @@ public class CinemaDAO extends MySQLConnect {
                 Cinema cinema = new Cinema();
                 cinema.setCinemaID(rs.getInt("CinemaID"));
                 cinema.setCinemaChainID(rs.getInt("CinemaChainID"));
+                cinema.setName(rs.getString("Name")); // Thêm trường Name
                 cinema.setAddress(rs.getString("Address"));
                 cinema.setProvince(rs.getString("Province"));
                 cinema.setDistrict(rs.getString("District"));
@@ -61,13 +63,14 @@ public class CinemaDAO extends MySQLConnect {
 
     // Cập nhật Cinema
     public boolean updateCinema(Cinema cinema) throws SQLException {
-        String sql = "UPDATE `Cinema` SET `Address` = ?, `Province` = ?, `District` = ?, `Commune` = ? WHERE `CinemaID` = ?";
+        String sql = "UPDATE `Cinema` SET `Name` = ?, `Address` = ?, `Province` = ?, `District` = ?, `Commune` = ? WHERE `CinemaID` = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, cinema.getAddress());
-            pstmt.setString(2, cinema.getProvince());
-            pstmt.setString(3, cinema.getDistrict());
-            pstmt.setString(4, cinema.getCommune());
-            pstmt.setInt(5, cinema.getCinemaID());
+            pstmt.setString(1, cinema.getName()); // Thêm trường Name
+            pstmt.setString(2, cinema.getAddress());
+            pstmt.setString(3, cinema.getProvince());
+            pstmt.setString(4, cinema.getDistrict());
+            pstmt.setString(5, cinema.getCommune());
+            pstmt.setInt(6, cinema.getCinemaID());
             int result = pstmt.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
@@ -84,11 +87,11 @@ public class CinemaDAO extends MySQLConnect {
             int result = pstmt.executeUpdate();
             return result > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }
 
+    // Lấy Cinema theo ID
     public Cinema getCinemaById(int cinemaID) throws SQLException {
         Cinema cinema = null;
         String sql = "SELECT * FROM `Cinema` WHERE `CinemaID` = ?";
@@ -101,6 +104,7 @@ public class CinemaDAO extends MySQLConnect {
                 cinema = new Cinema();
                 cinema.setCinemaID(rs.getInt("CinemaID"));
                 cinema.setCinemaChainID(rs.getInt("CinemaChainID"));
+                cinema.setName(rs.getString("Name")); // Thêm trường Name
                 cinema.setAddress(rs.getString("Address"));
                 cinema.setProvince(rs.getString("Province"));
                 cinema.setDistrict(rs.getString("District"));
@@ -108,11 +112,12 @@ public class CinemaDAO extends MySQLConnect {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e;  // Rethrow exception to handle in the calling method
+            throw e;
         }
         return cinema;
     }
 
+    // Lấy tất cả Cinemas theo CinemaChainID
     public List<Cinema> getCinemasByCinemaChainID(int cinemaChainID) throws SQLException {
         List<Cinema> cinemas = new ArrayList<>();
         String sql = "SELECT * FROM `Cinema` WHERE `CinemaChainID` = ?";
@@ -125,6 +130,7 @@ public class CinemaDAO extends MySQLConnect {
                 Cinema cinema = new Cinema();
                 cinema.setCinemaID(rs.getInt("CinemaID"));
                 cinema.setCinemaChainID(rs.getInt("CinemaChainID"));
+                cinema.setName(rs.getString("Name")); // Thêm trường Name
                 cinema.setAddress(rs.getString("Address"));
                 cinema.setProvince(rs.getString("Province"));
                 cinema.setDistrict(rs.getString("District"));
@@ -138,5 +144,4 @@ public class CinemaDAO extends MySQLConnect {
 
         return cinemas;
     }
-
 }

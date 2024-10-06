@@ -42,11 +42,6 @@ public class Movie {
         this.genres = genres;
     }
 
-    // lay ra chuoi cac the loai : 
-    public String getGenresAsString() {
-        return String.join(", ", genres);
-    }
-
     public int getMovieID() {
         return movieID;
     }
@@ -134,7 +129,5 @@ public class Movie {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
 
 }
