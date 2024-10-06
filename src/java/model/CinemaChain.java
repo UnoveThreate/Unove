@@ -16,7 +16,6 @@ public class CinemaChain {
     private String avatarURL;
     private String information;
     private int userId;
-    private String avatarURL;
 
     // Constructors
     public CinemaChain() {
@@ -26,20 +25,20 @@ public class CinemaChain {
         this.cinemaChainID = cinemaChainID;
         this.name = name;
         this.information = information;
-        this.userId = userId;
+        this.userID = userId;
     }
 
     public CinemaChain(int userID, String name, String information) {
-        this.userId = userId;
+        this.userID = userID;
         this.name = name;
         this.information = information;
     }
 
     public CinemaChain(int cinemaChainID, String name, String information, int userId, String avatarURL) {
+        this.userID = userId;
         this.cinemaChainID = cinemaChainID;
         this.name = name;
         this.information = information;
-        this.userId = userId;
         this.avatarURL = avatarURL;
     }
 
