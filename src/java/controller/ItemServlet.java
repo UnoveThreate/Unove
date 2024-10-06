@@ -4,41 +4,28 @@
  */
 package controller;
 
+import database.MySQLConnect;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import model.Movie;
-import util.RouterJSP;
-import database.MySQLConnect;
-
 
 /**
  *
- * @author Admin
+ * @author ASUS
  */
-@WebServlet("")
-public class HomeServlet extends HttpServlet {
+public class ItemServlet extends HttpServlet {
 
- 
-    Connection connection ;
+    Connection connection;
 
     @Override
 
     public void init() throws ServletException {
         try {
-           connection = new MySQLConnect().connect(getServletContext());
+            connection = new MySQLConnect().connect(getServletContext());
         } catch (Exception e) {
             throw new ServletException("Unable to load database properties", e);
         }
@@ -52,7 +39,9 @@ public class HomeServlet extends HttpServlet {
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -64,34 +53,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Movie> movies = getListMovies();
-        System.out.println(movies);
-        request.setAttribute("movies", movies);
-        request.getRequestDispatcher(new RouterJSP().LANDING_PAGE).forward(request, response);
-
-    }
-
-    private List<Movie> getListMovies() {
-        List<Movie> movieList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Movie"); ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                Movie movie = new Movie();
-                movie.setMovieID(rs.getInt("movieID"));
-                movie.setTitle(rs.getString("title"));
-                movie.setSynopsis(rs.getString("synopsis"));
-                movie.setDatePublished(rs.getString("datePublished"));
-                movie.setImageURL(rs.getString("imageURL"));
-                movie.setRating(rs.getFloat("rating"));
-                movie.setCountry(rs.getString("country"));
-                movie.setLinkTrailer(rs.getString("linkTrailer"));
-                movie.setCinemaID(rs.getInt("cinemaID"));
-                movieList.add(movie);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(); // Xử lý lỗi ở đây
-        }
-        return movieList;
+        processRequest(request, response);
     }
 
     /**
@@ -105,7 +67,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        processRequest(request, response);
     }
 
     /**
