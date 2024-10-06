@@ -31,7 +31,7 @@ public class HandleDisplayUserInfo extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         try {
-            userDAO = new DAO.UserDAO((ServletContext) (javax.servlet.ServletContext) getServletContext());
+            userDAO = new DAO.UserDAO((ServletContext)getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }

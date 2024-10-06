@@ -3,8 +3,6 @@ package DAOSchedule;
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;
 import model.MovieSlot;
-
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
