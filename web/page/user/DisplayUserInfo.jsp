@@ -393,74 +393,138 @@
         </div>
 
         <script>
-            $(document).ready(function () {
-                // Fetch provinces
-                $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {
-                    if (data_tinh.error === 0) {
-                        $.each(data_tinh.data, function (key_tinh, val_tinh) {
-                            $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                        });
+           document.addEventListener('DOMContentLoaded', function () {
+                const tinhSelect = document.getElementById('tinh');
+                const quanSelect = document.getElementById('quan');
+                const phuongSelect = document.getElementById('phuong');
 
-                        // Set the default selected province text
-                        var defaultProvince = '${user.getProvince()}';
-                        if (defaultProvince) {
-                            $("#tinh").val(defaultProvince);
-                        }
-
-                        // On province change
-                        $("#tinh").change(function () {
-                            var idtinh = $(this).val();
-                            var selectedProvince = $("#tinh option:selected").text();
-                            $("#provinceName").val(selectedProvince); // Update hidden field with selected name
-
-                            // Fetch districts
-                            $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function (data_quan) {
+                // Function to fetch districts based on the province ID
+                function fetchDistricts(provinceId, defaultDistrict) {
+                    fetch('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm')
+                            .then(response => response.json())
+                            .then(data_quan => {
                                 if (data_quan.error === 0) {
-                                    $("#quan").html('<option value="0">Quận Huyện</option>');
-                                    $("#phuong").html('<option value="0">Phường Xã</option>');
-                                    $.each(data_quan.data, function (key_quan, val_quan) {
-                                        $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                                    });
 
-                                    // Set the default selected district text
-                                    var defaultDistrict = '${user.getDistrict()}';
-                                    if (defaultDistrict) {
-                                        $("#quan").val(defaultDistrict);
+                                    if (!defaultDistrict) {
+                                        quanSelect.innerHTML = `<option value="0">Quận Huyện</option>`;
+                                        phuongSelect.innerHTML = '<option value="0">Phường Xã</option>';
                                     }
 
-                                    // On district change
-                                    $("#quan").change(function () {
-                                        var idquan = $(this).val();
-                                        var selectedDistrict = $("#quan option:selected").text();
-                                        $("#districtName").val(selectedDistrict); // Update hidden field with selected name
+                                    data_quan.data.forEach(function (val_quan) {
+                                        const option = document.createElement('option');
+                                        option.value = val_quan.id;
+                                        option.textContent = val_quan.full_name;
+                                        quanSelect.appendChild(option);
+                                    });
 
-                                        // Fetch wards
-                                        $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function (data_phuong) {
-                                            if (data_phuong.error === 0) {
-                                                $("#phuong").html('<option value="0">Phường Xã</option>');
-                                                $.each(data_phuong.data, function (key_phuong, val_phuong) {
-                                                    $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                                });
+                                    if (defaultDistrict) {
+                                        const provinceID = tinhSelect.value;
 
-                                                // Set the default selected ward text
-                                                var defaultWard = '${user.getCommune()}';
-                                                if (defaultWard) {
-                                                    $("#phuong").val(defaultWard);
-                                                }
-
-                                                // On ward change
-                                                $("#phuong").change(function () {
-                                                    var selectedWard = $("#phuong option:selected").text();
-                                                    $("#communeName").val(selectedWard); // Update hidden field with selected name
-                                                });
+                                        findDistrictId(provinceID, defaultDistrict).then(districtId => {
+                                            if (districtId !== -1) {
+                                                fetchCommunes(districtId, '${user.getCommune()}')
                                             }
                                         });
+                                    }
+
+                                    quanSelect.addEventListener('change', function () {
+                                        const idquan = quanSelect.value;
+                                        const selectedDistrict = quanSelect.options[quanSelect.selectedIndex].text;
+                                        document.getElementById('districtName').value = selectedDistrict; // Update hidden field with selected name
+                                        fetchCommunes(idquan); // Fetch communes based on district selection
+                                    });
+
+                                }
+                            });
+                }
+
+                // Function to fetch communes based on the district ID
+                function fetchCommunes(districtId, defaultCommune) {
+                    fetch('https://esgoo.net/api-tinhthanh/3/' + districtId + '.htm')
+                            .then(response => response.json())
+                            .then(data_phuong => {
+                                if (data_phuong.error === 0) {
+                                    if (!defaultCommune)
+                                        phuongSelect.innerHTML = '<option value="0">Phường Xã</option>';
+                                    data_phuong.data.forEach(function (val_phuong) {
+                                        const option = document.createElement('option');
+                                        option.value = val_phuong.id;
+                                        option.textContent = val_phuong.full_name;
+                                        phuongSelect.appendChild(option);
+                                    });
+                                    phuongSelect.addEventListener('change', function () {
+                                        const selectedWard = phuongSelect.options[phuongSelect.selectedIndex].text;
+                                        document.getElementById('communeName').value = selectedWard; // Update hidden field with selected name
                                     });
                                 }
                             });
+                }
+
+                function findProvinceId(provinceName) {
+                    return fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
+                            .then(response => response.json())
+                            .then(data_tinh => {
+                                if (data_tinh.error === 0) {
+                                    const foundProvince = data_tinh.data.find(province => province.full_name === provinceName);
+                                    return foundProvince ? foundProvince.id : -1; // Return province ID or -1 if not found
+                                } else {
+                                    return -1; // Return -1 if there is an error
+                                }
+                            })
+                            .catch(() => {
+                                return -1; // Return -1 in case of any fetch error
+                            });
+                }
+
+                function findDistrictId(provinceId, districtName) {
+                    return fetch('https://esgoo.net/api-tinhthanh/2/' + provinceId + '.htm')
+                            .then(response => response.json())
+                            .then(data_quan => {
+                                if (data_quan.error === 0) {
+                                    const foundDistrict = data_quan.data.find(district => district.full_name === districtName);
+                                    return foundDistrict ? foundDistrict.id : -1; // Return district ID or -1 if not found
+                                } else {
+                                    return -1; // Return -1 if there is an error
+                                }
+                            })
+                            .catch(() => {
+                                return -1; // Return -1 in case of any fetch error
+                            });
+                }
+
+
+                // Fetch provinces
+                fetch('https://esgoo.net/api-tinhthanh/1/0.htm')
+                        .then(response => response.json())
+                        .then(data_tinh => {
+                            if (data_tinh.error === 0) {
+                                data_tinh.data.forEach(function (val_tinh) {
+                                    const option = document.createElement('option');
+                                    option.value = val_tinh.id;
+                                    option.textContent = val_tinh.full_name;
+                                    tinhSelect.appendChild(option);
+                                });
+
+                                // Set the default selected province and trigger district fetching
+                                const defaultProvince = '${user.getProvince()}';
+
+                                if (defaultProvince) {
+                                    findProvinceId(defaultProvince).then(provinceId => {
+                                        if (provinceId !== -1) {
+                                            tinhSelect.value = provinceId;
+                                            fetchDistricts(provinceId, '${user.getDistrict()}'); // Automatically fetch districts if province exists
+                                        }
+                                    });
+                                }
+
+                                tinhSelect.addEventListener('change', function () {
+                                    const idtinh = tinhSelect.value;
+                                    const selectedProvince = tinhSelect.options[tinhSelect.selectedIndex].text;
+                                    document.getElementById('provinceName').value = selectedProvince; // Update hidden field with selected name
+                                    fetchDistricts(idtinh); // Fetch districts based on province selection
+                                });
+                            }
                         });
-                    }
-                });
             });
         </script>
 
