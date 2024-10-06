@@ -75,7 +75,7 @@ public class RouterJSP {
 
     public String CINEMAS = "/page/owner/manage/Cinemas.jsp";
 
-    public static String VIEW_ORDER = "/page/bill/Bill.index.jsp";
+    public static String VIEW_ORDER = "/page/bill/Bill.jsp";
 
     public static String SCHEDULE_MOVIE = "/page/movie/schedule/ScheduleMovie.jsp";
 
