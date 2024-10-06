@@ -4,7 +4,6 @@ import jakarta.servlet.ServletContext;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -26,7 +25,7 @@ public class MySQLConnect {
         }
     }
 
-    public Connection connect(ServletContext context) throws Exception {
+    public final Connection connect(ServletContext context) throws Exception {
         // Load the properties from the dbconfig.properties file
         Properties props = new Properties();
         try (FileInputStream fis = new FileInputStream(
@@ -50,12 +49,15 @@ public class MySQLConnect {
         // Load MySQL JDBC Driver
         Class.forName("com.mysql.cj.jdbc.Driver");
 
-        // Establish the connection using try-with-resources
-        try (Connection connect = DriverManager.getConnection(url, username, password)) {
-            // Connection established and automatically closed at the end of this block
-            // Perform database operations here
-            System.out.println("Connection successful");
-            return this.connection = connect;
+        // Establish the connection without try-with-resources so that it can be reused
+        try {
+            if (this.connection == null || this.connection.isClosed()) {
+                this.connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Connection established and ready");
+            } else {
+                System.out.println("Existing connection -> Reuse");
+            }
+            return this.connection;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new SQLException("Error establishing connection to the database", ex);

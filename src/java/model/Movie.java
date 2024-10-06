@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -79,6 +80,16 @@ public class Movie {
 
     public void setDatePublished(Date datePublished) {
         this.datePublished = datePublished;
+    }
+
+    public void setDatePublished(String datePublished) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");// change format date for suitable
+        try {
+            this.datePublished = (datePublished != null) ? formatter.parse(datePublished) : null;
+        } catch (Exception e) {
+            this.datePublished = null;
+        }
+
     }
 
     public float getRating() {
