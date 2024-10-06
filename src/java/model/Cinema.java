@@ -9,6 +9,8 @@ public class Cinema {
     private String district;
     private String commune;
 
+   
+
     public int getCinemaID() {
         return cinemaID;
     }
@@ -25,11 +27,11 @@ public class Cinema {
         this.cinemaChainID = cinemaChainID;
     }
 
-    public String getName() { // Thêm phương thức getter cho name
+    public String getName() {
         return name;
     }
 
-    public void setName(String name) { // Thêm phương thức setter cho name
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -65,3 +67,4 @@ public class Cinema {
         this.commune = commune;
     }
 }
+

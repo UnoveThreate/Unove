@@ -1,18 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <title>Lịch Chiếu Phim</title>
-        <link rel="stylesheet" href="path/to/your/styles.css"> <!-- Thay đổi đường dẫn cho phù hợp -->
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: #f0f4f8;
-                margin: 0;
-                padding: 20px;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Showtimes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Màu nền sáng */
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); /* Hiệu ứng gradient */
+        }
 
         .container {
             max-width: 1200px;
@@ -115,32 +116,29 @@
             background: #d1d1d1; /* Màu nền khi hover */
         }
 
-            .footer {
-                text-align: center;
-                margin-top: 30px;
-                font-size: 0.9em;
-                color: #777;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Lịch Chiếu Phim</h1>
+        .error-message {
+            color: red;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Lịch chiếu phim</h1>
+        </div>
 
-            <div class="cinema-chain">
-                <h2>Chuỗi Rạp</h2>
-                <div id="cinemaChainSelect">
-                    <c:forEach var="chain" items="${cinemaChains}">
-                        <form action="/Unove/showtimes" method="GET">
-                            <input type="hidden" name="cinemaChainID" value="${chain.cinemaChainID}"/>
-                            <input type="submit" value="${chain.name}"/>
-<!--                            <div onclick="handle" style="${sessionScope.selectedCinemaChainID == chain.cinemaChainID ? 'font-weight: bold;' : ''}">
-                              
-                            </div>                          -->
-                        </form>
-                    </c:forEach>
-                </div>
-            </div>
+        <form action="showtimes" method="get" class="form-group">
+            <label class="label" for="cinemaChainID">Chọn chuỗi rạp:</label>
+            <select name="cinemaChainID" id="cinemaChainID" class="form-select" onchange="this.form.submit()">
+                <c:forEach var="chain" items="${cinemaChains}">
+                    <option value="${chain.cinemaChainID}" 
+                            <c:if test="${chain.cinemaChainID == selectedCinemaChainID}">selected</c:if>>
+                        ${chain.name}
+                    </option>
+                </c:forEach>
+            </select>
 
             <label class="label" for="cinemaID">Chọn rạp:</label>
             <select name="cinemaID" id="cinemaID" class="form-select" onchange="this.form.submit()">
@@ -172,16 +170,26 @@
                         <img src="${movie.imageURL}" alt="${movie.title}" class="movie-image"/>
 
                         <p><strong>Mô tả:</strong> ${movie.synopsis}</p>
-                        <p><strong>Ngày phát hành:</strong> ${movie.datePublished}</p>
-                        <p><strong>Quốc gia:</strong> ${movie.country}</p>
-                        <p><strong>Đánh giá:</strong> ${movie.rating}</p>
-                        <img src="${movie.imageURL}" alt="${movie.title}">
-                        <div class="showtimes">
-                            <c:if test="${not empty movieSlotsByMovie[movie]}">
-                                <c:forEach var="entry" items="${movieSlotsByMovie[movie]}">
-                                    <div class="showtime">
-                                        <span>${entry.startTime} - ${entry.endTime}</span>
-                                    </div>
+                        <p><strong>Ngày công chiếu:</strong> ${movie.datePublished != null ? fn:substring(movie.datePublished, 0, 10) : 'Chưa có thông tin'}</p>
+                        <p><strong>Đánh giá:</strong> ${movie.rating != null ? movie.rating : 'Chưa có đánh giá'}</p>
+                        <p><strong>Quốc gia:</strong> ${movie.country != null ? movie.country : 'Chưa có thông tin'}</p>
+
+                        <h4>Suất chiếu:</h4>
+                        <c:if test="${not empty movieSlotsByMovie[movie]}">
+                            <ul class="slot-list">
+                                <c:forEach var="slot" items="${movieSlotsByMovie[movie]}">
+                                    <li class="slot-item" onclick="location.href='selectSeat?movieSlotID=${slot.movieSlotID}'">
+                                        Thời gian: ${slot.startTime} - ${slot.endTime} <br>
+                                        Giá: ${slot.price} VND <br>
+                                        <c:if test="${slot.discount != null}">
+                                            Giảm giá: ${slot.discount}%
+                                        </c:if>
+                                        <c:if test="${slot.discount == null}">
+                                            Giảm giá: Không có giảm giá
+                                        </c:if>
+                                        <br>
+                                        Trạng thái: ${slot.status}
+                                    </li>
                                 </c:forEach>
                             </ul>
                         </c:if>

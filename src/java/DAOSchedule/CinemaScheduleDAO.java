@@ -13,9 +13,10 @@ public class CinemaScheduleDAO extends MySQLConnect {
 
     public CinemaScheduleDAO(ServletContext context) throws Exception {
         super();
-        connect(context);
+        connect((ServletContext) context);
     }
 
+    // Lấy danh sách rạp chiếu theo chuỗi rạp
     public List<Cinema> getCinemasByChain(int cinemaChainID) {
         List<Cinema> cinemas = new ArrayList<>();
         String sql = "SELECT * FROM Cinema WHERE CinemaChainID = ?";
@@ -27,6 +28,7 @@ public class CinemaScheduleDAO extends MySQLConnect {
                     Cinema cinema = new Cinema();
                     cinema.setCinemaID(rs.getInt("CinemaID"));
                     cinema.setCinemaChainID(rs.getInt("CinemaChainID"));
+                    cinema.setName(rs.getString("Name")); // Bổ sung tên rạp
                     cinema.setAddress(rs.getString("Address"));
                     cinema.setProvince(rs.getString("Province"));
                     cinema.setDistrict(rs.getString("District"));
@@ -40,34 +42,37 @@ public class CinemaScheduleDAO extends MySQLConnect {
         return cinemas;
     }
 
+    // Thêm một rạp chiếu mới
     public boolean insertCinema(Cinema cinema) {
-        String sql = "INSERT INTO Cinema (CinemaChainID, Address, Province, District, Commune) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Cinema (CinemaChainID, Name, Address, Province, District, Commune) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
 
             pstmt.setInt(1, cinema.getCinemaChainID());
-            pstmt.setString(2, cinema.getAddress());
-            pstmt.setString(3, cinema.getProvince());
-            pstmt.setString(4, cinema.getDistrict());
-            pstmt.setString(5, cinema.getCommune());
+            pstmt.setString(2, cinema.getName()); // Bổ sung tên rạp
+            pstmt.setString(3, cinema.getAddress());
+            pstmt.setString(4, cinema.getProvince());
+            pstmt.setString(5, cinema.getDistrict());
+            pstmt.setString(6, cinema.getCommune());
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Trả về false nếu có lỗi
+            return false;
         }
     }
 
+    // Lấy thông tin rạp chiếu theo ID
     public Cinema getCinemaById(int cinemaID) {
         Cinema cinema = null;
         String sql = "SELECT * FROM Cinema WHERE CinemaID = ?";
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-
             pstmt.setInt(1, cinemaID);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     cinema = new Cinema();
                     cinema.setCinemaID(rs.getInt("CinemaID"));
                     cinema.setCinemaChainID(rs.getInt("CinemaChainID"));
+                    cinema.setName(rs.getString("Name"));
                     cinema.setAddress(rs.getString("Address"));
                     cinema.setProvince(rs.getString("Province"));
                     cinema.setDistrict(rs.getString("District"));
