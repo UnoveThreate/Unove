@@ -43,9 +43,9 @@ public class SeatDAO extends MySQLConnect {
                 seat.setCoordinateX(resultSet.getInt("CoordinateX"));
                 seat.setCoordinateY(resultSet.getInt("CoordinateY"));
                 seat.setAvailable(checkSeatAvailability(seat.getSeatID()));
-                seat.setVIP(resultSet.getBoolean("IsVIP"));
-                seat.setSweetbox(resultSet.getBoolean("IsSweetbox"));
-                seat.setRegular(resultSet.getBoolean("IsRegular"));
+//                seat.setVIP(resultSet.getBoolean("IsVIP"));
+//                seat.setSweetbox(resultSet.getBoolean("IsSweetbox"));
+//                seat.setRegular(resultSet.getBoolean("IsRegular"));
 
                 seats.add(seat); // Thêm ghế vào danh sách
             }

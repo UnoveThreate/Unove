@@ -29,129 +29,130 @@ import util.RouterJSP;
 
 @WebServlet("/showtimes")
 public class ShowtimeServlet extends HttpServlet {
-        private CinemaChainScheduleDAO cinemaChainDAO;
-        private CinemaScheduleDAO cinemaDAO;
-        private MovieScheduleDAO movieDAO;
-        private MovieScheduleSlotDAO movieSlotDAO;
-        private SeatDAO seatDAO;
 
-        @Override
-        public void init() throws ServletException {
-                super.init();
-                try {
-                        ServletContext context = getServletContext();
-                        this.cinemaChainDAO = new CinemaChainScheduleDAO(context);
-                        this.cinemaDAO = new CinemaScheduleDAO(context);
-                        this.movieDAO = new MovieScheduleDAO(context);
-                        this.movieSlotDAO = new MovieScheduleSlotDAO(context);
-                        this.seatDAO = new SeatDAO(context);
-                } catch (Exception ex) {
-                        Logger.getLogger(ShowtimeServlet.class.getName()).log(Level.SEVERE, null, ex);
-                        throw new ServletException("Failed to initialize DAO", ex);
-                }
+    private CinemaChainScheduleDAO cinemaChainDAO;
+    private CinemaScheduleDAO cinemaDAO;
+    private MovieScheduleDAO movieDAO;
+    private MovieScheduleSlotDAO movieSlotDAO;
+    private SeatDAO seatDAO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            ServletContext context = getServletContext();
+            this.cinemaChainDAO = new CinemaChainScheduleDAO(context);
+            this.cinemaDAO = new CinemaScheduleDAO(context);
+            this.movieDAO = new MovieScheduleDAO(context);
+            this.movieSlotDAO = new MovieScheduleSlotDAO(context);
+            this.seatDAO = new SeatDAO(context);
+        } catch (Exception ex) {
+            Logger.getLogger(ShowtimeServlet.class.getName()).log(Level.SEVERE, null, ex);
+            throw new ServletException("Failed to initialize DAO", ex);
+        }
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        // lay danh sach chuoi rap
+        List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
+        request.setAttribute("cinemaChains", cinemaChains);
+
+        if (cinemaChains.isEmpty()) {
+            request.setAttribute("errorMessage", "Không có chuỗi rạp nào.");
+            request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+            return;
         }
 
-        protected void doGet(HttpServletRequest request, HttpServletResponse response)
-                        throws ServletException, IOException {
-                HttpSession session = request.getSession();
+        Integer cinemaChainID = (Integer) session.getAttribute("selectedCinemaChainID");
+        String cinemaChainIDParam = request.getParameter("cinemaChainID");
+        if (cinemaChainID == null || cinemaChainIDParam == null
+                || !cinemaChainID.equals(Integer.parseInt(cinemaChainIDParam))) {
+            cinemaChainID = (cinemaChainIDParam != null && !cinemaChainIDParam.isEmpty())
+                    ? Integer.parseInt(cinemaChainIDParam)
+                    : cinemaChains.get(0).getCinemaChainID();
+            session.setAttribute("selectedCinemaChainID", cinemaChainID);
+            session.removeAttribute("selectedCinemaID");
+        }
 
-                // lay danh sach chuoi rap
-                List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
-                request.setAttribute("cinemaChains", cinemaChains);
+        List<Cinema> cinemas = cinemaDAO.getCinemasByChain(cinemaChainID);
+        request.setAttribute("cinemas", cinemas);
 
-                if (cinemaChains.isEmpty()) {
-                        request.setAttribute("errorMessage", "Không có chuỗi rạp nào.");
-                        request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-                        return;
-                }
+        if (cinemas.isEmpty()) {
+            request.setAttribute("errorMessage", "Không có rạp nào cho chuỗi rạp đã chọn.");
+            request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+            return;
+        }
 
-                Integer cinemaChainID = (Integer) session.getAttribute("selectedCinemaChainID");
-                String cinemaChainIDParam = request.getParameter("cinemaChainID");
-                if (cinemaChainID == null || cinemaChainIDParam == null
-                                || !cinemaChainID.equals(Integer.parseInt(cinemaChainIDParam))) {
-                        cinemaChainID = (cinemaChainIDParam != null && !cinemaChainIDParam.isEmpty())
-                                        ? Integer.parseInt(cinemaChainIDParam)
-                                        : cinemaChains.get(0).getCinemaChainID();
-                        session.setAttribute("selectedCinemaChainID", cinemaChainID);
-                        session.removeAttribute("selectedCinemaID");
-                }
+        Integer cinemaID = (Integer) session.getAttribute("selectedCinemaID");
+        String cinemaIDParam = request.getParameter("cinemaID");
+        if (cinemaID == null || cinemaIDParam == null || !cinemaID.equals(Integer.parseInt(cinemaIDParam))) {
+            cinemaID = (cinemaIDParam != null && !cinemaIDParam.isEmpty()) ? Integer.parseInt(cinemaIDParam)
+                    : cinemas.get(0).getCinemaID();
+            session.setAttribute("selectedCinemaID", cinemaID);
+        }
 
-                List<Cinema> cinemas = cinemaDAO.getCinemasByChain(cinemaChainID);
-                request.setAttribute("cinemas", cinemas);
+        Cinema selectedCinema = cinemaDAO.getCinemaById(cinemaID);
+        request.setAttribute("selectedCinema", selectedCinema);
 
-                if (cinemas.isEmpty()) {
-                        request.setAttribute("errorMessage", "Không có rạp nào cho chuỗi rạp đã chọn.");
-                        request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-                        return;
-                }
+        List<LocalDate> availableDates = movieSlotDAO.getAvailableDates(cinemaID);
+        request.setAttribute("availableDates", availableDates);
 
-                Integer cinemaID = (Integer) session.getAttribute("selectedCinemaID");
-                String cinemaIDParam = request.getParameter("cinemaID");
-                if (cinemaID == null || cinemaIDParam == null || !cinemaID.equals(Integer.parseInt(cinemaIDParam))) {
-                        cinemaID = (cinemaIDParam != null && !cinemaIDParam.isEmpty()) ? Integer.parseInt(cinemaIDParam)
-                                        : cinemas.get(0).getCinemaID();
-                        session.setAttribute("selectedCinemaID", cinemaID);
-                }
+        if (availableDates.isEmpty()) {
+            request.setAttribute("errorMessage", "Không có ngày nào có suất chiếu.");
+            request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+            return;
+        }
 
-                Cinema selectedCinema = cinemaDAO.getCinemaById(cinemaID);
-                request.setAttribute("selectedCinema", selectedCinema);
+        LocalDate selectedDate = (LocalDate) session.getAttribute("selectedDate");
+        String dateParam = request.getParameter("date");
+        if (selectedDate == null || dateParam != null) {
+            selectedDate = (dateParam != null && !dateParam.isEmpty()) ? LocalDate.parse(dateParam)
+                    : availableDates.get(0);
+            session.setAttribute("selectedDate", selectedDate);
+        }
 
-                List<LocalDate> availableDates = movieSlotDAO.getAvailableDates(cinemaID);
-                request.setAttribute("availableDates", availableDates);
+        List<Movie> movies = movieDAO.getMoviesByCinemaAndDate(cinemaID, selectedDate);
+        request.setAttribute("movies", movies);
 
-                if (availableDates.isEmpty()) {
-                        request.setAttribute("errorMessage", "Không có ngày nào có suất chiếu.");
-                        request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-                        return;
-                }
+        List<MovieSlot> movieSlots = movieSlotDAO.getMovieSlotsByCinemaAndDate(cinemaID, selectedDate);
 
-                LocalDate selectedDate = (LocalDate) session.getAttribute("selectedDate");
-                String dateParam = request.getParameter("date");
-                if (selectedDate == null || dateParam != null) {
-                        selectedDate = (dateParam != null && !dateParam.isEmpty()) ? LocalDate.parse(dateParam)
-                                        : availableDates.get(0);
-                        session.setAttribute("selectedDate", selectedDate);
-                }
+        Map<Movie, List<MovieSlot>> movieSlotsByMovie = movieSlots.stream()
+                .collect(Collectors.groupingBy(movieSlot -> movies.stream()
+                .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
+                .findFirst()
+                .orElse(null)));
 
-                List<Movie> movies = movieDAO.getMoviesByCinemaAndDate(cinemaID, selectedDate);
-                request.setAttribute("movies", movies);
+        request.setAttribute("selectedCinemaChainID", cinemaChainID);
+        request.setAttribute("selectedCinemaID", cinemaID);
+        request.setAttribute("selectedDate", selectedDate);
+        request.setAttribute("movieSlotsByMovie", movieSlotsByMovie);
 
-                List<MovieSlot> movieSlots = movieSlotDAO.getMovieSlotsByCinemaAndDate(cinemaID, selectedDate);
+        request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+    }
 
-                Map<Movie, List<MovieSlot>> movieSlotsByMovie = movieSlots.stream()
-                                .collect(Collectors.groupingBy(movieSlot -> movies.stream()
-                                                .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
-                                                .findFirst()
-                                                .orElse(null)));
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
 
-                request.setAttribute("selectedCinemaChainID", cinemaChainID);
-                request.setAttribute("selectedCinemaID", cinemaID);
-                request.setAttribute("selectedDate", selectedDate);
-                request.setAttribute("movieSlotsByMovie", movieSlotsByMovie);
+        if ("selectSlot".equals(action)) {
+            String movieSlotIDParam = request.getParameter("movieSlotID");
+            if (movieSlotIDParam != null) {
+                int movieSlotID = Integer.parseInt(movieSlotIDParam);
 
+                MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
+                request.setAttribute("selectedSlot", selectedSlot);
+
+                List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
+                request.setAttribute("seats", seats);
+
+                request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
+            } else {
+                request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
                 request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+            }
         }
-
-        protected void doPost(HttpServletRequest request, HttpServletResponse response)
-                        throws ServletException, IOException {
-                String action = request.getParameter("action");
-
-                if ("selectSlot".equals(action)) {
-                        String movieSlotIDParam = request.getParameter("movieSlotID");
-                        if (movieSlotIDParam != null) {
-                                int movieSlotID = Integer.parseInt(movieSlotIDParam);
-
-                                MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
-                                request.setAttribute("selectedSlot", selectedSlot);
-
-                                List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
-                                request.setAttribute("seats", seats);
-
-                                request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
-                        } else {
-                                request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
-                                request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-                        }
-                }
-        }
+    }
 }
