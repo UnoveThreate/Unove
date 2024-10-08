@@ -329,8 +329,9 @@
 
             function selectSlot(movieSlotID) {
                 var form = document.createElement('form');
-                form.method = 'post';
-                form.action = 'showtimes';
+                
+                form.method = 'GET';
+                form.action = 'selectSeat';
 
                 var actionInput = document.createElement('input');
                 actionInput.type = 'hidden';

@@ -161,6 +161,7 @@ public class ShowtimeServlet extends HttpServlet {
 
                 List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
                 request.setAttribute("seats", seats);
+                request.setAttribute("movieSlotID", movieSlotID);
 
                 request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
             } else {

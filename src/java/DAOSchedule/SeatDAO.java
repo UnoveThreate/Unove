@@ -88,7 +88,7 @@ public class SeatDAO extends MySQLConnect {
         seat.setName(resultSet.getString("Name"));
         seat.setCoordinateX(resultSet.getInt("CoordinateX"));
         seat.setCoordinateY(resultSet.getInt("CoordinateY"));
-        seat.setPrice(resultSet.getDouble("Price"));
+        //seat.setPrice(resultSet.getDouble("Price"));
         return seat;
     }
 

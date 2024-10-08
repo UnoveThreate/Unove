@@ -1,4 +1,4 @@
-package controller;
+package controller.SelectSeat;
 
 import DAOSchedule.MovieScheduleSlotDAO;
 import DAOSchedule.SeatDAO;
@@ -11,16 +11,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.*;
+
 import util.RouterJSP;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.BookingSession;
+import model.MovieSlot;
+import model.Seat;
 
 @WebServlet("/selectSeat")
 public class SelectSeatServlet extends HttpServlet {
@@ -52,38 +53,26 @@ public class SelectSeatServlet extends HttpServlet {
         LOGGER.info("doGet method started");
         try {
             String movieSlotIDParam = request.getParameter("movieSlotID");
-            MovieSlot movieSlot = null;
-
-            if (movieSlotIDParam == null || movieSlotIDParam.isEmpty()) {
-                LOGGER.info("movieSlotID not provided, fetching latest movie slot");
-                movieSlot = movieSlotDAO.getLatestMovieSlot();
-                if (movieSlot == null) {
-                    throw new ServletException("Không có suất chiếu nào hiện tại.");
-                }
-            } else {
+            if (movieSlotIDParam != null) {
                 int movieSlotID = Integer.parseInt(movieSlotIDParam);
-                LOGGER.info("Fetching MovieSlot for ID: " + movieSlotID);
-                movieSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
-                if (movieSlot == null) {
-                    throw new ServletException("Suất chiếu không tồn tại.");
-                }
+
+                MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
+                request.setAttribute("selectedSlot", selectedSlot);
+                
+                LOGGER.info("Retrieved MovieSlot: " + selectedSlot);
+                
+                List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
+                request.setAttribute("seats", seats);
+                request.setAttribute("movieSlotID", movieSlotID);
+
+                request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
+            } else {
+                request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
+                request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
             }
 
-            LOGGER.info("Retrieved MovieSlot: " + movieSlot);
+            
 
-            List<Seat> seats = seatDAO.getSeatsByRoomId(movieSlot.getRoomID());
-            LOGGER.info("Retrieved " + seats.size() + " seats for room ID: " + movieSlot.getRoomID());
-
-            request.setAttribute("seats", seats);
-            request.setAttribute("movieSlot", movieSlot);
-
-            HttpSession session = request.getSession();
-            BookingSession bookingSession = new BookingSession();
-            bookingSession.setMovieSlotID(movieSlot.getMovieSlotID());
-            session.setAttribute("bookingSession", bookingSession);
-            LOGGER.info("BookingSession created and set in session");
-
-            LOGGER.info("Forwarding to SELECT_SEAT JSP");
             request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
         } catch (NumberFormatException e) {
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);
@@ -97,8 +86,9 @@ public class SelectSeatServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOGGER.info("doPost method started");
-        HttpSession session = request.getSession(false);
-        
+
+        HttpSession session = request.getSession();
+
         if (session == null) {
             LOGGER.warning("Session is null");
             handleError(request, response, "Phiên làm việc đã hết hạn. Vui lòng thử lại.");
@@ -108,9 +98,7 @@ public class SelectSeatServlet extends HttpServlet {
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
         if (bookingSession == null) {
-            LOGGER.warning("BookingSession is null");
-            handleError(request, response, "Thông tin đặt vé không hợp lệ. Vui lòng thử lại.");
-            return;
+            bookingSession = new BookingSession();
         }
 
         String movieSlotIDParam = request.getParameter("movieSlotID");
@@ -126,6 +114,8 @@ public class SelectSeatServlet extends HttpServlet {
 
         try {
             int movieSlotID = Integer.parseInt(movieSlotIDParam);
+            bookingSession.setMovieSlotID(movieSlotID);
+
             MovieSlot movieSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
 
             if (selectedSeatIDsParam == null || selectedSeatIDsParam.isEmpty()) {
@@ -150,29 +140,11 @@ public class SelectSeatServlet extends HttpServlet {
             double totalPrice = calculateTotalPrice(selectedSeats, movieSlot);
             bookingSession.setTotalPrice(totalPrice);
 
-            // Tạo đơn hàng mới
-            Order order = new Order();
-            order.setUserID(((User) session.getAttribute("user")).getUserID());
-            order.setMovieSlotID(movieSlotID);
-            order.setTimeCreated((Timestamp) new Date());
-            order.setStatus("Đang xử lý");
-            int orderID = orderDAO.createOrder(order);
-
-            // Tạo vé cho từng ghế đã chọn
-            for (Seat seat : selectedSeats) {
-                Ticket ticket = new Ticket();
-                ticket.setOrderID(orderID);
-                ticket.setSeatID(seat.getSeatID());
-                ticket.setStatus("Đã đặt");
-                ticketDAO.createTicket(ticket);
-            }
-
             // Cập nhật BookingSession trong session
             bookingSession.setStatus("Đã đặt vé");
+
             session.setAttribute("bookingSession", bookingSession);
 
-          
-            request.setAttribute("order", order);
             request.setAttribute("movieSlot", movieSlot);
             request.setAttribute("selectedSeats", selectedSeats);
             request.getRequestDispatcher("/bookingConfirmation.jsp").forward(request, response);

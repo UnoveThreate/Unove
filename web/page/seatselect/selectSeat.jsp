@@ -114,6 +114,7 @@
                 document.getElementById('totalPrice').textContent = totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
                 document.getElementById('bookButton').disabled = selectedSeats.length === 0;
             }
+            
         }
     </script>
 </head>
@@ -156,7 +157,7 @@
     </div>
 
     <form action="selectSeat" method="post">
-        <input type="hidden" name="movieSlotID" value="${movieSlot.movieSlotID}">
+        <input type="hidden" name="movieSlotID" value="${selectedSlot.movieSlotID}">
         <input type="hidden" id="selectedSeatID" name="selectedSeatID" value="">
         <button type="submit" disabled id="bookButton" class="book-button">Đặt Ghế</button>
     </form>
