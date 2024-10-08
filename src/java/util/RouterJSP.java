@@ -140,4 +140,6 @@ public class RouterJSP {
 
     public static String OWNER_MANAGE_CINEMACHAIN_PAGE = "/page/owner/manageCinemaChain.jsp";
 
+    public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
+
 }

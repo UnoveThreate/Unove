@@ -1,5 +1,5 @@
-package controller.payment;
 
+package controller.payment;
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -31,10 +31,8 @@ import util.VnPayConfig;
  *
  * @author DELL
  */
-@WebServlet(name = "PaymentServlet", urlPatterns = {"/payment"})
+@WebServlet(name = "PaymentServlet", urlPatterns = {"/payment/vnpay"})
 public class PaymentServlet extends HttpServlet {
-
-    String ipAdress;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -75,13 +73,13 @@ public class PaymentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int movieSlotID = 1;
+        int movieSlotID = 2;
         double price = 1000000;
-        int userID = 1; // Giả định người dùng đã đăng nhập
+        int userID = 2; // Giả định người dùng đã đăng nhập
         int premiumTypeID = 1; // Loại vé cao cấp
 
         // Tạo thông tin đơn hàng
-        int OrderID = 1;
+        int OrderID = 2;
 
         // Tạo URL thanh toán qua VNPAY
         PayMentService(OrderID, request, response);
@@ -100,7 +98,7 @@ public class PaymentServlet extends HttpServlet {
         String vnp_Command = "pay";
         String orderType = "other";
         System.out.println("amout:" + (String) req.getParameter("amount"));
-        int amount = 10000 * 100;
+        int amount = 200000 * 100;
 
         String bankCode = req.getParameter("bankCode");
 

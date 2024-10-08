@@ -4,12 +4,12 @@ import jakarta.servlet.ServletContext;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class MySQLConnect {
+
     protected Connection connection;
 
     public MySQLConnect() {
@@ -24,51 +24,43 @@ public class MySQLConnect {
             ex.printStackTrace();
         }
     }
-    
-    public Connection connect(ServletContext context) throws Exception {
 
-            // Load the properties from the dbconfig.properties file
-            Properties props = new Properties();
-            try (FileInputStream fis = new FileInputStream(context.getRealPath("/WEB-INF/config/private/dbconfig.properties"))) {
-                props.load(fis);
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new Exception("Error loading database configuration", e);
-            }
-
-            // Get the database connection details from properties
-            String serverName = props.getProperty("db.serverName");
-            String databaseName = props.getProperty("db.databaseName");
-            String username = props.getProperty("db.username");
-            String password = props.getProperty("db.password");
-            String portNumber = props.getProperty("db.portNumber", "3306");
-
-            // Build the connection URL
-            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName+"?allowPublicKeyRetrieval=true&useSSL=false";
-
-            // Load MySQL JDBC Driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Establish the connection
-            this.connection = DriverManager.getConnection(url, username, password); 
-            return connection; 
+    public final Connection connect(ServletContext context) throws Exception {
+        // Load the properties from the dbconfig.properties file
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(
+                context.getRealPath("/WEB-INF/config/private/dbconfig.properties"))) {
+            props.load(fis);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new Exception("Error loading database configuration", e);
         }
-//   public static void main(String[] args) {
-//        MySQLConnect mySQLConnect = new MySQLConnect();
-//        Properties props = new Properties();
-//     
-//        props.setProperty("db.serverName", "localhost");
-//        props.setProperty("db.databaseName", "dbnew");
-//        props.setProperty("db.username", "root");
-//        props.setProperty("db.password", "Password.1");
-//
-//        try {
-//            mySQLConnect.connect(props);
-//            System.out.println("Database connection test successful!");
-//            mySQLConnect.closeConnection();
-//        } catch (Exception e) {
-//            System.err.println("Database connection test failed: " + e.getMessage());
-//        }
-//    }
-    
+
+        // Get the database connection details from properties
+        String serverName = props.getProperty("db.serverName");
+        String databaseName = props.getProperty("db.databaseName");
+        String username = props.getProperty("db.username");
+        String password = props.getProperty("db.password");
+        String portNumber = props.getProperty("db.portNumber", "3306");
+
+        // Build the connection URL
+        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName;
+
+        // Load MySQL JDBC Driver
+        Class.forName("com.mysql.cj.jdbc.Driver");
+
+        // Establish the connection without try-with-resources so that it can be reused
+        try {
+            if (this.connection == null || this.connection.isClosed()) {
+                this.connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Connection established and ready");
+            } else {
+                System.out.println("Existing connection -> Reuse");
+            }
+            return this.connection;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new SQLException("Error establishing connection to the database", ex);
+        }
+    }
 }

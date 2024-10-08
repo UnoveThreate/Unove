@@ -41,5 +41,8 @@ public class CinemaChainDAO extends MySQLConnect {
         stmt.setString(4, cinemaChain.getInformation());
         return stmt.executeUpdate() > 0;
     }
+    
 
 }
+
+

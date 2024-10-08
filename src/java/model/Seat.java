@@ -8,6 +8,9 @@ public class Seat {
     private int coordinateX; // Tọa độ X
     private int coordinateY; // Tọa độ Y
     private boolean booked; // Trạng thái ghế (đã đặt hay chưa)
+    
+    
+    public Seat (){}
 
     // Constructor
     public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY, boolean booked) {
