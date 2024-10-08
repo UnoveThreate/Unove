@@ -26,7 +26,7 @@ public class CinemaChainDAO extends MySQLConnect {
     stmt.setInt(1, userID);
     ResultSet rs = stmt.executeQuery();
     if (rs.next()) {
-        return new CinemaChain(rs.getInt("CinemaChainID"), rs.getString("Name"), rs.getString("Information"), rs.getInt("UserID"));
+        return new CinemaChain(rs.getInt("CinemaChainID"), rs.getString("Name"), rs.getString("Information"), rs.getInt("UserID"), rs.getString("avatarURL"));
     }
     return null;
 }
@@ -38,7 +38,7 @@ public class CinemaChainDAO extends MySQLConnect {
         stmt.setInt(1, cinemaChain.getUserID());
         stmt.setString(2, cinemaChain.getName());
         stmt.setString(3, cinemaChain.getInformation());
-        stmt.setString(4, cinemaChain.getInformation());
+        stmt.setString(4, cinemaChain.getAvatarURL());
         return stmt.executeUpdate() > 0;
     }
 

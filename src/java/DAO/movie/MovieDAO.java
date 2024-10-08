@@ -16,7 +16,7 @@ import model.Review;
  * @author DELL
  */
 public class MovieDAO extends MySQLConnect {
-    
+
     public MovieDAO(ServletContext context) throws Exception {
         super();
         connect(context); // Establish the connection from MySQLConnect
@@ -24,67 +24,68 @@ public class MovieDAO extends MySQLConnect {
 
     // Method to get movie by CinemaID and MovieID
     public Movie getMovieByCinemaIDAndMovieID(int cinemaID, int movieID) throws SQLException {
-    Movie movie = null;
-    String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ?";
+        Movie movie = null;
+        String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ?";
 
-    try (PreparedStatement pstmt = connection.prepareStatement(sqlQuery)) {
-        pstmt.setInt(1, cinemaID);
-        pstmt.setInt(2, movieID);
+        try (PreparedStatement pstmt = connection.prepareStatement(sqlQuery)) {
+            pstmt.setInt(1, cinemaID);
+            pstmt.setInt(2, movieID);
 
-        // Debugging log
-        System.out.println("Executing query: " + sqlQuery + " with CinemaID: " + cinemaID + " and MovieID: " + movieID);
+            // Debugging log
+            System.out.println("Executing query: " + sqlQuery + " with CinemaID: " + cinemaID + " and MovieID: " + movieID);
 
-        try (ResultSet rs = pstmt.executeQuery()) {
-            if (rs.next()) {
-                // Retrieve data from ResultSet
-                String title = rs.getString("Title");
-                String synopsis = rs.getString("Synopsis");
-                Date datePublished = rs.getDate("DatePublished");  // java.sql.Date, ensure compatibility with Movie class
-                String imageURL = rs.getString("ImageURL");
-                float rating = rs.getFloat("Rating");
-                String country = rs.getString("Country");
-                String linkTrailer = rs.getString("LinkTrailer");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // Retrieve data from ResultSet
+                    String title = rs.getString("Title");
+                    String synopsis = rs.getString("Synopsis");
+                    Date datePublished = rs.getDate("DatePublished");  // java.sql.Date, ensure compatibility with Movie class
+                    String imageURL = rs.getString("ImageURL");
+                    float rating = rs.getFloat("Rating");
+                    String country = rs.getString("Country");
+                    String linkTrailer = rs.getString("LinkTrailer");
 
-                // Create a new Movie object using the constructor
-                movie = new Movie();
-                movie.setMovieID(rs.getInt("MovieID"));
-                movie.setCinemaID(cinemaID);
-                movie.setLinkTrailer(linkTrailer);
-                movie.setRating(rating);
-                movie.setDatePublished(datePublished);
-                movie.setCountry(country);
-                movie.setImageURL(imageURL);
-                movie.setTitle(title);
-                movie.setSynopsis(synopsis);
-                
-                // Lấy danh sách thể loại của bộ phim từ bảng MovieInGenre
-                List<String> genres = new ArrayList<>();
-                String genreQuery = "SELECT Genre FROM MovieInGenre WHERE MovieID = ?";
-                
-                try (PreparedStatement genrePstmt = connection.prepareStatement(genreQuery)) {
-                    genrePstmt.setInt(1, movieID);
-                    try (ResultSet genreResultSet = genrePstmt.executeQuery()) {
-                        while (genreResultSet.next()) {
-                            String genre = genreResultSet.getString("Genre");
-                            genres.add(genre);
+                    // Create a new Movie object using the constructor
+                    movie = new Movie();
+                    movie.setMovieID(rs.getInt("MovieID"));
+                    movie.setCinemaID(cinemaID);
+                    movie.setLinkTrailer(linkTrailer);
+                    movie.setRating(rating);
+                    movie.setDatePublished(datePublished);
+                    movie.setCountry(country);
+                    movie.setImageURL(imageURL);
+                    movie.setTitle(title);
+                    movie.setSynopsis(synopsis);
+
+                    // Lấy danh sách thể loại của bộ phim từ bảng MovieInGenre
+                    List<String> genres = new ArrayList<>();
+                    String genreQuery = "SELECT Genre FROM MovieInGenre WHERE MovieID = ?";
+
+                    try (PreparedStatement genrePstmt = connection.prepareStatement(genreQuery)) {
+                        genrePstmt.setInt(1, movieID);
+                        try (ResultSet genreResultSet = genrePstmt.executeQuery()) {
+                            while (genreResultSet.next()) {
+                                String genre = genreResultSet.getString("Genre");
+                                genres.add(genre);
+                            }
                         }
                     }
+
+                    // Set genres to the movie object
+                    movie.setGenres(genres);
+                } else {
+                    System.err.println("No movie found for CinemaID: " + cinemaID + " and MovieID: " + movieID);
                 }
-                
-                // Set genres to the movie object
-                movie.setGenres(genres);
-            } else {
-                System.err.println("No movie found for CinemaID: " + cinemaID + " and MovieID: " + movieID);
             }
+        } catch (SQLException e) {
+            // Handle exceptions properly
+            e.printStackTrace();
+            throw new SQLException("Error while fetching movie data.", e);
         }
-    } catch (SQLException e) {
-        // Handle exceptions properly
-        e.printStackTrace();
-        throw new SQLException("Error while fetching movie data.", e);
+
+        return movie; // Return the Movie object (or null if not found)
     }
 
-    return movie; // Return the Movie object (or null if not found)
-}
     public ArrayList<Review> getReviewsByMovieID(int movieID, ServletContext context) throws Exception {
 
         database.MySQLConnect dbConnect = new MySQLConnect();
