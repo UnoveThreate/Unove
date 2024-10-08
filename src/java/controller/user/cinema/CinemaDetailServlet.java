@@ -56,7 +56,7 @@ public class CinemaDetailServlet extends HttpServlet {
             request.setAttribute("reviews", reviews);
 
             // Chuyển tiếp tới trang JSP chi tiết của Cinema
-            request.getRequestDispatcher(router.CINEMA_DETAIL_PAGE).forward(request, response);
+            request.getRequestDispatcher(RouterJSP.CINEMA_DETAIL_PAGE).forward(request, response);
         } catch (NumberFormatException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid CinemaID");

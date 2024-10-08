@@ -2,16 +2,17 @@
 <%@page import="model.CinemaReview"%>
 <%@page contentType="text/html;charset=UTF-8" language="java" %>
 <%@page import="java.util.List" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<%
-    Cinema cinema = (Cinema) request.getAttribute("cinema");
-    List<CinemaReview> reviews = (List<CinemaReview>) request.getAttribute("reviews");
-%>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chi tiết Rạp Chiếu Phim</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinema Details</title>
+    <!-- Bootstrap 5 CDN for beautiful UI -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,57 +21,50 @@
         h1, h2 {
             color: #333;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-        }
         .btn-back {
             margin-top: 20px;
-        }
-        .btn-back a {
-            text-decoration: none;
-            color: white;
-            background-color: #007BFF;
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
-        .btn-back a:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Thông tin Rạp Chiếu Phim</h1>
-    <% if (cinema != null) { %>
-        <p><strong>Địa chỉ:</strong> <%= cinema.getAddress() %></p>
-        <p><strong>Tỉnh:</strong> <%= cinema.getProvince() %>, <strong>Quận:</strong> <%= cinema.getDistrict() %>, <strong>Xã:</strong> <%= cinema.getCommune() %></p>
-    <% } else { %>
-        <p>Không tìm thấy thông tin rạp chiếu phim.</p>
-    <% } %>
+    <div class="container">
+        <h1>Cinema Detail Information</h1>
+        <c:if test="${not empty cinema}">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p><strong>Address:</strong> ${cinema.address}</p>
+                    <p><strong>Province:</strong> ${cinema.province}, 
+                       <strong>District:</strong> ${cinema.district}, 
+                       <strong>Commune:</strong> ${cinema.commune}</p>
+                </div>
+            </div>
+        </c:if>
+        <c:if test="${empty cinema}">
+            <div class="alert alert-warning">Cinema information not found.</div>
+        </c:if>
 
-    <h2>Đánh giá</h2>
-    <ul>
-        <% if (reviews != null && !reviews.isEmpty()) { %>
-            <% for (CinemaReview review : reviews) { %>
-                <li>
-                    <strong>Đánh giá:</strong> <%= review.getRating() %> / 5
-                    <p><strong>Nội dung:</strong> <%= review.getContent() %></p>
-                    <p><em>Ngày tạo: <%= review.getTimeCreated() %></em></p>
-                </li>
-            <% } %>
-        <% } else { %>
-            <li>Chưa có đánh giá nào.</li>
-        <% } %>
-    </ul>
+        <h2>Reviews</h2>
+        <c:if test="${not empty reviews}">
+            <ul class="list-group">
+                <c:forEach var="review" items="${reviews}">
+                    <li class="list-group-item">
+                        <strong>Rating:</strong> ${review.rating} / 5
+                        <p><strong>Content:</strong> ${review.content}</p>
+                        <p><em>Time created: <fmt:formatDate value="${review.timeCreated}" pattern="dd/MM/yyyy"/></em></p>
+                    </li>
+                </c:forEach>
+            </ul>
+        </c:if>
+        <c:if test="${empty reviews}">
+            <div class="alert alert-info">No reviews yet.</div>
+        </c:if>
 
-    <div class="btn-back">
-        <a href="cinemaList.jsp">Quay lại danh sách rạp</a>
+        <div class="btn-back">
+            <a href="cinemaList.jsp" class="btn btn-primary">Return to cinema list</a>
+        </div>
     </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

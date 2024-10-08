@@ -49,4 +49,6 @@ public class RouterURL {
     public static String DETAIL_MOVIE_PAGE = "/Unove/HandleDisplayMovieInfo";
 
     public static String CINEMA_DETAIL_PAGE = "/Unove/cinemaDetail";
+    
+    public static String CANTEEN_ITEM_UPLOAD_PAGE = "/Unove/CanteenItemServlet";
 }
