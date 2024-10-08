@@ -60,14 +60,8 @@
     </head>
     <body>
         <div class="container">
-<<<<<<< HEAD:web/page/owner/createCinemaChain.jsp
-            <h2>Create Cinema Chain</h2>      
-            <form action="<%= RouterURL.MANAGE_CINEMA %>" method="POST" enctype="multipart/form-data">
-                
-=======
             <h2>Create Cinema Chain</h2>
             <form action="<%= RouterURL.MANAGE_CINEMA%>" method="POST" enctype="multipart/form-data">
->>>>>>> CRUDRoom-PhongND:web/page/Owner/createCinemaChain.jsp
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" class="form-control" id="name" name="name" required>
