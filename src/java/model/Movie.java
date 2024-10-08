@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,8 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(String title, String synopsis, Date datePublished, String imageURL, float rating, String country, List<String> genres) {
+    public Movie(String title, String synopsis, Date datePublished, String imageURL, float rating, String country,
+            List<String> genres) {
         this.title = title;
         this.datePublished = datePublished;
         this.rating = rating;
@@ -31,7 +33,8 @@ public class Movie {
     }
 
     // Constructor
-    public Movie(int movieID, String title, String synopsis, Date datePublished, String imageURL, float rating, String status, String country, List<String> genres) {
+    public Movie(int movieID, String title, String synopsis, Date datePublished, String imageURL, float rating,
+            String status, String country, List<String> genres) {
         this.movieID = movieID;
         this.datePublished = datePublished;
         this.rating = rating;
@@ -42,7 +45,7 @@ public class Movie {
         this.genres = genres;
     }
 
-    // lay ra chuoi cac the loai : 
+    // lay ra chuoi cac the loai :
     public String getGenresAsString() {
         return String.join(", ", genres);
     }
@@ -79,6 +82,16 @@ public class Movie {
         this.datePublished = datePublished;
     }
 
+    public void setDatePublished(String datePublished) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");// change format date for suitable
+        try {
+            this.datePublished = (datePublished != null) ? formatter.parse(datePublished) : null;
+        } catch (Exception e) {
+            this.datePublished = null;
+        }
+
+    }
+
     public float getRating() {
         return rating;
     }
@@ -101,6 +114,7 @@ public class Movie {
 
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
+
     }
 
     public String getCountry() {
@@ -134,7 +148,12 @@ public class Movie {
     public void setStatus(String status) {
         this.status = status;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Movie{" + "movieID=" + movieID + ", title=" + title + ", synopsis=" + synopsis + ", datePublished="
+                + datePublished + ", imageURL=" + imageURL + ", rating=" + rating + ", country=" + country
+                + ", linkTrailer=" + linkTrailer + ", cinemaID=" + cinemaID + '}';
+    }
 
 }

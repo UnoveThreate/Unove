@@ -20,374 +20,386 @@
 <!DOCTYPE html>
 
 <html>
-  
+
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style type="text/css">
-       /* Định dạng cho navbar */
-       
-/* Định dạng cho navbar */
-/* Navbar Styles */
-/* Navbar Styles */
-.nav-item.dropdown:hover .dropdown-menu {
-    display: block;
-    animation: fadeIn 0.3s ease;
-}
+        /* Định dạng cho navbar */
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        /* Định dạng cho navbar */
+        /* Navbar Styles */
+        /* Navbar Styles */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
 
-.dropdown > .dropdown-toggle:active {
-    pointer-events: none;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* Borderless Button Styles */
-.borderless-btn {
-    background: none;
-    border: none;
-    color: #6a11cb;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
+        .dropdown > .dropdown-toggle:active {
+            pointer-events: none;
+        }
 
-.borderless-btn:hover {
-    color: #2575fc;
-    transform: scale(1.1);
-}
+        /* Borderless Button Styles */
+        .borderless-btn {
+            background: none;
+            border: none;
+            color: #6a11cb;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-.borderless-btn:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.25);
-}
+        .borderless-btn:hover {
+            color: #2575fc;
+            transform: scale(1.1);
+        }
 
-/* Modal Styles */
-.custom-modal .modal-dialog {
-    position: absolute;
-    top: 5%;
-    left: 25%;
-    width: 50vw;
-    max-width: 600px;
-}
+        .borderless-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.25);
+        }
 
-.custom-modal .modal-content {
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
-    border: none;
-}
+        /* Modal Styles */
+        .custom-modal .modal-dialog {
+            position: absolute;
+            top: 5%;
+            left: 25%;
+            width: 50vw;
+            max-width: 600px;
+        }
 
-.navbar {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    padding: 15px 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+        .custom-modal .modal-content {
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+            border: none;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
 
-.navbar-brand {
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    transition: all 0.3s ease;
-}
+        .navbar-brand {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
 
-.navbar-brand:hover {
-    color: #f0f4f8;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
+        .navbar-brand:hover {
+            color: #f0f4f8;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
 
-.nav-link {
-    color: #ffffff !important;
-    font-weight: 500;
-    padding: 10px 15px !important;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-}
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            padding: 10px 15px !important;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
 
-.nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
 
-.navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.5);
-}
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
 
-.navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        }
 
-/* Movie Image Styles */
-.movie-image {
-    max-width: 100px;
-    border-radius: 8px;
-    margin-right: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
+        /* Movie Image Styles */
+        .movie-image {
+            max-width: 100px;
+            border-radius: 8px;
+            margin-right: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-.movie-image:hover {
-    transform: scale(1.05);
-}
+        .movie-image:hover {
+            transform: scale(1.05);
+        }
 
-/* Movie Info Styles */
-.movie-info {
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+        /* Movie Info Styles */
+        .movie-info {
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-.movie-info p, .movie-info span {
-    margin: 0;
-    line-height: 1.4;
-}
+        .movie-info p, .movie-info span {
+            margin: 0;
+            line-height: 1.4;
+        }
 
-.movie-details {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid #eaeaea;
-    transition: background-color 0.3s ease;
-}
+        .movie-details {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eaeaea;
+            transition: background-color 0.3s ease;
+        }
 
-.movie-details:hover {
-    background: linear-gradient(135deg, #f5f7fa 0%, #e0e5ec 100%);
-}
+        .movie-details:hover {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0e5ec 100%);
+        }
 
-.genre {
-    display: inline-block;
-    margin-right: 5px;
-    padding: 3px 8px;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    border-radius: 20px;
-    font-size: 0.85rem;
-    color: #ffffff;
-    transition: all 0.3s ease;
-}
+        .genre {
+            display: inline-block;
+            margin-right: 5px;
+            padding: 3px 8px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
 
-.genre:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(37, 117, 252, 0.2);
-}
+        .genre:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(37, 117, 252, 0.2);
+        }
 
-/* Search Input Styles */
-#movieNameInput {
-    width: calc(100% - 20px);
-    padding: 12px 15px;
-    font-size: 1rem;
-    border: 2px solid #ced4da;
-    border-radius: 25px;
-    outline: none;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-}
+        /* Search Input Styles */
+        #movieNameInput {
+            width: calc(100% - 20px);
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #ced4da;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+        }
 
-#movieNameInput:focus {
-    border-color: #6a11cb;
-    box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.25);
-}
+        #movieNameInput:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 0.2rem rgba(106, 17, 203, 0.25);
+        }
 
-/* Modal Footer Button Styles */
-.modal-footer button {
-    width: 120px;
-    height: 48px;
-    border-radius: 24px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    color: #ffffff;
-    border: none;
-}
+        /* Modal Footer Button Styles */
+        .modal-footer button {
+            width: 120px;
+            height: 48px;
+            border-radius: 24px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #ffffff;
+            border: none;
+        }
 
-.modal-footer button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(37, 117, 252, 0.2);
-}
+        .modal-footer button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(37, 117, 252, 0.2);
+        }
 
-/* "ĐANG CHIẾU" Button Styles */
-#showingButton {
-    height: 30px;
-    border: none;
-    border-radius: 15px;
-    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-    color: white;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-}
+        /* "ĐANG CHIẾU" Button Styles */
+        #showingButton {
+            height: 30px;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
 
-#showingButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(255, 65, 108, 0.2);
-}
+        #showingButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 65, 108, 0.2);
+        }
 
-/* Movie Container Styles */
-#movieDetailsContainer {
-    cursor: pointer;
-}
+        /* Movie Container Styles */
+        #movieDetailsContainer {
+            cursor: pointer;
+        }
 
-#movieContainerForm {
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 15px;
-    scrollbar-width: thin;
-    scrollbar-color: #6a11cb #f0f0f0;
-}
+        #movieContainerForm {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 15px;
+            scrollbar-width: thin;
+            scrollbar-color: #6a11cb #f0f0f0;
+        }
 
-#movieContainerForm::-webkit-scrollbar {
-    width: 8px;
-}
+        #movieContainerForm::-webkit-scrollbar {
+            width: 8px;
+        }
 
-#movieContainerForm::-webkit-scrollbar-track {
-    background: #f0f0f0;
-}
+        #movieContainerForm::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
 
-#movieContainerForm::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    border-radius: 20px;
-    border: 3px solid #f0f0f0;
-}
+        #movieContainerForm::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            border-radius: 20px;
+            border: 3px solid #f0f0f0;
+        }
 
-/* Search Button Styles */
-#searchButton {
-    margin-left: 20px;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    color: white;
-    border: none;
-    border-radius: 25px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        /* Search Button Styles */
+        #searchButton {
+            margin-left: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-#searchButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-}
+        #searchButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
 
-#searchButton:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+        #searchButton:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-/* Logo Styles */
-.icon-logo-btn {
-    font-size: 2em;
-}
+        /* Logo Styles */
+        .icon-logo-btn {
+            font-size: 2em;
+        }
 
-.wrapper-navbar-header {
-    display: flex;
-    align-items: center;
-}
+        .wrapper-navbar-header {
+            display: flex;
+            align-items: center;
+        }
 
-.icon-logo_header {
-    width: 50px;
-    height: 50px;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
+        .icon-logo_header {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
 
-.icon-logo_header:hover {
-    transform: scale(1.1);
-}
+        .icon-logo_header:hover {
+            transform: scale(1.1);
+        }
 
-/* Responsive Styles */
-@media (max-width: 767px) {
-    #searchButton {
-        margin-left: 10px;
-    }
+        /* Responsive Styles */
+        @media (max-width: 767px) {
+            #searchButton {
+                margin-left: 10px;
+            }
 
-    .custom-modal .modal-dialog {
-        width: 95vw;
-        left: 2.5%;
-    }
+            .custom-modal .modal-dialog {
+                width: 95vw;
+                left: 2.5%;
+            }
 
-    .borderless-btn {
-        font-size: 1.2rem;
-    }
+            .borderless-btn {
+                font-size: 1.2rem;
+            }
 
-    .movie-info {
-        margin-left: 15px;
-    }
+            .movie-info {
+                margin-left: 15px;
+            }
 
-    .movie-details {
-        padding: 15px;
-    }
+            .movie-details {
+                padding: 15px;
+            }
 
-    #movieNameInput {
-        width: calc(100% - 15px);
-    }
+            #movieNameInput {
+                width: calc(100% - 15px);
+            }
 
-    .modal-footer button {
-        width: 100px;
-        height: 40px;
-    }
+            .modal-footer button {
+                width: 100px;
+                height: 40px;
+            }
 
-    #showingButton {
-        height: 28px;
-        font-size: 12px;
-    }
+            #showingButton {
+                height: 28px;
+                font-size: 12px;
+            }
 
-    .movie-image {
-        max-width: 80px;
-    }
-}
+            .movie-image {
+                max-width: 80px;
+            }
+        }
 
-@media (min-width: 768px) {
-    .navbar-expand-lg .navbar-nav {
-        flex-direction: row;
-    }
+        @media (min-width: 768px) {
+            .navbar-expand-lg .navbar-nav {
+                flex-direction: row;
+            }
 
-    .custom-modal .modal-dialog {
-        max-width: 500px;
-    }
+            .custom-modal .modal-dialog {
+                max-width: 500px;
+            }
 
-    .borderless-btn {
-        font-size: 1.5rem;
-    }
-}
+            .borderless-btn {
+                font-size: 1.5rem;
+            }
+        }
 
-/* Navbar Gradient */
-.navbar {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
+        /* Navbar Gradient */
+        .navbar {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
 
-/* Dropdown Menu Gradient */
-.dropdown-menu {
-    background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-}
+        /* Dropdown Menu Gradient */
+        .dropdown-menu {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+        }
 
-/* Hover effects */
-.nav-link:hover, .dropdown-item:hover {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+        /* Hover effects */
+        .nav-link:hover, .dropdown-item:hover {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
+        .navbar {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 15px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+      
 
     </style>
 
     <!--get chains from login servlet-->
     <c:set var="cinemaNames" value="${sessionScope.chains}" />
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
         <div class="container-fluid">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/movie" style="font-style:normal; font-weight: 600">Unove</a>
 
@@ -400,18 +412,23 @@
                         <a class="icon-logo-btn nav-link active" aria-current="page" href="${pageContext.request.contextPath}/movie"> <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader.png" alt="Logo"/></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">Lịch chiếu</a>
+                        <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Phim chiếu</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">Showtimes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Top Phim</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Movie</a>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Top Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Upcoming movies</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Rạp chiếu
+                            Cinema
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <c:forEach var="cinema" items="${cinemaNames}">
@@ -440,25 +457,25 @@
                                         </div>
                                     </form>
                                 </div>
-                                <c:if test="${not empty movies}">
-                                    <form id="movieContainerForm">
-                                        <c:forEach var="movie" items="${movies}">
-                                            <div class="modal-body movie-details" id="movieDetailsContainer" onclick="displayMovieDetails('${movie.movieID}')">
-                                                <img src="${movie.imageURL}" alt="${movie.title} image" class="movie-image" />
-                                                <div class="movie-info">
-                                                    <b style="font-size: 22px;">${movie.title}</b>
-                                                    <c:set var="genresString" value="${fn:replace(movie.genres.toString(), '[', '')}" />
-                                                    <c:set var="genresString" value="${fn:replace(genresString, ']', '')}" />
-                                                    <p style="font-size: 18px;">${genresString}</p>
-                                                    <p style="font-size: 18px;"><i class="fa-regular fa-star"></i> ${movie.rating}</p>
-                                                    <button type="button" id="showingButton"><i class="fas fa-video" style="margin-right: 8px;"></i>ĐANG CHIẾU</button>
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                        </c:forEach>
-                                        <input type="hidden" id="movieIDInput" name="movieID">
-                                    </form>
-                                </c:if>
+                               <%--<c:if test="${not empty movies}">--%>
+                                    <!--<form id="movieContainerForm">-->
+                                        <%--<c:forEach var="movie" items="${movies}">--%>
+                                            <!--<div class="modal-body movie-details" id="movieDetailsContainer" onclick="displayMovieDetails('${movie.movieID}')">-->
+                                                <!--<img src="${movie.imageURL}" alt="${movie.title} image" class="movie-image" />-->
+                                                <!--<div class="movie-info">-->
+                                                    <!--<b style="font-size: 22px;">${movie.title}</b>-->
+                                                    <%--<c:set var="genresString" value="${fn:replace(movie.genres.toString(), '[', '')}" />--%>
+                                                    <%--<c:set var="genresString" value="${fn:replace(genresString, ']', '')}" />--%>
+                                                    <!--<p style="font-size: 18px;">${genresString}</p>-->
+                                                    <!--<p style="font-size: 18px;"><i class="fa-regular fa-star"></i> ${movie.rating}</p>-->
+                                                    <!--<button type="button" id="showingButton"><i class="fas fa-video" style="margin-right: 8px;"></i>ĐANG CHIẾU</button>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<hr/>-->
+                                        <%--</c:forEach>--%>
+                                        <!--<input type="hidden" id="movieIDInput" name="movieID">-->
+                                    <!--</form>-->
+                                <%--</c:if>--%>
                                 <div class="modal-footer">
                                     <button style="background-color: rgb(216, 45, 139)" type="button" class="btn btn-primary" onclick="closeModal();" data-bs-dismiss="modal">Close</button>
                                 </div>
@@ -466,7 +483,7 @@
                         </div>
                     </div>
                 </div>
-               
+
                 <ul class="navbar-nav ms-auto mb-2 me-lg-5">
                     <c:choose>
                         <c:when test="${not empty sessionScope.username}">
@@ -483,7 +500,7 @@
                         </c:when>
                         <c:otherwise>
                             <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+                               <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
                             </li>
                         </c:otherwise>
                     </c:choose>

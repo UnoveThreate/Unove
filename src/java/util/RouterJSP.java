@@ -77,7 +77,7 @@ public class RouterJSP {
 
     public static String VIEW_ORDER = "/page/bill/Bill.jsp";
 
-    public static String SCHEDULE_MOVIE = "/page/movie/schedule/ScheduleMovie.jsp";
+    public static String SCHEDULE_MOVIEe = "/page/movie/schedule/ScheduleMovie.jsp";
 
     public String UPDATE_CINEMACHAIN = "/page/owner/manage/UpdateCinemaChain.jsp";
 
@@ -142,4 +142,7 @@ public class RouterJSP {
 
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
+    public static String SCHEDULE_MOVIE = "/page/schedule/showtime.jsp";
+
+    public static String SELECT_SEAT = "/page/seatselect/selectSeat.jsp";
 }

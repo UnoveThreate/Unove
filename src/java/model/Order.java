@@ -1,28 +1,19 @@
 package model;
-import java.time.LocalDateTime;
+
+import java.sql.Timestamp;
 
 public class Order {
+    private int orderID;
+    private int userID;
+    private int movieSlotID;
+    private Timestamp timeCreated;
+    private Integer premiumTypeID;
+    private String status;
 
-    private int orderID;       
-    private int userID;        
-    private int movieSlotID;   
-    private LocalDateTime timeCreated;  
-    private int premiumTypeID; 
-    private String status;     
+ 
+    public Order() {}
 
-    // Constructors
-    public Order() {
-    }
-
-    public Order(int userID, int movieSlotID, LocalDateTime timeCreated, int premiumTypeID, String status) {
-        this.userID = userID;
-        this.movieSlotID = movieSlotID;
-        this.timeCreated = timeCreated;
-        this.premiumTypeID = premiumTypeID;
-        this.status = status;
-    }
-
-    public Order(int orderID, int userID, int movieSlotID, LocalDateTime timeCreated, int premiumTypeID, String status) {
+    public Order(int orderID, int userID, int movieSlotID, Timestamp timeCreated, Integer premiumTypeID, String status) {
         this.orderID = orderID;
         this.userID = userID;
         this.movieSlotID = movieSlotID;
@@ -56,19 +47,19 @@ public class Order {
         this.movieSlotID = movieSlotID;
     }
 
-    public LocalDateTime getTimeCreated() {
+    public Timestamp getTimeCreated() {
         return timeCreated;
     }
 
-    public void setTimeCreated(LocalDateTime timeCreated) {
+    public void setTimeCreated(Timestamp timeCreated) {
         this.timeCreated = timeCreated;
     }
 
-    public int getPremiumTypeID() {
+    public Integer getPremiumTypeID() {
         return premiumTypeID;
     }
 
-    public void setPremiumTypeID(int premiumTypeID) {
+    public void setPremiumTypeID(Integer premiumTypeID) {
         this.premiumTypeID = premiumTypeID;
     }
 

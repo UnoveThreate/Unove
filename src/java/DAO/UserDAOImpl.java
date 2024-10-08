@@ -7,9 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import model.User;
-import jakarta.servlet.ServletContext;
 import java.util.Properties;
-
+import jakarta.servlet.ServletContext;
 /**
  * Data Access Object for User management
  */

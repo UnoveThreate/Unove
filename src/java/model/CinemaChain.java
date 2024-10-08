@@ -11,10 +11,11 @@ package model;
 public class CinemaChain {
 
     private int cinemaChainID;
+    private int userID;
     private String name;
+    private String avatarURL;
     private String information;
     private int userId;
-    private String avatarURL;
 
     // Constructors
     public CinemaChain() {
@@ -24,20 +25,20 @@ public class CinemaChain {
         this.cinemaChainID = cinemaChainID;
         this.name = name;
         this.information = information;
-        this.userId = userId;
+        this.userID = userId;
     }
 
     public CinemaChain(int userID, String name, String information) {
-        this.userId = userId;
+        this.userID = userID;
         this.name = name;
         this.information = information;
     }
 
     public CinemaChain(int cinemaChainID, String name, String information, int userId, String avatarURL) {
+        this.userID = userId;
         this.cinemaChainID = cinemaChainID;
         this.name = name;
         this.information = information;
-        this.userId = userId;
         this.avatarURL = avatarURL;
     }
 
@@ -49,6 +50,14 @@ public class CinemaChain {
         this.cinemaChainID = cinemaChainID;
     }
 
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
     public String getName() {
         return name;
     }
@@ -57,28 +66,20 @@ public class CinemaChain {
         this.name = name;
     }
 
-    public String getInformation() {
-        return information;
-    }
-
-    public void setInformation(String information) {
-        this.information = information;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public String getAvatarURL() {
         return avatarURL;
     }
 
     public void setAvatarURL(String avatarURL) {
         this.avatarURL = avatarURL;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
     }
 
     @Override

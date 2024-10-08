@@ -4,8 +4,6 @@
  */
 package controller.owner;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,7 +14,6 @@ import DAO.cinemaChainOwnerDAO.CinemaDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.annotation.MultipartConfig;
 import model.CinemaChain;
-import model.User;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
@@ -29,7 +26,6 @@ import model.Cinema;
 import util.FileUploader;
 import util.Role;
 import util.RouterJSP;
-import util.Router;
 import util.RouterURL;
 
 /**
@@ -138,7 +134,7 @@ public class CinemaChainServlet extends HttpServlet {
 
                 // Continue with other logic (e.g., save the avatar URL to the database)
                 CinemaChain cinemaChain = new CinemaChain();
-                cinemaChain.setUserId(userID);
+                cinemaChain.setUserID(userID);
                 cinemaChain.setName(name);
                 cinemaChain.setInformation(information);
                 cinemaChain.setAvatarURL(avatarURL);

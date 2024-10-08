@@ -1,25 +1,25 @@
-// File: Seat.java
 package model;
 
 public class Seat {
-    private int seatID; // ID của ghế
-    private int roomID; // ID của phòng chiếu
-    private String name; // Tên ghế (ví dụ: A1, B2)
-    private int coordinateX; // Tọa độ X
-    private int coordinateY; // Tọa độ Y
-    private boolean booked; // Trạng thái ghế (đã đặt hay chưa)
-    
-    
-    public Seat (){}
+    private int seatID;
+    private int roomID;
+    private String name;
+    private int coordinateX;
+    private int coordinateY;
+    private boolean available;
+    private double price;
 
     // Constructor
-    public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY, boolean booked) {
+    public Seat() {}
+
+    public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY, double price) {
         this.seatID = seatID;
         this.roomID = roomID;
         this.name = name;
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
-        this.booked = booked;
+        this.price = price;
+        this.available = true;
     }
 
     // Getters and Setters
@@ -63,11 +63,19 @@ public class Seat {
         this.coordinateY = coordinateY;
     }
 
-    public boolean isBooked() {
-        return booked;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setBooked(boolean booked) {
-        this.booked = booked;
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

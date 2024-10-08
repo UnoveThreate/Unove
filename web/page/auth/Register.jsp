@@ -49,7 +49,7 @@ body {
     display: flex;
 }
 
-/* Form Styles */
+
 .signup-form {
     flex: 1;
     padding: 40px;
@@ -144,7 +144,7 @@ body {
     box-shadow: 0 6px 20px rgba(108, 99, 255, 0.4);
 }
 
-/* Image Section Styles */
+
 .signup-image {
     flex: 1;
     display: flex;
@@ -196,7 +196,7 @@ body {
     }
 }
 
-/* Error Message Style */
+
 .error-message {
     color: #ff3860;
     font-size: 14px;
