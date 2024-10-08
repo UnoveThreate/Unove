@@ -91,14 +91,14 @@ public class UpdateMovieServlet extends HttpServlet {
 
         // Lấy thông tin bộ phim từ request
         Integer movieID = Integer.parseInt(request.getParameter("movieID")); // Lấy movieID từ request
-        Integer cinemaID = Integer.parseInt(request.getParameter("cinemaID")); // Lấy movieID từ request
+        Integer cinemaID = Integer.parseInt(request.getParameter("cinemaID")); // Lấy cinemaID từ request
         String title = request.getParameter("title");
         String synopsis = request.getParameter("synopsis");
         String datePublishedStr = request.getParameter("datePublished");
         String imageURL = request.getParameter("imageURL");
-        double rating = Double.parseDouble(request.getParameter("rating"));
         String country = request.getParameter("country");
         String linkTrailer = request.getParameter("linkTrailer");
+        String type = request.getParameter("type");
         String[] genreIDs = request.getParameterValues("genreIDs");
 
         // Chuyển đổi datePublished từ String sang Date
@@ -110,6 +110,14 @@ public class UpdateMovieServlet extends HttpServlet {
             throw new ServletException("Invalid date format. Please use yyyy-MM-dd.", e);
         }
 
+        // Lấy rating hiện tại từ cơ sở dữ liệu
+        float currentRating = 0;
+        try {
+            currentRating = movieDAO.getRatingByMovieID(movieID); // Phương thức để lấy rating hiện tại
+        } catch (SQLException e) {
+            throw new ServletException("Error fetching current rating", e);
+        }
+
         // Tạo một đối tượng Movie mới
         Movie movie = new Movie();
         movie.setMovieID(movieID); // Gán movieID cho phim
@@ -117,9 +125,10 @@ public class UpdateMovieServlet extends HttpServlet {
         movie.setSynopsis(synopsis);
         movie.setDatePublished(datePublished); // Gán đối tượng Date vào
         movie.setImageURL(imageURL);
-        movie.setRating((float) rating); // Chuyển đổi từ double sang float
+        movie.setRating(currentRating); // Gán lại giá trị rating từ cơ sở dữ liệu
         movie.setCountry(country);
         movie.setLinkTrailer(linkTrailer);
+        movie.setType(type);
 
         try {
             // Cập nhật phim trong cơ sở dữ liệu
@@ -130,4 +139,5 @@ public class UpdateMovieServlet extends HttpServlet {
             throw new ServletException("Error updating movie", e);
         }
     }
+
 }

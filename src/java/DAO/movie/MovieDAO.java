@@ -25,7 +25,7 @@ public class MovieDAO extends MySQLConnect {
     // Method to get movie by CinemaID and MovieID
     public Movie getMovieByCinemaIDAndMovieID(int cinemaID, int movieID) throws SQLException {
     Movie movie = null;
-    String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ?";
+    String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ? ";
 
     try (PreparedStatement pstmt = connection.prepareStatement(sqlQuery)) {
         pstmt.setInt(1, cinemaID);

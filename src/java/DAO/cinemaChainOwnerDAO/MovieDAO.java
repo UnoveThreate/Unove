@@ -15,17 +15,16 @@ public class MovieDAO extends MySQLConnect {
         connect(context);
     }
 
-    // Method to get a movie by CinemaID and MovieID
+    // Method to get a movie by CinemaID and MovieID (only movies with status = TRUE)
     public Movie getMovieByCinemaIDAndMovieID(int cinemaID, int movieID) throws SQLException {
         Movie movie = null;
-        String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ?";
+        String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ? AND Status = TRUE";
         try (PreparedStatement pstmt = connection.prepareStatement(sqlQuery)) {
             pstmt.setInt(1, cinemaID);
             pstmt.setInt(2, movieID);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // Retrieve data from ResultSet
                     movie = new Movie();
                     movie.setMovieID(rs.getInt("MovieID"));
                     movie.setCinemaID(cinemaID);
@@ -36,20 +35,15 @@ public class MovieDAO extends MySQLConnect {
                     movie.setRating(rs.getFloat("Rating"));
                     movie.setCountry(rs.getString("Country"));
                     movie.setLinkTrailer(rs.getString("LinkTrailer"));
+                    movie.setStatus(rs.getBoolean("Status"));
+                    movie.setType(rs.getString("Type"));
 
-                    // Get genres for the movie
                     List<Genre> genres = getGenresByMovieID(movieID);
-
                     movie.setGenres(genres);
-                } else {
-                    System.err.println("No movie found for CinemaID: " + cinemaID + " and MovieID: " + movieID);
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new SQLException("Error while fetching movie data.", e);
         }
-        return movie; // Return the Movie object (or null if not found)
+        return movie;
     }
 
     public Movie getMovieByID(int movieID) throws SQLException {
@@ -71,6 +65,7 @@ public class MovieDAO extends MySQLConnect {
                 movie.setCountry(rs.getString("Country"));
                 movie.setLinkTrailer(rs.getString("LinkTrailer"));
                 movie.setCinemaID(rs.getInt("CinemaID"));
+                movie.setType(rs.getString("Type"));
                 // Nếu cần thiết, bạn có thể lấy thông tin thể loại ở đây hoặc sau này.
                 // Ví dụ: movie.setGenres(getGenresByMovieID(movieID));
 
@@ -80,12 +75,12 @@ public class MovieDAO extends MySQLConnect {
         return movie;
     }
 
-    // Method to get all movies
+    // Method to get all movies by CinemaID (only movies with status = TRUE)
     public List<Movie> getAllMovies(int cinemaID) throws SQLException {
         List<Movie> movies = new ArrayList<>();
-        String sql = "SELECT * FROM Movie WHERE CinemaID = ?";
+        String sql = "SELECT * FROM Movie WHERE CinemaID = ? AND Status = TRUE";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, cinemaID); // Set the CinemaID parameter
+            pstmt.setInt(1, cinemaID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Movie movie = new Movie();
@@ -98,12 +93,14 @@ public class MovieDAO extends MySQLConnect {
                 movie.setCountry(rs.getString("Country"));
                 movie.setLinkTrailer(rs.getString("LinkTrailer"));
                 movie.setCinemaID(rs.getInt("CinemaID"));
+                movie.setStatus(rs.getBoolean("Status"));
+                movie.setType(rs.getString("Type"));
+
                 List<Genre> genres = getGenresByMovieID(movie.getMovieID());
                 movie.setGenres(genres);
+
                 movies.add(movie);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return movies;
     }
@@ -145,65 +142,90 @@ public class MovieDAO extends MySQLConnect {
         return genres;
     }
 
-    // Thêm Movie
-    // Thêm Movie
+    // Method to create a new movie (default status is TRUE)
     public void createMovie(Movie movie, String[] genreIDs) throws SQLException {
-        String sql = "INSERT INTO Movie (Title, Synopsis, DatePublished, ImageURL, Rating, Country, LinkTrailer, CinemaID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movie (Title, Synopsis, DatePublished, ImageURL, Rating, Country, LinkTrailer, CinemaID, Status, Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?, TRUE, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, movie.getTitle());
             pstmt.setString(2, movie.getSynopsis());
-            pstmt.setDate(3, new java.sql.Date(movie.getDatePublished().getTime())); // Chuyển đổi Date
+            pstmt.setDate(3, new java.sql.Date(movie.getDatePublished().getTime()));
             pstmt.setString(4, movie.getImageURL());
             pstmt.setFloat(5, movie.getRating());
             pstmt.setString(6, movie.getCountry());
             pstmt.setString(7, movie.getLinkTrailer());
             pstmt.setInt(8, movie.getCinemaID());
+            pstmt.setString(9, movie.getType());
+
             pstmt.executeUpdate();
 
-            // Lấy MovieID được tạo
             ResultSet generatedKeys = pstmt.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int movieID = generatedKeys.getInt(1);
-                // Thêm thể loại
-                if (genreIDs != null) { // Kiểm tra genreIDs không null
+
+                if (genreIDs != null) {
                     for (String genreID : genreIDs) {
-                        addMovieGenre(movieID, Integer.parseInt(genreID)); // Gọi phương thức private ở đây
+                        addMovieGenre(movieID, Integer.parseInt(genreID));
                     }
                 }
             }
         }
     }
+// Method to update movie details (keep status and rating unchanged, only update other fields)
 
-// Cập nhật Movie
     public void updateMovie(Movie movie, String[] genreIDs) throws SQLException {
-        String sql = "UPDATE Movie SET Title = ?, Synopsis = ?, DatePublished = ?, ImageURL = ?, Rating = ?, Country = ?, LinkTrailer = ? WHERE MovieID = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        // Lấy giá trị rating hiện tại từ cơ sở dữ liệu
+        String getCurrentRatingSQL = "SELECT Rating FROM Movie WHERE MovieID = ?";
+        float currentRating = 0.0f;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(getCurrentRatingSQL)) {
+            pstmt.setInt(1, movie.getMovieID());
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                currentRating = rs.getFloat("Rating");
+            }
+        }
+
+        // Cập nhật các trường khác trừ rating
+        String updateSQL = "UPDATE Movie SET Title = ?, Synopsis = ?, DatePublished = ?, ImageURL = ?, Country = ?, LinkTrailer = ?, Type = ? WHERE MovieID = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(updateSQL)) {
             pstmt.setString(1, movie.getTitle());
             pstmt.setString(2, movie.getSynopsis());
-            pstmt.setDate(3, new java.sql.Date(movie.getDatePublished().getTime())); // Chuyển đổi Date thành java.sql.Date
+            pstmt.setDate(3, new java.sql.Date(movie.getDatePublished().getTime()));
             pstmt.setString(4, movie.getImageURL());
-            pstmt.setFloat(5, movie.getRating());
-            pstmt.setString(6, movie.getCountry());
-            pstmt.setString(7, movie.getLinkTrailer());
+            pstmt.setString(5, movie.getCountry());
+            pstmt.setString(6, movie.getLinkTrailer());
+            pstmt.setString(7, movie.getType());
             pstmt.setInt(8, movie.getMovieID());
+
             pstmt.executeUpdate();
         }
 
-        // Xóa các thể loại cũ
+        // Cập nhật thể loại của phim
         deleteMovieGenres(movie.getMovieID());
 
-        // Thêm các thể loại mới từ genreIDs
-        if (genreIDs != null) { // Kiểm tra genreIDs không null
+        if (genreIDs != null) {
             for (String genreID : genreIDs) {
-                addMovieGenre(movie.getMovieID(), Integer.parseInt(genreID)); // Gọi phương thức thêm thể loại
+                addMovieGenre(movie.getMovieID(), Integer.parseInt(genreID));
             }
         }
     }
 
-    // Xóa Movie
+    public float getRatingByMovieID(int movieID) throws SQLException {
+        String sql = "SELECT Rating FROM Movie WHERE MovieID = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, movieID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getFloat("Rating");
+            }
+        }
+        return 0; // Trường hợp không tìm thấy rating
+    }
+
+    // Method to 'delete' a movie (set status to FALSE)
     public void deleteMovie(int movieID) throws SQLException {
-        deleteMovieGenres(movieID);
-        String sql = "DELETE FROM Movie WHERE MovieID = ?";
+        String sql = "UPDATE Movie SET Status = FALSE WHERE MovieID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, movieID);
             pstmt.executeUpdate();

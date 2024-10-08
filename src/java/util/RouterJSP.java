@@ -153,4 +153,12 @@ public class RouterJSP {
     public static String OWNER_MOVIE_CREATE_PAGE = "/page/owner/owner_create_movie.jsp";  
     
     public static String OWNER_MOVIE_UPDATE_PAGE = "/page/owner/owner_update_movie.jsp";  
+    
+    public static String OWNER_UPDATE_CINEMACHAIN_PAGE = "/page/owner/updateCinemaChain.jsp";
+    
+    public static String OWNER_ROOM_CREATE_PAGE = "/page/owner/room/owner_create_room.jsp";
+    
+    public static String OWNER_MANAGE_ROOM_PAGE = "/page/owner/room/owner_manage_room.jsp";
+    
+    public static String OWNER_ROOM_UPDATE_PAGE = "/page/owner/room/owner_update_room.jsp";
 }

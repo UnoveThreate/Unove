@@ -7,13 +7,15 @@ package controller.owner.movie;
 import DAO.cinemaChainOwnerDAO.MovieDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import model.owner.Movie;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -27,8 +29,14 @@ import model.owner.Genre;
 import util.Role;
 import util.RouterJSP;
 import util.RouterURL;
+import util.FileUploader;
 
 @WebServlet("/owner/createMovie")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 5, // 5 MB
+        maxFileSize = 1024 * 1024 * 30, // 30 MB
+        maxRequestSize = 1024 * 1024 * 100 // 100 MB
+)
 public class CreateMovieServlet extends HttpServlet {
 
     private MovieDAO movieDAO;
@@ -43,41 +51,41 @@ public class CreateMovieServlet extends HttpServlet {
         }
     }
 
-   @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    HttpSession session = request.getSession();
-    String role = (String) session.getAttribute("role");
-    Integer userID = (Integer) session.getAttribute("userID");
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String role = (String) session.getAttribute("role");
+        Integer userID = (Integer) session.getAttribute("userID");
 
-    // Kiểm tra xem người dùng đã đăng nhập và có vai trò owner
-    if (userID == null || !Role.isRoleValid(role, Role.OWNER)) {
-        response.sendRedirect(RouterURL.LOGIN);
-        return;
+        // Kiểm tra xem người dùng đã đăng nhập và có vai trò owner
+        if (userID == null || !Role.isRoleValid(role, Role.OWNER)) {
+            response.sendRedirect(RouterURL.LOGIN);
+            return;
+        }
+
+        // Lấy cinemaID từ request
+        String cinemaIDStr = request.getParameter("cinemaID");
+        if (cinemaIDStr == null || cinemaIDStr.isEmpty()) {
+            response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not provided
+            return;
+        }
+
+        try {
+            Integer cinemaID = Integer.parseInt(cinemaIDStr); // Parse cinemaID to Integer
+            List<Genre> genres = movieDAO.getAllGenres(); // Lấy danh sách thể loại từ database
+
+            // Gán cinemaID cho request để truyền đến JSP
+            request.setAttribute("cinemaID", cinemaID);
+            request.setAttribute("genres", genres); // Truyền danh sách thể loại tới JSP
+
+            // Chuyển hướng đến trang tạo phim
+            request.getRequestDispatcher(RouterJSP.OWNER_MOVIE_CREATE_PAGE).forward(request, response);
+        } catch (NumberFormatException e) {
+            response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not a valid integer
+        } catch (SQLException e) {
+            throw new ServletException("Failed to retrieve genres", e);
+        }
     }
-
-    // Lấy cinemaID từ request
-    String cinemaIDStr = request.getParameter("cinemaID");
-    if (cinemaIDStr == null || cinemaIDStr.isEmpty()) {
-        response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not provided
-        return;
-    }
-
-    try {
-        Integer cinemaID = Integer.parseInt(cinemaIDStr); // Parse cinemaID to Integer
-        List<Genre> genres = movieDAO.getAllGenres(); // Lấy danh sách thể loại từ database
-
-        // Gán cinemaID cho request để truyền đến JSP
-        request.setAttribute("cinemaID", cinemaID);
-        request.setAttribute("genres", genres); // Truyền danh sách thể loại tới JSP
-
-        // Chuyển hướng đến trang tạo phim
-        request.getRequestDispatcher(RouterJSP.OWNER_MOVIE_CREATE_PAGE).forward(request, response);
-    } catch (NumberFormatException e) {
-        response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not a valid integer
-    } catch (SQLException e) {
-        throw new ServletException("Failed to retrieve genres", e);
-    }
-}
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -96,12 +104,11 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
         String title = request.getParameter("title");
         String synopsis = request.getParameter("synopsis");
         String datePublishedStr = request.getParameter("datePublished");
-        String imageURL = request.getParameter("imageURL");
-        double rating = Double.parseDouble(request.getParameter("rating")); // Giữ lại kiểu double
         String country = request.getParameter("country");
         String linkTrailer = request.getParameter("linkTrailer");
-
         String[] genreIDs = request.getParameterValues("genreIDs");
+        String type = request.getParameter("type"); // Lấy type từ form
+
         // Chuyển đổi datePublished từ String sang Date
         Date datePublished = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng ngày
@@ -111,15 +118,35 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             throw new ServletException("Invalid date format. Please use yyyy-MM-dd.", e);
         }
 
+        // Xử lý việc upload ảnh cho phim
+        String imageURL = "";
+        Part imagePart = request.getPart("imageURL");
+        if (imagePart != null && imagePart.getSize() > 0) {
+            // Tạo file tạm cho ảnh
+            File imageFile = File.createTempFile("movie_", "_" + imagePart.getSubmittedFileName());
+            imagePart.write(imageFile.getAbsolutePath());
+
+            // Upload lên Cloudinary
+            FileUploader fileUploader = new FileUploader();
+            imageURL = fileUploader.uploadAndReturnUrl(imageFile, "movie_" + title, "movie/poster");
+            if (imageURL.isEmpty()) {
+                response.sendRedirect(RouterURL.ERROR_PAGE);
+                return;
+            }
+            System.out.println("Uploaded image URL: " + imageURL);
+
+        }
+
         // Tạo một đối tượng Movie mới
         Movie newMovie = new Movie();
         newMovie.setTitle(title);
         newMovie.setSynopsis(synopsis);
         newMovie.setDatePublished(datePublished); // Gán đối tượng Date vào
-        newMovie.setImageURL(imageURL);
-        newMovie.setRating((float) rating); // Chuyển đổi từ double sang float
+        newMovie.setImageURL(imageURL); // Gán URL ảnh sau khi upload
+        newMovie.setRating(0.0f); // Chuyển đổi từ double sang float
         newMovie.setCountry(country);
         newMovie.setLinkTrailer(linkTrailer);
+        newMovie.setType(type); // Gán giá trị type vào đối tượng Movie
         newMovie.setCinemaID(cinemaID); // Gán cinemaID cho phim
 
         try {
@@ -131,4 +158,5 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response) t
             throw new ServletException("Error creating new movie", e);
         }
     }
+
 }

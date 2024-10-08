@@ -67,5 +67,15 @@ public class RouterURL {
     public static String OWNER_UPDATE_MOVIE = "/Unove/owner/updateMovie";
     
     public static String OWNER_DELETR_MOVIE = "/Unove/owner/deleteMovie";
+    
+    public static String OWNER_UPDATE_CINEMACHAIN = "/Unove/owner/updateCinemaChain";
+    
+    public static String MANAGE_ROOM = "/Unove/owner/manageRoom"; 
+    
+    public static String OWNER_CREATE_ROOM ="/Unove/owner/createRoom";
+    
+    public static String OWNER_UPDATE_ROOM ="/Unove/owner/updateRoom";
+    
+    public static String OWNER_DELETE_ROOM ="/Unove/owner/deleteRoom";
 }
 

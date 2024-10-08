@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */package model.owner;
+package model.owner;
 
 import java.util.Date;
 import java.util.List;
@@ -17,8 +14,30 @@ public class Movie {
     private String linkTrailer;
     private int cinemaID;
     private List<Genre> genres; // Danh sách các genre
+    private String type; // Phim đang chiếu hoặc sắp chiếu
+    private boolean status; // Trạng thái của phim (FALSE: ẩn, TRUE: hiện)
 
-    // Getters và Setters
+    // Constructor mặc định
+    public Movie() {
+    }
+
+    // Constructor đầy đủ
+    public Movie(int movieID, String title, String synopsis, Date datePublished, String imageURL, float rating, String country, String linkTrailer, int cinemaID, List<Genre> genres, String type, boolean status) {
+        this.movieID = movieID;
+        this.title = title;
+        this.synopsis = synopsis;
+        this.datePublished = datePublished;
+        this.imageURL = imageURL;
+        this.rating = rating;
+        this.country = country;
+        this.linkTrailer = linkTrailer;
+        this.cinemaID = cinemaID;
+        this.genres = genres;
+        this.type = type;
+        this.status = status;
+    }
+
+    // Getters và Setters cho tất cả các thuộc tính
     public int getMovieID() {
         return movieID;
     }
@@ -99,20 +118,26 @@ public class Movie {
         this.genres = genres;
     }
 
-    public Movie() {
+    public String getType() {
+        return type;
     }
 
-    public Movie(int movieID, String title, String synopsis, Date datePublished, String imageURL, float rating, String country, String linkTrailer, int cinemaID, List<Genre> genres) {
-        this.movieID = movieID;
-        this.title = title;
-        this.synopsis = synopsis;
-        this.datePublished = datePublished;
-        this.imageURL = imageURL;
-        this.rating = rating;
-        this.country = country;
-        this.linkTrailer = linkTrailer;
-        this.cinemaID = cinemaID;
-        this.genres = genres;
+    public void setType(String type) {
+        this.type = type;
     }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" + "movieID=" + movieID + ", title=" + title + ", synopsis=" + synopsis + ", datePublished=" + datePublished + ", imageURL=" + imageURL + ", rating=" + rating + ", country=" + country + ", linkTrailer=" + linkTrailer + ", cinemaID=" + cinemaID + ", genres=" + genres + ", type=" + type + ", status=" + status + '}';
+    }
+    
     
 }

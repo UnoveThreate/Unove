@@ -20,24 +20,11 @@
     </head>
     <body>
         <div class="container mt-5">
-            <h2 class="text-center">Bảng Điều Khiển Chủ Sở Hữu</h2>
-            <div class="text-center mt-4">
-                <a href="<%= RouterURL.MANAGE_CINEMA%>">Quản lí chuỗi rạp</a> <%-- Cập nhật đường dẫn --%>
-            </div>
-
-            <!-- Optional: Display additional information or actions -->
-            <div class="mt-4">
-                <h4>Thông tin rạp phim của bạn:</h4>
-                <!-- You can loop through and display information about the cinema chains here -->
-                <c:forEach var="cinemaChain" items="${cinemaChains}">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">${cinemaChain.name}</h5>
-
-                        </div>
-                    </div>
-                </c:forEach>
-            </div>
+            <h2 class="text-center">Owner Dashboard</h2>
+           
         </div>
     </body>
 </html>
+
+
+

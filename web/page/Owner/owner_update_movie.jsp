@@ -52,12 +52,6 @@
                     <label for="imageURL">URL hình ảnh:</label>
                     <input type="text" class="form-control" id="imageURL" name="imageURL" value="${movie.imageURL}" required>
                 </div>
-
-                <div class="form-group">
-                    <label for="rating">Đánh giá:</label>
-                    <input type="number" step="0.1" class="form-control" id="rating" name="rating" min="0" max="10" value="${movie.rating}" required>
-                </div>
-
                 <div class="form-group">
                     <label for="country">Quốc gia:</label>
                     <input type="text" class="form-control" id="country" name="country" value="${movie.country}" required>
@@ -81,7 +75,13 @@
                     </select>
                     <small class="form-text text-muted">Giữ phím Ctrl (Windows) hoặc Command (Mac) để chọn nhiều thể loại.</small>
                 </div>
-
+                <div class="form-group">
+                    <label for="type">Loại phim:</label>
+                    <select class="form-control" id="type" name="type" required>
+                        <option value="Đang chiếu" ${movie.type == 'Đang chiếu' ? 'selected' : ''}>Phim đang chiếu</option>
+                        <option value="Sắp chiếu" ${movie.type == 'Sắp chiếu' ? 'selected' : ''}>Phim sắp công chiếu</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary">Cập Nhật Phim</button>
                 <a href="${pageContext.request.contextPath}/owner/movie?cinemaID=${movie.cinemaID}" class="btn btn-secondary">Quay lại</a>
 
