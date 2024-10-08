@@ -25,25 +25,13 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
                      "JOIN Room r ON ms.RoomID = r.RoomID " +
                      "WHERE r.CinemaID = ? AND DATE(ms.StartTime) = ?";
 
-        try (
-             PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-             
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
             pstmt.setDate(2, java.sql.Date.valueOf(date));
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    MovieSlot movieSlot = new MovieSlot();
-                    movieSlot.setMovieSlotID(rs.getInt("MovieSlotID"));
-                    movieSlot.setRoomID(rs.getInt("RoomID"));
-                    movieSlot.setMovieID(rs.getInt("MovieID"));
-                    movieSlot.setStartTime(rs.getTimestamp("StartTime"));
-                    movieSlot.setEndTime(rs.getTimestamp("EndTime"));
-                    movieSlot.setType(rs.getString("Type"));
-                    movieSlot.setPrice(rs.getFloat("Price"));
-                    movieSlot.setDiscount(rs.getFloat("Discount"));
-                    movieSlot.setStatus(rs.getString("Status"));
-                    movieSlots.add(movieSlot);
+                    movieSlots.add(extractMovieSlotFromResultSet(rs));
                 }
             }
         } catch (SQLException e) {
@@ -59,9 +47,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
                      "WHERE r.CinemaID = ? AND StartTime >= CURDATE() " +
                      "ORDER BY show_date LIMIT 7";
 
-        try (
-             PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
-             
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
@@ -73,6 +59,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         }
         return dates; 
     }
+
     public MovieSlot getMovieSlotById(int movieSlotID) {
         MovieSlot movieSlot = null;
         String sql = "SELECT * FROM MovieSlot WHERE MovieSlotID = ?";
@@ -80,21 +67,41 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
             pstmt.setInt(1, movieSlotID);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    movieSlot = new MovieSlot();
-                    movieSlot.setMovieSlotID(rs.getInt("MovieSlotID"));
-                    movieSlot.setRoomID(rs.getInt("RoomID"));
-                    movieSlot.setMovieID(rs.getInt("MovieID"));
-                    movieSlot.setStartTime(rs.getTimestamp("StartTime"));
-                    movieSlot.setEndTime(rs.getTimestamp("EndTime"));
-                    movieSlot.setType(rs.getString("Type"));
-                    movieSlot.setPrice(rs.getFloat("Price"));
-                    movieSlot.setDiscount(rs.getFloat("Discount"));
-                    movieSlot.setStatus(rs.getString("Status"));
+                    movieSlot = extractMovieSlotFromResultSet(rs);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return movieSlot;
+    }
+
+    public MovieSlot getLatestMovieSlot() {
+        MovieSlot movieSlot = null;
+        String sql = "SELECT * FROM MovieSlot WHERE StartTime > NOW() ORDER BY StartTime ASC LIMIT 1";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    movieSlot = extractMovieSlotFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return movieSlot;
+    }
+
+    private MovieSlot extractMovieSlotFromResultSet(ResultSet rs) throws SQLException {
+        MovieSlot movieSlot = new MovieSlot();
+        movieSlot.setMovieSlotID(rs.getInt("MovieSlotID"));
+        movieSlot.setRoomID(rs.getInt("RoomID"));
+        movieSlot.setMovieID(rs.getInt("MovieID"));
+        movieSlot.setStartTime(rs.getTimestamp("StartTime"));
+        movieSlot.setEndTime(rs.getTimestamp("EndTime"));
+        movieSlot.setType(rs.getString("Type"));
+        movieSlot.setPrice(rs.getFloat("Price"));
+        movieSlot.setDiscount(rs.getFloat("Discount"));
+        movieSlot.setStatus(rs.getString("Status"));
         return movieSlot;
     }
 }

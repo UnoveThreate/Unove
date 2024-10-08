@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -35,6 +36,7 @@ public class ShowtimeServlet extends HttpServlet {
     private MovieScheduleDAO movieDAO;
     private MovieScheduleSlotDAO movieSlotDAO;
     private SeatDAO seatDAO;
+    private Map<Integer, List<String>> movieGenres;
 
     @Override
     public void init() throws ServletException {
@@ -52,11 +54,12 @@ public class ShowtimeServlet extends HttpServlet {
         }
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        // lay danh sach chuoi rap
+        // Lấy danh sách chuỗi rạp
         List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
         request.setAttribute("cinemaChains", cinemaChains);
 
@@ -89,7 +92,8 @@ public class ShowtimeServlet extends HttpServlet {
         Integer cinemaID = (Integer) session.getAttribute("selectedCinemaID");
         String cinemaIDParam = request.getParameter("cinemaID");
         if (cinemaID == null || cinemaIDParam == null || !cinemaID.equals(Integer.parseInt(cinemaIDParam))) {
-            cinemaID = (cinemaIDParam != null && !cinemaIDParam.isEmpty()) ? Integer.parseInt(cinemaIDParam)
+            cinemaID = (cinemaIDParam != null && !cinemaIDParam.isEmpty())
+                    ? Integer.parseInt(cinemaIDParam)
                     : cinemas.get(0).getCinemaID();
             session.setAttribute("selectedCinemaID", cinemaID);
         }
@@ -109,7 +113,8 @@ public class ShowtimeServlet extends HttpServlet {
         LocalDate selectedDate = (LocalDate) session.getAttribute("selectedDate");
         String dateParam = request.getParameter("date");
         if (selectedDate == null || dateParam != null) {
-            selectedDate = (dateParam != null && !dateParam.isEmpty()) ? LocalDate.parse(dateParam)
+            selectedDate = (dateParam != null && !dateParam.isEmpty())
+                    ? LocalDate.parse(dateParam)
                     : availableDates.get(0);
             session.setAttribute("selectedDate", selectedDate);
         }
@@ -117,13 +122,21 @@ public class ShowtimeServlet extends HttpServlet {
         List<Movie> movies = movieDAO.getMoviesByCinemaAndDate(cinemaID, selectedDate);
         request.setAttribute("movies", movies);
 
+        // Lấy thể loại cho mỗi bộ phim
+        Map<Integer, List<String>> movieGenres = new HashMap<>();
+        for (Movie movie : movies) {
+            List<String> genres = movieDAO.getMovieGenres(movie.getMovieID());
+            movieGenres.put(movie.getMovieID(), genres);
+        }
+        request.setAttribute("movieGenres", movieGenres);
+
         List<MovieSlot> movieSlots = movieSlotDAO.getMovieSlotsByCinemaAndDate(cinemaID, selectedDate);
 
         Map<Movie, List<MovieSlot>> movieSlotsByMovie = movieSlots.stream()
                 .collect(Collectors.groupingBy(movieSlot -> movies.stream()
-                .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
-                .findFirst()
-                .orElse(null)));
+                        .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
+                        .findFirst()
+                        .orElse(null)));
 
         request.setAttribute("selectedCinemaChainID", cinemaChainID);
         request.setAttribute("selectedCinemaID", cinemaID);
@@ -133,6 +146,7 @@ public class ShowtimeServlet extends HttpServlet {
         request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");

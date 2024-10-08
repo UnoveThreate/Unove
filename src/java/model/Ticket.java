@@ -1,12 +1,13 @@
 package model;
 
 public class Ticket {
-    private int ticketID;        
-    private int orderID;         
-    private int seatID;          
-    private String status;       
-    public Ticket() {
-    }
+    private int ticketID;
+    private int orderID;
+    private int seatID;
+    private String status;
+
+    // Constructor
+    public Ticket() {}
 
     public Ticket(int ticketID, int orderID, int seatID, String status) {
         this.ticketID = ticketID;
@@ -15,7 +16,7 @@ public class Ticket {
         this.status = status;
     }
 
-    // Getter và Setter cho các thuộc tính
+    // Getters and Setters
     public int getTicketID() {
         return ticketID;
     }

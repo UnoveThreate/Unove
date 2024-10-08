@@ -97,4 +97,22 @@ public class MovieScheduleDAO extends MySQLConnect {
             return false; 
         }
     }
+   public List<String> getMovieGenres(int movieId) {
+    List<String> genres = new ArrayList<>();
+    String sql = "SELECT g.GenreName FROM MovieInGenre mg " +
+                 "JOIN Genre g ON mg.GenreID = g.GenreID " +
+                 "WHERE mg.MovieID = ?";
+    try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+        pstmt.setInt(1, movieId);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                genres.add(rs.getString("GenreName"));
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return genres;
+}
+    
 }
