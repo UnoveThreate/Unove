@@ -80,11 +80,13 @@ public class BookTicketServlet extends HttpServlet {
                 int cinemaID = 1;
                 int userID = 2;
                 int movieSlotID = 1;
+                int movieID = 7;
 
                 // Đặt thuộc tính vào request để sử dụng trong JSP
                 Cinema cinema = paymentDAO.getCinemaById(cinemaID);
                 CinemaChain cinemaChain = paymentDAO.getCinemaChainByUserID(userID);
                 MovieSlot movieSlot = paymentDAO.getMovieSlotById(movieSlotID);
+                Movie movie =paymentDAO.getMovieByCinemaIDAndMovieID(cinemaID, movieID);
 
                 System.out.println(movieSlot);
 
@@ -92,6 +94,7 @@ public class BookTicketServlet extends HttpServlet {
                 request.setAttribute("cinema", cinema);
                 request.setAttribute("cinemaChain", cinemaChain);
                 request.setAttribute("movieSlot", movieSlot);
+                request.setAttribute("movie", movie);
 
                 // Chuyển hướng đến orderDetail.jsp
                 request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
