@@ -30,7 +30,7 @@ import util.RouterURL;
  *
  * @author Per
  */
-@WebServlet(name = "CreateCinemaServlet", urlPatterns = {"/owner/create/cinema"})
+@WebServlet("/owner/create/cinema")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 5, // 5 MB
         maxFileSize = 1024 * 1024 * 30, // 30 MB
@@ -41,7 +41,6 @@ public class CreateCinemaServlet extends HttpServlet {
     private final RouterJSP router = new RouterJSP();
     private CinemaChainDAO cinemaChainDAO;
     private CinemaDAO cinemaDAO;
-
 
     @Override
     public void init() throws ServletException {
@@ -63,8 +62,6 @@ public class CreateCinemaServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -90,15 +87,15 @@ public class CreateCinemaServlet extends HttpServlet {
         }
         try {
             CinemaChain cinemaChain = cinemaChainDAO.getCinemaChainByUserID(userID);
-         
+
             if (cinemaChain == null) {
                 // Nếu user chưa có CinemaChain, yêu cầu tạo mới
-           
+
                 request.getRequestDispatcher(router.OWNER_CMC).forward(request, response);
             } else {
                 // Nếu đã có, chuyển hướng tới trang quản lý
 
-                 String cinemaChainIDStr = request.getParameter("cinemaChainID");
+                String cinemaChainIDStr = request.getParameter("cinemaChainID");
                 request.setAttribute("cinemaChainID", cinemaChainIDStr);
                 request.getRequestDispatcher(RouterJSP.OWNER_CREATE_CINEMA_PAGE).forward(request, response);
             }
@@ -118,21 +115,22 @@ public class CreateCinemaServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String name = request.getParameter("name");
         String address = request.getParameter("address");
         String province = request.getParameter("provinceName"); // Sử dụng tên tỉnh
         String district = request.getParameter("districtName"); // Sử dụng tên quận/huyện
         String commune = request.getParameter("communeName"); // Sử dụng tên xã/phường
         String cinemaChainIDStr = request.getParameter("cinemaChainID");
         int cinemaChainID = Integer.parseInt(cinemaChainIDStr);
-        
+
         // Tạo đối tượng Cinema
         Cinema cinema = new Cinema();
+        cinema.setName(name);
         cinema.setAddress(address);
         cinema.setProvince(province);
         cinema.setDistrict(district);
         cinema.setCommune(commune);
         cinema.setCinemaChainID(cinemaChainID);
-        
 
         try {
             // Lưu cinema vào cơ sở dữ liệu
