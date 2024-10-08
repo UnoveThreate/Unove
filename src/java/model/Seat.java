@@ -1,21 +1,28 @@
 package model;
 
 public class Seat {
-    private int seatID;          
-    private int roomID;          
-    private String name;         
-    private int coordinateX;     
-    private int coordinateY;     
-    private boolean available;    
-    private boolean isVIP;        
-    private boolean isSweetbox;   
-    private boolean isRegular;   
+    private int seatID;
+    private int roomID;
+    private String name;
+    private int coordinateX;
+    private int coordinateY;
+    private boolean available;
+    private double price;
 
     // Constructor
-    public Seat() {
+    public Seat() {}
+
+    public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY, double price) {
+        this.seatID = seatID;
+        this.roomID = roomID;
+        this.name = name;
+        this.coordinateX = coordinateX;
+        this.coordinateY = coordinateY;
+        this.price = price;
+        this.available = true;
     }
 
-    // Getter và Setter
+    // Getters and Setters
     public int getSeatID() {
         return seatID;
     }
@@ -64,27 +71,11 @@ public class Seat {
         this.available = available;
     }
 
-    public boolean isVIP() {
-        return isVIP;
+    public double getPrice() {
+        return price;
     }
 
-    public void setVIP(boolean isVIP) {
-        this.isVIP = isVIP;
-    }
-
-    public boolean isSweetbox() {
-        return isSweetbox;
-    }
-
-    public void setSweetbox(boolean isSweetbox) {
-        this.isSweetbox = isSweetbox;
-    }
-
-    public boolean isRegular() {
-        return isRegular;
-    }
-
-    public void setRegular(boolean isRegular) {
-        this.isRegular = isRegular;
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

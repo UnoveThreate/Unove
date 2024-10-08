@@ -68,8 +68,8 @@
             }
 
             .selector-button:hover, .selector-button.active {
-                background-color: #7E60BF;
-                color: white;
+                background-color: #ffffff;
+                color: #eb2f96;
             }
 
             .date-selector {
@@ -204,6 +204,141 @@
                 margin: 0 2px;
                 color: #91d5ff;
             }
+            .button-group {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                justify-content: flex-start;
+            }
+
+            .selector-button {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 80px;
+                height: 80px;
+                background: #fff;
+                border: 1px solid #e0e0e0;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                padding: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .selector-button:hover,
+            .selector-button.active {
+                border-color: #eb2f96;
+                box-shadow: 0 0 10px rgba(235, 47, 150, 0.3);
+            }
+
+            .cinema-chain-avatar {
+                width: 40px;
+                height: 40px;
+                object-fit: contain;
+                margin-bottom: 5px;
+            }
+
+            .selector-button span {
+                font-size: 10px;
+                text-align: center;
+                color: #333;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .selector-button:hover span,
+            .selector-button.active span {
+                color: #eb2f96;
+                font-weight: bold;
+            }
+
+            .discount-badge {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                background: #ff4d4f;
+                color: white;
+                font-size: 8px;
+                padding: 2px 4px;
+                border-radius: 10px;
+                transform: rotate(15deg);
+            }
+            h3 {
+                color: #8e24aa;
+                margin-bottom: 15px;
+                font-size: 18px;
+                text-align: left;
+                padding-left: 15px;
+            }
+
+            .cinema-list {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border: none;
+            }
+
+            .cinema-item {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                background-color: #fff;
+                padding: 12px 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: none;
+                border-bottom: 1px solid #f0f0f0;
+                text-align: left;
+                position: relative;
+            }
+
+            .cinema-item:last-child {
+                border-bottom: none;
+            }
+
+            .cinema-item:hover,
+            .cinema-item.active {
+                background-color: #fce4ec;
+            }
+
+            .cinema-name {
+                flex-grow: 1;
+                font-size: 14px;
+                color: #333;
+            }
+
+            .cinema-item::after {
+                content: '>';
+                position: absolute;
+                right: 15px;
+                color: #e91e63;
+                font-size: 18px;
+            }
+
+            .cinema-item:hover::after,
+            .cinema-item.active::after {
+                color: #c2185b;
+            }
+
+            .movie-genres {
+                margin-bottom: 10px;
+                font-size: 14px;
+                color: #666;
+            }
+            .genre-tag {
+                display: inline-block;
+                background-color: #f0f0f0;
+                padding: 2px 8px;
+                margin-right: 5px;
+                margin-bottom: 5px;
+                border-radius: 10px;
+                font-size: 12px;
+            }
         </style>
     </head>
     <body>
@@ -219,20 +354,21 @@
                         <button class="selector-button ${chain.cinemaChainID == selectedCinemaChainID ? 'active' : ''}" 
                                 data-id="${chain.cinemaChainID}" 
                                 onclick="selectCinemaChain(${chain.cinemaChainID})">
-                            ${chain.name}
+                            <img src="${chain.avatarURL}" alt="${chain.name}" class="cinema-chain-avatar" onerror="this.style.display='none';" />
+                            <span>${chain.name}</span>
                         </button>
                     </c:forEach>
                 </div>
             </div>
 
             <div class="selector">
-                <h3>Chọn rạp:</h3>
-                <div class="button-group" id="cinemaButtons">
+               <h3>Chọn rạp:</h3>
+                <div class="cinema-list" id="cinemaButtons">
                     <c:forEach var="cinema" items="${cinemas}">
-                        <button class="selector-button ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
+                        <button class="cinema-item ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
                                 data-id="${cinema.cinemaID}" 
                                 onclick="selectCinema(${cinema.cinemaID})">
-                            ${cinema.name}
+                            <span class="cinema-name">${cinema.name}</span>
                         </button>
                     </c:forEach>
                 </div>
@@ -273,14 +409,15 @@
                         <c:if test="${not empty movieSlotsByMovie[movie]}">
                             <div class="movie-item">
                                 <h3 class="movie-title">${movie.title}</h3>
-                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-image"/>
+                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-image" onerror="console.error('Lỗi tải hình ảnh:', this.src);" />
+                                
+                                <!-- Thêm phần hiển thị thể loại phim -->
+                                <div class="movie-genres">
+                                    <c:forEach var="genre" items="${movieGenres[movie.movieID]}">
+                                        <span class="genre-tag">${genre}</span>
+                                    </c:forEach>
+                                </div>
 
-                                <p><strong>Mô tả:</strong> ${movie.synopsis}</p>
-                                <p><strong>Ngày công chiếu:</strong> <fmt:formatDate value="${movie.datePublished}" pattern="dd/MM/yyyy" /></p>
-                                <p><strong>Đánh giá:</strong> ${movie.rating != null ? movie.rating : 'Chưa có đánh giá'}</p>
-                                <p><strong>Quốc gia:</strong> ${not empty movie.country ? movie.country : 'Chưa có thông tin'}</p>
-
-                                <h4>Suất chiếu:</h4>
                                 <div class="showtime-grid">
                                     <c:forEach var="slot" items="${movieSlotsByMovie[movie]}">
                                         <div class="showtime-group">
