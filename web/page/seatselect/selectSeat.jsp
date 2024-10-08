@@ -8,14 +8,14 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #1c1c1c; /* Màu nền tối */
+            background-color: #1c1c1c;
             color: white;
             margin: 0;
             padding: 20px;
         }
-        h1 {
+        h1, h2, h3 {
             text-align: center;
-            color: #ff4081; /* Màu hồng cho tiêu đề */
+            color: #ff4081;
         }
         .screen {
             text-align: center;
@@ -23,146 +23,154 @@
             font-weight: bold;
             font-size: 24px;
         }
+        .seats-container {
+            display: grid;
+            grid-template-columns: repeat(18, 1fr);
+            gap: 5px;
+            margin: 20px auto;
+            max-width: 900px;
+        }
         .seat {
-            display: inline-block;
             width: 40px;
             height: 40px;
-            margin: 5px;
-            text-align: center;
-            line-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border: 1px solid #ccc;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 12px;
         }
-        .available {
-            background-color: #722ed1; /* Ghế có sẵn */
+        .available { background-color: #722ed1; }
+        .selected { background-color: #d42a87; }
+        .unavailable { 
+            background-color: #404040;
+            cursor: not-allowed;
         }
-        .selected {
-            background-color: #d42a87; /* Ghế đã chọn */
-        }
-        .unavailable {
-            background-color: #404040; /* Ghế đã đặt */
-        }
-        .row {
-            text-align: center;
-            margin-bottom: 10px;
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #e71a0f;
+            text-align: right;
+            margin-top: 10px;
         }
         .book-button {
             display: block;
             margin: 20px auto;
             padding: 10px 20px;
-            background-color: #ff4081; /* Màu hồng cho nút đặt */
+            background-color: #e71a0f;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             font-size: 18px;
+            width: 100%;
+            max-width: 300px;
         }
         .book-button:disabled {
-            background-color: #ccc; /* Màu xám khi không thể đặt */
+            background-color: #ccc;
+            cursor: not-allowed;
         }
         .info {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.info h3 {
-    margin-bottom: 10px;
-    color: #ff4081; /* Màu hồng cho tiêu đề */
-    font-size: 24px; /* Kích thước chữ lớn hơn */
-}
-
-.info .seat {
-    display: inline-block;
-    width: 50px; /* Kích thước ghế */
-    height: 50px; /* Kích thước ghế */
-    margin: 5px;
-    text-align: center;
-    line-height: 50px; /* Căn giữa chữ */
-    border-radius: 10px; /* Bo góc */
-    font-weight: bold; /* Chữ đậm */
-    color: white; /* Màu chữ trắng */
-}
-
-.info .available {
-    background-color: #722ed1; /* Ghế có sẵn */
-}
-
-.info .selected {
-    background-color: #d42a87; /* Ghế đã chọn */
-}
-
-.info .unavailable {
-    background-color: #404040; /* Ghế đã đặt */
-}
-
-.info .description {
-    display: block;
-    margin-top: 10px; /* Khoảng cách giữa ghế và mô tả */
-}
-
-.info .description span {
-    margin: 0 10px; /* Khoảng cách giữa các mô tả */
-    font-size: 16px; /* Kích thước chữ mô tả */
-    color: #ffffff; /* Màu chữ trắng */
-}
+            text-align: center;
+            margin-top: 20px;
+        }
+        .info .seat {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            margin: 5px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .info .description {
+            display: block;
+            margin-top: 10px;
+        }
+        .info .description span {
+            margin: 0 10px;
+            font-size: 16px;
+        }
     </style>
     <script>
         const selectedSeats = [];
+        let totalPrice = 0;
 
         function selectSeat(seat) {
             const seatID = seat.dataset.id;
+            const seatPrice = parseFloat(seat.dataset.price);
             if (seat.classList.contains('available')) {
                 if (selectedSeats.includes(seatID)) {
-                    // Nếu ghế đã được chọn, bỏ chọn
                     seat.classList.remove('selected');
                     selectedSeats.splice(selectedSeats.indexOf(seatID), 1);
+                    totalPrice -= seatPrice;
                 } else {
-                    // Nếu ghế chưa được chọn, chọn ghế
                     seat.classList.add('selected');
                     selectedSeats.push(seatID);
+                    totalPrice += seatPrice;
                 }
-                // Cập nhật giá trị của selectedSeatID
                 document.getElementById('selectedSeatID').value = selectedSeats.join(',');
-                // Kích hoạt hoặc vô hiệu hóa nút đặt ghế
+                document.getElementById('totalPrice').textContent = totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
                 document.getElementById('bookButton').disabled = selectedSeats.length === 0;
             }
+            
         }
     </script>
 </head>
 <body>
     <h1>Mua vé xem phim</h1>
     <div class="screen">MÀN HÌNH</div>
-<!--    <h2>Suất chiếu: ${movieSlotID}</h2>-->
+<!--     <h2>Suất chiếu: <fmt:formatDate value="${movieSlot.startTime}" pattern="dd/MM/yyyy HH:mm"/></h2>-->
+<!--    <h3>Phim: ${movieSlot.movie.title}</h3>-->
 
-    <div id="seats">
-        <c:forEach var="seat" items="${seats}">
-            <div class="seat 
-                ${seat.available ? 'available' : 'unavailable'} 
-                ${seat.available && selectedSeats.contains(seat.seatID) ? 'selected' : ''}" 
-                data-id="${seat.seatID}" 
-                onclick="selectSeat(this)">
-                ${seat.name}
-            </div>
+    <div class="seats-container">
+        <c:forEach var="row" begin="1" end="9">
+            <c:forEach var="col" begin="1" end="18">
+                <c:set var="currentSeat" value="${null}" />
+                <c:forEach var="seat" items="${seats}">
+                    <c:if test="${seat.coordinateX == col && seat.coordinateY == row}">
+                        <c:set var="currentSeat" value="${seat}" />
+                    </c:if>
+                </c:forEach>
+                
+                <c:choose>
+                    <c:when test="${currentSeat != null}">
+                        <div class="seat 
+                            ${currentSeat.available ? 'available' : 'unavailable'}" 
+                            data-id="${currentSeat.seatID}" 
+                            data-price="${currentSeat.price * (1 - movieSlot.discount)}"
+                            onclick="selectSeat(this)">
+                            ${currentSeat.name}
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="seat" style="visibility: hidden;"></div>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
         </c:forEach>
     </div>
 
+    <div class="total-price">
+        Tạm tính: <span id="totalPrice">0 ₫</span>
+    </div>
+
     <form action="selectSeat" method="post">
-        <input type="hidden" name="movieSlotID" value="${movieSlotID}">
+        <input type="hidden" name="movieSlotID" value="${selectedSlot.movieSlotID}">
         <input type="hidden" id="selectedSeatID" name="selectedSeatID" value="">
         <button type="submit" disabled id="bookButton" class="book-button">Đặt Ghế</button>
     </form>
 
-    <<div class="info">
-<!--    <h3>Chú thích:</h3>-->
-    <div class="seat available">.</div>
-    <div class="seat selected">.</div>
-    <div class="seat unavailable">.</div>
-    <div class="description">
-        <span class="available">Có sẵn</span>
-        <span class="selected">Đã chọn</span>
-        <span class="unavailable">Đã đặt</span>
+    <div class="info">
+        <div class="seat available">.</div>
+        <div class="seat selected">.</div>
+        <div class="seat unavailable">.</div>
+        <div class="description">
+            <span class="available">Có sẵn</span>
+            <span class="selected">Đã chọn</span>
+            <span class="unavailable">Đã đặt</span>
+        </div>
     </div>
-</div>
 </body>
 </html>
