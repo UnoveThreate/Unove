@@ -170,7 +170,5 @@ public class RouterJSP {
 
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
-    public static String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
-
     public static String CANTEEN_ITEM_PAGE = "/page/landingPage/Item.jsp";
 }
