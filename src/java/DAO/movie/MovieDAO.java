@@ -22,20 +22,14 @@ public class MovieDAO extends MySQLConnect {
         connect(context); // Establish the connection from MySQLConnect
     }
 
-   
-    
-
     // Method to get movie by CinemaID and MovieID
-    public Movie getMovieByCinemaIDAndMovieID(int cinemaID, int movieID) throws SQLException {
+    public Movie getMovieByCinemaIDAndMovieID(int movieID) throws SQLException {
         Movie movie = null;
-        String sqlQuery = "SELECT * FROM Movie WHERE CinemaID = ? AND MovieID = ?";
+        String sqlQuery = "SELECT * FROM Movie WHERE  MovieID = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sqlQuery)) {
-            pstmt.setInt(1, cinemaID);
-            pstmt.setInt(2, movieID);
 
-            // Debugging log
-            System.out.println("Executing query: " + sqlQuery + " with CinemaID: " + cinemaID + " and MovieID: " + movieID);
+            pstmt.setInt(1, movieID);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -47,6 +41,7 @@ public class MovieDAO extends MySQLConnect {
                     float rating = rs.getFloat("Rating");
                     String country = rs.getString("Country");
                     String linkTrailer = rs.getString("LinkTrailer");
+                    int cinemaID = rs.getInt("CinemaID");
 
                     // Create a new Movie object using the constructor
                     movie = new Movie();
@@ -62,7 +57,7 @@ public class MovieDAO extends MySQLConnect {
 
                     // Lấy danh sách thể loại của bộ phim từ bảng MovieInGenre
                     List<String> genres = new ArrayList<>();
-                    String genreQuery = "SELECT Genre FROM MovieInGenre WHERE MovieID = ?";
+                    String genreQuery = "SELECT g.GenreName as Genre FROM Genre g JOIN movieingenre m ON m.genreID = g.genreID WHERE m.MovieID = ?;";
 
                     try (PreparedStatement genrePstmt = connection.prepareStatement(genreQuery)) {
                         genrePstmt.setInt(1, movieID);
@@ -77,7 +72,7 @@ public class MovieDAO extends MySQLConnect {
                     // Set genres to the movie object
                     movie.setGenres(genres);
                 } else {
-                    System.err.println("No movie found for CinemaID: " + cinemaID + " and MovieID: " + movieID);
+                    System.err.println("No movie found for  MovieID: " + movieID);
                 }
             }
         } catch (SQLException e) {
