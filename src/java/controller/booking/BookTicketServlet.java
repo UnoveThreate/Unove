@@ -71,6 +71,7 @@ public class BookTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession();
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
@@ -80,7 +81,7 @@ public class BookTicketServlet extends HttpServlet {
         }
 
         // Retrieve movieSlotID from session
-        Integer movieSlotID = (Integer) session.getAttribute("movieSlotID");
+        Integer movieSlotID = (Integer) bookingSession.getMovieSlotID();
 
         // Use movieSlotID to obtain movieID and cinemaID
         if (movieSlotID != null) {
@@ -92,11 +93,11 @@ public class BookTicketServlet extends HttpServlet {
             System.out.println(cinema);
             System.out.println(movie);
 
-            // Set booking details as attributes for JSP
-            request.setAttribute("movie", movieID);
+
+            request.setAttribute("movie", movie);
             request.setAttribute("cinema", cinema);
-            request.setAttribute("movieSlot", bookingSession.getMovieSlotID());
-            request.setAttribute("selectedSeats", bookingSession.getSelectedSeatIDs());
+            request.setAttribute("movieSlot", bookingSession.getMovieSlot());
+            request.setAttribute("selectedSeats", bookingSession.getListSeats());
             request.setAttribute("totalPrice", bookingSession.getTotalPrice());
 
             // Forward to orderDetail.jsp page

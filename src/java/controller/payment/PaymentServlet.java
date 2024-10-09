@@ -72,19 +72,24 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        // lấy từ seesion ra
         int movieSlotID = 2;
         double price = 1000000;
         int userID = 2; // Giả định người dùng đã đăng nhập
         int premiumTypeID = 1; // Loại vé cao cấp
+        
+        // insert data dô table order với status "PENDING"
+        
+        int OrderID = 100;
+        
+        // insert into table tempTicketOrder = Table Ticket (lấy từ list Seat trong list seat)
+        
 
         // Tạo thông tin đơn hàng
-        int OrderID = 2;
+       
 
         // Tạo URL thanh toán qua VNPAY
         PayMentService(OrderID, request, response);
-
-        // Chuyển hướng người dùng sang trang thanh toán VNPAY
     }
 
     @Override
@@ -98,6 +103,7 @@ public class PaymentServlet extends HttpServlet {
         String vnp_Command = "pay";
         String orderType = "other";
         System.out.println("amout:" + (String) req.getParameter("amount"));
+        
         int amount = 200000 * 100;
 
         String bankCode = req.getParameter("bankCode");
@@ -142,7 +148,7 @@ public class PaymentServlet extends HttpServlet {
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.MINUTE, 15);
+        cld.add(Calendar.MINUTE, 60*24);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
