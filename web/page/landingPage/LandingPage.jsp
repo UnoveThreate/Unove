@@ -144,6 +144,63 @@
                     </div>
                 </c:forEach>
             </div>
+        </nav>
+        <hr>
+        <!--thanh navbar dưới carousel-->
+        <h2 style="margin-left:270px;color: grey">FILM</h2>
+        <nav class="navbar navbar-expand-lg navbar-custom" style="width: 1000px; margin-left: 270px;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav" style="display: flex; justify-content: space-around; width: 100%;">
+                        <a class="nav-link">MONDAY</a>
+                        <a class="nav-link">TUESDAY</a>
+                        <a class="nav-link">WEDNESDAY</a>
+                        <a class="nav-link">THURSDAY</a>
+                        <a class="nav-link">FRIDAY</a>
+                        <a class="nav-link">SATURDAY</a>
+                        <a class="nav-link">SUNDAY</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <br>
+        <!--card phim-->
+        <!--        <div class="card" style="width: 18rem;margin-left: 200px">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>-->
+
+        <!--card movie-->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+            <c:if test="${empty movies}">
+                <p style="color:red;text-align: center">Không có phim nào để hiển thị.</p>
+            </c:if>
+
+            <c:forEach var="movie" items="${movies}">
+                <div class="card" style="width: 18rem;position: relative; overflow: hidden;">
+                    <img src="${movie.imageURL}" class="card-img-top" >
+                    <!-- Hiển thị rating ở góc dưới bên trái -->
+                    <div class="rating" style="position: absolute; bottom: 10px; left: 230px; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px; border-radius: 5px; white-space: nowrap;margin-bottom: 9px">
+                        ${movie.rating} ★
+                    </div>
+                    <div class="trailer-button">
+                        <a href="/Unove/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn btn-outline-warning">Chi Tiết</a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${movie.title}</h5>
+                        <a href="#" class="btn btn-danger">Buy ticket</a>
+                    </div>
+                </div>
+            </c:forEach>
         </div>
 
         <footer>
