@@ -134,11 +134,11 @@
                             <img src="${movie.imageURL}" class="card-img-top" alt="${movie.title}">
                             <div class="rating">${movie.rating} ★</div>
                             <div class="trailer-button">
-                                <a href="${movie.linkTrailer}" class="btn btn-outline-warning">Xem trailer</a>
+                                <a href="/Unove/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn btn-outline-warning">Chi Tiết</a>
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">${movie.title}</h5>
-                                <a href="#" class="btn btn-danger">Buy ticket</a>
+                                
                             </div>
                         </div>
                     </div>
@@ -235,5 +235,5 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
-    </body>
+</body>
 </html>
