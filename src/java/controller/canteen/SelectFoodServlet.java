@@ -59,6 +59,7 @@ public class SelectFoodServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //get list canteen item từ database (chèn data mẫu) , trước khi return về jsp 
         request.getRequestDispatcher(RouterJSP.CANTEEN_ITEM_PAGE).forward(request, response);
     }
 

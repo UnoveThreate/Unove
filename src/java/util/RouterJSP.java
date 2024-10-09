@@ -132,5 +132,5 @@ public class RouterJSP {
     
     public static String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
     
-    public static String CANTEEN_ITEM_PAGE = "/page/landingPage/Item.jsp";
+    public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
 }
