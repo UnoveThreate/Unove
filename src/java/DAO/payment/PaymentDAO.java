@@ -222,4 +222,64 @@ public class PaymentDAO extends MySQLConnect {
         return dates;
     }
 
+    public Movie getMovieByMovieSlotID(int movieSlotID) {
+        Movie movie = null;
+        String sql = "SELECT m.MovieID, m.Title, m.Synopsis, m.DatePublished, m.ImageURL, m.Rating, m.Country, m.LinkTrailer "
+                + "FROM Movie m "
+                + "JOIN MovieSlot ms ON ms.MovieID = m.MovieID "
+                + "WHERE ms.MovieSlotID = ?";
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, movieSlotID);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                movie = new Movie();
+                movie.setMovieID(resultSet.getInt("MovieID"));
+                movie.setTitle(resultSet.getString("Title"));
+                movie.setSynopsis(resultSet.getString("Synopsis"));
+                movie.setDatePublished(resultSet.getDate("DatePublished"));
+                movie.setImageURL(resultSet.getString("ImageURL"));
+                movie.setRating(resultSet.getFloat("Rating"));
+                movie.setCountry(resultSet.getString("Country"));
+                movie.setLinkTrailer(resultSet.getString("LinkTrailer"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return movie;
+    }
+
+    // Method to get cinema details by movieSlotID
+    public Cinema getCinemaByMovieSlot(int movieSlotID) {
+
+        String sql = "SELECT c.CinemaID, c.Name AS CinemaName, c.Address, c.Province, c.District, c.Commune "
+                + "FROM Cinema c "
+                + "JOIN Movie m ON c.CinemaID = m.CinemaID "
+                + "JOIN MovieSlot ms ON m.MovieID = ms.MovieID "
+                + "WHERE ms.MovieSlotID = ?";
+        Cinema cinema = new Cinema();
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, movieSlotID);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    
+                    cinema.setCinemaID(resultSet.getInt("CinemaID"));
+                    cinema.setName(resultSet.getString("CinemaName"));
+                    cinema.setAddress(resultSet.getString("Address"));
+                    cinema.setProvince(resultSet.getString("Province"));
+                    cinema.setDistrict(resultSet.getString("District"));
+                    cinema.setCommune(resultSet.getString("Commune"));
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cinema; // Return the list of cinemas for the given MovieSlotID
+    }
 }
