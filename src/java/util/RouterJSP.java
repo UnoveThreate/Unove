@@ -130,4 +130,5 @@ public class RouterJSP {
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
     public static String SCHEDULE_MOVIE = "/page/schedule/showtime.jsp";
     public static String SELECT_SEAT = "/page/seatselect/selectSeat.jsp";
+    public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 }
