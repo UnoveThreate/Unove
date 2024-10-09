@@ -8,6 +8,7 @@ package model;
  *
  * @author Kaan
  */
+
 public class CanteenItem {
 
     private int canteenItemID;
@@ -16,25 +17,26 @@ public class CanteenItem {
     private float price;
     private int stock;
     private String status;
+    private String imageURL; // Thêm thuộc tính imageURL
 
     // Constructors
-    public CanteenItem(int cinemaID, String name, float price, int stock, String status) {
+    public CanteenItem(int cinemaID, String name, float price, int stock, String status, String imageURL) {
         this.cinemaID = cinemaID;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.status = status;
-
+        this.imageURL = imageURL; // Khởi tạo imageURL
     }
 
-    public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status) {
+    public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status, String imageURL) {
         this.canteenItemID = canteenItemID;
         this.cinemaID = cinemaID;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.status = status;
-
+        this.imageURL = imageURL; // Khởi tạo imageURL
     }
 
     // Getters and Setters
@@ -86,4 +88,11 @@ public class CanteenItem {
         this.status = status;
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 }

@@ -6,14 +6,14 @@ package DAO;
 
 import database.MySQLConnect;
 import model.CanteenItem;
-
 import jakarta.servlet.ServletContext;
-import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author Kaan
@@ -27,13 +27,14 @@ public class CanteenItemDAO extends MySQLConnect {
 
     // Create a new Canteen Item
     public boolean addCanteenItem(CanteenItem item) {
-        String sql = "INSERT INTO CanteenItem (CinemaID, Name, Price, Stock, Status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO CanteenItem (CinemaID, Name, Price, Stock, Status, imageURL) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, item.getCinemaID());
             pstmt.setString(2, item.getName());
             pstmt.setFloat(3, item.getPrice());
             pstmt.setInt(4, item.getStock());
             pstmt.setString(5, item.getStatus()); // Sử dụng status
+            pstmt.setString(6, item.getImageURL()); // Lưu imageURL
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,7 +56,8 @@ public class CanteenItemDAO extends MySQLConnect {
                         rs.getString("Name"),
                         rs.getFloat("Price"),
                         rs.getInt("Stock"),
-                        rs.getString("Status") // Chỉ sử dụng status
+                        rs.getString("Status"), // Chỉ sử dụng status
+                        rs.getString("imageURL") // Lấy imageURL
                 ));
             }
         } catch (SQLException e) {
@@ -66,12 +68,13 @@ public class CanteenItemDAO extends MySQLConnect {
 
     // Update Canteen Item
     public boolean updateCanteenItem(CanteenItem item) {
-        String sql = "UPDATE CanteenItem SET Name = ?, Price = ?, Stock = ? WHERE CanteenItemID = ?";
+        String sql = "UPDATE CanteenItem SET Name = ?, Price = ?, Stock = ?, imageURL = ? WHERE CanteenItemID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, item.getName());
             pstmt.setFloat(2, item.getPrice());
             pstmt.setInt(3, item.getStock());
-            pstmt.setInt(4, item.getCanteenItemID());
+            pstmt.setString(4, item.getImageURL()); // Cập nhật imageURL
+            pstmt.setInt(5, item.getCanteenItemID());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

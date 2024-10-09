@@ -1,26 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller.owner;
 
 import DAO.CanteenItemDAO;
 import model.CanteenItem;
+import util.FileUploader;
+import util.RouterJSP;
+
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import util.RouterJSP;
 
-/**
- *
- * @author Kaan
- */
 @WebServlet("/CanteenItemServlet")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10,      // 10MB
+        maxRequestSize = 1024 * 1024 * 50)   // 50MB
 public class CanteenItemServlet extends HttpServlet {
 
     private CanteenItemDAO canteenItemDAO;
@@ -38,12 +38,21 @@ public class CanteenItemServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Lấy cinemaID từ request
-            int cinemaID = Integer.parseInt(request.getParameter("cinemaID"));
+            // Lấy cinemaID từ request và kiểm tra
+            String cinemaIDStr = request.getParameter("cinemaID");
+            if (cinemaIDStr == null || cinemaIDStr.isEmpty()) {
+                throw new IllegalArgumentException("Cinema ID is required.");
+            }
+
+            int cinemaID = Integer.parseInt(cinemaIDStr);
             List<CanteenItem> items = canteenItemDAO.getAllCanteenItems(cinemaID);
+
             request.setAttribute("canteenItems", items);
             request.setAttribute("cinemaID", cinemaID); // Thiết lập cinemaID cho JSP
             request.getRequestDispatcher(RouterJSP.CANTEEN_ITEM_UPLOAD_PAGE).forward(request, response);
+        } catch (NumberFormatException e) {
+            log("Invalid Cinema ID format: " + e.getMessage(), e);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Cinema ID format");
         } catch (Exception e) {
             log("Error processing request: " + e.getMessage(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching canteen items");
@@ -77,7 +86,13 @@ public class CanteenItemServlet extends HttpServlet {
         if (cinemaIdStr == null || cinemaIdStr.isEmpty()) {
             throw new IllegalArgumentException("Cinema ID is required.");
         }
-        int cinemaID = Integer.parseInt(cinemaIdStr); // Chuyển đổi cinemaID
+
+        int cinemaID;
+        try {
+            cinemaID = Integer.parseInt(cinemaIdStr); // Chuyển đổi cinemaID
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid Cinema ID format.");
+        }
 
         // Lấy các tham số khác từ request
         String name = request.getParameter("name");
@@ -91,25 +106,63 @@ public class CanteenItemServlet extends HttpServlet {
         }
 
         // Chuyển đổi giá trị price và stock
-        float price = Float.parseFloat(priceStr);
-        int stock = Integer.parseInt(stockStr);
+        float price;
+        int stock;
+        try {
+            price = Float.parseFloat(priceStr);
+            stock = Integer.parseInt(stockStr);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid price or stock format.");
+        }
+
+        // Xử lý upload hình ảnh và lấy URL
+        String imageURL = uploadImage(request);
 
         // Tạo đối tượng CanteenItem mới
-        CanteenItem item = new CanteenItem(0, cinemaID, name, price, stock, status);
+        CanteenItem item = new CanteenItem(0, cinemaID, name, price, stock, status, imageURL); // Cập nhật constructor
 
         // Thêm item vào cơ sở dữ liệu
         canteenItemDAO.addCanteenItem(item);
     }
 
+    private String uploadImage(HttpServletRequest request) throws IOException, ServletException {
+        String imageURL = "";
+        Part imagePart = request.getPart("imageURL"); // "imageURL" là name của input file trong form
+        if (imagePart != null && imagePart.getSize() > 0) {
+            // Tạo file tạm để lưu trữ ảnh
+            File imageFile = File.createTempFile("canteen_item_", "_" + imagePart.getSubmittedFileName());
+            imagePart.write(imageFile.getAbsolutePath());
+
+            // Upload file lên dịch vụ lưu trữ (giả sử Cloudinary)
+            FileUploader fileUploader = new FileUploader();
+            imageURL = fileUploader.uploadAndReturnUrl(imageFile, "canteen_item_" + System.currentTimeMillis(), "canteen/item");
+
+            if (imageURL.isEmpty()) {
+                throw new IOException("Failed to upload image.");
+            }
+
+            System.out.println("Uploaded image URL: " + imageURL);
+        }
+        return imageURL;
+    }
+
     private void updateCanteenItem(HttpServletRequest request) throws Exception {
-        // Lấy các tham số từ request
+        int itemID, cinemaID;
+        try {
+            itemID = Integer.parseInt(request.getParameter("canteenItemID"));
+            cinemaID = Integer.parseInt(request.getParameter("cinemaID"));
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid ID format.");
+        }
+
         CanteenItem item = new CanteenItem(
-                Integer.parseInt(request.getParameter("canteenItemID")),
-                Integer.parseInt(request.getParameter("cinemaID")),
+                itemID,
+                cinemaID,
                 request.getParameter("name"),
                 Float.parseFloat(request.getParameter("price")),
                 Integer.parseInt(request.getParameter("stock")),
-                request.getParameter("status") // Không thay đổi status
+                request.getParameter("status"), // Không thay đổi status
+                request.getParameter("imageURL") // Lấy imageURL
         );
 
         // Cập nhật item trong cơ sở dữ liệu
