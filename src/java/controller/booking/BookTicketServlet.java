@@ -94,7 +94,7 @@ public class BookTicketServlet extends HttpServlet {
 
             // Set booking details as attributes for JSP
             request.setAttribute("movie", movieID);
-            request.setAttribute("cinema", cinema);
+//            request.setAttribute("cinema", cinema);
             request.setAttribute("movieSlot", bookingSession.getMovieSlotID());
             request.setAttribute("selectedSeats", bookingSession.getSelectedSeatIDs());
             request.setAttribute("totalPrice", bookingSession.getTotalPrice());
