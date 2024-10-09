@@ -225,7 +225,7 @@
                         ${movie.rating} ★
                     </div>
                     <div class="trailer-button">
-                        <a href="$(movie.linkTrailer)" class="btn btn-outline-warning">Xem trailer</a>
+                        <a href="/Unove/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn btn-outline-warning">Chi Tiết</a>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">${movie.title}</h5>
