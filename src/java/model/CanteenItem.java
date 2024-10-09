@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 /**
- *
- * @author Kaan
+ * CanteenItem class representing items in the cinema canteen.
  */
-
 public class CanteenItem {
 
     private int canteenItemID;
@@ -17,27 +11,24 @@ public class CanteenItem {
     private float price;
     private int stock;
     private String status;
-    private String imageURL; // Thêm thuộc tính imageURL
+    private String imageURL; // URL to the image of the item
+    private boolean isAvailable; // New field representing availability
 
-    // Constructors
-    public CanteenItem(int cinemaID, String name, float price, int stock, String status, String imageURL) {
-        this.cinemaID = cinemaID;
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
-        this.status = status;
-        this.imageURL = imageURL; // Khởi tạo imageURL
-    }
 
-    public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status, String imageURL) {
+    public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status, String imageURL, boolean isAvailable) {
         this.canteenItemID = canteenItemID;
         this.cinemaID = cinemaID;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.status = status;
-        this.imageURL = imageURL; // Khởi tạo imageURL
+        this.imageURL = imageURL;
+        this.isAvailable = isAvailable; // Initialize isAvailable
     }
+
+    public CanteenItem() {
+    }
+    
 
     // Getters and Setters
     public int getCanteenItemID() {
@@ -94,5 +85,27 @@ public class CanteenItem {
 
     public void setImageURL(String imageURL) {
         this.imageURL = imageURL;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
+    @Override
+    public String toString() {
+        return "CanteenItem{" +
+                "canteenItemID=" + canteenItemID +
+                ", cinemaID=" + cinemaID +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", status='" + status + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                ", isAvailable=" + isAvailable +
+                '}';
     }
 }

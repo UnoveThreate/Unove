@@ -15,11 +15,12 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
+import static java.lang.Boolean.TRUE;
 import java.util.List;
 
 @WebServlet("/CanteenItemServlet")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10,      // 10MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)   // 50MB
 public class CanteenItemServlet extends HttpServlet {
 
@@ -116,10 +117,10 @@ public class CanteenItemServlet extends HttpServlet {
         }
 
         // Xử lý upload hình ảnh và lấy URL
-        String imageURL = uploadImage(request);
+        String image = uploadImage(request);
 
         // Tạo đối tượng CanteenItem mới
-        CanteenItem item = new CanteenItem(0, cinemaID, name, price, stock, status, imageURL); // Cập nhật constructor
+        CanteenItem item = new CanteenItem(0, cinemaID, name, price, stock, status, image, TRUE); // Cập nhật constructor
 
         // Thêm item vào cơ sở dữ liệu
         canteenItemDAO.addCanteenItem(item);
@@ -162,7 +163,8 @@ public class CanteenItemServlet extends HttpServlet {
                 Float.parseFloat(request.getParameter("price")),
                 Integer.parseInt(request.getParameter("stock")),
                 request.getParameter("status"), // Không thay đổi status
-                request.getParameter("imageURL") // Lấy imageURL
+                request.getParameter("imageURL"), // Lấy imageURL
+                TRUE
         );
 
         // Cập nhật item trong cơ sở dữ liệu
