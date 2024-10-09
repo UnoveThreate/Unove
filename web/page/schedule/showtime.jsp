@@ -54,159 +54,6 @@
             .button-group {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .selector-button {
-                padding: 10px 15px;
-                border: none;
-                background-color: #ffe4e1;
-                color: #7E60BF;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-
-            .selector-button:hover, .selector-button.active {
-                background-color: #ffffff;
-                color: #eb2f96;
-            }
-
-            .date-selector {
-                display: flex;
-                overflow-x: auto;
-                gap: 10px;
-                padding-bottom: 10px;
-            }
-
-            .date-button {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                background-color: white;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                min-width: 60px;
-            }
-
-            .date-button.active {
-                background-color: #7E60BF;
-                color: white;
-                border-color: #7E60BF;
-            }
-
-            .date-number {
-                font-size: 18px;
-                font-weight: bold;
-            }
-
-            .date-day {
-                font-size: 14px;
-            }
-
-            .date-button:hover {
-                background-color: #f8bbd0;
-                border-color: #7E60BF;
-            }
-
-            .movie-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 30px;
-            }
-
-            .movie-item {
-                background: #fff0f5;
-                border-radius: 15px;
-                box-shadow: 0 10px 20px rgba(255, 105, 180, 0.2);
-                padding: 25px;
-                transition: all 0.3s ease;
-            }
-
-            .movie-title {
-                font-size: 24px;
-                color: #7E60BF;
-                margin-bottom: 15px;
-                border-bottom: 2px solid #7E60BF;
-                padding-bottom: 10px;
-            }
-
-            .movie-image {
-                width: 100%;
-                max-width: 250px;
-                border-radius: 10px;
-                margin-bottom: 15px;
-            }
-
-            .showtime-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: 10px;
-                margin-top: 15px;
-            }
-
-            .showtime-item {
-                display: inline-block;
-                padding: 5px 10px;
-                background-color: #e6f7ff;
-                border: 1px solid #91d5ff;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-
-            .showtime-item:hover {
-                background-color: #F5EFFF;
-                color: white;
-            }
-            .showtime-group {
-                margin-bottom: 10px;
-            }
-
-            .showtime-time {
-                font-weight: bold;
-                font-size: 16px;
-            }
-
-            .showtime-type {
-                font-weight: bold;
-                font-size: 14px;
-                color: #0c0b0b;
-                margin-bottom: 5px;
-            }
-            .error-message {
-                color: #ff1493;
-                font-weight: bold;
-                text-align: center;
-                padding: 15px;
-                background-color: #ffe4e1;
-                border: 1px solid #ffb3ba;
-                border-radius: 8px;
-                margin-top: 20px;
-            }
-
-            @media (max-width: 768px) {
-                .movie-list {
-                    grid-template-columns: 1fr;
-                }
-            }
-            .start-time {
-                font-weight: bold;
-                color: #0ea5e9;
-            }
-            .end-time {
-                color: #0ea5e9;
-            }
-            .time-separator {
-                margin: 0 2px;
-                color: #91d5ff;
-            }
-            .button-group {
-                display: flex;
-                flex-wrap: wrap;
                 gap: 15px;
                 justify-content: flex-start;
             }
@@ -255,23 +102,40 @@
                 font-weight: bold;
             }
 
-            .discount-badge {
-                position: absolute;
-                top: -5px;
-                right: -5px;
-                background: #ff4d4f;
-                color: white;
-                font-size: 8px;
-                padding: 2px 4px;
-                border-radius: 10px;
-                transform: rotate(15deg);
+            .date-selector {
+                display: flex;
+                overflow-x: auto;
+                gap: 10px;
+                padding-bottom: 10px;
             }
-            h3 {
-                color: #8e24aa;
-                margin-bottom: 15px;
+
+            .date-button {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                min-width: 60px;
+            }
+
+            .date-button.active {
+                background-color: #7E60BF;
+                color: white;
+                border-color: #7E60BF;
+            }
+
+
+            .date-number {
                 font-size: 18px;
-                text-align: left;
-                padding-left: 15px;
+                font-weight: bold;
+            }
+
+            .date-day {
+                font-size: 14px;
             }
 
             .cinema-list {
@@ -325,11 +189,60 @@
                 color: #c2185b;
             }
 
+            .movie-list {
+                max-height: 600px;
+                overflow-y: auto;
+                background-color: white;
+                border-radius: 15px;
+                box-shadow: 0 10px 20px rgba(255, 105, 180, 0.2);
+                padding: 20px;
+            }
+
+            .movie-poster {
+                width: 100px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 8px;
+                margin-right: 20px; /* Tạo khoảng cách giữa poster và thông tin phim */
+                transition: all 0.3s ease;
+            }
+            .movie-item:hover .movie-poster {
+                transform: scale(1.05) rotate(2deg);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+            .movie-item {
+                display: flex;
+                margin-bottom: 20px;
+                padding: 15px;
+                border-bottom: 1px solid #eee;
+                transition: all 0.3s ease;
+                align-items: flex-start;
+            }
+
+            .movie-item:hover {
+                background-color: rgba(255, 255, 255, 0.1);
+                transform: translateY(-5px);
+            }
+
+            .movie-info {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .movie-title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #7E60BF;
+                margin-bottom: 5px;
+            }
+
             .movie-genres {
-                margin-bottom: 10px;
                 font-size: 14px;
                 color: #666;
+                margin-bottom: 10px;
             }
+
             .genre-tag {
                 display: inline-block;
                 background-color: #f0f0f0;
@@ -339,6 +252,65 @@
                 border-radius: 10px;
                 font-size: 12px;
             }
+
+            .showtime-type {
+                font-weight: bold;
+                margin-top: 10px;
+            }
+
+            .showtime-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .showtime-item {
+                display: inline-block;
+                background-color: #e6f7ff;
+                border: 1px solid #91d5ff;
+                border-radius: 20px;
+                padding: 5px 12px;
+                font-size: 14px;
+                color: #0050b3;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-right: 8px;
+                margin-bottom: 8px;
+            }
+
+            .showtime-item:hover {
+                background-color: #bae7ff;
+                border-color: #1890ff;
+            }
+
+            .start-time {
+                font-weight: bold;
+            }
+
+            .end-time {
+                font-weight: normal;
+            }
+
+            .time-separator {
+                margin: 0 2px;
+                color: #8c8c8c;
+            }
+            .error-message {
+                color: #ff1493;
+                font-weight: bold;
+                text-align: center;
+                padding: 15px;
+                background-color: #ffe4e1;
+                border: 1px solid #ffb3ba;
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+
+            @media (max-width: 768px) {
+                .movie-list {
+                    grid-template-columns: 1fr;
+                }
+            }
+
         </style>
     </head>
     <body>
@@ -362,7 +334,7 @@
             </div>
 
             <div class="selector">
-               <h3>Chọn rạp:</h3>
+                <h3>Chọn rạp:</h3>
                 <div class="cinema-list" id="cinemaButtons">
                     <c:forEach var="cinema" items="${cinemas}">
                         <button class="cinema-item ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
@@ -378,22 +350,21 @@
                 <h3>Chọn ngày:</h3>
                 <div class="date-selector">
                     <c:forEach var="date" items="${availableDates}" varStatus="status">
-                        <button class="date-button ${date == selectedDate ? 'active' : ''}" 
+                        <button class="date-button ${date == selectedDate ? 'active' : ''} ${datesWithShowtimes.contains(date) ? 'has-showtimes' : ''}" 
                                 onclick="selectDate('${date}')">
                             <span class="date-number">${date.dayOfMonth}</span>
                             <span class="date-day">
                                 <c:choose>
                                     <c:when test="${status.index == 0}">Hôm nay</c:when>
                                     <c:otherwise>
-                                        <c:set var="dayOfWeek" value="${date.dayOfWeek}" />
                                         <c:choose>
-                                            <c:when test="${dayOfWeek == 'MONDAY'}">Thứ 2</c:when>
-                                            <c:when test="${dayOfWeek == 'TUESDAY'}">Thứ 3</c:when>
-                                            <c:when test="${dayOfWeek == 'WEDNESDAY'}">Thứ 4</c:when>
-                                            <c:when test="${dayOfWeek == 'THURSDAY'}">Thứ 5</c:when>
-                                            <c:when test="${dayOfWeek == 'FRIDAY'}">Thứ 6</c:when>
-                                            <c:when test="${dayOfWeek == 'SATURDAY'}">Thứ 7</c:when>
-                                            <c:when test="${dayOfWeek == 'SUNDAY'}">CN</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 1}">Thứ 2</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 2}">Thứ 3</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 3}">Thứ 4</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 4}">Thứ 5</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 5}">Thứ 6</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 6}">Thứ 7</c:when>
+                                            <c:when test="${date.dayOfWeek.value == 7}">CN</c:when>
                                         </c:choose>
                                     </c:otherwise>
                                 </c:choose>
@@ -404,43 +375,46 @@
             </div>
 
             <div class="movie-list">
-                <c:if test="${not empty movies}">
-                    <c:forEach var="movie" items="${movies}">
-                        <c:if test="${not empty movieSlotsByMovie[movie]}">
-                            <div class="movie-item">
-                                <h3 class="movie-title">${movie.title}</h3>
-                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-image" onerror="console.error('Lỗi tải hình ảnh:', this.src);" />
-                                
-                                <!-- Thêm phần hiển thị thể loại phim -->
-                                <div class="movie-genres">
-                                    <c:forEach var="genre" items="${movieGenres[movie.movieID]}">
-                                        <span class="genre-tag">${genre}</span>
-                                    </c:forEach>
-                                </div>
-
-                                <div class="showtime-grid">
-                                    <c:forEach var="slot" items="${movieSlotsByMovie[movie]}">
-                                        <div class="showtime-group">
-                                            <div class="showtime-type">${slot.type}</div>
-                                            <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
-                                                <span class="start-time"><fmt:formatDate value="${slot.startTime}" pattern="HH:mm" /></span>
-                                                <span class="time-separator">~</span>
-                                                <span class="end-time"><fmt:formatDate value="${slot.endTime}" pattern="HH:mm" /></span>
-                                            </div>
+                <c:choose>
+                    <c:when test="${not empty movies}">
+                        <c:forEach var="movie" items="${movies}">
+                            <c:if test="${not empty movieSlotsByMovie[movie]}">
+                                <div class="movie-item">
+                                    <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster" onerror="this.src='path/to/default/image.jpg';" />
+                                    <div class="movie-info">
+                                        <h3 class="movie-title">${movie.title}</h3>
+                                        <div class="movie-genres">
+                                            <c:forEach var="genre" items="${movieGenres[movie.movieID]}">
+                                                <span class="genre-tag">${genre}</span>
+                                            </c:forEach>
                                         </div>
-                                    </c:forEach>
+                                        <div class="showtime-grid">
+                                            <c:forEach var="slot" items="${movieSlotsByMovie[movie]}">
+                                                <div class="showtime-group">
+                                                    <div class="showtime-type">${slot.type}</div>
+                                                    <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
+                                                        <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
+                                                        <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
+                                                        <span class="start-time">${formattedStartTime}</span>
+                                                        <span class="time-separator">~</span>
+                                                        <span class="end-time">${formattedEndTime}</span>
+                                                    </div>
+                                                </div>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </c:if>
-                    </c:forEach>
-                </c:if>
-                <c:if test="${empty movies}">
-                    <p>Không có phim nào đang chiếu.</p>
-                </c:if>
+                            </c:if>
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <p class="error-message">Không có phim nào đang chiếu.</p>
+                    </c:otherwise>
+                </c:choose>
             </div>
 
             <c:if test="${empty movieSlotsByMovie}">
-                <p>Không có suất chiếu nào cho ngày đã chọn.</p>
+                <p class="error-message">Không có suất chiếu nào cho ngày đã chọn.</p>
             </c:if>
 
             <c:if test="${not empty errorMessage}">
@@ -466,8 +440,8 @@
 
             function selectSlot(movieSlotID) {
                 var form = document.createElement('form');
-                form.method = 'post';
-                form.action = 'showtimes';
+                form.method = "GET";
+                form.action = "selectSeat";
 
                 var actionInput = document.createElement('input');
                 actionInput.type = 'hidden';
