@@ -129,5 +129,8 @@ public class RouterJSP {
     public static String ADMIN_PENDING_MOVIE_LIST = "/page/admin/PendingMovieList.jsp";
     
     public static String OWNER_VIEW_MOVIE_REQUEST = "/page/owner/viewMovieRequests/ViewRequests.jsp";
-    public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
+    
+    public static String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
+    
+    public static String CANTEEN_ITEM_PAGE = "/page/landingPage/Item.jsp";
 }

@@ -26,11 +26,11 @@ public class MySQLConnect {
         }
     }
 
-    public Connection connect(ServletContext context) throws Exception {
-
+    public final Connection connect(ServletContext context) throws Exception {
         // Load the properties from the dbconfig.properties file
         Properties props = new Properties();
-        try (FileInputStream fis = new FileInputStream(context.getRealPath("/WEB-INF/config/private/dbconfig.properties"))) {
+        try (FileInputStream fis = new FileInputStream(
+                context.getRealPath("/WEB-INF/config/private/dbconfig.properties"))) {
             props.load(fis);
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,34 +50,18 @@ public class MySQLConnect {
         // Load MySQL JDBC Driver
         Class.forName("com.mysql.cj.jdbc.Driver");
 
-        // Establish the connection using try-with-resources
-        try (Connection connect = DriverManager.getConnection(url, username, password)) {
-            // Connection established and automatically closed at the end of this block
-            // Perform database operations here
-            System.out.println("Connection successful");
-            return this.connection = connect;
+        // Establish the connection without try-with-resources so that it can be reused
+        try {
+            if (this.connection == null || this.connection.isClosed()) {
+                this.connection = DriverManager.getConnection(url, username, password);
+                System.out.println("Connection established and ready");
+            } else {
+                System.out.println("Existing connection -> Reuse");
+            }
+            return this.connection;
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw new SQLException("Error establishing connection to the database", ex);
         }
     }
-//    public static void main(String[] args) {
-//        MySQLConnect mySQLConnect = new MySQLConnect();
-//        Properties props = new Properties();
-//
-//        // Set database properties for testing
-//        props.setProperty("db.serverName", "localhost");
-//        props.setProperty("db.databaseName", "Unove");
-//        props.setProperty("db.username", "root");
-//        props.setProperty("db.password", "Password.1");
-//
-//        try {
-//            mySQLConnect.connect(props);
-//            System.out.println("Database connection test successful!");
-//            mySQLConnect.closeConnection();
-//        } catch (Exception e) {
-//            System.err.println("Database connection test failed: " + e.getMessage());
-//        }
-//    }
-
 }
