@@ -371,6 +371,7 @@
                             <span class="cinema-name">${cinema.name}</span>
                         </button>
                     </c:forEach>
+                    
                 </div>
             </div>
 

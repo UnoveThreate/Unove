@@ -96,7 +96,9 @@ public class ShowtimeServlet extends HttpServlet {
                     : cinemas.get(0).getCinemaID();
             session.setAttribute("selectedCinemaID", cinemaID);
         }
-
+        
+        // lưu cinema vào session
+        
         Cinema selectedCinema = cinemaDAO.getCinemaById(cinemaID);
         request.setAttribute("selectedCinema", selectedCinema);
 

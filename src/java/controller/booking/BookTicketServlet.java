@@ -4,8 +4,6 @@
  */
 package controller.booking;
 
-import DAO.payment.PaymentDAO;
-import jakarta.servlet.ServletContext;
 import model.BookingSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,17 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Cinema;
-import model.CinemaChain;
-import model.Movie;
-import model.MovieSlot;
-import model.Order;
-import model.Seat;
 import util.RouterJSP;
-import util.RouterURL;
 
 /**
  *
@@ -33,20 +21,6 @@ import util.RouterURL;
  */
 @WebServlet(name = "BookTicketServlet", urlPatterns = {"/bookTicket"})
 public class BookTicketServlet extends HttpServlet {
-
-    PaymentDAO paymentDAO;
-
-    @Override
-    public void init() throws ServletException {
-        super.init(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
-        try {
-
-            paymentDAO = new PaymentDAO(getServletContext());
-
-        } catch (Exception ex) {
-            Logger.getLogger(BookTicketServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -68,42 +42,23 @@ public class BookTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            // Lấy thông tin từ session
-            HttpSession session = request.getSession();
-            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
+        HttpSession session = request.getSession();
+        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
-            // Kiểm tra xem bookingSession có tồn tại không
-           
-                // Lấy thông tin từ bookingSession
-
-                int cinemaID = 1;
-                int userID = 2;
-                int movieSlotID = 1;
-                int movieID = 7;
-
-                // Đặt thuộc tính vào request để sử dụng trong JSP
-                Cinema cinema = paymentDAO.getCinemaById(cinemaID);
-                CinemaChain cinemaChain = paymentDAO.getCinemaChainByUserID(userID);
-                MovieSlot movieSlot = paymentDAO.getMovieSlotById(movieSlotID);
-                Movie movie =paymentDAO.getMovieByCinemaIDAndMovieID(cinemaID, movieID);
-
-                System.out.println(movieSlot);
-
-                // Đặt thuộc tính vào request để sử dụng trong JSP
-                request.setAttribute("cinema", cinema);
-                request.setAttribute("cinemaChain", cinemaChain);
-                request.setAttribute("movieSlot", movieSlot);
-                request.setAttribute("movie", movie);
-
-                // Chuyển hướng đến orderDetail.jsp
-                request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
-            
-        } catch (Exception ex) {
-            Logger.getLogger(BookTicketServlet.class.getName()).log(Level.SEVERE, null, ex);
-            response.sendRedirect("ErrorPage.jsp"); // Redirect đến trang lỗi
+        if (bookingSession == null) {
+            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+            return;
         }
 
+        // Set booking details as attributes for JSP
+        request.setAttribute("movie", bookingSession.getMovieID());
+        request.setAttribute("cinema", bookingSession.getCinemaID());
+        request.setAttribute("movieSlot", bookingSession.getMovieSlotID());
+        request.setAttribute("selectedSeats", bookingSession.getSelectedSeatIDs());
+        request.setAttribute("totalPrice", bookingSession.getTotalPrice());
+
+        // Forward to orderDetail.jsp page
+        request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
     }
 
     @Override

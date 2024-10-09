@@ -9,6 +9,7 @@ import jakarta.servlet.ServletContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import model.Cinema;
 import model.CinemaChain;
 import model.Movie;
 import model.MovieSlot;
+import model.Seat;
 
 /**
  *
@@ -35,7 +37,6 @@ public class PaymentDAO extends MySQLConnect {
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
             ResultSet rs = pstmt.executeQuery();
-
             if (rs.next()) {
                 cinema = new Cinema();
                 cinema.setName(rs.getString("Name"));
@@ -125,8 +126,6 @@ public class PaymentDAO extends MySQLConnect {
                     movie.setTitle(title);
                     movie.setSynopsis(synopsis);
 
-                   
-
                     // Set genres to the movie obje               
                 } else {
                     System.err.println("No movie found for CinemaID: " + cinemaID + " and MovieID: " + movieID);
@@ -139,6 +138,88 @@ public class PaymentDAO extends MySQLConnect {
         }
 
         return movie; // Return the Movie object (or null if not found)
+    }
+
+    public List<Seat> getSeatsByRoomId(int roomId) {
+        List<Seat> seats = new ArrayList<>();
+        String sql = "SELECT * FROM Seat WHERE RoomID = ?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, roomId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Seat seat = mapResultSetToSeat(resultSet);
+                    seat.setAvailable(checkSeatAvailability(seat.getSeatID()));
+                    seats.add(seat);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return seats;
+    }
+
+    public Seat getSeatById(int seatID) {
+        String sql = "SELECT * FROM Seat WHERE SeatID = ?";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, seatID);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Seat seat = mapResultSetToSeat(resultSet);
+                    seat.setAvailable(checkSeatAvailability(seat.getSeatID()));
+                    return seat;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Seat mapResultSetToSeat(ResultSet resultSet) throws SQLException {
+        Seat seat = new Seat();
+        seat.setSeatID(resultSet.getInt("SeatID"));
+        seat.setRoomID(resultSet.getInt("RoomID"));
+        seat.setName(resultSet.getString("Name"));
+        seat.setCoordinateX(resultSet.getInt("CoordinateX"));
+        seat.setCoordinateY(resultSet.getInt("CoordinateY"));
+        //seat.setPrice(resultSet.getDouble("Price"));
+        return seat;
+    }
+
+    public boolean checkSeatAvailability(int seatID) {
+        String sql = "SELECT COUNT(*) FROM Ticket WHERE SeatID = ? AND Status = 'Đã đặt'";
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+            statement.setInt(1, seatID);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    int count = resultSet.getInt(1);
+                    return count == 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<String> getAvailableDates(int cinemaID) {
+        List<String> dates = new ArrayList<>();
+        String sql = "SELECT DISTINCT DATE_FORMAT(StartTime, '%Y:%d:%m') as show_date FROM MovieSlot ms "
+                + "JOIN Room r ON ms.RoomID = r.RoomID "
+                + "WHERE r.CinemaID = ? AND StartTime >= CURDATE() "
+                + "ORDER BY show_date LIMIT 7";
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+            pstmt.setInt(1, cinemaID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    dates.add(rs.getString("show_date"));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dates;
     }
 
 }
