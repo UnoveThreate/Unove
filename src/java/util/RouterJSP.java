@@ -102,6 +102,8 @@ public class RouterJSP {
     public static String SEARCH_MOVIE = "/page/search/SearchMovie.jsp";
 
     public static String ADMIN_PAGE = "/page/admin/AdminPage.jsp";
+    
+//    public static String ORDER_ITEM ="page/ladingPage/OrderConfirmation.jsp";
 
     // URL JSP FILE FOR OWNER //
     public static String OWNER_COMFIRM_ORDER_PAGE = "/page/owner/confirm/ConfirmTicket.jsp";
