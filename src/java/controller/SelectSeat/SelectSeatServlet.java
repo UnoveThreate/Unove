@@ -1,4 +1,4 @@
-package controller.SelectSeat;
+package controller.selectSeat;
 
 import DAOSchedule.MovieScheduleSlotDAO;
 import DAOSchedule.SeatDAO;
