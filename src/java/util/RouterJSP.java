@@ -12,6 +12,8 @@ public class RouterJSP {
 
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
+    // public String HOMEPAGE = "/page/home/Home.jsp";
+
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
@@ -75,7 +77,7 @@ public class RouterJSP {
 
     public String CINEMAS = "/page/owner/manage/Cinemas.jsp";
 
-    public static String VIEW_ORDER = "/page/bill/Bill.index.jsp";
+    public static String VIEW_ORDER = "/page/bill/Bill.jsp";
 
     public static String SCHEDULE_MOVIEe = "/page/movie/schedule/ScheduleMovie.jsp";
 
@@ -171,5 +173,5 @@ public class RouterJSP {
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
-    
+
 }

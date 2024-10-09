@@ -34,7 +34,7 @@ public class UserDAO extends MySQLConnect {
     
     public UserDAO(ServletContext context) throws Exception {
         super();
-        connect((ServletContext) context);
+        connect(context);
     }
 
     public ResultSet getResultSet(String sqlQuery) throws SQLException {
@@ -350,6 +350,7 @@ public ResultSet getData(String table, String atr, Map<String, String> condition
         }
         return genres;
     }
+     
 
     
 

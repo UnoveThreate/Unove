@@ -1,14 +1,18 @@
 package model;
 
 public class Ticket {
+
+    
     private int ticketID;
     private int orderID;
     private int seatID;
     private String status;
 
-    // Constructor
-    public Ticket() {}
+   
+    public Ticket() {
+    }
 
+  
     public Ticket(int ticketID, int orderID, int seatID, String status) {
         this.ticketID = ticketID;
         this.orderID = orderID;
@@ -16,7 +20,7 @@ public class Ticket {
         this.status = status;
     }
 
-    // Getters and Setters
+   
     public int getTicketID() {
         return ticketID;
     }
@@ -25,6 +29,7 @@ public class Ticket {
         this.ticketID = ticketID;
     }
 
+    
     public int getOrderID() {
         return orderID;
     }
@@ -33,6 +38,7 @@ public class Ticket {
         this.orderID = orderID;
     }
 
+   
     public int getSeatID() {
         return seatID;
     }
@@ -41,6 +47,7 @@ public class Ticket {
         this.seatID = seatID;
     }
 
+    // Getter và Setter cho status
     public String getStatus() {
         return status;
     }
@@ -48,4 +55,5 @@ public class Ticket {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

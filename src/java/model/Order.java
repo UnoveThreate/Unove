@@ -22,7 +22,7 @@ public class Order {
         this.status = status;
     }
 
-    
+    // Getters and Setters
     public int getOrderID() {
         return orderID;
     }
@@ -71,5 +71,15 @@ public class Order {
         this.status = status;
     }
 
- 
+    @Override
+    public String toString() {
+        return "Order{"
+                + "orderID=" + orderID
+                + ", userID=" + userID
+                + ", movieSlotID=" + movieSlotID
+                + ", timeCreated=" + timeCreated
+                + ", premiumTypeID=" + premiumTypeID
+                + ", status='" + status + '\''
+                + '}';
+    }
 }

@@ -1,5 +1,7 @@
 package controller.movie;
 
+import DAO.UserDAO;
+import DAO.movie.FavouriteMoviesDAO;
 import DAO.movie.MovieDAO;
 import jakarta.servlet.ServletContext;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +21,8 @@ import util.RouterJSP;
 public class HandleDisplayMovieInfo extends HttpServlet {
 
     private MovieDAO movieDAO;
+    FavouriteMoviesDAO favoriteMoviesDAO;
+    UserDAO userDAO;
     private RouterJSP route = new RouterJSP();
 
     @Override
@@ -34,38 +39,45 @@ public class HandleDisplayMovieInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            userDAO = new UserDAO(request.getServletContext());
+            // Nhan tu username gui qua
             String movieID = request.getParameter("movieID");
             String cinemaID = request.getParameter("cinemaID");
-       
+
             //kiem tra chuoi có null hay khong
             if (cinemaID == null || cinemaID.isEmpty() || movieID == null || movieID.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "CinemaID or MovieID is missing or empty");
                 return;
             }
 
-            int cinemaIDInt;
-            int movieIDInt;
-            try {
-                cinemaIDInt = Integer.parseInt(cinemaID);
-                movieIDInt = Integer.parseInt(movieID);
-
-            } catch (NumberFormatException ex) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid format for cinemaID or movieID");
-                return;
-            }
-
-            Movie movie = movieDAO.getMovieByCinemaIDAndMovieID(cinemaIDInt,movieIDInt);
-            System.out.println("Looking for Movie with CinemaID: " + cinemaIDInt + " and MovieID: " + movieIDInt);
+            Movie movie = movieDAO.getMovieByCinemaIDAndMovieID(Integer.parseInt(cinemaID), Integer.parseInt(movieID));
+            System.out.println("Looking for Movie with CinemaID: " + cinemaID + " and MovieID: " + movieID);
 
 //             If movie is null, handle the case
             if (movie == null) {
-                System.err.println("Movie not found for CinemaID: " + cinemaIDInt + ", MovieID: " + movieIDInt);
+                System.err.println("Movie not found for CinemaID: " + cinemaID + ", MovieID: " + movieID);
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Movie not found");
                 return;
             }
 
+            // case favourite movies
+            favoriteMoviesDAO = new FavouriteMoviesDAO(request.getServletContext());
+            HttpSession session = request.getSession();
+            System.out.println(session.getAttribute("userID"));
+
+            int userID = -1;
+            if (session.getAttribute("userID") != null) {
+                userID = (int) session.getAttribute("userID");
+            }
+
+            Boolean isFavoritedMovie = null;
+            if (userID != -1) {
+                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, Integer.parseInt(movieID));
+            }
+
             // Add movie to request attributes
             request.setAttribute("movie", movie);
+            request.setAttribute("isFavoritedMovie", isFavoritedMovie);
 
             // Forward request to DisplayMovieInfo.jsp
             request.getRequestDispatcher(route.DETAIL_MOVIE_PAGE).forward(request, response);
@@ -85,6 +97,29 @@ public class HandleDisplayMovieInfo extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Implement doPost if needed
+        HttpSession session = request.getSession();
+        int userID = (int) session.getAttribute("userID");
+        int movieID = Integer.parseInt(request.getParameter("movieID"));
+
+        boolean isAddingToFavorite = request.getParameter("isAddingToFavorite") != null && request.getParameter("isAddingToFavorite").equals("true");
+
+        if (isAddingToFavorite) {
+            String favoritedAt = request.getParameter("favoritedAt");
+            try {
+                favoriteMoviesDAO = new FavouriteMoviesDAO(request.getServletContext());
+                favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
+                doGet(request, response);
+            } catch (Exception ex) {
+                Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return;
+        }
+
+        String redirectUrl = "/movie/HandleDisplayMovieInfo";
+        response.setContentType("text/plain");
+        response.getWriter().write(redirectUrl);
+
+        doGet(request, response);
     }
+
 }

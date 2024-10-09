@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="model.Movie" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 
 <%
     Movie movie = (Movie) request.getAttribute("movie");
@@ -13,198 +16,190 @@
         <title><%= movie.getTitle()%></title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
+            /* Global Styles */
             body, html {
                 margin: 0;
                 padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: white;
+                font-family: 'SairaSemiCondensed-Bold', sans-serif;
+                background-color: whitesmoke;
                 color: white;
             }
+
             .container {
                 display: flex;
                 background-color: black;
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                align-items: flex-start;
-                width: 100%;
+                border-radius: 12px;
+                padding: 74px;
                 max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
+                margin: 40px auto;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
             }
+
+            /* Poster Styles */
             .poster {
-                position: relative;
                 width: 30%;
                 min-width: 250px;
                 height: 450px;
+                border-radius: 10px;
                 background-size: cover;
                 background-position: center;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+                position: relative;
             }
-            .poster .play-button {
+
+            .play-button {
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                background-color: rgba(255, 255, 255, 0.7);
+                background-color: rgba(255, 255, 255, 0.9);
                 border-radius: 50%;
-                padding: 20px;
+                padding: 15px;
+                transition: background-color 0.3s ease;
             }
-            .play-button img {
-                width: 64px;
-                height: 64px;
+
+            .play-button:hover {
+                background-color: rgba(255, 255, 255, 1);
             }
+
+            .play-button i {
+                font-size: 32px;
+                color: #ff5733;
+            }
+
+            /* Movie Details */
             .movie-details {
                 width: 65%;
                 padding-left: 20px;
             }
+
             .movie-title {
-                font-size: 36px;
+                font-size: 40px;
                 font-weight: bold;
+                color: #ff5733;
+                margin-bottom: 10px;
             }
+
             .ratings {
                 display: flex;
                 align-items: center;
                 margin: 10px 0;
             }
-            .ratings .rating {
+
+            .rating {
                 font-size: 20px;
                 margin-right: 15px;
                 display: flex;
                 align-items: center;
-            }
-            .ratings .rating i {
-                color: yellow;
-                margin-right: 5px;
-            }
-            .ratings .imdb-rating {
-                background-color: #e5c708;
+                background-color: #ffca28;
                 padding: 5px 10px;
-                border-radius: 3px;
-                font-size: 18px;
+                border-radius: 5px;
+                color: #1c1c1c;
             }
-            .description {
-                margin: 20px 0;
-                line-height: 1.5;
-            }
+
             .metadata {
                 display: flex;
                 margin-top: 20px;
             }
-            .metadata .publicdate,
-            .metadata .genre,
-            .metadata .country {
-                flex-basis: 15%;
+
+            .metadata div {
+                flex-basis: 30%;
+                padding-right: 10px;
             }
-            .metadata .publicdate span,
-            .metadata .genre span,
-            .metadata .country span {
-                display: block;
-                font-size: 15px;
-                margin-top: 5px;
-                color: lightgray;
-            }
-            .metadata .country {
-                margin-left: 33px;
-            }
+
             .metadata strong {
-                font-size: 15px;
-                color: white;
-                display: block;
+                font-size: 16px;
+                color: #ccc;
             }
+
+            /* Buttons */
             .buttons {
-                margin-top: 20px;
+                margin-top: 30px;
             }
-            .buttons button {
-                padding: 10px 20px;
+
+            button {
+                padding: 12px 25px;
                 border: none;
                 cursor: pointer;
                 font-weight: bold;
-                margin-right: 10px;
+                border-radius: 50px;
+                font-size: 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                transition: background-color 0.4s ease, transform 0.2s ease;
             }
+
+            #reviewBtn, #trailerBtn {
+                background: linear-gradient(45deg, #ff5733, #feb47b);
+                color: white;
+                margin-right: 20px;
+                transition: all 0.3s ease;
+            }
+
+            #reviewBtn:hover, #trailerBtn:hover {
+                background: linear-gradient(45deg, #feb47b, #ff7e5f);
+                transform: translateY(-3px);
+            }
+
+            /* Favorite Button */
+            #viewFavouriteMoviesForm{
+                margin-top: 44px;
+            }
+
+            /* Modal Styles */
             .modal {
                 display: none;
                 position: fixed;
-                z-index: 1;
+                z-index: 999;
                 left: 0;
                 top: 0;
                 width: 100%;
                 height: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
+                background-color: rgba(0, 0, 0, 0.85);
                 justify-content: center;
                 align-items: center;
+                transition: opacity 0.5s ease;
             }
+
             .modal-content {
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 10px;
+                background-color: #1e1e1e;
+                color: #f0f0f0;
+                padding: 30px;
+                border-radius: 12px;
                 position: relative;
                 text-align: center;
+                box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
             }
-            #reviewBtn,
-            #trailerBtn {
-                background-color: #ff5733;
-                margin-top: 57px;
-                color: #fff;
-                padding: 14px 13px;
-                border: none;
-                border-radius: 57px;
-                font-size: 13px;
+
+            .close {
+                position: absolute;
+                top: 15px;
+                right: 20px;
+                color: #ff5733;
+                font-size: 40px;
                 font-weight: bold;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-            #btnYeuThich {
-                background-color: transparent;
-                margin-left:412px;
-                border: none;
-                color: red;
-                font-size: 24px;
                 cursor: pointer;
                 transition: transform 0.3s ease, color 0.3s ease;
             }
 
-            #btnYeuThich:hover {
-                color: darkred;
-            }
-            #reviewBtn {
-                margin-left: 15px;
-            }
-            #reviewBtn:hover,
-            #trailerBtn:hover {
-                background-color: #ff6f47;
-                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-                transform: translateY(-3px);
-            }
-            #reviewBtn:active,
-            #trailerBtn:active {
-                transform: translateY(1px);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            }
-            .close {
-                position: absolute;
-                top: 10px;
-                right: 20px;
-                color: #000;
-                font-size: 60px;
-                font-weight: bold;
-                cursor: pointer;
-                transition: color 0.5s ease;
-            }
             .close:hover {
-                color: red;
+                color: darkred;
+                transform: scale(1.2);
             }
+            /* Favorite Button Styles */
+
+
             @media (max-width: 768px) {
                 .container {
                     flex-direction: column;
                     align-items: center;
                 }
+
                 .movie-details {
                     width: 100%;
                     padding-left: 0;
+                    text-align: center;
                 }
+
                 .poster {
                     width: 100%;
                     height: 350px;
@@ -213,55 +208,93 @@
         </style>
     </head>
     <body>
+
         <div class="container">
+            <!-- Movie Poster -->
             <div class="poster" style="background-image: url('<%= movie.getImageURL()%>');">
-                <button type="button" class="play-button">
+                <button class="play-button">
                     <i class="fa fa-play"></i>
                 </button>
             </div>
 
-            <div class="movie-details">
+            <!-- Movie Details -->
+            <div class="movie-details" style="margin-left:43px">
                 <h1 class="movie-title"><%= movie.getTitle()%></h1>
                 <div class="ratings">
                     <div class="rating">
                         <i class="fa fa-star"></i> <%= movie.getRating()%>
                     </div>
                 </div>
-                    <p class="mb-4 tracking-wide">
-                    <strong>Nội dung:</strong> <%= movie.getSynopsis()%>
-                </p>
+                <p><%= movie.getSynopsis()%></p>
 
                 <div class="metadata">
-                    <div class="publicdate">
-                        <span>Ngày chiếu:</span>
-                        <strong><%= movie.getDatePublished()%></strong>
-                    </div>
-                    <div class="genre">
-                        <span>Thể loại:</span>
-                        <strong><%= movie.getGenresAsString()%></strong>
-                    </div>
-                    <div class="country">
-                        <span>Quốc Gia:</span>
-                        <strong><%= movie.getCountry()%></strong>
-                    </div>
+                    <div>Published: <strong><%= movie.getDatePublished()%></strong></div>
+                    <div>Genre: <strong><%= movie.getGenresAsString()%></strong></div>
+                    <div>Country: <strong><%= movie.getCountry()%></strong></div>
                 </div>
 
-                <button id="trailerBtn">Xem Trailer</button>
-                <button id="reviewBtn">Xem Review</button>
-                <button id="btnYeuThich" onclick="addToFavorites(1)">
-                    <i class="fa fa-heart"></i>
-                </button>
+                <!-- Action Buttons -->
+
+                <div class="buttons">
+                    <button id="trailerBtn">View Trailer</button>
 
 
+                </div>
+
+                <!-- Modal for movie trailer -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
                 <div id="trailerModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
                         <iframe id="trailerVideo" width="560" height="315" src="<%= movie.getLinkTrailer()%>" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
                     </div>
                 </div>
+
+
+                <!-- Favorite Actions -->
+
+                <c:if test="${ not empty sessionScope.userID}">
+                    <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
+                    <c:if test="${isFavoritedMovie == false}">
+                        <form id="addToFavoriteForm">
+                            <input type="hidden" name="isAddingToFavorite" value="true"/>
+                            <input type="hidden" id="favoritedAtInput" name="favoritedAt"/>
+                            <a onclick="addToFavorite();" style="display: inline-block;text-decoration: none;cursor: pointer;margin-left: -6px;margin-top: 18px;">
+                                <span class="clWhite">
+                                    <img src="assets/images/add-to-favorites.png"></img>
+                                    Thêm vào yêu thích
+                                </span>
+                            </a>
+                        </form>
+                    </c:if>
+
+                    <c:if test="${isFavoritedMovie == true}">
+                        <form id="deleteFavoriteMovieForm">
+                            <input type="hidden" name="deletedFavouriteMovieInput" value="${movie.movieID}"/>
+                            <input type="hidden" name="isDeletingInMovieInfo" value="true"/>
+                            <a onclick="deleteFavoriteMovie();" style="display: inline-block;text-decoration: none;cursor: pointer;margin-left: -6px;margin-top: 18px;">
+                                <span class="clWhite">
+                                    <img src="assets/images/delete-favorite.png"></img>
+                                    Hủy yêu thích
+                                </span>
+                            </a>
+                        </form>                                    
+                    </c:if>
+                    <form id="viewFavouriteMoviesForm">
+                        <a onclick="viewFavouriteMovies();" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px;">
+                            <span class="clWhite">
+                                <img src="assets/images/view-favourite-movies.png"></img>
+                                Xem phim đã yêu thích
+                            </span>
+                        </a>
+                    </form>
+
+
+                </c:if>
+
+
+
             </div>
         </div>
-
         <script>
             const trailerBtn = document.getElementById("trailerBtn");
             const trailerModal = document.getElementById("trailerModal");
@@ -284,6 +317,38 @@
                     trailerVideo.src = trailerVideo.src.split("?")[0];
                 }
             };
+
+            function getCurrentDateTime() {
+                const now = new Date();
+
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const seconds = String(now.getSeconds()).padStart(2, '0');
+                const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+
+                return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
+            }
+            //ham add favorite movie
+            function addToFavorite() {
+                let favoritedAtInput = document.getElementById('favoritedAtInput');
+                favoritedAtInput.value = getCurrentDateTime();
+
+                callServlet('addToFavoriteForm', 'HandleDisplayMovieInfo?movieID=' + movieID, 'POST');
+            }
+
+            function deleteFavoriteMovie() {
+                callServlet('deleteFavoriteMovieForm', 'myfavouritemovie', 'POST');
+            }
+
+            function viewFavouriteMovies() {
+                callServlet('viewFavouriteMoviesForm', 'myfavouritemovie', 'GET');
+            }
+
+
         </script>
     </body>
-</html>
+</html> 
