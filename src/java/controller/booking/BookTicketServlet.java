@@ -5,12 +5,6 @@
 package controller.booking;
 
 import DAO.payment.PaymentDAO;
-import DAOSchedule.MovieScheduleSlotDAO;
-import DAOSchedule.OrderDAO;
-import DAOSchedule.SeatDAO;
-import DAOSchedule.TicketDAO;
-import controller.SelectSeat.SelectSeatServlet;
-import jakarta.servlet.ServletContext;
 import model.BookingSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,9 +14,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jakarta.servlet.ServletContext;
 import model.Cinema;
 import model.Movie;
 import util.RouterJSP;
