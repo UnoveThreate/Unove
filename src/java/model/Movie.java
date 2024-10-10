@@ -44,7 +44,7 @@ public class Movie {
         this.status = status;
         this.genres = genres;
     }
-
+    
     // lay ra chuoi cac the loai :
     public String getGenresAsString() {
         return String.join(", ", genres);
@@ -155,5 +155,4 @@ public class Movie {
                 + datePublished + ", imageURL=" + imageURL + ", rating=" + rating + ", country=" + country
                 + ", linkTrailer=" + linkTrailer + ", cinemaID=" + cinemaID + '}';
     }
-
 }

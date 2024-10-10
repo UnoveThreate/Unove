@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -72,19 +73,26 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        // lấy từ seesion ra
+        HttpSession session = request.getSession();
+        
         int movieSlotID = 2;
-        double price = 1000000;
+        Double price = (Double) session.getAttribute("totalPrice");
         int userID = 2; // Giả định người dùng đã đăng nhập
         int premiumTypeID = 1; // Loại vé cao cấp
+        
+        // insert data dô table order với status "PENDING"
+        
+        int OrderID = 5;
+        
+        // insert into table tempTicketOrder = Table Ticket (lấy từ list Seat trong list seat)
+        
 
         // Tạo thông tin đơn hàng
-        int OrderID = 2;
+       
 
         // Tạo URL thanh toán qua VNPAY
-        PayMentService(OrderID, request, response);
-
-        // Chuyển hướng người dùng sang trang thanh toán VNPAY
+        PayMentService(OrderID,price, request, response);
     }
 
     @Override
@@ -92,13 +100,15 @@ public class PaymentServlet extends HttpServlet {
 
     }
 
-    public void PayMentService(int OrderID, HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException, IOException {
+    public void PayMentService(int OrderID, double price,HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException, IOException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
         System.out.println("amout:" + (String) req.getParameter("amount"));
-        int amount = 200000 * 100;
+        
+        int amount = (int)(price * 100);
+        System.out.println("Total Price: " + price);
 
         String bankCode = req.getParameter("bankCode");
 
@@ -142,7 +152,7 @@ public class PaymentServlet extends HttpServlet {
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.MINUTE, 15);
+        cld.add(Calendar.MINUTE, 60*24);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 

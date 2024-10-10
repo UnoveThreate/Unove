@@ -75,7 +75,7 @@ public class EditCinemaServlet extends HttpServlet {
             request.setAttribute("currentProvince", province);
             request.setAttribute("currentDistrict", district);
             request.setAttribute("currentCommune", commune);
-
+           
             // Forward tới trang JSP chỉnh sửa
             request.getRequestDispatcher(RouterJSP.OWNER_EDIT_CINEMA_PAGE).forward(request, response);
 
@@ -89,6 +89,7 @@ public class EditCinemaServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String address = request.getParameter("address");
+        String name = request.getParameter("name");
         String province = request.getParameter("provinceName"); // Sử dụng tên tỉnh
         String district = request.getParameter("districtName"); // Sử dụng tên quận/huyện
         String commune = request.getParameter("communeName"); // Sử dụng tên xã/phường
@@ -96,6 +97,7 @@ public class EditCinemaServlet extends HttpServlet {
         // Tạo đối tượng Cinema
         Cinema cinema = new Cinema();
         cinema.setAddress(address);
+        cinema.setName(name);
         cinema.setProvince(province);
         cinema.setDistrict(district);
         cinema.setCommune(commune);

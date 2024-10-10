@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@page import="util.RouterURL"%>
+<jsp:include page="navbar.jsp" />
 
 <!DOCTYPE html>
 <html>
@@ -23,11 +24,27 @@
                 border-radius: 10px;
                 box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             }
+            .button-group {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+            .btn {
+                width: 100%;
+                font-size: 16px;
+                padding: 10px;
+            }
+            .btn-danger {
+                background-color: #dc3545;
+                border-color: #dc3545;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <h2>Chỉnh sửa Rạp Phim</h2>
+
+            <!-- Form cập nhật rạp -->
             <form action="<%= RouterURL.OWNER_EDIT_CINEMA%>" method="POST">
                 <c:if test="${not empty cinema}">
                     <input type="hidden" name="cinemaID" value="${cinema.cinemaID}">
@@ -64,15 +81,21 @@
                     <label for="address">Địa chỉ:</label>
                     <input type="text" id="address" name="address" class="form-control" value="${cinema.address}" required>
                 </div>
+                <div class="form-group">
+                    <label for="name">Tên rạp:</label>
+                    <input type="text" id="name" name="name" class="form-control" value="${cinema.name}" required>
+                </div>
 
+                <!-- Nút cập nhật nằm trong form cập nhật -->
                 <button type="submit" class="btn btn-primary">Cập nhật Rạp</button>
             </form>
-            <form action="<%= RouterURL.OWNER_DELETE_CINEMA%>" method="POST" style="margin-top: 20px;">
+
+            <!-- Form riêng biệt cho nút xóa -->
+            <form action="<%= RouterURL.OWNER_DELETE_CINEMA%>" method="POST" style="display: inline;">
                 <input type="hidden" name="cinemaID" value="${cinema.cinemaID}">
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa rạp phim này không?');">Xóa Rạp</button>
             </form>
         </div>
-
         <script>
             $(document).ready(function () {
                 // Đặt giá trị hiện tại cho các trường
@@ -176,7 +199,5 @@
                 }
             });
         </script>
-
-
     </body>
 </html>

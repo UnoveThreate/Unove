@@ -35,6 +35,39 @@ CREATE TABLE User (
     FOREIGN KEY (PremiumTypeID) REFERENCES PremiumType(id)
 );
 
+
+select * from unove.movieingenre;
+
+select * from unove.genre;
+
+INSERT INTO genre (GenreName)
+VALUES 
+('Horror'),
+('Action'),
+('Comedy'),
+('Drama'),
+('Vietnamese'),
+('Thriller');
+
+SELECT g.GenreName
+FROM genre g
+JOIN movieingenre mg ON g.GenreID = mg.GenreID
+WHERE mg.MovieID = 1;
+
+-- MovieID 1 is a Vietnamese Action Movie
+INSERT INTO movieingenre (MovieID, GenreID)
+VALUES 
+(3, 2),  -- Action
+(3, 5);  -- Vietnamese
+
+SELECT g.GenreName as Genre FROM Genre g JOIN movieingenre m ON m.genreID = g.genreID WHERE m.MovieID =  3;
+
+
+select * from movie
+
+select * from unove.genre
+select * from movie
+SELECT g.GenreName as Genre FROM Genre g JOIN MovieinGerne movieingenregenrem ON m.MovieID = g.MovieID WHERE m.MovieID = 1 ;
 -- Bảng CinemaChain: Lưu thông tin chuỗi rạp chiếu phim
 CREATE TABLE CinemaChain (
     UserID INT,

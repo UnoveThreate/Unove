@@ -26,23 +26,40 @@
         <link rel="stylesheet" href="${pageContext.request.contextPath}/page/movie/movie-style.css">
 
         <style>
-            body {
-                background-color: #f8f9fa;
-            }
-
-            .carousel-item img {
-                max-height: 500px; /* Set max height for carousel images */
-                object-fit: cover; /* Ensure images cover the area */
-            }
 
             .titlee {
                 text-align: center;
-                font-size: 28px;
-                color: #333;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                margin: 40px 0;
+                font-size: 28px; /* Kích thước chữ */
+                color: #333; /* Màu chữ */
+                font-weight: bold; /* Đậm */
+                text-transform: uppercase; /* Chuyển đổi thành chữ in hoa */
+                letter-spacing: 2px; /* Khoảng cách giữa các ký tự */
+                margin: 59px 0;
+            }
+
+
+
+        </style>
+
+
+        <!--Include necessary CSS and JavaScript files only once--> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/page/movie/movie-style.css">
+
+
+
+        <style>
+            iframe {
+                width: 100%;
+                height: 250px;
+            }
+        </style>
+
+        <style>
+            .card:hover .trailer-button {
+                display: block;
             }
 
             .card {
@@ -77,19 +94,7 @@
                 color: white;
                 padding: 5px;
                 border-radius: 5px;
-                font-size: 14px;
-            }
-
-            footer {
-                background-color: whitesmoke;
-                color: gray;
-                padding: 20px 0;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%; /* Full width on small screens */
-                }
+                font-size: 14px; /* Thay đổi kích thước chữ nếu cần */
             }
         </style>
     </head>
@@ -118,66 +123,130 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
+        <br>
+        <br>
+        <nav class="navbar navbar-expand-lg navbar-custom" style="width: 1000px; margin-left: 270px;background-color: #343a40;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-
-
-        <h2 class="titlee">FILM</h2>
-
-        <div class="container">
-            <div class="row">
-                <c:if test="${empty movies}">
-                    <p style="color:red;text-align: center">Không có phim nào để hiển thị.</p>
-                </c:if>
-
-                <c:forEach var="movie" items="${movies}">
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <img src="${movie.imageURL}" class="card-img-top" alt="${movie.title}">
-                            <div class="rating">${movie.rating} ★</div>
-                            <div class="trailer-button">
-                                <a href="${movie.linkTrailer}" class="btn btn-outline-warning">Xem trailer</a>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">${movie.title}</h5>
-                                <a href="#" class="btn btn-danger">Buy ticket</a>
-                            </div>
-                        </div>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav" style="display: flex; justify-content: space-around; width: 100%;">
+                        <a class="nav-link">1.SELECT CINEMA</a>
+                        <a class="nav-link">2.SELECT MOVIE</a>
+                        <a class="nav-link">3.SELECT DAY</a>
+                        <a class="nav-link">4.SELECT SHOWTIME</a>
+                        <button type="button" class="btn btn-outline-warning">BUY TICKET FAST</button>
                     </div>
-                </c:forEach>
+                </div>
             </div>
+        </nav>
+        <hr>
+        <!--thanh navbar dưới carousel-->
+        <h2 style="margin-left:270px;color: grey">FILM</h2>
+        <nav class="navbar navbar-expand-lg navbar-custom" style="width: 1000px; margin-left: 270px;">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav" style="display: flex; justify-content: space-around; width: 100%;">
+                        <a class="nav-link">MONDAY</a>
+                        <a class="nav-link">TUESDAY</a>
+                        <a class="nav-link">WEDNESDAY</a>
+                        <a class="nav-link">THURSDAY</a>
+                        <a class="nav-link">FRIDAY</a>
+                        <a class="nav-link">SATURDAY</a>
+                        <a class="nav-link">SUNDAY</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <br>
+        <!--card phim-->
+        <!--        <div class="card" style="width: 18rem;margin-left: 200px">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>-->
+
+        <!--card movie-->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px;">
+            <c:if test="${empty movies}">
+                <p style="color:red;text-align: center">Không có phim nào để hiển thị.</p>
+            </c:if>
+
+            <c:forEach var="movie" items="${movies}">
+                <div class="card" style="width: 18rem;position: relative; overflow: hidden;">
+                    <img src="${movie.imageURL}" class="card-img-top" >
+                    <!-- Hiển thị rating ở góc dưới bên trái -->
+                    <div class="rating" style="position: absolute; bottom: 10px; left: 230px; background-color: rgba(0, 0, 0, 0.7); color: white; padding: 5px; border-radius: 5px; white-space: nowrap;margin-bottom: 9px">
+                        ${movie.rating} ★
+                    </div>
+                    <div class="trailer-button">
+                        <a href="$(movie.linkTrailer)" class="btn btn-outline-warning">Xem trailer</a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${movie.title}</h5>
+                        <a href="#" class="btn btn-danger">Buy ticket</a>
+                    </div>
+                </div>
+            </c:forEach>
         </div>
 
-        <footer>
-            <div class="container-fluid">
-                <div class="row text-center">
-                    <div class="col-md-4">
-                        <h5>Contact Information</h5>
-                        <p>Email: Unove@gmail.com</p>
-                        <p>Phone: (123) 456-7890</p>
-                    </div>
-                    <div class="col-md-4">
-                        <h5>Quick Links</h5>
-                        <ul class="list-unstyled">
-                            <li><a href="#" style="color: gray;">Home page</a></li>
-                            <li><a href="#" style="color: gray;">Movies Showing</a></li>
-                            <li><a href="#" style="color: gray;">Book Tickets</a></li>
-                            <li><a href="#" style="color: gray;">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-4">
-                        <h5>About Us</h5>
-                        <p>We provide fast and convenient online movie ticket booking service.</p>
-                    </div>
-                </div>
-                <div class="text-center" style="margin-top: 20px;">
-                    <p>&copy; 2024 Your Company. All rights reserved.</p>
-                </div>
+    </body>
+    <br>
+    <hr>
+    <!--    //GÓC ĐIỆN ẢNH-->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="width:1300px;margin-left: 150px">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" style="color:yellow">PROMOTIONAL NEWS </a>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="DISCOUNT VOUCHER" aria-label="Search">
+                <button class="btn btn-outline-warning" type="submit">SEARCH</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<!--footer-->
+<footer class="footer" style="background-color: whitesmoke; color: gray; padding: 20px 0;">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h5>Contact information</h5>
+                <p>Email: Unove@gmail.com</p>
+                <p>Phone: (123) 456-7890</p>
             </div>
-        </footer>
+            <div class="col-md-4 text-center">
+                <h5>Quick Links</h5>
+                <ul style="list-style: none; padding: 0;">
+                    <li><a href="#" style="color: gray; text-decoration: none;">Home page</a></li>
+                    <li><a href="#" style="color: gray; text-decoration: none;">Movie is showing</a></li>
+                    <li><a href="#" style="color: gray; text-decoration: none;">Book tickets</a></li>
+                    <li><a href="#" style="color: gray; text-decoration: none;">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 text-center">
+                <h5>About us</h5>
+                <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader.png" alt="Logo"/>
+                <p>We provide fast and convenient online movie ticket booking service.</p>
+            </div>
+        </div>
+        <div class="text-center" style="margin-top: 20px;">
+            <p>&copy;2024 Your Company. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 
-    </body>
+
 </html>

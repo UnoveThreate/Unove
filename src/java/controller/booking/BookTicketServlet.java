@@ -5,12 +5,6 @@
 package controller.booking;
 
 import DAO.payment.PaymentDAO;
-import DAOSchedule.MovieScheduleSlotDAO;
-import DAOSchedule.OrderDAO;
-import DAOSchedule.SeatDAO;
-import DAOSchedule.TicketDAO;
-import controller.SelectSeat.SelectSeatServlet;
-import jakarta.servlet.ServletContext;
 import model.BookingSession;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,9 +14,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import jakarta.servlet.ServletContext;
 import model.Cinema;
 import model.Movie;
 import util.RouterJSP;
@@ -71,6 +65,7 @@ public class BookTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession();
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
@@ -80,7 +75,7 @@ public class BookTicketServlet extends HttpServlet {
         }
 
         // Retrieve movieSlotID from session
-        Integer movieSlotID = (Integer) session.getAttribute("movieSlotID");
+        Integer movieSlotID = (Integer) bookingSession.getMovieSlotID();
 
         // Use movieSlotID to obtain movieID and cinemaID
         if (movieSlotID != null) {
@@ -92,11 +87,11 @@ public class BookTicketServlet extends HttpServlet {
             System.out.println(cinema);
             System.out.println(movie);
 
-            // Set booking details as attributes for JSP
-            request.setAttribute("movie", movieID);
-//            request.setAttribute("cinema", cinema);
-            request.setAttribute("movieSlot", bookingSession.getMovieSlotID());
-            request.setAttribute("selectedSeats", bookingSession.getSelectedSeatIDs());
+
+            request.setAttribute("movie", movie);
+            request.setAttribute("cinema", cinema);
+            request.setAttribute("movieSlot", bookingSession.getMovieSlot());
+            request.setAttribute("selectedSeats", bookingSession.getListSeats());
             request.setAttribute("totalPrice", bookingSession.getTotalPrice());
 
             // Forward to orderDetail.jsp page

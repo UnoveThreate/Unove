@@ -42,20 +42,18 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             userDAO = new UserDAO(request.getServletContext());
             // Nhan tu username gui qua
             String movieID = request.getParameter("movieID");
-            String cinemaID = request.getParameter("cinemaID");
 
             //kiem tra chuoi có null hay khong
-            if (cinemaID == null || cinemaID.isEmpty() || movieID == null || movieID.isEmpty()) {
+            if (movieID == null || movieID.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "CinemaID or MovieID is missing or empty");
                 return;
             }
 
-            Movie movie = movieDAO.getMovieByCinemaIDAndMovieID(Integer.parseInt(cinemaID), Integer.parseInt(movieID));
-            System.out.println("Looking for Movie with CinemaID: " + cinemaID + " and MovieID: " + movieID);
+            Movie movie = movieDAO.getMovieByCinemaIDAndMovieID(Integer.parseInt(movieID));
 
 //             If movie is null, handle the case
             if (movie == null) {
-                System.err.println("Movie not found for CinemaID: " + cinemaID + ", MovieID: " + movieID);
+                System.err.println("Movie not found  MovieID: " + movieID);
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Movie not found");
                 return;
             }
@@ -80,7 +78,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             request.setAttribute("isFavoritedMovie", isFavoritedMovie);
 
             // Forward request to DisplayMovieInfo.jsp
-            request.getRequestDispatcher("page/movie/DisplayMovieInfo.jsp").forward(request, response);
+            request.getRequestDispatcher(route.DETAIL_MOVIE_PAGE).forward(request, response);
 
         } catch (SQLException ex) {
             Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);

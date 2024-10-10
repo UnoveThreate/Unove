@@ -1,4 +1,4 @@
-package controller.SelectSeat;
+package controller.selectSeatRoom;
 
 import DAOSchedule.MovieScheduleSlotDAO;
 import DAOSchedule.SeatDAO;
@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 import model.BookingSession;
 import model.MovieSlot;
 import model.Seat;
+import util.RouterURL;
 
 @WebServlet("/selectSeat")
 public class SelectSeatServlet extends HttpServlet {
@@ -49,7 +50,8 @@ public class SelectSeatServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         LOGGER.info("doGet method started");
         try {
             String movieSlotIDParam = request.getParameter("movieSlotID");
@@ -58,9 +60,9 @@ public class SelectSeatServlet extends HttpServlet {
 
                 MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
                 request.setAttribute("selectedSlot", selectedSlot);
-                
+
                 LOGGER.info("Retrieved MovieSlot: " + selectedSlot);
-                
+
                 List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
                 request.setAttribute("seats", seats);
                 request.setAttribute("movieSlotID", movieSlotID);
@@ -70,8 +72,6 @@ public class SelectSeatServlet extends HttpServlet {
                 request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
                 request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
             }
-
-            
 
             request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
         } catch (NumberFormatException e) {
@@ -84,7 +84,8 @@ public class SelectSeatServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         LOGGER.info("doPost method started");
 
         HttpSession session = request.getSession();
@@ -138,16 +139,17 @@ public class SelectSeatServlet extends HttpServlet {
             }
 
             double totalPrice = calculateTotalPrice(selectedSeats, movieSlot);
-            bookingSession.setTotalPrice(totalPrice);
 
             // Cập nhật BookingSession trong session
+            bookingSession.setTotalPrice(totalPrice);
+            bookingSession.setMovieSlotID(movieSlotID);
             bookingSession.setStatus("Đã đặt vé");
+            bookingSession.setMovieSlot(movieSlot);
+            bookingSession.setListSeats(selectedSeats);
 
             session.setAttribute("bookingSession", bookingSession);
 
-            request.setAttribute("movieSlot", movieSlot);
-            request.setAttribute("selectedSeats", selectedSeats);
-            request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
+            response.sendRedirect(RouterURL.ORDER_DETAIL);
 
         } catch (NumberFormatException e) {
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);
@@ -185,7 +187,8 @@ public class SelectSeatServlet extends HttpServlet {
         return selectedSeats.size() * basePrice * (1 - discount);
     }
 
-    private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage) throws ServletException, IOException {
+    private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
+            throws ServletException, IOException {
         LOGGER.warning("Handling error: " + errorMessage);
         request.setAttribute("errorMessage", errorMessage);
         request.getRequestDispatcher("/error.jsp").forward(request, response);

@@ -16,26 +16,33 @@ import model.CinemaChain;
 import model.Cinema;
 import model.Movie;
 import model.MovieSlot;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import model.Seat;
 import util.RouterJSP;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 @WebServlet("/showtimes")
 public class ShowtimeServlet extends HttpServlet {
+
+    private static final Logger LOGGER = Logger.getLogger(ShowtimeServlet.class.getName());
 
     private CinemaChainScheduleDAO cinemaChainDAO;
     private CinemaScheduleDAO cinemaDAO;
     private MovieScheduleDAO movieDAO;
     private MovieScheduleSlotDAO movieSlotDAO;
     private SeatDAO seatDAO;
-    private Map<Integer, List<String>> movieGenres;
 
     @Override
     public void init() throws ServletException {
@@ -48,7 +55,7 @@ public class ShowtimeServlet extends HttpServlet {
             this.movieSlotDAO = new MovieScheduleSlotDAO(context);
             this.seatDAO = new SeatDAO(context);
         } catch (Exception ex) {
-            Logger.getLogger(ShowtimeServlet.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Failed to initialize DAO", ex);
             throw new ServletException("Failed to initialize DAO", ex);
         }
     }
@@ -58,93 +65,136 @@ public class ShowtimeServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        // Lấy danh sách chuỗi rạp
-        List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
-        request.setAttribute("cinemaChains", cinemaChains);
+        try {
+            List<CinemaChain> cinemaChains = cinemaChainDAO.getAllCinemaChains();
+            request.setAttribute("cinemaChains", cinemaChains);
 
-        if (cinemaChains.isEmpty()) {
-            request.setAttribute("errorMessage", "Không có chuỗi rạp nào.");
+            if (cinemaChains.isEmpty()) {
+                request.setAttribute("errorMessage", "Không có chuỗi rạp nào.");
+                request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+                return;
+            }
+
+            Integer cinemaChainID = processCinemaChainSelection(request, session, cinemaChains);
+            List<Cinema> cinemas = cinemaDAO.getCinemasByChain(cinemaChainID);
+            request.setAttribute("cinemas", cinemas);
+
+            if (cinemas.isEmpty()) {
+                request.setAttribute("errorMessage", "Không có rạp nào cho chuỗi rạp đã chọn.");
+                request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+                return;
+            }
+
+            Integer cinemaID = processCinemaSelection(request, session, cinemas);
+            Optional<Cinema> selectedCinema = Optional.ofNullable(cinemaDAO.getCinemaById(cinemaID));
+            selectedCinema.ifPresent(cinema -> request.setAttribute("selectedCinema", cinema));
+
+            LocalDate today = LocalDate.now();
+            List<LocalDate> next7Days = IntStream.range(0, 7)
+                    .mapToObj(today::plusDays)
+                    .collect(Collectors.toList());
+            request.setAttribute("availableDates", next7Days);
+
+            LocalDate selectedDate = processDateSelection(request, session, next7Days);
+
+            // Lấy danh sách các ngày có suất chiếu
+            List<LocalDate> datesWithShowtimes = movieSlotDAO.getAvailableDates(cinemaID);
+            request.setAttribute("datesWithShowtimes", datesWithShowtimes);
+
+            List<Movie> movies = movieDAO.getMoviesByCinemaAndDate(cinemaID, selectedDate);
+            request.setAttribute("movies", movies);
+
+            Map<Integer, List<String>> movieGenres = processMovieGenres(movies);
+            request.setAttribute("movieGenres", movieGenres);
+
+            Map<Movie, List<MovieSlot>> movieSlotsByMovie = processMovieSlots(cinemaID, selectedDate, movies);
+
+            request.setAttribute("selectedCinemaChainID", cinemaChainID);
+            request.setAttribute("selectedCinemaID", cinemaID);
+            request.setAttribute("selectedDate", selectedDate);
+            request.setAttribute("movieSlotsByMovie", movieSlotsByMovie);
+
+            LOGGER.log(Level.INFO, "Processing request for cinemaChainID: {0}, cinemaID: {1}, date: {2}",
+                    new Object[] { cinemaChainID, cinemaID, selectedDate });
+
             request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-            return;
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Error processing request", e);
+            request.setAttribute("errorMessage", "Đã xảy ra lỗi khi xử lý yêu cầu.");
+            request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
         }
+    }
 
+    private Integer processCinemaChainSelection(HttpServletRequest request, HttpSession session,
+            List<CinemaChain> cinemaChains) {
         Integer cinemaChainID = (Integer) session.getAttribute("selectedCinemaChainID");
         String cinemaChainIDParam = request.getParameter("cinemaChainID");
-        if (cinemaChainID == null || cinemaChainIDParam == null
-                || !cinemaChainID.equals(Integer.parseInt(cinemaChainIDParam))) {
-            cinemaChainID = (cinemaChainIDParam != null && !cinemaChainIDParam.isEmpty())
-                    ? Integer.parseInt(cinemaChainIDParam)
-                    : cinemaChains.get(0).getCinemaChainID();
-            session.setAttribute("selectedCinemaChainID", cinemaChainID);
-            session.removeAttribute("selectedCinemaID");
+        if (cinemaChainIDParam != null && !cinemaChainIDParam.isEmpty()) {
+            try {
+                cinemaChainID = Integer.parseInt(cinemaChainIDParam);
+            } catch (NumberFormatException e) {
+                LOGGER.log(Level.WARNING, "Invalid cinemaChainID parameter", e);
+                cinemaChainID = cinemaChains.get(0).getCinemaChainID();
+            }
+        } else if (cinemaChainID == null) {
+            cinemaChainID = cinemaChains.get(0).getCinemaChainID();
         }
+        session.setAttribute("selectedCinemaChainID", cinemaChainID);
+        return cinemaChainID;
+    }
 
-        List<Cinema> cinemas = cinemaDAO.getCinemasByChain(cinemaChainID);
-        request.setAttribute("cinemas", cinemas);
-
-        if (cinemas.isEmpty()) {
-            request.setAttribute("errorMessage", "Không có rạp nào cho chuỗi rạp đã chọn.");
-            request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-            return;
-        }
-
+    private Integer processCinemaSelection(HttpServletRequest request, HttpSession session, List<Cinema> cinemas) {
         Integer cinemaID = (Integer) session.getAttribute("selectedCinemaID");
         String cinemaIDParam = request.getParameter("cinemaID");
-        if (cinemaID == null || cinemaIDParam == null || !cinemaID.equals(Integer.parseInt(cinemaIDParam))) {
-            cinemaID = (cinemaIDParam != null && !cinemaIDParam.isEmpty())
-                    ? Integer.parseInt(cinemaIDParam)
-                    : cinemas.get(0).getCinemaID();
-            session.setAttribute("selectedCinemaID", cinemaID);
+        if (cinemaIDParam != null && !cinemaIDParam.isEmpty()) {
+            try {
+                cinemaID = Integer.parseInt(cinemaIDParam);
+            } catch (NumberFormatException e) {
+                LOGGER.log(Level.WARNING, "Invalid cinemaID parameter", e);
+                cinemaID = cinemas.get(0).getCinemaID();
+            }
+        } else if (cinemaID == null) {
+            cinemaID = cinemas.get(0).getCinemaID();
         }
-        
-        // lưu cinema vào session
-        
-        Cinema selectedCinema = cinemaDAO.getCinemaById(cinemaID);
-        request.setAttribute("selectedCinema", selectedCinema);
+        session.setAttribute("selectedCinemaID", cinemaID);
+        return cinemaID;
+    }
 
-        List<LocalDate> availableDates = movieSlotDAO.getAvailableDates(cinemaID);
-        request.setAttribute("availableDates", availableDates);
-
-        if (availableDates.isEmpty()) {
-            request.setAttribute("errorMessage", "Không có ngày nào có suất chiếu.");
-            request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
-            return;
-        }
-
+    private LocalDate processDateSelection(HttpServletRequest request, HttpSession session,
+            List<LocalDate> availableDates) {
         LocalDate selectedDate = (LocalDate) session.getAttribute("selectedDate");
         String dateParam = request.getParameter("date");
-        if (selectedDate == null || dateParam != null) {
-            selectedDate = (dateParam != null && !dateParam.isEmpty())
-                    ? LocalDate.parse(dateParam)
-                    : availableDates.get(0);
-            session.setAttribute("selectedDate", selectedDate);
+        if (dateParam != null && !dateParam.isEmpty()) {
+            selectedDate = LocalDate.parse(dateParam);
+        } else if (selectedDate == null || !availableDates.contains(selectedDate)) {
+            selectedDate = availableDates.get(0);
         }
+        session.setAttribute("selectedDate", selectedDate);
+        return selectedDate;
+    }
 
-        List<Movie> movies = movieDAO.getMoviesByCinemaAndDate(cinemaID, selectedDate);
-        request.setAttribute("movies", movies);
-
-        // Lấy thể loại cho mỗi bộ phim
+    private Map<Integer, List<String>> processMovieGenres(List<Movie> movies) {
         Map<Integer, List<String>> movieGenres = new HashMap<>();
         for (Movie movie : movies) {
             List<String> genres = movieDAO.getMovieGenres(movie.getMovieID());
             movieGenres.put(movie.getMovieID(), genres);
         }
-        request.setAttribute("movieGenres", movieGenres);
+        return movieGenres;
+    }
 
-        List<MovieSlot> movieSlots = movieSlotDAO.getMovieSlotsByCinemaAndDate(cinemaID, selectedDate);
+    private Map<Movie, List<MovieSlot>> processMovieSlots(Integer cinemaID, LocalDate selectedDate,
+            List<Movie> movies) {
+        LocalDateTime now = LocalDateTime.now();
+        Map<Integer, Movie> movieMap = movies.stream()
+                .collect(Collectors.toMap(Movie::getMovieID, movie -> movie));
 
-        Map<Movie, List<MovieSlot>> movieSlotsByMovie = movieSlots.stream()
-                .collect(Collectors.groupingBy(movieSlot -> movies.stream()
-                        .filter(movie -> movie.getMovieID() == movieSlot.getMovieID())
-                        .findFirst()
-                        .orElse(null)));
-
-        request.setAttribute("selectedCinemaChainID", cinemaChainID);
-        request.setAttribute("selectedCinemaID", cinemaID);
-        request.setAttribute("selectedDate", selectedDate);
-        request.setAttribute("movieSlotsByMovie", movieSlotsByMovie);
-
-        request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+        return movieSlotDAO.getMovieSlotsByCinemaAndDate(cinemaID, selectedDate).stream()
+                .filter(slot -> slot.getStartTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+                        .isAfter(now))
+                .sorted(Comparator.comparing(MovieSlot::getStartTime))
+                .collect(Collectors.groupingBy(
+                        slot -> movieMap.get(slot.getMovieID()),
+                        Collectors.toList()));
     }
 
     @Override
@@ -155,16 +205,21 @@ public class ShowtimeServlet extends HttpServlet {
         if ("selectSlot".equals(action)) {
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
-                int movieSlotID = Integer.parseInt(movieSlotIDParam);
+                try {
+                    int movieSlotID = Integer.parseInt(movieSlotIDParam);
 
-                MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
-                request.setAttribute("selectedSlot", selectedSlot);
+                    MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
+                    request.setAttribute("selectedSlot", selectedSlot);
 
-                List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
-                request.setAttribute("seats", seats);
-                request.setAttribute("movieSlotID", movieSlotID);
+                    List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
+                    request.setAttribute("seats", seats);
 
-                request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
+                    request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
+                } catch (NumberFormatException e) {
+                    LOGGER.log(Level.WARNING, "Invalid movieSlotID parameter", e);
+                    request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
+                    request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
+                }
             } else {
                 request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
                 request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);

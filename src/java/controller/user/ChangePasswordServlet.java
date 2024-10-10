@@ -72,7 +72,7 @@ public class ChangePasswordServlet extends HttpServlet {
         }
 
         // chuyen qua cho thang display  ra thong tin user : (chuyen sang cho Servlet truoc : )
-        request.getRequestDispatcher("/user/information").forward(request, response);
+        request.getRequestDispatcher("/display").forward(request, response);
 
     }
 
