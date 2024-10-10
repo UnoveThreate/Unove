@@ -73,7 +73,7 @@ public class HomeServlet extends HttpServlet {
 
     private List<Movie> getListMovies() {
         List<Movie> movieList = new ArrayList<>();
-        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Movie"); ResultSet rs = stmt.executeQuery()) {
+        try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Movie where Status = TRUE"); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 Movie movie = new Movie();
