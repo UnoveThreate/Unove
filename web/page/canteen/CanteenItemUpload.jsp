@@ -58,6 +58,7 @@
     <div class="container">
         <h1 class="text-center">Quản lý sản phẩm căn tin</h1>
 
+        <!-- Form thêm sản phẩm mới -->
         <form action="${pageContext.request.contextPath}/CanteenItemServlet" method="post" class="mb-4" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add">
             <input type="hidden" name="cinemaID" value="${cinemaID}">
@@ -104,6 +105,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Hiển thị danh sách sản phẩm -->
                     <c:forEach var="item" items="${canteenItems}">
                         <tr>
                             <td>${item.canteenItemID}</td>
@@ -115,15 +117,61 @@
                                 <img src="${item.imageURL}" alt="Canteen Item Image" class="img-fluid" style="max-width: 100px;" onclick="openModal('${item.imageURL}')">
                             </td>
                             <td>
-                                <div class="btn-group" role="group">
-                                    <form action="${pageContext.request.contextPath}/CanteenItemServlet" method="post" style="display:inline;">
-                                        <input type="hidden" name="action" value="delete">
-                                        <input type="hidden" name="canteenItemID" value="${item.canteenItemID}">
-                                        <input type="hidden" name="cinemaID" value="${cinemaID}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
-                                    </form>
-                                    <a href="${pageContext.request.contextPath}/CanteenItemServlet?action=update&canteenItemID=${item.canteenItemID}&cinemaID=${cinemaID}" class="btn btn-warning btn-sm">Sửa</a>
+                                <!-- Nút Update để mở modal chỉnh sửa -->
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateModal-${item.canteenItemID}">
+                                    Sửa
+                                </button>
+
+                                <!-- Modal chỉnh sửa sản phẩm -->
+                                <div class="modal fade" id="updateModal-${item.canteenItemID}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel-${item.canteenItemID}">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Chỉnh sửa sản phẩm</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="CanteenItemServlet?action=update" method="post">
+                                                    <input type="hidden" name="canteenItemID" value="${item.canteenItemID}">
+                                                    <input type="hidden" name="cinemaID" value="${cinemaID}">
+                                                    
+                                                    <!-- Tên -->
+                                                    <div class="form-group">
+                                                        <label for="name-${item.canteenItemID}">Tên sản phẩm</label>
+                                                        <input type="text" class="form-control" id="name-${item.canteenItemID}" name="name" value="${item.name}">
+                                                    </div>
+                                                    
+                                                    <!-- Số lượng -->
+                                                    <div class="form-group">
+                                                        <label for="stock-${item.canteenItemID}">Số lượng</label>
+                                                        <input type="number" class="form-control" id="stock-${item.canteenItemID}" name="stock" value="${item.stock}">
+                                                    </div>
+                                                    
+                                                    <!-- Trạng thái -->
+                                                    <div class="form-group">
+                                                        <label for="status-${item.canteenItemID}">Trạng thái</label>
+                                                        <select class="form-control" id="status-${item.canteenItemID}" name="status">
+                                                            <option value="true" ${item.status == 'true' ? 'selected' : ''}>Còn hàng</option>
+                                                            <option value="false" ${item.status == 'false' ? 'selected' : ''}>Hết hàng</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+
+                                <!-- Form xóa sản phẩm -->
+                                <form action="${pageContext.request.contextPath}/CanteenItemServlet" method="post" style="display:inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="canteenItemID" value="${item.canteenItemID}">
+                                    <input type="hidden" name="cinemaID" value="${cinemaID}">
+                                    <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+                                </form>
                             </td>
                         </tr>
                     </c:forEach>
@@ -154,22 +202,11 @@
             modalImage.src = imageURL;
             modal.style.display = "flex";
         }
+
         const closeBtn = document.querySelector(".close");
-        closeBtn.onclick = function () {
-            closeModal();
-        };
-
-        window.onclick = function (event) {
-            const modal = document.getElementById("imageModal");
-            if (event.target == modal) {
-                closeModal();
-            }
-        };
-
-        function closeModal() {
-            const modal = document.getElementById("imageModal");
-            modal.style.display = "none";
-        }
+        closeBtn.addEventListener("click", () => {
+            document.getElementById("imageModal").style.display = "none";
+        });
     </script>
 </body>
 </html>

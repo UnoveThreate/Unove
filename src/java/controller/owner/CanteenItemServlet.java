@@ -156,15 +156,26 @@ public class CanteenItemServlet extends HttpServlet {
             throw new IllegalArgumentException("Invalid ID format.");
         }
 
+        // Lấy giá trị từ form
+        String name = request.getParameter("name");
+        int stock = Integer.parseInt(request.getParameter("stock"));
+        String status = request.getParameter("status");
+
+        // Nếu số lượng hàng về 0 thì tự động set thành hết hàng (status = false)
+        if (stock == 0) {
+            status = "false";  // Set status thành unavailable khi stock = 0
+        }
+
+        // Tạo đối tượng CanteenItem
         CanteenItem item = new CanteenItem(
                 itemID,
                 cinemaID,
-                request.getParameter("name"),
+                name,
                 Float.parseFloat(request.getParameter("price")),
-                Integer.parseInt(request.getParameter("stock")),
-                request.getParameter("status"), // Không thay đổi status
-                request.getParameter("imageURL"), // Lấy imageURL
-                TRUE
+                stock,
+                status,
+                request.getParameter("imageURL"), // Có thể giữ nguyên URL hình ảnh
+                Boolean.parseBoolean(status)
         );
 
         // Cập nhật item trong cơ sở dữ liệu
