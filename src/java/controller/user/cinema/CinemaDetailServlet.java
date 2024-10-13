@@ -8,7 +8,6 @@ import DAO.CinemaDAO;
 import controller.user.UpdateUserInfo;
 import model.Cinema;
 import model.CinemaReview;
-import database.MySQLConnect;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -41,6 +40,7 @@ public class CinemaDetailServlet extends HttpServlet {
         }
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {

@@ -22,6 +22,7 @@ import java.util.List;
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)   // 50MB
+
 public class CanteenItemServlet extends HttpServlet {
 
     private CanteenItemDAO canteenItemDAO;
@@ -55,6 +56,7 @@ public class CanteenItemServlet extends HttpServlet {
             log("Invalid Cinema ID format: " + e.getMessage(), e);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Cinema ID format");
         } catch (Exception e) {
+            e.printStackTrace();
             log("Error processing request: " + e.getMessage(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error fetching canteen items");
         }
@@ -75,7 +77,8 @@ public class CanteenItemServlet extends HttpServlet {
             }
             // Chuyển hướng về danh sách Canteen Items sau khi thực hiện action
             response.sendRedirect("CanteenItemServlet?cinemaID=" + request.getParameter("cinemaID"));
-        } catch (Exception e) {
+        } catch (Exception e) {  
+            e.printStackTrace();
             log("Error processing request: " + e.getMessage(), e);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error processing request");
         }
@@ -174,7 +177,7 @@ public class CanteenItemServlet extends HttpServlet {
                 Float.parseFloat(request.getParameter("price")),
                 stock,
                 status,
-                request.getParameter("imageURL"), // Có thể giữ nguyên URL hình ảnh
+                null, // Có thể giữ nguyên URL hình ảnh
                 Boolean.parseBoolean(status)
         );
 

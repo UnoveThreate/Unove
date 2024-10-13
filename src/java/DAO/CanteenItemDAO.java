@@ -69,12 +69,12 @@ public class CanteenItemDAO extends MySQLConnect {
 
     // Update Canteen Item (does not update isAvailable)
     public boolean updateCanteenItem(CanteenItem item) {
-        String sql = "UPDATE CanteenItem SET Name = ?, Price = ?, Stock = ?, Image = ? WHERE CanteenItemID = ?";
+        String sql = "UPDATE CanteenItem SET Name = ?, Price = ?, Stock = ?, IsAvailable = ? WHERE CanteenItemID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, item.getName());
             pstmt.setFloat(2, item.getPrice());
             pstmt.setInt(3, item.getStock());
-            pstmt.setString(4, item.getImageURL()); // Cập nhật Image
+            pstmt.setBoolean(4, item.isAvailable()); 
             pstmt.setInt(5, item.getCanteenItemID());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {

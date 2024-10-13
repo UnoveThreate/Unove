@@ -52,6 +52,9 @@
         .close:hover {
             color: red;
         }
+        .modal-backdrop{
+            z-index: 0;
+        }
     </style>
 </head>
 <body>
@@ -112,7 +115,7 @@
                             <td>${item.name}</td>
                             <td>${item.price}</td>
                             <td>${item.stock}</td>
-                            <td>${item.status}</td>
+                            <td> ${item.status == true ? 'Còn Hàng' : 'Hết Hàng'}</td>
                             <td>
                                 <img src="${item.imageURL}" alt="Canteen Item Image" class="img-fluid" style="max-width: 100px;" onclick="openModal('${item.imageURL}')">
                             </td>
@@ -133,7 +136,8 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form action="CanteenItemServlet?action=update" method="post">
+                                                <form style="z-index: 2000" action="CanteenItemServlet?action=update" method="post">
+                                                   
                                                     <input type="hidden" name="canteenItemID" value="${item.canteenItemID}">
                                                     <input type="hidden" name="cinemaID" value="${cinemaID}">
                                                     
@@ -141,6 +145,12 @@
                                                     <div class="form-group">
                                                         <label for="name-${item.canteenItemID}">Tên sản phẩm</label>
                                                         <input type="text" class="form-control" id="name-${item.canteenItemID}" name="name" value="${item.name}">
+                                                    </div>
+                                                    
+                                                     <!-- Số lượng -->
+                                                    <div class="form-group">
+                                                        <label for="stock-${item.canteenItemID}">Giá</label>
+                                                        <input type="number" class="form-control" id="price-${item.canteenItemID}" name="price" value="${item.price}">
                                                     </div>
                                                     
                                                     <!-- Số lượng -->
