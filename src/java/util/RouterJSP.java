@@ -12,7 +12,10 @@ public class RouterJSP {
 
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
+    // public String HOMEPAGE = "/page/home/Home.jsp";
+
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
+    public static String OWNER_DASHBOARD = "/page/dashboard/dashboard.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
 
@@ -75,7 +78,7 @@ public class RouterJSP {
 
     public String CINEMAS = "/page/owner/manage/Cinemas.jsp";
 
-    public static String VIEW_ORDER = "/page/bill/Bill.index.jsp";
+    public static String VIEW_ORDER = "/page/bill/Bill.jsp";
 
     public static String SCHEDULE_MOVIEe = "/page/movie/schedule/ScheduleMovie.jsp";
 
@@ -100,6 +103,8 @@ public class RouterJSP {
     public static String SEARCH_MOVIE = "/page/search/SearchMovie.jsp";
 
     public static String ADMIN_PAGE = "/page/admin/AdminPage.jsp";
+
+    // public static String ORDER_ITEM ="page/ladingPage/OrderConfirmation.jsp";
 
     // URL JSP FILE FOR OWNER //
     public static String OWNER_COMFIRM_ORDER_PAGE = "/page/owner/confirm/ConfirmTicket.jsp";
@@ -167,4 +172,7 @@ public class RouterJSP {
     public static String OWNER_ROOM_UPDATE_PAGE = "/page/owner/room/owner_update_room.jsp";
 
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
+
+    public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
+
 }

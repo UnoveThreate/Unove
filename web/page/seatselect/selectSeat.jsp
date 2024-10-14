@@ -158,6 +158,7 @@
 
     <form action="selectSeat" method="post">
         <input type="hidden" name="movieSlotID" value="${selectedSlot.movieSlotID}">
+       
         <input type="hidden" id="selectedSeatID" name="selectedSeatID" value="">
         <button type="submit" disabled id="bookButton" class="book-button">Đặt Ghế</button>
     </form>

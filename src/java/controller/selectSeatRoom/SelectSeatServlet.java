@@ -1,4 +1,7 @@
-package controller.selectSeats;
+
+package controller.selectSeatRoom;
+
+
 
 
 import DAOSchedule.MovieScheduleSlotDAO;
@@ -23,6 +26,7 @@ import java.util.logging.Logger;
 import model.BookingSession;
 import model.MovieSlot;
 import model.Seat;
+import util.RouterURL;
 
 @WebServlet("/selectSeat")
 public class SelectSeatServlet extends HttpServlet {
@@ -139,16 +143,17 @@ public class SelectSeatServlet extends HttpServlet {
             }
 
             double totalPrice = calculateTotalPrice(selectedSeats, movieSlot);
-            bookingSession.setTotalPrice(totalPrice);
 
             // Cập nhật BookingSession trong session
+            bookingSession.setTotalPrice(totalPrice);
+            bookingSession.setMovieSlotID(movieSlotID);
             bookingSession.setStatus("Đã đặt vé");
+            bookingSession.setMovieSlot(movieSlot);
+            bookingSession.setListSeats(selectedSeats);
 
             session.setAttribute("bookingSession", bookingSession);
 
-            request.setAttribute("movieSlot", movieSlot);
-            request.setAttribute("selectedSeats", selectedSeats);
-            request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
+            response.sendRedirect(RouterURL.ORDER_DETAIL);
 
         } catch (NumberFormatException e) {
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);

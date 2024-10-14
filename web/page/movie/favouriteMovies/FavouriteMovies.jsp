@@ -12,55 +12,57 @@
 
         <style>
             body {
-                background-color: #f0f2f5;
-                font-family: 'Arial', sans-serif;
+                background-color: #f8f9fa;
+                font-family: 'Roboto', sans-serif;
+                color: #333;
             }
 
             .container {
                 background-color: #fff;
-                padding: 20px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                border-radius: 10px;
-                margin-top: 30px;
+                padding: 30px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                border-radius: 12px;
+                margin: 40px auto;
+                max-width: 1200px;
             }
 
             h2 {
-                color: #343a40;
-                font-size: 2.5rem;
-                font-weight: bold;
-                margin-bottom: 20px;
+                color: #212529;
+                font-size: 2.8rem;
+                font-weight: 700;
                 text-align: center;
+                margin-bottom: 40px;
                 position: relative;
             }
 
             h2::after {
                 content: "";
                 display: block;
-                width: 50px;
+                width: 60px;
                 height: 4px;
                 background-color: #007bff;
-                margin: 0.5rem auto 0;
-                border-radius: 2px;
+                margin: 0.75rem auto 0;
+                border-radius: 4px;
             }
 
             .movie-table {
-                margin: 20px auto;
                 width: 100%;
-                border-collapse: separate;
                 border-spacing: 0 15px;
             }
 
             .movie-table th, .movie-table td {
-                vertical-align: middle;
-                padding: 10px 15px;
+                padding: 15px 20px;
                 text-align: left;
+                vertical-align: middle;
+                border-bottom: 1px solid #dee2e6;
             }
 
             .movie-table img {
-                width: 50px;
+                width: 60px;
                 height: auto;
-                margin-right: 15px;
-                border-radius: 5px;
+                margin-right: 20px;
+                border-radius: 6px;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             }
 
             .movie-title {
@@ -70,8 +72,10 @@
             }
 
             .table-header {
-                background-color: #343a40;
+                background-color: #007bff;
                 color: white;
+                font-weight: 600;
+                text-transform: uppercase;
             }
 
             .table-header th {
@@ -80,30 +84,52 @@
 
             .table-row {
                 background-color: #ffffff;
-                transition: background-color 0.3s ease;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                transition: background-color 0.3s ease, box-shadow 0.3s ease;
+                border-radius: 10px;
             }
 
             .table-row:hover {
-                background-color: #f8f9fa;
+                background-color: #f1f3f5;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
-            
+
             .button-borderless {
                 border: none;
                 background-color: transparent;
                 color: #dc3545;
                 cursor: pointer;
-                font-size: 1.2rem;
+                font-size: 1.4rem;
+                transition: color 0.2s;
             }
-            
+
             .button-borderless:hover {
                 color: #bd2130;
             }
-            
+
             .movie-genres {
-                padding-left: 5px;
+                color: #495057;
+                font-size: 0.95rem;
             }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 20px;
+                }
+
+                .movie-table th, .movie-table td {
+                    padding: 10px;
+                }
+
+                h2 {
+                    font-size: 2rem;
+                }
+
+                .movie-table img {
+                    width: 40px;
+                }
+            }
+
         </style>
         <script src="javascript/style.js"></script>
     </head>
@@ -111,40 +137,38 @@
         <div class="container">
             <h2 class="text-center my-4">Bộ phim yêu thích</h2>
             <c:set var="movies" value="${requestScope.favouriteMovies}" scope="request"></c:set>
-            <form id="favouriteMoviesForm">
-            <table class="table movie-table">
-                <thead class="table-header">
-                    <tr>
-                        <th scope="col">Tên phim</th>
-                        <th scope="col">Thể loại</th>
-                        <th scope="col">Tình trạng</th>
-                        <th scope="col">Điểm số</th>
-                        <th scope="col">Xóa khỏi yêu thích</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="movie" items="${movies}">
-                    <tr class="table-row" onclick="window.location.href='HandleDisplayMovieInfo?movieID=${movie.movieID}'">
-                        <td>
-                            <div class="movie-title">
-                                <img src="${movie.imageURL}" alt="${movie.title}">
-                                ${movie.title}
-                            </div>
-                        </td>
-                        <c:set var="movieGenres" value="${fn:replace(movie.genres.toString(), '[', '')}" />
-                        <c:set var="movieGenres" value="${fn:replace(movieGenres, ']', '')}" />
-                        <td class="movie-genres">${movieGenres}</td>
-                        <td>${movie.status}</td>
-                        <td>${movie.rating}</td>
-                        <td>
-                            <button id="delete_${movie.movieID}" class="button-borderless" onclick="deleteFavouriteMovie('${movie.movieID}');">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                <form id="favouriteMoviesForm">
+                    <table class="table movie-table">
+                        <thead class="table-header">
+                            <tr>
+                                <th scope="col">Tên phim</th>
+                                <th scope="col">Thể loại</th>                             
+                                <th scope="col">Điểm số</th>
+                                <th scope="col">Xóa khỏi yêu thích</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="movie" items="${movies}">
+                            <tr class="table-row" onclick="window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}'">
+                                <td>
+                                    <div class="movie-title">
+                                        <img src="${movie.imageURL}" alt="${movie.title}">
+                                        ${movie.title}
+                                    </div>
+                                </td>
+                                <c:set var="movieGenres" value="${fn:replace(movie.genres.toString(), '[', '')}" />
+                                <c:set var="movieGenres" value="${fn:replace(movieGenres, ']', '')}" />
+                                <td class="movie-genres">${movieGenres}</td>
+                                <td>${movie.rating}</td>
+                                <td>
+                                    <button id="delete_${movie.movieID}" class="button-borderless" onclick="deleteFavouriteMovie('${movie.movieID}');">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
             </form>
         </div>
     </body>
