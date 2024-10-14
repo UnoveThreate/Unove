@@ -415,7 +415,7 @@
                         <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">Showtimes</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/showtimes">Lịch chiếu phim</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Movie</a>
