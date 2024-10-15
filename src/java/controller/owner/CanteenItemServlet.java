@@ -1,6 +1,6 @@
 package controller.owner;
 
-import DAO.CanteenItemDAO;
+import DAO.owner.canteenItemDAO.CanteenItemManageDAO;
 import model.CanteenItem;
 import util.FileUploader;
 import util.RouterJSP;
@@ -25,12 +25,12 @@ import java.util.List;
 
 public class CanteenItemServlet extends HttpServlet {
 
-    private CanteenItemDAO canteenItemDAO;
+    private CanteenItemManageDAO canteenItemDAO;
 
     @Override
     public void init() throws ServletException {
         try {
-            canteenItemDAO = new CanteenItemDAO(getServletContext());
+            canteenItemDAO = new CanteenItemManageDAO(getServletContext());
         } catch (Exception e) {
             throw new ServletException("Failed to initialize CanteenItemDAO", e);
         }
