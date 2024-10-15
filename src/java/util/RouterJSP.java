@@ -12,12 +12,10 @@ public class RouterJSP {
 
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
-    <<<<<<<HEAD
-    // public String HOMEPAGE = "/page/home/Home.jsp";
 
-    =======
-    // public String HOMEPAGE = "/page/home/Home.jsp";
-    >>>>>>>feature/canteenCRUD
+    public String HOMEPAGE = "/page/home/Home.jsp";
+
+
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
@@ -133,8 +131,6 @@ public class RouterJSP {
     public static String ADMIN_PENDING_MOVIE_LIST = "/page/admin/PendingMovieList.jsp";
 
     public static String OWNER_VIEW_MOVIE_REQUEST = "/page/owner/viewMovieRequests/ViewRequests.jsp";
-
-    public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
 
     public static String SHOWTIME_PAGE = "/page/showtime/showtime.jsp";
 
