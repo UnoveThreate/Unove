@@ -12,8 +12,12 @@ public class RouterJSP {
 
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
+    <<<<<<<HEAD
     // public String HOMEPAGE = "/page/home/Home.jsp";
 
+    =======
+    // public String HOMEPAGE = "/page/home/Home.jsp";
+    >>>>>>>feature/canteenCRUD
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
@@ -173,5 +177,11 @@ public class RouterJSP {
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
+
+    public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
+
+    public static String CINEMA_DETAIL_PAGE = "/page/cinema/CinemaDetail.jsp";
+
+    public static String CANTEEN_ITEM_UPLOAD_PAGE = "/page/owner/CanteenItemUpload.jsp";
 
 }

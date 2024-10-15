@@ -82,4 +82,7 @@ public class RouterURL {
 
     public static String SELECT_SEAT = "/Unove/selectSeat";
 
+    public static String CINEMA_DETAIL_PAGE = "/Unove/cinemaDetail";
+
+    public static String CANTEEN_ITEM_UPLOAD_PAGE = "/Unove/CanteenItemServlet";
 }
