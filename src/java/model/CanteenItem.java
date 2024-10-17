@@ -9,23 +9,28 @@ package model;
  * @author ASUS
  */
 public class CanteenItem {
+
     private int canteenItemID;
-    private int cinemaChainID;
+    private int cinemaID;
     private String name;
     private float price;
     private int stock;
     private String status;
+    private String image;
+    private boolean isAvailable;
 
     public CanteenItem() {
     }
 
-    public CanteenItem(int canteenItemID, int cinemaChainID, String name, float price, int stock, String status) {
+    public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status, String image, boolean isAvailable) {
         this.canteenItemID = canteenItemID;
-        this.cinemaChainID = cinemaChainID;
+        this.cinemaID = cinemaID;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.status = status;
+        this.image = image;
+        this.isAvailable = isAvailable;
     }
 
     public int getCanteenItemID() {
@@ -36,12 +41,12 @@ public class CanteenItem {
         this.canteenItemID = canteenItemID;
     }
 
-    public int getCinemaChainID() {
-        return cinemaChainID;
+    public int getCinemaID() {
+        return cinemaID;
     }
 
-    public void setCinemaChainID(int cinemaChainID) {
-        this.cinemaChainID = cinemaChainID;
+    public void setCinemaID(int cinemaID) {
+        this.cinemaID = cinemaID;
     }
 
     public String getName() {
@@ -52,7 +57,7 @@ public class CanteenItem {
         this.name = name;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -76,10 +81,26 @@ public class CanteenItem {
         this.status = status;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public boolean isIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     @Override
     public String toString() {
-        return "CanteenItem{" + "canteenItemID=" + canteenItemID + ", cinemaChainID=" + cinemaChainID + ", name=" + name + ", price=" + price + ", stock=" + stock + ", status=" + status + '}';
+        return "CanteenItem{" + "canteenItemID=" + canteenItemID + ", cinemaID=" + cinemaID + ", name=" + name + ", price=" + price + ", stock=" + stock + ", status=" + status + ", image=" + image + ", isAvailable=" + isAvailable + '}';
     }
-    
-    
+
+
 }
