@@ -179,5 +179,7 @@ public class RouterJSP {
     public static String CINEMA_DETAIL_PAGE = "/page/cinema/CinemaDetail.jsp";
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/page/owner/CanteenItemUpload.jsp";
+        
+    public static final String OWNER_APPROVAL_PAGE = "/page/admin/OwnerApproval.jsp"; // Admin owner approval page
 
 }
