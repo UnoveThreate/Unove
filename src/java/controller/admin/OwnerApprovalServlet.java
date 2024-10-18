@@ -19,8 +19,9 @@ import model.OwnerRequest;
  *
  * @author Kaan
  */
-@WebServlet("/ownerApproval")
+@WebServlet("/admin/ownerApproval")
 public class OwnerApprovalServlet extends HttpServlet {
+    
     private OwnerRequestDAO ownerRequestDAO;
     private UserRoleUpdateDAO userRoleUpdateDAO;
 
@@ -51,12 +52,15 @@ public class OwnerApprovalServlet extends HttpServlet {
         String reason = request.getParameter("reason");
 
         if (ownerRequestDAO.updateRequestStatus(requestID, status, reason)) {
+            
             if ("approved".equals(status)) {
                 // Get UserID from the request to update role
                 int userID = ownerRequestDAO.getUserIDByRequestID(requestID);
                 userRoleUpdateDAO.updateUserRoleToOwner(userID);
             }
+            
             response.sendRedirect(RouterURL.ADMIN_PAGE);
+            
         } else {
             request.setAttribute("error", "Failed to update request status.");
             request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
