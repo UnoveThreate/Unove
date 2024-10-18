@@ -13,7 +13,9 @@ public class RouterURL {
     public static String LANDING_PAGE = "/Unove";
 
     public static String ERROR_PAGE = "/Unove/error";
-
+    
+    public static String HOME_PAGE = "/Unove";
+    
     public static String REGISTER = "/Unove/register";
 
     public static String LOGIN = "/Unove/login";

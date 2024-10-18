@@ -1,3 +1,4 @@
+
 package controller.selectSeatRoom;
 
 import DAOSchedule.MovieScheduleSlotDAO;
@@ -30,7 +31,6 @@ public class SelectSeatServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(SelectSeatServlet.class.getName());
     private SeatDAO seatDAO;
     private MovieScheduleSlotDAO movieSlotDAO;
-    private OrderDAO orderDAO;
     private TicketDAO ticketDAO;
 
     @Override
@@ -40,7 +40,6 @@ public class SelectSeatServlet extends HttpServlet {
             ServletContext context = getServletContext();
             this.seatDAO = new SeatDAO(context);
             this.movieSlotDAO = new MovieScheduleSlotDAO(context);
-            this.orderDAO = new OrderDAO(context);
             this.ticketDAO = new TicketDAO(context);
             LOGGER.info("SelectSeatServlet initialized successfully");
         } catch (Exception e) {
@@ -54,6 +53,14 @@ public class SelectSeatServlet extends HttpServlet {
             throws ServletException, IOException {
         LOGGER.info("doGet method started");
         try {
+            HttpSession session = request.getSession();
+            Integer userID = (Integer) session.getAttribute("userID");
+
+            if (userID == null) {
+                request.setAttribute("errorMessage", "Login de thuc hien dat ghe");
+                response.sendRedirect(RouterURL.LOGIN);
+                return;
+            }
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
                 int movieSlotID = Integer.parseInt(movieSlotIDParam);
@@ -193,4 +200,5 @@ public class SelectSeatServlet extends HttpServlet {
         request.setAttribute("errorMessage", errorMessage);
         request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
+    
 }

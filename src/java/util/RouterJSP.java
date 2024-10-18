@@ -13,7 +13,6 @@ public class RouterJSP {
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
     // public String HOMEPAGE = "/page/home/Home.jsp";
-
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
@@ -104,7 +103,6 @@ public class RouterJSP {
     public static String ADMIN_PAGE = "/page/admin/AdminPage.jsp";
 
     // public static String ORDER_ITEM ="page/ladingPage/OrderConfirmation.jsp";
-
     // URL JSP FILE FOR OWNER //
     public static String OWNER_COMFIRM_ORDER_PAGE = "/page/owner/confirm/ConfirmTicket.jsp";
 
@@ -173,5 +171,9 @@ public class RouterJSP {
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
+    
+    public static String CONFIRM_TICKET = "/page/owner/owner_confirm.jsp";
+    
+    public static String VIEW_RESULT_TICKET = "/page/owner/owner_ResultConfirm.jsp";
 
 }
