@@ -15,7 +15,7 @@ public class RouterJSP {
     // public String HOMEPAGE = "/page/home/Home.jsp";
 
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
-    public static String OWNER_DASHBOARD = "/page/dashboard/dashboard.jsp";
+    public static String OWNER_DASHBOARD = "/page/ownerdashboard/dashboard.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
 
