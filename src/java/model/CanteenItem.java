@@ -7,7 +7,6 @@ public class CanteenItem {
 
     private int canteenItemID;
     private int cinemaID;
-    private int cinemaChainID;
     private String name;
     private float price;
     private int stock;
