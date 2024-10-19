@@ -8,7 +8,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.owner.Genre" %>
 <%@ page import="DAO.cinemaChainOwnerDAO.GenreDAO" %>
-<jsp:include page="navbar.jsp" />
+<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html>
     <head>

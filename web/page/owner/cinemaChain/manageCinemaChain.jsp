@@ -1,6 +1,6 @@
 <%@page import="util.RouterURL"%>
 <%@page import="model.CinemaChain"%>
-<jsp:include page="navbar.jsp" />
+<jsp:include page="/page/owner/navbar.jsp" />
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

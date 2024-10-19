@@ -54,7 +54,7 @@ public class RouterURL {
 
     public static String OWNER_DELETE_CINEMA = "/Unove/owner/delete/cinema";
 
-    public static String MANAGE_CINEMA = "/Unove/owner/manageCinemaChain";
+    public static String MANAGE_CINEMA = "/Unove/owner/cinemaChain/manageCinemaChain";
 
     public static String MANAGE_GENRES = "/Unove/owner/genre";
 
@@ -68,18 +68,22 @@ public class RouterURL {
 
     public static String OWNER_DELETR_MOVIE = "/Unove/owner/deleteMovie";
 
-    public static String OWNER_UPDATE_CINEMACHAIN = "/Unove/owner/updateCinemaChain";
+    public static String OWNER_UPDATE_CINEMACHAIN = "/Unove/owner/cinemaChain/updateCinemaChain";
 
-    public static String MANAGE_ROOM = "/Unove/owner/manageRoom";
+    public static String MANAGE_ROOM = "/Unove/owner/room/manageRoom";
 
-    public static String OWNER_CREATE_ROOM = "/Unove/owner/createRoom";
+    public static String OWNER_CREATE_ROOM = "/Unove/owner/room/createRoom";
 
-    public static String OWNER_UPDATE_ROOM = "/Unove/owner/updateRoom";
+    public static String OWNER_UPDATE_ROOM = "/Unove/owner/room/updateRoom";
 
-    public static String OWNER_DELETE_ROOM = "/Unove/owner/deleteRoom";
+    public static String OWNER_DELETE_ROOM = "/Unove/owner/room/deleteRoom";
 
     public static String ORDER_DETAIL = "/Unove/bookTicket";
 
     public static String SELECT_SEAT = "/Unove/selectSeat";
+
+    public static String MANAGE_MOVIE_SLOT = "/Unove/owner/movieSlot/manageMovieSlot";
+    
+    public static String CREATE_MOVIE_SLOT = "/Unove/owner/movieSlot/createMovieSlot";
 
 }

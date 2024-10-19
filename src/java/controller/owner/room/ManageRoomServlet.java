@@ -16,7 +16,7 @@ import util.RouterURL;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/owner/manageRoom")
+@WebServlet("/owner/room/manageRoom")
 public class ManageRoomServlet extends HttpServlet {
 
     private RoomDAO roomDAO;

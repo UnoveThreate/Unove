@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
     public void init() throws ServletException {
         try {
             super.init();
-            this.userDAO = new UserDAO((ServletContext) getServletContext());        
+            this.userDAO = new UserDAO((ServletContext) getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -95,7 +95,7 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher(route.LOGIN).forward(request, response);
             return;
         }
-     
+
         String hash = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
 
         Boolean ok = null;
@@ -142,7 +142,7 @@ public class LoginServlet extends HttpServlet {
                     // Retrieve the originally requested URL
                     String redirectTo = (String) session.getAttribute("redirectTo");
                     System.out.println("redirect to: " + redirectTo);
-                    
+
                     System.out.print("USSSSSSERRRR");
 
                     if (redirectTo == null) {
@@ -176,14 +176,12 @@ public class LoginServlet extends HttpServlet {
                     }
 
                 }
-                case "OWNER" ->
-                   
-                {  
-                   System.out.print("OWNER LOGINED");
-                   response.sendRedirect(RouterURL.OWNER_PAGE);
-                
+                case "OWNER" -> {
+                    System.out.print("OWNER LOGINED");
+                    response.sendRedirect(RouterURL.OWNER_PAGE);
+
                 }
-                  
+
                 case "ADMIN" ->
                     request.getRequestDispatcher("/admin").forward(request, response);
             }
