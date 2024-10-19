@@ -11,14 +11,13 @@ import java.sql.SQLException;
 import com.google.gson.Gson;
 import DAO.dashboardowner.DashboardDAO;
 import util.RouterJSP;
-import util.Role;
 import model.dashboardowner.DashboardData;
 
 @WebServlet("/owner/dashboard")
 public class OwnerDashboardServlet extends HttpServlet {
-
+    
     private DashboardDAO dashboardDAO;
-
+    
     @Override
     public void init() throws ServletException {
         super.init();
@@ -30,62 +29,54 @@ public class OwnerDashboardServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Integer userID = (Integer) session.getAttribute("userID");
-        String role = (String) session.getAttribute("role");
-
-        //check role đăng nhập với owner
-        if (userID == null || !Role.isRoleValid(role, Role.OWNER)) {
-            response.sendRedirect(request.getContextPath() + RouterJSP.LOGIN);
-            return;
-        }
-
         try {
+            HttpSession session = request.getSession();
             DashboardData dashboardData = (DashboardData) session.getAttribute("dashboardData");
-
+            
             boolean refreshData = "true".equals(request.getParameter("refresh"));
-
+            
             if (dashboardData == null || refreshData) {
                 dashboardData = new DashboardData();
+                int testUserID = 1; // Sử dụng ID người dùng cố định để test
 
                 // Tổng quan
-                dashboardData.setTotalRevenue(dashboardDAO.getTotalRevenue(userID, refreshData));
-                dashboardData.setTotalTicketsSold(dashboardDAO.getTotalTicketsSold(userID, refreshData));
-                dashboardData.setTotalMovieSlots(dashboardDAO.getTotalMovieSlots(userID, refreshData));
-                dashboardData.setAverageSeatOccupancy(dashboardDAO.getAverageSeatOccupancy(userID, refreshData));
+                dashboardData.setTotalRevenue(dashboardDAO.getTotalRevenue(testUserID, refreshData));
+                dashboardData.setTotalTicketsSold(dashboardDAO.getTotalTicketsSold(testUserID, refreshData));
+                dashboardData.setTotalMovieSlots(dashboardDAO.getTotalMovieSlots(testUserID, refreshData));
+                dashboardData.setAverageSeatOccupancy(dashboardDAO.getAverageSeatOccupancy(testUserID, refreshData));
 
                 // Thông tin phim
-                dashboardData.setTopMovies(dashboardDAO.getTopMovies(userID, 5, refreshData));
-                dashboardData.setCurrentMoviesCount(dashboardDAO.getCurrentMoviesCount(userID, refreshData));
-                dashboardData.setUpcomingMoviesCount(dashboardDAO.getUpcomingMoviesCount(userID, refreshData));
+                dashboardData.setTopMovies(dashboardDAO.getTopMovies(testUserID, 5, refreshData));
+                dashboardData.setCurrentMoviesCount(dashboardDAO.getCurrentMoviesCount(testUserID, refreshData));
+                dashboardData.setUpcomingMoviesCount(dashboardDAO.getUpcomingMoviesCount(testUserID, refreshData));
 
                 // Thông tin rạp
-                dashboardData.setTotalCinemas(dashboardDAO.getTotalCinemas(userID, refreshData));
-                dashboardData.setTopCinema(dashboardDAO.getTopCinema(userID, refreshData));
-                dashboardData.setCinemaOccupancyRates(dashboardDAO.getCinemaOccupancyRates(userID, refreshData));
+                dashboardData.setTotalCinemas(dashboardDAO.getTotalCinemas(testUserID, refreshData));
+                dashboardData.setTopCinema(dashboardDAO.getTopCinema(testUserID, refreshData));
+                dashboardData.setCinemaOccupancyRates(dashboardDAO.getCinemaOccupancyRates(testUserID, refreshData));
 
                 // Thông tin khách hàng
-                dashboardData.setNewCustomersCount(dashboardDAO.getNewCustomersCount(userID, refreshData));
-                dashboardData.setTotalMembers(dashboardDAO.getTotalMembers(userID, refreshData));
-                dashboardData.setTopCustomers(dashboardDAO.getTopCustomers(userID, 5, refreshData));
+                dashboardData.setNewCustomersCount(dashboardDAO.getNewCustomersCount(testUserID, refreshData));
+                dashboardData.setTotalMembers(dashboardDAO.getTotalMembers(testUserID, refreshData));
+                dashboardData.setTopCustomers(dashboardDAO.getTopCustomers(testUserID, 5, refreshData));
 
                 // Thống kê doanh thu của chuỗi rạp và từng rạp
-                dashboardData.setRevenueStats(dashboardDAO.getRevenueStats(userID, refreshData));
+                dashboardData.setRevenueStats(dashboardDAO.getRevenueStats(testUserID, refreshData));
 
                 // Thống kê số lượng vé của chuỗi rạp và từng rạp
-                dashboardData.setTicketStats(dashboardDAO.getTicketStats(userID, refreshData));
+                dashboardData.setTicketStats(dashboardDAO.getTicketStats(testUserID, refreshData));
 
                 // Thống kê doanh thu theo từng bộ phim toàn rạp
-                dashboardData.setMovieRevenueStats(dashboardDAO.getMovieRevenueStats(userID, refreshData));
+                dashboardData.setMovieRevenueStats(dashboardDAO.getMovieRevenueStats(testUserID, refreshData));
 
                 // Lấy thông tin lịch chiếu các bộ phim sắp tới
-                dashboardData.setUpcomingMovieSchedule(dashboardDAO.getUpcomingMovieSchedule(userID, 7, 10, refreshData));
+                dashboardData.setUpcomingMovieSchedule(dashboardDAO.getUpcomingMovieSchedule(testUserID, 7, 10, refreshData));
 
-                // dữ liệu thành json thống kê cho các biểu đồ
+                // dữ liệu thành json cho các biểu đồ
                 Gson gson = new Gson();
-                dashboardData.setRevenueChartDataJson(gson.toJson(dashboardDAO.getRevenueChartData(userID, refreshData)));
+                dashboardData.setRevenueChartDataJson(gson.toJson(dashboardDAO.getRevenueChartData(testUserID, refreshData)));
                 dashboardData.setCinemaComparisonDataJson(gson.toJson(dashboardData.getCinemaOccupancyRates()));
                 dashboardData.setRevenueStatsJson(gson.toJson(dashboardData.getRevenueStats()));
                 dashboardData.setTicketStatsJson(gson.toJson(dashboardData.getTicketStats()));
