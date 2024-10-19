@@ -18,7 +18,7 @@ public class CanteenItem {
     }
 
     public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status,
-            String imageURL, boolean isAvailable) {
+            String image, boolean isAvailable) {
         this.canteenItemID = canteenItemID;
         this.cinemaID = cinemaID;
         this.name = name;
@@ -26,7 +26,7 @@ public class CanteenItem {
         this.stock = stock;
         this.status = status;
         this.imageURL = imageURL;
-        this.isAvailable = isAvailable; // Initialize isAvailable
+        this.isAvailable = isAvailable;
     }
 
     // Getters and Setters
@@ -54,7 +54,7 @@ public class CanteenItem {
         this.name = name;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 

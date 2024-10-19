@@ -166,6 +166,8 @@ public class RouterJSP {
     public static String OWNER_MANAGE_ROOM_PAGE = "/page/owner/room/owner_manage_room.jsp";
 
     public static String OWNER_ROOM_UPDATE_PAGE = "/page/owner/room/owner_update_room.jsp";
+    
+    public static String ORDER_ITEM = "/page/landingPage/Item.jsp";
 
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
