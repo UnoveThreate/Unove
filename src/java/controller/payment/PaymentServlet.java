@@ -1,11 +1,16 @@
-
 package controller.payment;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+import DAO.payment.PaymentDAO;
+import DAO.payment.OrderDAO;
+import DAO.ticket.TicketDAO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import controller.booking.BookTicketServlet;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -26,6 +31,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.BookingSession;
+import model.Order;
+import model.Seat;
+import util.RouterJSP;
+import util.RouterURL;
+import util.Util;
 import util.VnPayConfig;
 
 /**
@@ -34,6 +47,27 @@ import util.VnPayConfig;
  */
 @WebServlet(name = "PaymentServlet", urlPatterns = {"/payment/vnpay"})
 public class PaymentServlet extends HttpServlet {
+
+    private static final Logger LOGGER = Logger.getLogger(PaymentServlet.class.getName());
+    private OrderDAO orderDAO;
+    private TicketDAO ticketDAO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            ServletContext context = getServletContext();
+
+            this.orderDAO = new OrderDAO(context);
+            this.ticketDAO = new TicketDAO(context);
+            LOGGER.info("SelectSeatServlet initialized successfully");
+
+        } catch (Exception e) {
+            Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, e);
+            LOGGER.log(Level.SEVERE, "Error initializing SelectSeatServlet", e);
+            throw new ServletException("Không thể khởi tạo DAO", e);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,26 +107,49 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // lấy từ seesion ra
-        HttpSession session = request.getSession();
-        
-        int movieSlotID = 2;
-        Double price = (Double) session.getAttribute("totalPrice");
-        int userID = 2; // Giả định người dùng đã đăng nhập
-        int premiumTypeID = 1; // Loại vé cao cấp
-        
-        // insert data dô table order với status "PENDING"
-        
-        int OrderID = 5;
-        
-        // insert into table tempTicketOrder = Table Ticket (lấy từ list Seat trong list seat)
-        
+        try {
+            // lấy từ session ra
+            HttpSession session = request.getSession();
+            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
-        // Tạo thông tin đơn hàng
-       
+            // lấy userID trực tiếp từ người dùng
+            Integer userID = (Integer) session.getAttribute("userID");
 
-        // Tạo URL thanh toán qua VNPAY
-        PayMentService(OrderID,price, request, response);
+            if (bookingSession == null && userID == null) {
+                request.setAttribute("errorMessage", "Thông tin đặt vé không đầy đủ");
+                response.sendRedirect(RouterURL.LOGIN);
+                return;
+            }
+
+            //set userId vào session
+            session.setAttribute("userID", userID);
+
+            // Lấy các thuộc tính trong session
+            int movieSlotID = bookingSession.getMovieSlotID();
+            double totalPrice = bookingSession.getTotalPrice();
+            String status = "Pending";
+            List<Seat> listSeats = bookingSession.getListSeats();
+
+            // Lấy premiumTypeID từ bảng user
+            Integer premiumTypeID = orderDAO.getPremiumTypeIDByUserId(userID);
+//            if (premiumTypeID == null) {
+//                request.setAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
+//                request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+//                return;
+//            }
+
+            // Tạo order ban đầu mà không có code và QR code
+            int orderID = orderDAO.insertOrder(userID, movieSlotID, premiumTypeID, status, null, null);
+            ticketDAO.insertTickets(orderID, listSeats, "Pending");
+            if (orderID != -1) {
+                PayMentService(orderID, totalPrice, request, response);
+            } else {
+                response.getWriter().println("Đã có lỗi xảy ra khi tạo đơn hàng.");
+            }
+        } catch (Exception e) {
+             Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, e);
+        }
+
     }
 
     @Override
@@ -100,15 +157,15 @@ public class PaymentServlet extends HttpServlet {
 
     }
 
-    public void PayMentService(int OrderID, double price,HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException, IOException {
+    public void PayMentService(int OrderID, double totalPrice, HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException, IOException {
 
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
         System.out.println("amout:" + (String) req.getParameter("amount"));
-        
-        int amount = (int)(price * 100);
-        System.out.println("Total Price: " + price);
+
+        int amount = (int) (totalPrice * 100);
+        System.out.println("Total Price: " + totalPrice);
 
         String bankCode = req.getParameter("bankCode");
 
@@ -133,7 +190,7 @@ public class PaymentServlet extends HttpServlet {
         }
 
         vnp_Params.put("vnp_TxnRef", vnp_TxnRef);
-        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
+        vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang: " + vnp_TxnRef);
         vnp_Params.put("vnp_OrderType", orderType);
 
         String locate = req.getParameter("language");
@@ -152,7 +209,7 @@ public class PaymentServlet extends HttpServlet {
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
-        cld.add(Calendar.MINUTE, 60*24);
+        cld.add(Calendar.MINUTE, 60 * 24);
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
@@ -214,19 +271,6 @@ public class PaymentServlet extends HttpServlet {
         return ipAdress;
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

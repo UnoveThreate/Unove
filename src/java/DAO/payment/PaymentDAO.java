@@ -6,6 +6,7 @@ package DAO.payment;
 
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;
+import java.security.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,11 +25,14 @@ import model.Seat;
  * @author DELL
  */
 public class PaymentDAO extends MySQLConnect {
+ 
 
     public PaymentDAO(ServletContext context) throws Exception {
         super();
         connect(context); // Establish the connection from MySQLConnect
     }
+
+   
 
     public Cinema getCinemaById(int cinemaID) throws SQLException {
         Cinema cinema = null;
@@ -266,7 +270,7 @@ public class PaymentDAO extends MySQLConnect {
             statement.setInt(1, movieSlotID);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    
+
                     cinema.setCinemaID(resultSet.getInt("CinemaID"));
                     cinema.setName(resultSet.getString("CinemaName"));
                     cinema.setAddress(resultSet.getString("Address"));
@@ -282,4 +286,5 @@ public class PaymentDAO extends MySQLConnect {
 
         return cinema; // Return the list of cinemas for the given MovieSlotID
     }
+
 }

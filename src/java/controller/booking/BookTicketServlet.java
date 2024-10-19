@@ -70,7 +70,7 @@ public class BookTicketServlet extends HttpServlet {
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
         if (bookingSession == null) {
-            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+            request.getRequestDispatcher(RouterJSP.LOGIN).forward(request, response);
             return;
         }
 
@@ -82,7 +82,7 @@ public class BookTicketServlet extends HttpServlet {
             Movie movie = paymentDAO.getMovieByMovieSlotID(movieSlotID);
             Cinema cinema = paymentDAO.getCinemaByMovieSlot(movieSlotID);
 
-            int movieID = movie.getMovieID();
+            
 
             System.out.println(cinema);
             System.out.println(movie);
