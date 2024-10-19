@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-@WebServlet("/owner/updateRoom")
+@WebServlet("/owner/room/updateRoom")
 public class UpdateRoomServlet extends HttpServlet {
 
     private RoomDAO roomDAO;

@@ -12,7 +12,7 @@
 <%@page import="util.RouterURL"%>
 <%@page import="model.CinemaChain"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="navbar.jsp" />
+<jsp:include page="/page/owner/navbar.jsp" />
 
 <!DOCTYPE html>
 <html lang="vi">

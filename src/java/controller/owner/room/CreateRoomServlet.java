@@ -17,7 +17,7 @@ import util.Role;
 import util.RouterJSP;
 import util.RouterURL;
 
-@WebServlet("/owner/createRoom")
+@WebServlet("/owner/room/createRoom")
 @MultipartConfig
 public class CreateRoomServlet extends HttpServlet {
 

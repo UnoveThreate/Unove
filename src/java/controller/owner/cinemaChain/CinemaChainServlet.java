@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.owner;
+package controller.owner.cinemaChain;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -32,7 +32,7 @@ import util.RouterURL;
  *
  * @author nguyendacphong
  */
-@WebServlet("/owner/manageCinemaChain")
+@WebServlet("/owner/cinemaChain/manageCinemaChain")
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 5, // 5 MB

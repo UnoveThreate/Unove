@@ -133,33 +133,33 @@ public class RouterJSP {
 
     public static String OWNER_PAGE = "/page/owner/ownerDashBoard.jsp";
 
-    public static String OWNER_CMC = "/page/owner/createCinemaChain.jsp";
+    public static String OWNER_CMC = "/page/owner/cinemaChain/createCinemaChain.jsp";
 
-    public static String OWNER_CREATE_CINEMA_PAGE = "/page/owner/createCinemaPage.jsp";
+    public static String OWNER_CREATE_CINEMA_PAGE = "/page/owner/cinema/createCinemaPage.jsp";
 
-    public static String OWNER_EDIT_CINEMA_PAGE = "/page/owner/editCinemaPage.jsp";
+    public static String OWNER_EDIT_CINEMA_PAGE = "/page/owner/cinema/editCinemaPage.jsp";
 
-    public static String OWNER_MANAGE_CINEMACHAIN_PAGE = "/page/owner/manageCinemaChain.jsp";
+    public static String OWNER_MANAGE_CINEMACHAIN_PAGE = "/page/owner/cinemaChain/manageCinemaChain.jsp";
 
     public static String DETAIL_MOVIE_PAGE = "/page/movie/DisplayMovieInfo.jsp";
 
-    public static String OWNER_GENRE_FORM_PAGE = "/page/owner/genre-form.jsp";
+    public static String OWNER_GENRE_FORM_PAGE = "/page/owner/genre/genre-form.jsp";
 
-    public static String OWNER_GENRE_LIST_PAGE = "/page/owner/genre-list.jsp";
+    public static String OWNER_GENRE_LIST_PAGE = "/page/owner/genre/genre-list.jsp";
 
-    public static String OWNER_MOVIE_LIST_PAGE = "/page/owner/owner_movie_list.jsp";
+    public static String OWNER_MOVIE_LIST_PAGE = "/page/owner/movie/owner_movie_list.jsp";
 
-    public static String OWNER_MANAGE_CINEMA_PAGE = "/page/owner/owner_manage_cinema.jsp";
+    public static String OWNER_MANAGE_CINEMA_PAGE = "/page/owner/cinema/owner_manage_cinema.jsp";
 
     public static String SCHEDULE_MOVIE = "/page/schedule/showtime.jsp";
 
     public static String SELECT_SEAT = "/page/seatselect/selectSeat.jsp";
 
-    public static String OWNER_MOVIE_CREATE_PAGE = "/page/owner/owner_create_movie.jsp";
+    public static String OWNER_MOVIE_CREATE_PAGE = "/page/owner/movie/owner_create_movie.jsp";
 
-    public static String OWNER_MOVIE_UPDATE_PAGE = "/page/owner/owner_update_movie.jsp";
+    public static String OWNER_MOVIE_UPDATE_PAGE = "/page/owner/movie/owner_update_movie.jsp";
 
-    public static String OWNER_UPDATE_CINEMACHAIN_PAGE = "/page/owner/updateCinemaChain.jsp";
+    public static String OWNER_UPDATE_CINEMACHAIN_PAGE = "/page/owner/cinemaChain/updateCinemaChain.jsp";
 
     public static String OWNER_ROOM_CREATE_PAGE = "/page/owner/room/owner_create_room.jsp";
 
@@ -172,6 +172,10 @@ public class RouterJSP {
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
+    
+    public static String OWNER_CREATE_MOVIESLOT = "/page/owner/movieSlot/createMovieSlot.jsp";
+    
+    public static String OWNER_MANAGE_MOVIESLOT = "/page/owner/movieSlot/manageMovieSlot.jsp";
 
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
 
@@ -182,5 +186,6 @@ public class RouterJSP {
     public static String CONFIRM_TICKET = "/page/owner/owner_confirm.jsp";
     
     public static String VIEW_RESULT_TICKET = "/page/owner/owner_ResultConfirm.jsp";
-
+    
+    public static String OWNER_EDIT_MOVIESLOT = "/page/owner/movieSlot/editMovieSlot.jsp";
 }
