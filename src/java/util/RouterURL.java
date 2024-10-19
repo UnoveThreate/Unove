@@ -86,9 +86,9 @@ public class RouterURL {
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/Unove/CanteenItemServlet";
 
-    public static String OWNER_REQUEST = "Unove/ownerRequest"; // User request servlet
+    public static String OWNER_REQUEST = "/Unove/ownerRequest"; // User request servlet
     
-    public static String ADMIN_OWNER_APPROVAL = "Unove/ownerApproval"; // Admin approval servlet
+    public static String ADMIN_OWNER_APPROVAL = "/Unove/ownerApproval"; // Admin approval servlet
     
     public static String REGISTER_AS_OWNER = "Unove/registerAsOwner";
 }

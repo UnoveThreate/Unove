@@ -20,9 +20,8 @@ import model.User;
  *
  * @author Kaan
  */
-@WebServlet("/ownerApproval")
+@WebServlet("/admin/ownerApproval")
 public class OwnerApprovalServlet extends HttpServlet {
-
     private OwnerRequestDAO ownerRequestDAO;
     private UserRoleUpdateDAO userRoleUpdateDAO;
 
