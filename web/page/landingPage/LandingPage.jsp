@@ -133,7 +133,7 @@
 
         <!-- Film Section -->
         <div class="container mt-5">
-            <h2 class="text-center text-secondary mb-4">FILM</h2>
+           
 
             <nav class="navbar navbar-expand-lg navbar-custom mb-3">
                 <div class="container-fluid">
@@ -148,23 +148,10 @@
                     </div>
                 </div>
             </nav>
-
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav" style="display: flex; justify-content: space-around; width: 100%;">
-                        <a class="nav-link">MONDAY</a>
-                        <a class="nav-link">TUESDAY</a>
-                        <a class="nav-link">WEDNESDAY</a>
-                        <a class="nav-link">THURSDAY</a>
-                        <a class="nav-link">FRIDAY</a>
-                        <a class="nav-link">SATURDAY</a>
-                        <a class="nav-link">SUNDAY</a>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
+        </div>
+ 
         <br>
-
+        <h2 class="text-center text-secondary mb-4">FILM</h2>
         <div style="display: flex; flex-wrap: wrap; gap: 16px;">
             <c:if test="${empty movies}">
                 <p style="color:red;text-align: center">Không có phim nào để hiển thị.</p>
