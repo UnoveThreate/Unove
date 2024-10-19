@@ -20,8 +20,8 @@ import java.util.List;
 public class OwnerRequestDAO extends MySQLConnect {
 
     public OwnerRequestDAO(ServletContext context) throws Exception {
-        super();
-        connect(context);
+        super(); // Call the constructor of MySQLConnect
+        connect(context); // Establish the connection
     }
 
     // Add a new owner request
@@ -72,6 +72,7 @@ public class OwnerRequestDAO extends MySQLConnect {
         }
     }
 
+    // Get UserID by RequestID
     public int getUserIDByRequestID(int requestID) {
         String sql = "SELECT UserID FROM OwnerRequest WHERE RequestID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

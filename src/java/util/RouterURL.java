@@ -90,4 +90,5 @@ public class RouterURL {
     
     public static String ADMIN_OWNER_APPROVAL = "Unove/ownerApproval"; // Admin approval servlet
     
+    public static String REGISTER_AS_OWNER = "Unove/registerAsOwner";
 }
