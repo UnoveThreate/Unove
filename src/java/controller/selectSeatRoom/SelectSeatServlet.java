@@ -4,6 +4,7 @@ import DAOSchedule.MovieScheduleSlotDAO;
 import DAOSchedule.SeatDAO;
 import DAOSchedule.OrderDAO;
 import DAOSchedule.TicketDAO;
+import controller.payment.PaymentReturnServlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -30,7 +31,6 @@ public class SelectSeatServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(SelectSeatServlet.class.getName());
     private SeatDAO seatDAO;
     private MovieScheduleSlotDAO movieSlotDAO;
-    private OrderDAO orderDAO;
     private TicketDAO ticketDAO;
 
     @Override
@@ -40,7 +40,6 @@ public class SelectSeatServlet extends HttpServlet {
             ServletContext context = getServletContext();
             this.seatDAO = new SeatDAO(context);
             this.movieSlotDAO = new MovieScheduleSlotDAO(context);
-            this.orderDAO = new OrderDAO(context);
             this.ticketDAO = new TicketDAO(context);
             LOGGER.info("SelectSeatServlet initialized successfully");
         } catch (Exception e) {
@@ -54,6 +53,14 @@ public class SelectSeatServlet extends HttpServlet {
             throws ServletException, IOException {
         LOGGER.info("doGet method started");
         try {
+            HttpSession session = request.getSession();
+            Integer userID = (Integer) session.getAttribute("userID");
+
+            if (userID == null) {
+                request.setAttribute("errorMessage", "Login de thuc hien dat ghe");
+                response.sendRedirect(RouterURL.LOGIN);
+                return;
+            }
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
                 int movieSlotID = Integer.parseInt(movieSlotIDParam);
@@ -152,12 +159,15 @@ public class SelectSeatServlet extends HttpServlet {
             response.sendRedirect(RouterURL.ORDER_DETAIL);
 
         } catch (NumberFormatException e) {
+            Logger.getLogger(SelectSeatServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);
             handleError(request, response, "Dữ liệu suất chiếu không hợp lệ.");
         } catch (ServletException e) {
+            Logger.getLogger(SelectSeatServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.WARNING, "ServletException", e);
             handleError(request, response, e.getMessage());
         } catch (Exception e) {
+            Logger.getLogger(SelectSeatServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.SEVERE, "Error in doPost", e);
             handleError(request, response, "Đã xảy ra lỗi khi xử lý đặt vé: " + e.getMessage());
         }
@@ -193,4 +203,5 @@ public class SelectSeatServlet extends HttpServlet {
         request.setAttribute("errorMessage", errorMessage);
         request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
+
 }

@@ -12,7 +12,7 @@ public class RouterJSP {
 
     public static String LANDING_PAGE = "/page/landingPage/LandingPage.jsp";
 
-    // public String HOMEPAGE = "/page/home/Home.jsp";
+    public String HOMEPAGE = "/page/home/Home.jsp";
 
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
 
@@ -104,7 +104,6 @@ public class RouterJSP {
     public static String ADMIN_PAGE = "/page/admin/AdminPage.jsp";
 
     // public static String ORDER_ITEM ="page/ladingPage/OrderConfirmation.jsp";
-
     // URL JSP FILE FOR OWNER //
     public static String OWNER_COMFIRM_ORDER_PAGE = "/page/owner/confirm/ConfirmTicket.jsp";
 
@@ -129,8 +128,6 @@ public class RouterJSP {
     public static String ADMIN_PENDING_MOVIE_LIST = "/page/admin/PendingMovieList.jsp";
 
     public static String OWNER_VIEW_MOVIE_REQUEST = "/page/owner/viewMovieRequests/ViewRequests.jsp";
-
-    public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
 
     public static String SHOWTIME_PAGE = "/page/showtime/showtime.jsp";
 
@@ -169,9 +166,21 @@ public class RouterJSP {
     public static String OWNER_MANAGE_ROOM_PAGE = "/page/owner/room/owner_manage_room.jsp";
 
     public static String OWNER_ROOM_UPDATE_PAGE = "/page/owner/room/owner_update_room.jsp";
+    
+    public static String ORDER_ITEM = "/page/landingPage/Item.jsp";
 
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
+
+    public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
+
+    public static String CINEMA_DETAIL_PAGE = "/page/cinema/CinemaDetail.jsp";
+
+    public static String CANTEEN_ITEM_UPLOAD_PAGE = "/page/owner/CanteenItemUpload.jsp";
+        
+    public static String CONFIRM_TICKET = "/page/owner/owner_confirm.jsp";
+    
+    public static String VIEW_RESULT_TICKET = "/page/owner/owner_ResultConfirm.jsp";
 
 }

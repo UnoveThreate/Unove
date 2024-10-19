@@ -1,5 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package model;
 
+/**
+ *
+ * @author Kaan
+ */
 public class Cinema {
 
     private int cinemaID;
@@ -13,10 +21,21 @@ public class Cinema {
     public Cinema() {
     }
 
-    public Cinema(int cinemaID, int cinemaChainID, String name, String address, String province, String district, String commune) {
+    public Cinema(int cinemaID, int cinemaChainID, String name, String address, String province, String district,
+            String commune) {
         this.cinemaID = cinemaID;
         this.cinemaChainID = cinemaChainID;
         this.name = name;
+
+        this.address = address;
+        this.province = province;
+        this.district = district;
+        this.commune = commune;
+    }
+
+    public Cinema(int cinemaID, int cinemaChainID, String address, String province, String district, String commune) {
+        this.cinemaID = cinemaID;
+        this.cinemaChainID = cinemaChainID;
         this.address = address;
         this.province = province;
         this.district = district;
@@ -81,7 +100,8 @@ public class Cinema {
 
     @Override
     public String toString() {
-        return "Cinema{" + "cinemaID=" + cinemaID + ", cinemaChainID=" + cinemaChainID + ", name=" + name + ", address=" + address + ", province=" + province + ", district=" + district + ", commune=" + commune + '}';
+        return "Cinema{" + "cinemaID=" + cinemaID + ", cinemaChainID=" + cinemaChainID + ", name=" + name + ", address="
+                + address + ", province=" + province + ", district=" + district + ", commune=" + commune + '}';
     }
 
 }
