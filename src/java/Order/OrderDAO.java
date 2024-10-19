@@ -42,8 +42,8 @@ public class OrderDAO extends MySQLConnect {
                 canteenItem.setPrice(rs.getFloat("price"));
                 canteenItem.setStock(rs.getInt("stock"));
                 canteenItem.setStatus(rs.getString("status"));
-                canteenItem.setImage(rs.getString("image"));
-                canteenItem.setIsAvailable(rs.getBoolean("isAvailable"));
+                canteenItem.setImageURL(rs.getString("image"));
+                canteenItem.setAvailable(rs.getBoolean("isAvailable"));
                 itemList.add(canteenItem);
             }
         } catch (SQLException e) {

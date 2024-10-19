@@ -33,7 +33,7 @@
                 <c:forEach var="item" items="${canteenItemList}">
                     <div class="col-md-4 mb-4" style="flex: 0 0 33.33%;">
                         <div class="card" style="margin: auto;">
-                            <img src="${item.image}" style="width: 150px; height: 180px" class="card-img-top" alt="...">
+                            <img src="${item.imageURL}" style="width: 150px; height: 180px" class="card-img-top" alt="...">
                             <div class="card-body">
                                 <h2 class="card-title">${item.name}</h2>
                                 <p class="card-text" style="color: red">Price: ${item.price} VNĐ</p>

@@ -25,7 +25,7 @@ public class CanteenItem {
         this.price = price;
         this.stock = stock;
         this.status = status;
-        this.imageURL = imageURL;
+        this.imageURL = image;
         this.isAvailable = isAvailable;
     }
 
@@ -54,7 +54,7 @@ public class CanteenItem {
         this.name = name;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
