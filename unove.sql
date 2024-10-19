@@ -243,7 +243,6 @@ CREATE TABLE MemberVIP (
     FOREIGN KEY (cinema_id) REFERENCES Cinema(CinemaID)
 );
 
-
 CREATE EVENT IF NOT EXISTS update_pending_orders
 ON SCHEDULE EVERY 1 MINUTE -- Kiểm tra mỗi phút
 DO

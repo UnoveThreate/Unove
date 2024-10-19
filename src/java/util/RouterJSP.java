@@ -171,14 +171,14 @@ public class RouterJSP {
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
 
-    public static String CONFIRM_TICKET = "/page/owner/owner_confirm.jsp";
-
-    public static String VIEW_RESULT_TICKET = "/page/owner/owner_ResultConfirm.jsp";
-
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
 
     public static String CINEMA_DETAIL_PAGE = "/page/cinema/CinemaDetail.jsp";
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/page/owner/CanteenItemUpload.jsp";
+        
+    public static String CONFIRM_TICKET = "/page/owner/owner_confirm.jsp";
+    
+    public static String VIEW_RESULT_TICKET = "/page/owner/owner_ResultConfirm.jsp";
 
 }
