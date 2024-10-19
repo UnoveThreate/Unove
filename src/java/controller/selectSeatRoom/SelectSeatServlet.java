@@ -1,10 +1,10 @@
-
 package controller.selectSeatRoom;
 
 import DAOSchedule.MovieScheduleSlotDAO;
 import DAOSchedule.SeatDAO;
 import DAOSchedule.OrderDAO;
 import DAOSchedule.TicketDAO;
+import controller.payment.PaymentReturnServlet;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -159,12 +159,15 @@ public class SelectSeatServlet extends HttpServlet {
             response.sendRedirect(RouterURL.ORDER_DETAIL);
 
         } catch (NumberFormatException e) {
+            Logger.getLogger(SelectSeatServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);
             handleError(request, response, "Dữ liệu suất chiếu không hợp lệ.");
         } catch (ServletException e) {
+            Logger.getLogger(SelectSeatServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.WARNING, "ServletException", e);
             handleError(request, response, e.getMessage());
         } catch (Exception e) {
+            Logger.getLogger(SelectSeatServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.SEVERE, "Error in doPost", e);
             handleError(request, response, "Đã xảy ra lỗi khi xử lý đặt vé: " + e.getMessage());
         }
@@ -200,5 +203,5 @@ public class SelectSeatServlet extends HttpServlet {
         request.setAttribute("errorMessage", errorMessage);
         request.getRequestDispatcher("/error.jsp").forward(request, response);
     }
-    
+
 }

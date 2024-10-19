@@ -56,6 +56,7 @@ public class PaymentReturnServlet extends HttpServlet {
 
         // Lấy userID từ session
         Integer userId = (Integer) session.getAttribute("userID");
+        String email = (String) session.getAttribute("email");
         String amountStr = request.getParameter("vnp_Amount"); // Lấy số tiền thanh toán
         String vnp_ResponseCode = request.getParameter("vnp_ResponseCode"); // Mã phản hồi từ VNPAY
         String vnp_TxnRef = request.getParameter("vnp_TxnRef"); // Mã giao dịch từ VNPAY
@@ -77,46 +78,52 @@ public class PaymentReturnServlet extends HttpServlet {
         int orderID = Integer.parseInt(vnp_TxnRef);
         // Kiểm tra mã phản hồi để xử lý thanh toán thành công hay thất bại
         if ("00".equals(vnp_ResponseCode)) {
-            // Cập nhật trạng thái đơn hàng thành công
-            orderDAO.updateOrderStatus(orderID, "success");
-            String email = userDAO.getEmailByUserId(userId); // Lấy email của người dùng
-            for (Seat seat : listSeats) {
+
+            try {
+                // Cập nhật trạng thái đơn hàng thành công
+                if (email == null) {
+                    email = userDAO.getEmailByUserId(userId); // Lấy email của người dùng
+                }
+                orderDAO.updateOrderStatus(orderID, "success");
+
+                for (Seat seat : listSeats) {
+                    ticketDAO.updateTicketStatus(orderID, seat.getSeatID(), "Success");
+                }
+
                 // Cập nhật trạng thái vé thành công
-                ticketDAO.updateTicketStatus(orderID, seat.getSeatID(), "Success");
                 String code = Util.generateActivationCodeOrder(); // Tạo mã kích hoạt đơn hàng
                 System.out.println("Generated activation code: " + code);
                 String qrCodeText = "http://localhost:8080/Unove/order/confirm?orderID=" + orderID + "&userID=" + userId + "&code=" + code; // Tạo URL cho QR code
                 String fileName = "qrcode_" + orderID + "_" + userId; // Tên file QR code
                 String uploadFolder = "QRCode_F"; // Thư mục tải lên QR code
 
-                try {
-                    // Tạo và tải lên QR code
-                    String qrCode = Util.generateQRCodeAndUpload(qrCodeText, fileName, uploadFolder);
-                    // Cập nhật mã và QR code cho đơn hàng trong cơ sở dữ liệu
-                    boolean isUpdated = orderDAO.updateOrderWithCodeAndQRCode(orderID, code, qrCode);
+                // Tạo và tải lên QR code
+                String qrCode = Util.generateQRCodeAndUpload(qrCodeText, fileName, uploadFolder);
+                // Cập nhật mã và QR code cho đơn hàng trong cơ sở dữ liệu
+                boolean isUpdated = orderDAO.updateOrderWithCodeAndQRCode(orderID, code, qrCode);
 
-                    if (isUpdated) {
-                        // Gửi email xác nhận
-                        EmailService emailService = new EmailService(ticketDAO);
-                        try {
-                            boolean emailSent = emailService.sendEmailTicketOrder(email, code, qrCode, orderID); // Gửi email xác nhận vé
-                            if (emailSent) {
-                                System.out.println("Email sent successfully!"); // Thông báo gửi email thành công
-                            } else {
-                                System.out.println("Failed to send email."); // Thông báo gửi email thất bại
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Error sending email: " + e.getMessage()); // Xử lý lỗi gửi email
-                            e.printStackTrace();
+                if (isUpdated) {
+                    // Gửi email xác nhận
+                    EmailService emailService = new EmailService(ticketDAO);
+                    try {
+                        boolean emailSent = emailService.sendEmailTicketOrder(email, code, qrCode, orderID); // Gửi email xác nhận vé
+                        if (emailSent) {
+                            System.out.println("Email sent successfully!"); // Thông báo gửi email thành công
+                        } else {
+                            System.out.println("Failed to send email."); // Thông báo gửi email thất bại
                         }
-                    } else {
-                        System.out.println("Failed to update order code and QR code."); // Thông báo cập nhật mã và QR code thất bại
+                    } catch (Exception e) {
+                        System.out.println("Error sending email: " + e.getMessage()); // Xử lý lỗi gửi email
+                        e.printStackTrace();
                     }
-                } catch (Exception e) {
-                    System.out.println("Error generating or uploading QR code: " + e.getMessage()); // Xử lý lỗi tạo hoặc tải lên QR code
-                    e.printStackTrace();
+                } else {
+                    System.out.println("Failed to update order code and QR code."); // Thông báo cập nhật mã và QR code thất bại
                 }
+            } catch (Exception e) {
+                System.out.println("Error generating or uploading QR code: " + e.getMessage()); // Xử lý lỗi tạo hoặc tải lên QR code
+                e.printStackTrace();
             }
+
             request.setAttribute("message", "Success");
         } else {
             // Nếu thanh toán thất bại

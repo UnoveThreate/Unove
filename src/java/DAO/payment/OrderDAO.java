@@ -23,15 +23,21 @@ public class OrderDAO extends MySQLConnect {
         connect(context); // Establish the connection from MySQLConnect
     }
 
-    public int insertOrder(int userID, int movieSlotID, int premiumTypeID, String status, String code, String qrCode) {
+    public int insertOrder(int userID, int movieSlotID, Integer premiumTypeID, String status, String code, String qrCode) {
         int generatedOrderID = -1;
 
-        String sql = "INSERT INTO `order` (UserID, MovieSlotID, TimeCreated, PremiumTypeID, Status, Code, QRCode) VALUES (?, ?, ?, ?, ?,?,?)";
+        String sql = "INSERT INTO `order` (UserID, MovieSlotID, TimeCreated, PremiumTypeID, Status, Code, QRCode) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = this.connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, userID);
             statement.setInt(2, movieSlotID);
-            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis())); // Lấy thời gian hiện tại
-            statement.setInt(4, premiumTypeID);
+            statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+
+            if (premiumTypeID != null) {
+                statement.setInt(4, premiumTypeID);
+            } else {
+                statement.setNull(4, java.sql.Types.INTEGER);
+            }
+
             statement.setString(5, status);
             statement.setString(6, code);
             statement.setString(7, qrCode);
@@ -106,15 +112,15 @@ public class OrderDAO extends MySQLConnect {
             e.printStackTrace();
             return false;
         }
-       
-        
+
     }
+
     public Order getOrderById(int orderID) {
         Order order = null;
         String sql = "SELECT * FROM orders WHERE OrderID = ?"; // Thay đổi tên bảng và các trường theo cơ sở dữ liệu của bạn
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-             
+
             ps.setInt(1, orderID);
             ResultSet rs = ps.executeQuery();
 

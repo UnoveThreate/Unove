@@ -61,7 +61,9 @@ public class PaymentServlet extends HttpServlet {
             this.orderDAO = new OrderDAO(context);
             this.ticketDAO = new TicketDAO(context);
             LOGGER.info("SelectSeatServlet initialized successfully");
+
         } catch (Exception e) {
+            Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, e);
             LOGGER.log(Level.SEVERE, "Error initializing SelectSeatServlet", e);
             throw new ServletException("Không thể khởi tạo DAO", e);
         }
@@ -105,44 +107,49 @@ public class PaymentServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // lấy từ session ra
-        HttpSession session = request.getSession();
-        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
+        try {
+            // lấy từ session ra
+            HttpSession session = request.getSession();
+            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
-        // lấy userID trực tiếp từ người dùng
-        Integer userID = (Integer) session.getAttribute("userID");
+            // lấy userID trực tiếp từ người dùng
+            Integer userID = (Integer) session.getAttribute("userID");
 
-        if (bookingSession == null && userID == null) {
-            request.setAttribute("errorMessage", "Thông tin đặt vé không đầy đủ");
-            response.sendRedirect(RouterURL.LOGIN);
-            return;
+            if (bookingSession == null && userID == null) {
+                request.setAttribute("errorMessage", "Thông tin đặt vé không đầy đủ");
+                response.sendRedirect(RouterURL.LOGIN);
+                return;
+            }
+
+            //set userId vào session
+            session.setAttribute("userID", userID);
+
+            // Lấy các thuộc tính trong session
+            int movieSlotID = bookingSession.getMovieSlotID();
+            double totalPrice = bookingSession.getTotalPrice();
+            String status = "Pending";
+            List<Seat> listSeats = bookingSession.getListSeats();
+
+            // Lấy premiumTypeID từ bảng user
+            Integer premiumTypeID = orderDAO.getPremiumTypeIDByUserId(userID);
+//            if (premiumTypeID == null) {
+//                request.setAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
+//                request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+//                return;
+//            }
+
+            // Tạo order ban đầu mà không có code và QR code
+            int orderID = orderDAO.insertOrder(userID, movieSlotID, premiumTypeID, status, null, null);
+            ticketDAO.insertTickets(orderID, listSeats, "Pending");
+            if (orderID != -1) {
+                PayMentService(orderID, totalPrice, request, response);
+            } else {
+                response.getWriter().println("Đã có lỗi xảy ra khi tạo đơn hàng.");
+            }
+        } catch (Exception e) {
+             Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        //set userId vào session
-        session.setAttribute("userID", userID);
-
-        // Lấy các thuộc tính trong session
-        int movieSlotID = bookingSession.getMovieSlotID();
-        double totalPrice = bookingSession.getTotalPrice();
-        String status = "Pending";
-        List<Seat> listSeats = bookingSession.getListSeats();
-
-        // Lấy premiumTypeID từ bảng user
-        Integer premiumTypeID = orderDAO.getPremiumTypeIDByUserId(userID);
-        if (premiumTypeID == null) {
-            request.setAttribute("errorMessage", "Không tìm thấy thông tin người dùng.");
-            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
-            return;
-        }
-
-        // Tạo order ban đầu mà không có code và QR code
-        int orderID = orderDAO.insertOrder(userID, movieSlotID, premiumTypeID, status, null, null);
-        ticketDAO.insertTickets(orderID, listSeats, "Pending");
-        if (orderID != -1) {
-            PayMentService(orderID, totalPrice, request, response);
-        } else {
-            response.getWriter().println("Đã có lỗi xảy ra khi tạo đơn hàng.");
-        }
     }
 
     @Override
