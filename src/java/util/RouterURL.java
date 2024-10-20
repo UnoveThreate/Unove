@@ -91,5 +91,6 @@ public class RouterURL {
     public static String MANAGE_MOVIE_SLOT = "/Unove/owner/movieSlot/manageMovieSlot";
     
     public static String CREATE_MOVIE_SLOT = "/Unove/owner/movieSlot/createMovieSlot";
+    
 
 }

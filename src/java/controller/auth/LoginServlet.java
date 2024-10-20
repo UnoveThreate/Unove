@@ -178,7 +178,7 @@ public class LoginServlet extends HttpServlet {
                 }
                 case "OWNER" -> {
                     System.out.print("OWNER LOGINED");
-                    response.sendRedirect(RouterURL.OWNER_PAGE);
+                    response.sendRedirect(RouterURL.OWNER_DASHBOARD_PAGE );
 
                 }
 
