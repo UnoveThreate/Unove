@@ -270,7 +270,6 @@ public class PaymentDAO extends MySQLConnect {
             statement.setInt(1, movieSlotID);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-
                     cinema.setCinemaID(resultSet.getInt("CinemaID"));
                     cinema.setName(resultSet.getString("CinemaName"));
                     cinema.setAddress(resultSet.getString("Address"));
@@ -286,5 +285,4 @@ public class PaymentDAO extends MySQLConnect {
 
         return cinema; // Return the list of cinemas for the given MovieSlotID
     }
-
 }

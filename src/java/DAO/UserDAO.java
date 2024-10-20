@@ -348,6 +348,7 @@ public class UserDAO extends MySQLConnect {
         }
         return genres;
     }
+     
 
     public String getEmailByUserId(int userId) {
         String email = null;

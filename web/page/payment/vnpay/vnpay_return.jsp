@@ -56,7 +56,6 @@
                 font-weight: bold;
                 color: green;
             }
-
             .form-group .highlight {
                 color: #e74c3c;
                 font-weight: bold;
@@ -86,8 +85,6 @@
                 margin-top: 20px;
                 font-size: 18px;
             }
-
-
         </style>
 
 
@@ -105,16 +102,13 @@
                 // Get the amount from the request
                 String amountString = request.getParameter("vnp_Amount");
                 String formattedAmount = ""; // Variable to hold the formatted amount
-
                 // Check if the amountString is not null
                 if (amountString != null) {
                     try {
                         // Parse the amount to a long (assuming it is in VND and is an integer)
                         long amount = Long.parseLong(amountString);
-
                         // Chia số tiền cho 100 để lấy giá trị thực tế
                         long actualAmount = amount / 100;
-
                         // Format the amount using NumberFormat
                         NumberFormat formatter = NumberFormat.getInstance(new Locale("vi", "VN"));
                         formattedAmount = formatter.format(actualAmount) + "đ"; // Add "đ" for Vietnamese Dong
@@ -148,14 +142,12 @@
                 // Get the payment date from the request
                 String vnpPayDate = request.getParameter("vnp_PayDate");
                 String formattedPayDate = ""; // Variable to hold the formatted date
-
                 // Check if the vnp_PayDate is not null
                 if (vnpPayDate != null) {
                     try {
                         // Parse the original date string (adjust the format according to the actual input format)
                         SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmm"); // Example input format
                         Date date = inputFormat.parse(vnpPayDate);
-
                         // Format the date to the desired output format
                         SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
                         formattedPayDate = outputFormat.format(date);
@@ -174,7 +166,6 @@
                 <%
                     String message = (String) request.getAttribute("message");
                     String color = "black"; // Default color
-
                     if ("success".equals(message)) {
                         color = "green";
                     } else if ("failed".equals(message)) {
@@ -199,18 +190,15 @@
             function startCountdown(seconds) {
                 var counter = seconds;
                 var countdownElement = document.getElementById('countdown');
-
                 var interval = setInterval(function () {
                     countdownElement.textContent = counter;
                     counter--;
-
                     if (counter < 0) {
                         clearInterval(interval);
                         window.location.href = '<%= RouterURL.HOME_PAGE%>'; // Redirect to home page
                     }
                 }, 1000);
             }
-
             window.onload = function () {
                 startCountdown(45);
             }
