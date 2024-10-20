@@ -39,6 +39,9 @@ public class BookingSession implements Serializable {
         this.movieSlot = movieSlot;
     }
 
+   
+    
+
     // Getters and Setters
     public int getMovieSlotID() {
         return movieSlotID;

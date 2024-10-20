@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ page import="model.owner.Movie" %>
 <%@ page import="java.util.List" %>
-<jsp:include page="navbar.jsp" />
+<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html lang="vi">
     <head>

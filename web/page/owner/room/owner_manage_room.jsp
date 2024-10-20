@@ -18,7 +18,7 @@
 
             <!-- Nút Thêm Phòng -->
             <div class="mb-3">
-                <a href="${pageContext.request.contextPath}/owner/createRoom?cinemaID=${cinemaID}" class="btn btn-primary">Thêm Phòng</a>
+                <a href="${pageContext.request.contextPath}/owner/room/createRoom?cinemaID=${cinemaID}" class="btn btn-primary">Thêm Phòng</a>
             </div>
 
             <!-- Bảng Danh Sách Phòng -->
@@ -47,10 +47,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group" role="group">
-                                        <a href="${pageContext.request.contextPath}/owner/updateRoom?roomID=${room.roomID}&cinemaID=${cinemaID}" class="btn btn-warning">Chỉnh Sửa</a>
+                                        <a href="${pageContext.request.contextPath}/owner/room/updateRoom?roomID=${room.roomID}&cinemaID=${cinemaID}" class="btn btn-warning">Chỉnh Sửa</a>
 
                                     </div>
-                                    <form action="${pageContext.request.contextPath}/owner/deleteRoom" method="post" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phòng này?');">
+                                    <form action="${pageContext.request.contextPath}/owner/room/deleteRoom" method="post" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phòng này?');">
                                         <input type="hidden" name="roomID" value="${room.roomID}">
                                         <input type="hidden" name="cinemaID" value="${cinemaID}">
                                         <button type="submit" class="btn btn-danger">Xoá</button>

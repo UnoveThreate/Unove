@@ -1,4 +1,4 @@
-<%@page import="model.Movie"%>
+<%@page import="model.owner.Movie"%>
 <%@page import="java.util.List"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="jakarta.servlet.ServletContext" %>
@@ -8,16 +8,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Movie Booking</title>
-
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
+        <title>Unove</title>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
         <!-- Slick Carousel -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
@@ -25,40 +20,29 @@
         <!-- Custom Styles -->
         <link rel="stylesheet" href="${pageContext.request.contextPath}/page/movie/movie-style.css">
 
+        <!-- Inline Styling for responsiveness -->
         <style>
-            body {
-                background-color: #f8f9fa;
+            @media only screen and (min-width:768px){
+                .nav-item.dropdown:hover .dropdown-menu {
+                    display: block;
+                }
+                .dropdown > .dropdown-toggle:active {
+                    pointer-events: none;
+                }
             }
 
-            .carousel-item img {
-                width: 100%;
-                height: 500px; /* Chiều cao cố định */
-                object-fit: cover; /* Đảm bảo ảnh che phủ toàn bộ không gian */
-            }
-            .card-img-top {
-                width: 100%;
-                height: 300px; /* Đặt chiều cao phù hợp cho các thẻ card */
+            /* Carousel responsive adjustments */
+            .carousel-inner img {
                 object-fit: cover;
-            }
-            
-
-
-            .titlee {
-                text-align: center;
-                font-size: 28px;
-                color: #333;
-                font-weight: bold;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                margin: 40px 0;
+                height: 500px;
             }
 
+            /* Responsive film cards */
             .card {
                 transition: transform 0.2s;
                 position: relative;
                 overflow: hidden;
-                border-radius: 8px; /* Rounded corners */
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                margin-bottom: 20px;
             }
 
             .card:hover {
@@ -88,104 +72,139 @@
                 font-size: 14px;
             }
 
+            /* Navbar Responsiveness */
+            .navbar-custom {
+                background-color: #343a40;
+            }
+
+            .navbar-custom .nav-link {
+                color: #fff;
+            }
+
+            /* Footer styling */
             footer {
                 background-color: whitesmoke;
                 color: gray;
                 padding: 20px 0;
             }
 
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%; /* Full width on small screens */
-                }
+            footer .col-md-4 {
+                margin-bottom: 20px;
             }
+
+            /* Responsive footer icons */
+            .icon-logo_header {
+                max-width: 150px;
+                height: auto;
+            }
+
         </style>
     </head>
+
     <body>
 
         <jsp:include page="Header.jsp" />
 
-        <div id="carouselExampleDark" class="carousel carousel-dark slide mb-4" data-bs-ride="carousel" data-bs-interval="5000" style="margin: auto; max-width: 1300px;">
+        <!-- Carousel Section -->
+        <div id="carouselExampleDark" class="carousel slide" data-bs-ride="carousel" style="width: 100%; max-width: 1300px; margin: 0 auto;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2"></button>
+            </div>
             <div class="carousel-inner">
-                <div class="carousel-item active" data-bs-interval="10000">
-                    <img src="https://wallpapercave.com/wp/wp4770368.jpg" class="d-block w-100" alt="Transformers" style="margin-top: 33px; object-fit: cover;">
-                </div>
-                <div class="carousel-item" data-bs-interval="2000">
-                    <img src="https://th.bing.com/th/id/R.1952345dbe02e31f379574b804c3326d?rik=7mG8AeKPzMWpzA&pid=ImgRaw&r=0" class="d-block w-100" alt="It Ends With Us" style="margin-top: 33px; object-fit: cover;">
+                <div class="carousel-item active">
+                    <img src="https://cdn.galaxycine.vn/media/2024/8/13/transformers-2048_1723544458749.jpg" class="d-block w-100" alt="...">
                 </div>
                 <div class="carousel-item">
-                    <img src="https://th.bing.com/th/id/R.32d5fc46d9546769f5f2bf31595499ea?rik=PP%2f0oFfvJ%2bTitw&pid=ImgRaw&r=0" class="d-block w-100" alt="Transformers" style="margin-top: 33px; object-fit: cover;">
+                    <img src="https://cdn.galaxycine.vn/media/2024/9/17/it-end-with-us-2048_1726546444253.jpg" class="d-block w-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                    <img src="https://cdn.galaxycine.vn/media/2024/8/13/transformers-2048_1723544458749.jpg" class="d-block w-100" alt="...">
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
             </button>
         </div>
 
-        <h2 class="titlee">FILM</h2>
+        <!-- Film Section -->
+        <div class="container mt-5">
+            <h2 class="text-center text-secondary mb-4">FILM</h2>
 
-        <div class="container">
-            <div class="row">
+            <nav class="navbar navbar-expand-lg navbar-custom mb-3">
+                <div class="container-fluid">
+                    <div class="navbar-nav mx-auto">
+                        <a class="nav-link" href="#">MONDAY</a>
+                        <a class="nav-link" href="#">TUESDAY</a>
+                        <a class="nav-link" href="#">WEDNESDAY</a>
+                        <a class="nav-link" href="#">THURSDAY</a>
+                        <a class="nav-link" href="#">FRIDAY</a>
+                        <a class="nav-link" href="#">SATURDAY</a>
+                        <a class="nav-link" href="#">SUNDAY</a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Movie Cards -->
+            <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
                 <c:if test="${empty movies}">
                     <p style="color:red;text-align: center">Không có phim nào để hiển thị.</p>
                 </c:if>
 
                 <c:forEach var="movie" items="${movies}">
-                    <div class="col-md-4 mb-4">
-                        <div class="card">
-                            <img src="${movie.imageURL}" class="card-img-top" alt="${movie.title}">
-                            <div class="rating">${movie.rating} ★</div>
-                            <div class="trailer-button">
-                                <a href="/Unove/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn btn-outline-warning">Chi Tiết</a>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">${movie.title}</h5>
-
+                    <div class="card" style="width: 18rem;">
+                        <img src="${movie.imageURL}" class="card-img-top" style="object-fit: cover; height: 150px; width: 100%;">
+                        <div class="card-body">
+                            <h5 class="card-title">${movie.title}</h5>
+                            <c:forEach var="genre" items="${movie.genres}">
+                                <span style="margin-right: 5px;">${genre.genreName}</span>
+                            </c:forEach>
+                            <div style="margin-top: 10px;">
+                                <a href="#" class="btn btn-outline-danger" style="background-color: red; color: white; display: block;">Buy ticket</a>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
             </div>
-        </nav>
 
+        </div>
 
-        <footer>
-            <div class="container-fluid">
-                <div class="row text-center">
-                    <div class="col-md-4">
+        <!-- Footer -->
+        <footer class="text-center text-lg-start bg-light text-muted mt-5">
+            <div class="container p-4">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
                         <h5>Contact Information</h5>
                         <p>Email: Unove@gmail.com</p>
                         <p>Phone: (123) 456-7890</p>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
                         <h5>Quick Links</h5>
                         <ul class="list-unstyled">
-                            <li><a href="#" style="color: gray;">Home page</a></li>
-                            <li><a href="#" style="color: gray;">Movies Showing</a></li>
-                            <li><a href="#" style="color: gray;">Book Tickets</a></li>
-                            <li><a href="#" style="color: gray;">Contact</a></li>
+                            <li><a href="#" class="text-dark">Home Page</a></li>
+                            <li><a href="#" class="text-dark">Movies Showing</a></li>
+                            <li><a href="#" class="text-dark">Book Tickets</a></li>
+                            <li><a href="#" class="text-dark">Contact</a></li>
                         </ul>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
                         <h5>About Us</h5>
-                        <p>We provide fast and convenient online movie ticket booking service.</p>
+                        <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader.png" alt="Logo">
+                        <p>We provide fast and convenient online movie ticket booking services.</p>
                     </div>
                 </div>
-                <div class="text-center" style="margin-top: 20px;">
-                    <p>&copy; 2024 Your Company. All rights reserved.</p>
-                </div>
+            </div>
+            <div class="text-center p-3">
+                &copy; 2024 Unove. All rights reserved.
             </div>
         </footer>
 
+        <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-
-</body>
+    </body>
 </html>
