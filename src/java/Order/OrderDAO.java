@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.owner.Genre;
-import model.owner.Movie;
 import model.CanteenItem;
 
 /**
@@ -30,7 +28,7 @@ public class OrderDAO extends MySQLConnect {
         List<CanteenItem> itemList = new ArrayList<>();
         String sql = "SELECT * FROM canteenitem WHERE isAvailable = true AND cinemaID = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID); // Đặt tham số cinemaID
             ResultSet rs = pstmt.executeQuery();
 
