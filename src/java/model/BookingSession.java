@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookingSession implements Serializable {
+
     private int movieSlotID;
     private int movieID;
     private int cinemaID;
@@ -14,10 +15,32 @@ public class BookingSession implements Serializable {
     private int userID;
     private String status;
 
+    private MovieSlot movieSlot;
+    private List<Seat> listSeats;
+
     public BookingSession() {
         this.selectedSeatIDs = new ArrayList<>();
         this.status = "Đang xử lý";
     }
+
+    public List<Seat> getListSeats() {
+        return listSeats;
+    }
+
+    public void setListSeats(List<Seat> listSeats) {
+        this.listSeats = listSeats;
+    }
+
+    public MovieSlot getMovieSlot() {
+        return movieSlot;
+    }
+
+    public void setMovieSlot(MovieSlot movieSlot) {
+        this.movieSlot = movieSlot;
+    }
+
+   
+    
 
     // Getters and Setters
     public int getMovieSlotID() {
@@ -96,15 +119,15 @@ public class BookingSession implements Serializable {
 
     @Override
     public String toString() {
-        return "BookingSession{" +
-                "movieSlotID=" + movieSlotID +
-                ", movieID=" + movieID +
-                ", cinemaID=" + cinemaID +
-                ", cinemaChainID=" + cinemaChainID +
-                ", selectedSeatIDs=" + selectedSeatIDs +
-                ", totalPrice=" + totalPrice +
-                ", userID=" + userID +
-                ", status='" + status + '\'' +
-                '}';
+        return "BookingSession{"
+                + "movieSlotID=" + movieSlotID
+                + ", movieID=" + movieID
+                + ", cinemaID=" + cinemaID
+                + ", cinemaChainID=" + cinemaChainID
+                + ", selectedSeatIDs=" + selectedSeatIDs
+                + ", totalPrice=" + totalPrice
+                + ", userID=" + userID
+                + ", status='" + status + '\''
+                + '}';
     }
 }

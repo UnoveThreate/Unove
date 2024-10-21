@@ -3,12 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package util;
-//
-//import com.google.zxing.BarcodeFormat;
-//import com.google.zxing.WriterException;
-//import com.google.zxing.client.j2se.MatrixToImageWriter;
-//import com.google.zxing.common.BitMatrix;
-//import com.google.zxing.qrcode.QRCodeWriter;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.security.SecureRandom;
 import java.util.Random;
 import javax.servlet.ServletException;
+
 
 /**
  *
@@ -46,26 +47,26 @@ public class Util {
         return code.toString();
     }
 
-//    public static void generateQRCodeImage(String text, int width, int height, String filePath)
-//            throws WriterException, IOException {
-//        QRCodeWriter qrCodeWriter = new QRCodeWriter();
-//        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
-//
-//        Path path = FileSystems.getDefault().getPath(filePath);
-//        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
-//    }
-//
-//    public static String generateQRCodeAndUpload(String qrCodeText, String fileName, String uploadFolder) throws IOException, ServletException {
-//        try {
-//            // Generate QR code and save it as an image file
-//            generateQRCodeImage(qrCodeText, 250, 250, QR_CODE_IMAGE_PATH);
-//        } catch (WriterException e) {
-//            throw new ServletException(e);
-//        }
-//
-//        // Upload the image to the cloud and get the URL
-//        FileUploader cloudinaryUploader = new FileUploader();
-//        File qrCodeFile = new File(QR_CODE_IMAGE_PATH);
-//        return cloudinaryUploader.uploadAndReturnUrl(qrCodeFile, fileName, uploadFolder);
-//    }
+    public static void generateQRCodeImage(String text, int width, int height, String filePath)
+            throws WriterException, IOException {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
+
+        Path path = FileSystems.getDefault().getPath(filePath);
+        MatrixToImageWriter.writeToPath(bitMatrix, "PNG", path);
+    }
+
+    public static String generateQRCodeAndUpload(String qrCodeText, String fileName, String uploadFolder) throws IOException, ServletException {
+        try {
+            // Generate QR code and save it as an image file
+            generateQRCodeImage(qrCodeText, 250, 250, QR_CODE_IMAGE_PATH);
+        } catch (WriterException e) {
+            throw new ServletException(e);
+        }
+
+        // Upload the image to the cloud and get the URL
+        FileUploader cloudinaryUploader = new FileUploader();
+        File qrCodeFile = new File(QR_CODE_IMAGE_PATH);
+        return cloudinaryUploader.uploadAndReturnUrl(qrCodeFile, fileName, uploadFolder);
+    }
 }

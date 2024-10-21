@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import DAO.landingPageMovieDAO.MovieDAO;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author Admin
@@ -40,7 +41,7 @@ public class HomeServlet extends HttpServlet {
     public void init() throws ServletException {
         try {
             ServletContext context = getServletContext();
-            movieDAO = new MovieDAO(context);  // Initialize MovieDAO using the ServletContext
+            movieDAO = new MovieDAO(context); // Initialize MovieDAO using the ServletContext
         } catch (Exception e) {
             throw new ServletException("Error initializing MovieDAO", e);
         }
@@ -54,14 +55,15 @@ public class HomeServlet extends HttpServlet {
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the
+    // + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -82,10 +84,10 @@ public class HomeServlet extends HttpServlet {
     /**
      * Handles the HTTP <code>POST</code> method.
      *
-     * @param request servlet request
+     * @param request  servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @throws IOException      if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

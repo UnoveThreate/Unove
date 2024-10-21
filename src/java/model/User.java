@@ -21,7 +21,7 @@ public class User {
     private Date birthday;
     private String address;
     private boolean isBanned;
-    private int levelPremiumID;
+    private int premiumTypeID;
     private double accountBalance;
     private int bonusPoint;
     private String province;  // Updated field
@@ -55,7 +55,7 @@ public class User {
         this.role = role;
     }
 
-    public User(int userID, String avatarLink, String fullName, String username, String email, String password, String bio, Date birthday, String address, boolean isBanned, int levelPremiumID, double accountBalance, int bonusPoint, String province, String district, String commune, String code, int status, String role) {
+    public User(int userID, String avatarLink, String fullName, String username, String email, String password, String bio, Date birthday, String address, boolean isBanned, int premiumTypeID, double accountBalance, int bonusPoint, String province, String district, String commune, String code, int status, String role) {
         this.userID = userID;
         this.avatarLink = avatarLink;
         this.fullName = fullName;
@@ -66,7 +66,7 @@ public class User {
         this.birthday = birthday;
         this.address = address;
         this.isBanned = isBanned;
-        this.levelPremiumID = levelPremiumID;
+        this.premiumTypeID = premiumTypeID;
         this.accountBalance = accountBalance;
         this.bonusPoint = bonusPoint;
         this.province = province;
@@ -157,12 +157,12 @@ public class User {
         this.isBanned = isBanned;
     }
 
-    public int getLevelPremiumID() {
-        return levelPremiumID;
+    public int getPremiumTypeID() {
+        return premiumTypeID;
     }
 
-    public void setLevelPremiumID(int levelPremiumID) {
-        this.levelPremiumID = levelPremiumID;
+    public void setLevelPremiumID(int premiumTypeID) {
+        this.premiumTypeID = premiumTypeID;
     }
 
     public double getAccountBalance() {
@@ -231,7 +231,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userID=" + userID + ", avatarLink=" + avatarLink + ", fullName=" + fullName + ", username=" + username + ", email=" + email + ", password=" + password + ", bio=" + bio + ", birthday=" + birthday + ", address=" + address + ", isBanned=" + isBanned + ", levelPremiumID=" + levelPremiumID + ", accountBalance=" + accountBalance + ", bonusPoint=" + bonusPoint + ", province=" + province + ", district=" + district + ", commune=" + commune + ", code=" + code + ", status=" + status + ", role=" + role + '}';
+        return "User{" + "userID=" + userID + ", avatarLink=" + avatarLink + ", fullName=" + fullName + ", username=" + username + ", email=" + email + ", password=" + password + ", bio=" + bio + ", birthday=" + birthday + ", address=" + address + ", isBanned=" + isBanned + ", levelPremiumID=" + premiumTypeID + ", accountBalance=" + accountBalance + ", bonusPoint=" + bonusPoint + ", province=" + province + ", district=" + district + ", commune=" + commune + ", code=" + code + ", status=" + status + ", role=" + role + '}';
     }
 
 }

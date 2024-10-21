@@ -35,6 +35,7 @@ CREATE TABLE User (
     FOREIGN KEY (PremiumTypeID) REFERENCES PremiumType(id)
 );
 
+
 -- Bảng CinemaChain: Lưu thông tin chuỗi rạp chiếu phim
 CREATE TABLE CinemaChain (
     UserID INT,
@@ -241,3 +242,11 @@ CREATE TABLE MemberVIP (
     FOREIGN KEY (user_id) REFERENCES User(UserID),
     FOREIGN KEY (cinema_id) REFERENCES Cinema(CinemaID)
 );
+
+CREATE EVENT IF NOT EXISTS update_pending_orders
+ON SCHEDULE EVERY 1 MINUTE -- Kiểm tra mỗi phút
+DO
+    UPDATE `order`
+    SET `Status` = 'Time Expired'
+    WHERE `Status` = 'pending' 
+	AND `TimeCreated` <= NOW() - INTERVAL 1 MINUTE;

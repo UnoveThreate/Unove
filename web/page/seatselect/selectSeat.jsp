@@ -121,8 +121,7 @@
 <body>
     <h1>Mua vé xem phim</h1>
     <div class="screen">MÀN HÌNH</div>
-<!--     <h2>Suất chiếu: <fmt:formatDate value="${movieSlot.startTime}" pattern="dd/MM/yyyy HH:mm"/></h2>-->
-<!--    <h3>Phim: ${movieSlot.movie.title}</h3>-->
+
 
     <div class="seats-container">
         <c:forEach var="row" begin="1" end="9">
@@ -158,6 +157,7 @@
 
     <form action="selectSeat" method="post">
         <input type="hidden" name="movieSlotID" value="${selectedSlot.movieSlotID}">
+       
         <input type="hidden" id="selectedSeatID" name="selectedSeatID" value="">
         <button type="submit" disabled id="bookButton" class="book-button">Đặt Ghế</button>
     </form>

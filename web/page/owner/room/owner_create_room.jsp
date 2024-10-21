@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -12,7 +13,7 @@
         <div class="container mt-5">     
             <h1>Create Room</h1>
 
-            <form action="${pageContext.request.contextPath}/owner/createRoom" method="post">
+            <form action="${pageContext.request.contextPath}/owner/room/createRoom" method="post">
                 <input type="hidden" name="cinemaID" value="${cinemaID}"/>
 
                 <div class="form-group">
@@ -40,7 +41,7 @@
                 <button type="submit" class="btn btn-primary">Create Room</button>
             </form>
 
-            <a href="${pageContext.request.contextPath}/owner/manageCinema?cinemaID=${cinemaID}" class="btn btn-secondary mt-3">Back to Cinema Management</a>
+            <a href="${pageContext.request.contextPath}/owner/room/manageCinema?cinemaID=${cinemaID}" class="btn btn-secondary mt-3">Back to Cinema Management</a>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

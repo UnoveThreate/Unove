@@ -40,6 +40,7 @@ public class CinemaChainDAO extends MySQLConnect {
         stmt.setString(4, cinemaChain.getAvatarURL());
         return stmt.executeUpdate() > 0;
     }
+    
 
     public boolean updateCinemaChain(CinemaChain cinemaChain) throws SQLException {
         String sql = "UPDATE CinemaChain SET Name = ?, Information = ?, AvatarURL = ? WHERE CinemaChainID = ?";
@@ -72,3 +73,5 @@ public class CinemaChainDAO extends MySQLConnect {
     }
 
 }
+
+

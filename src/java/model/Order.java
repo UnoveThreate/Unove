@@ -3,15 +3,35 @@ package model;
 import java.sql.Timestamp;
 
 public class Order {
+
     private int orderID;
     private int userID;
     private int movieSlotID;
     private Timestamp timeCreated;
     private Integer premiumTypeID;
     private String status;
+    private String QRCodeURL;
+    private String Code;
 
- 
-    public Order() {}
+    public Order() {
+    }
+
+    public String getQRCodeURL() {
+        return QRCodeURL;
+    }
+
+    public void setQRCodeURL(String QRCodeURL) {
+        this.QRCodeURL = QRCodeURL;
+    }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String Code) {
+        this.Code = Code;
+    }
+    
 
     public Order(int orderID, int userID, int movieSlotID, Timestamp timeCreated, Integer premiumTypeID, String status) {
         this.orderID = orderID;
@@ -22,7 +42,7 @@ public class Order {
         this.status = status;
     }
 
-    
+    // Getters and Setters
     public int getOrderID() {
         return orderID;
     }
@@ -71,5 +91,15 @@ public class Order {
         this.status = status;
     }
 
- 
+    @Override
+    public String toString() {
+        return "Order{"
+                + "orderID=" + orderID
+                + ", userID=" + userID
+                + ", movieSlotID=" + movieSlotID
+                + ", timeCreated=" + timeCreated
+                + ", premiumTypeID=" + premiumTypeID
+                + ", status='" + status + '\''
+                + '}';
+    }
 }

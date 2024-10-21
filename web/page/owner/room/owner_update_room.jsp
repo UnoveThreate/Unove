@@ -6,6 +6,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -34,7 +35,7 @@
     <body>
         <div class="container">
             <h1>Update Room</h1>
-            <form action="${pageContext.request.contextPath}/owner/updateRoom" method="post" onsubmit="return validateForm()">
+            <form action="${pageContext.request.contextPath}/owner/room/updateRoom" method="post" onsubmit="return validateForm()">
                 <input type="hidden" name="roomID" value="${room.roomID}">
                 <input type="hidden" name="cinemaID" value="${room.cinemaID}">
 
@@ -83,7 +84,7 @@
                     return true; // Cho phép form gửi đi
                 }
             </script>
-            <a class="btn btn-secondary mt-3" href="${pageContext.request.contextPath}/owner/manageRoom?cinemaID=${room.cinemaID}">Back to Room Management</a>
+            <a class="btn btn-secondary mt-3" href="${pageContext.request.contextPath}/owner/room/manageRoom?cinemaID=${room.cinemaID}">Back to Room Management</a>
         </div>
     </body>
 </html>
