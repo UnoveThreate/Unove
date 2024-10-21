@@ -89,7 +89,7 @@
         }
 
         .navbar {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #D4BEE4 0%, #D4BEE4 100%);
             padding: 15px 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
