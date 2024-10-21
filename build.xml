@@ -9,7 +9,7 @@
 <!-- in the project's Project Properties dialog box.-->
 <project name="Unove" default="default" basedir=".">
     <description>Builds, tests, and runs the project Unove.</description>
-    <import file="nbproject/build-impl.xml"/>
+    <import file="nbproject/build-impl.xml" />
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -68,4 +68,19 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+
+    <!--  properties file -->
+    <property file="project.properties" />
+
+    <property name="tomcat.home" value="C:/tool/apache-tomcat-10.1.29" />
+    <property name="webapps.dir" value="${tomcat.home}/webapps" />
+    <property name="war.file" value="${dist.dir}/${war.file.name}" />
+
+
+    <target name="-post-dist">
+        <copy file="${dist.dir}/${war.file.name}" todir="${webapps.dir}" overwrite="true" />
+        <echo message="WAR file copied to Tomcat webapps directory: ${webapps.dir}" />
+    </target>
+
 </project>
