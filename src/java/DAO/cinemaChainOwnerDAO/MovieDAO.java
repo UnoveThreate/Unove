@@ -265,4 +265,8 @@ public class MovieDAO extends MySQLConnect {
         return cinemaName;
     }
 
+    public List<Movie> searchMoviesByTitle(String searchQuery) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 }

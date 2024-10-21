@@ -15,7 +15,6 @@ public class MovieDAO extends MySQLConnect {
         connect(context);
     }
 
-
     public Movie getMovieByID(int movieID) throws SQLException {
         Movie movie = null;
         String sql = "SELECT * FROM Movie WHERE MovieID = ?";
@@ -111,7 +110,6 @@ public class MovieDAO extends MySQLConnect {
         return genres;
     }
 
-
     public float getRatingByMovieID(int movieID) throws SQLException {
         String sql = "SELECT Rating FROM Movie WHERE MovieID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -124,5 +122,70 @@ public class MovieDAO extends MySQLConnect {
         return 0; // Trường hợp không tìm thấy rating
     }
 
+    //search movie theo tên movie
+    public List<Movie> searchMoviesByTitle(String title) throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        String sql = "SELECT * FROM Movie WHERE Title LIKE ? AND Status = TRUE"; // Tìm kiếm phim còn hoạt động
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + title + "%"); // Tìm kiếm với ký tự đại diện
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Movie movie = new Movie();
+                    movie.setMovieID(rs.getInt("MovieID"));
+                    movie.setTitle(rs.getString("Title"));
+                    movie.setSynopsis(rs.getString("Synopsis"));
+                    movie.setDatePublished(rs.getDate("DatePublished"));
+                    movie.setImageURL(rs.getString("ImageURL"));
+                    movie.setRating(rs.getFloat("Rating"));
+                    movie.setCountry(rs.getString("Country"));
+                    movie.setLinkTrailer(rs.getString("LinkTrailer"));
+                    movie.setCinemaID(rs.getInt("CinemaID"));
+                    movie.setStatus(rs.getBoolean("Status")); // Cập nhật trạng thái
+                    movie.setType(rs.getString("Type"));
+
+                    List<Genre> genres = getGenresByMovieID(movie.getMovieID()); // Lấy thể loại phim
+                    movie.setGenres(genres);
+
+                    movies.add(movie);
+                }
+            }
+        }
+
+        return movies;
+    }
+
+    //lọc movie theo genre
+    public List<Movie> getMoviesByGenre(String genreName) throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        String sql = "SELECT m.MovieID, m.Title, m.Synopsis, m.DatePublished, m.ImageURL, m.Rating, m.Country, m.LinkTrailer, m.CinemaID, m.Status, g.GenreName "
+                + "FROM movie m "
+                + "JOIN movieingenre mi ON m.MovieID = mi.MovieID "
+                + "JOIN genre g ON mi.GenreID = g.GenreID "
+                + "WHERE m.Status = TRUE AND g.GenreName = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, genreName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Movie movie = new Movie();
+                    movie.setMovieID(rs.getInt("MovieID"));
+                    movie.setTitle(rs.getString("Title"));
+                    movie.setSynopsis(rs.getString("Synopsis"));
+                    movie.setDatePublished(rs.getDate("DatePublished"));
+                    movie.setImageURL(rs.getString("ImageURL"));
+                    movie.setRating(rs.getFloat("Rating"));
+                    movie.setCountry(rs.getString("Country"));
+                    movie.setLinkTrailer(rs.getString("LinkTrailer"));
+                    movie.setCinemaID(rs.getInt("CinemaID"));
+                    movie.setStatus(rs.getBoolean("Status"));
+                    movies.add(movie);
+                }
+            }
+        }
+
+        return movies;
+    }
 
 }

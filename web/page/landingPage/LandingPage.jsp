@@ -147,6 +147,46 @@
                 </div>
             </nav>
 
+            <!--             Tìm kiếm sản phẩm 
+                        <div class="container mt-4">
+                            <form action="${pageContext.request.contextPath}/searchMovies" method="get">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" style="width: 300px;" placeholder="Tìm kiếm phim..." name="searchQuery" aria-label="Tìm kiếm phim">
+                                    <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+                                </div>
+                            </form>
+                        </div>
+            
+                        <br>-->
+
+
+
+            <div class="row mb-4">
+                <!-- Lọc theo thể loại bên trái -->
+                <div class="col-md-6">
+                    <form action="${pageContext.request.contextPath}/searchMoviesByGenre" method="get">
+                        <select name="genre" class="form-control" style="width: auto; display: inline-block;">
+                            <option value="">Chọn thể loại</option>
+                            <option value="Hành động">Hành động</option>
+                            <option value="Hài hước">Hài hước</option>
+                            <option value="Kinh dị">Kinh dị</option>
+                            <option value="Khoa học viễn tưởng">Khoa học viễn tưởng</option>
+                            <!-- Thêm các thể loại khác tại đây -->
+                        </select>
+                        <button class="btn btn-outline-secondary mt-2" type="submit">Lọc phim</button>
+                    </form>
+                </div>
+
+                <!-- Tìm kiếm phim bên phải -->
+                <div class="col-md-6 text-end">
+                    <form action="${pageContext.request.contextPath}/searchMovies" method="get">
+                        <div class="input-group">
+                            <input type="text" class="form-control" style="width: 200px;" placeholder="Tìm kiếm phim..." name="searchQuery" aria-label="Tìm kiếm phim">
+                            <button class="btn btn-outline-secondary" type="submit">Tìm kiếm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <!-- Movie Cards -->
             <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
                 <c:if test="${empty movies}">
