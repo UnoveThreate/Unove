@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Order;
+package DAO.canteenItem;
 
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;
@@ -17,9 +17,9 @@ import model.CanteenItem;
  *
  * @author ASUS
  */
-public class OrderDAO extends MySQLConnect {
+public class CanteenItemSelectDAO extends MySQLConnect {
 
-    public OrderDAO(ServletContext context) throws Exception {
+    public CanteenItemSelectDAO(ServletContext context) throws Exception {
         super();
         connect(context);
     }

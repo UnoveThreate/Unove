@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
-import Order.OrderDAO;
+import DAO.canteenItem.CanteenItemSelectDAO;
 import jakarta.servlet.annotation.WebServlet;
 import java.sql.SQLException;
 import java.util.List;
@@ -31,13 +31,13 @@ import util.RouterJSP;
 
 public class ItemServlet extends HttpServlet {
 
-    private OrderDAO orderDAO;
+    private CanteenItemSelectDAO canteenSelectItemDAO;
 
     @Override
     public void init() throws ServletException {
         try {
             ServletContext context = getServletContext();
-            orderDAO = new OrderDAO(context);  // Initialize MovieDAO using the ServletContext
+            canteenSelectItemDAO = new CanteenItemSelectDAO(context);  // Initialize MovieDAO using the ServletContext
         } catch (Exception e) {
             throw new ServletException("Error initializing MovieDAO", e);
         }
@@ -64,7 +64,7 @@ public class ItemServlet extends HttpServlet {
         }
 
         try {
-            canteenItemList = orderDAO.getAllCanteenItemByCinemaID(cinemaID); // Gọi phương thức với cinemaID
+            canteenItemList = canteenSelectItemDAO.getAllCanteenItemByCinemaID(cinemaID); // Gọi phương thức với cinemaID
         } catch (SQLException ex) {
             Logger.getLogger(ItemServlet.class.getName()).log(Level.SEVERE, "Error retrieving canteen items", ex);
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to retrieve items.");
@@ -77,7 +77,7 @@ public class ItemServlet extends HttpServlet {
             request.setAttribute("canteenItemList", canteenItemList);
         }
 
-        request.getRequestDispatcher(RouterJSP.ORDER_ITEM).forward(request, response);
+        request.getRequestDispatcher(RouterJSP.CATEEN_ORDER_ITEM).forward(request, response);
     }
 
     @Override
