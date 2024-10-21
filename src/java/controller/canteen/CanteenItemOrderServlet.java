@@ -74,6 +74,7 @@ public class CanteenItemOrderServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         List<CanteenItemOrder> itemOrders = new ArrayList<>();
 
         // Lấy danh sách các canteen item từ request
@@ -86,13 +87,14 @@ public class CanteenItemOrderServlet extends HttpServlet {
                 if (quantity > 0) {
                     CanteenItemOrder itemOrder = new CanteenItemOrder(canteenItemID, quantity);
                     itemOrders.add(itemOrder);
-                    System.out.println("Canteen Item ID: " + canteenItemID + ", Quantity: " + quantity);
+                    
                 }
             }
         }
+        // get list canteen item 
+        System.out.println(itemOrders);
 
-        // Bạn có thể gửi phản hồi nếu cần
-        response.getWriter().write("Dữ liệu đã được ghi vào log");
+        //redirect to confirm payment page 
     }
 
     /**
