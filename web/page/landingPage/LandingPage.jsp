@@ -983,7 +983,7 @@
                                 </p>
                                 <div class="movie-buttons">
                                     <a href="${pageContext.request.contextPath}/showtimes" class="btn-book">ĐẶT VÉ</a>
-                                    <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo" class="btn-details">CHI TIẾT</a>
+                                    <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-details">CHI TIẾT</a>
                                 </div>
                             </div>
                         </div>
