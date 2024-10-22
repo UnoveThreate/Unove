@@ -125,11 +125,12 @@ public class AuthFilter implements Filter {
                 userDAO = new UserDAO((ServletContext) httpRequest.getServletContext());
                 role = userDAO.getUserRole(username);
             } catch (Exception ex) {
-
+                ex.printStackTrace(); // Log the exception
+                role = ""; // Set role to an empty string to avoid null issues
             }
         }
 
-        session = httpRequest.getSession(true);
+        //session = httpRequest.getSession(true);
 //        String urlStore = (String) httpRequest.getRequestURI();
 //        if (!urlStore.equals(RouterURL.LOGIN) && !url.contains("/LoginGoogleServlet") && !url.contains("/notifications")) {
 //
@@ -142,41 +143,41 @@ public class AuthFilter implements Filter {
 //                session.setAttribute("param_" + paramName, paramValue);
 //            }
 //        }
-
         String loginURI = httpRequest.getContextPath() + "/login";
         //Có thể phải coi lại đề phòng lỗi url
-        if (url.contains("/admin") && (!role.equals("ADMIN"))) {
+        if (url.contains("/admin") && (!"ADMIN".equals(role))) {
             httpResponse.sendRedirect(loginURI);
+            return;
         }
-        if (url.contains("/user") && (!role.equals("USER"))) {
+        if (url.contains("/user") && (!"USER".equals(role))) {
             httpResponse.sendRedirect(loginURI);
+            return;
         }
-        if (url.contains("/owner") && (!role.equals("OWNER"))) {
+        if (url.contains("/owner") && (!"OWNER".equals(role))) {
             httpResponse.sendRedirect(loginURI);
+            return;
         }
 
         Throwable problem = null;
 
         try {
+            if (response.isCommitted()) {
+                return;
+            }
             chain.doFilter(request, response);
-        } catch (Throwable t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
+        } catch (ServletException | IOException t) {
             problem = t;
             t.printStackTrace();
         }
 
         doAfterProcessing(request, response);
 
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
         if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
+            if (problem instanceof ServletException servletException) {
+                throw servletException;
             }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
+            if (problem instanceof IOException iOException) {
+                throw iOException;
             }
             sendProcessingError(problem, response);
         }

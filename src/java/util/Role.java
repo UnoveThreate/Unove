@@ -18,7 +18,7 @@ public class Role {
         if (roleInput == null || roleInput.isEmpty()) {
             return false;
         }
-        return roleInput.equals(roleValid);
+        return roleInput.equalsIgnoreCase(roleValid);
     }
 
 }
