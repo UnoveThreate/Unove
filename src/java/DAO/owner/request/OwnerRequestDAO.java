@@ -24,12 +24,18 @@ public class OwnerRequestDAO extends MySQLConnect {
         connect(context); // Establish the connection
     }
 
-    // Add a new owner request
-    public boolean addOwnerRequest(int userID, String reason) {
-        String sql = "INSERT INTO OwnerRequest (UserID, Reason, Status) VALUES (?, ?, 'pending')";
+    // Method to add a new owner request with the extended fields
+    public boolean addOwnerRequest(int userID, String fullName, String email, String cinemaName, String cinemaAddress, String businessLicenseNumber, String businessLicenseFile) {
+        String sql = "INSERT INTO OwnerRequest (UserID, FullName, Email, CinemaName, CinemaAddress, BusinessLicenseNumber, BusinessLicenseFile, Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, userID);
-            pstmt.setString(2, reason);
+            pstmt.setString(2, fullName);
+            pstmt.setString(3, email);
+            pstmt.setString(4, cinemaName);
+            pstmt.setString(5, cinemaAddress);
+            pstmt.setString(6, businessLicenseNumber);
+            pstmt.setString(7, businessLicenseFile); // Store the file name
+
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -48,7 +54,13 @@ public class OwnerRequestDAO extends MySQLConnect {
                         rs.getInt("UserID"),
                         rs.getTimestamp("RequestDate"),
                         rs.getString("Status"),
-                        rs.getString("Reason")
+                        rs.getString("Reason"),
+                        rs.getString("FullName"), // additional fields
+                        rs.getString("Email"),
+                        rs.getString("CinemaName"),
+                        rs.getString("CinemaAddress"),
+                        rs.getString("BusinessLicenseNumber"),
+                        rs.getString("BusinessLicenseFile")
                 );
                 requests.add(request);
             }
@@ -85,5 +97,20 @@ public class OwnerRequestDAO extends MySQLConnect {
             e.printStackTrace();
         }
         return -1; // or throw an exception if needed
+    }
+
+    // Check if user has a pending request
+    public boolean hasPendingRequest(int userID) {
+        String sql = "SELECT COUNT(*) FROM OwnerRequest WHERE UserID = ? AND Status = 'pending'";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

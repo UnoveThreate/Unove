@@ -180,6 +180,10 @@ public class RouterJSP {
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/page/owner/CanteenItemUpload.jsp";
         
-    public static final String OWNER_APPROVAL_PAGE = "/page/admin/OwnerApproval.jsp"; // Admin owner approval page
+    public static String OWNER_APPROVAL_PAGE = "/page/admin/OwnerApproval.jsp"; // Admin owner approval page
+    
+    public static String OWNER_REGIST_PAGE = "/page/user/OwnerRegist.jsp"; // Admin owner approval page
+
+    public static String OWNER_REGIST_SUCCESS_PAGE = "/page/user/ownerRequestSuccess.jsp"; // Admin owner approval page
 
 }
