@@ -269,4 +269,38 @@ public class MovieDAO extends MySQLConnect {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    public List<Movie> getMoviesByCountry(String country) throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        String sql = "SELECT * FROM movie WHERE Country = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, country);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Movie movie = new Movie();
+                movie.setMovieID(resultSet.getInt("MovieID"));
+                movie.setTitle(resultSet.getString("Title"));
+                movie.setSynopsis(resultSet.getString("Synopsis"));
+                movie.setDatePublished(resultSet.getDate("DatePublished"));
+                movie.setImageURL(resultSet.getString("ImageURL"));
+                movie.setRating(resultSet.getFloat("Rating"));
+                movie.setCountry(resultSet.getString("Country"));
+                movie.setLinkTrailer(resultSet.getString("LinkTrailer"));
+                movie.setCinemaID(resultSet.getInt("CinemaID"));
+                movie.setStatus(resultSet.getBoolean("Status"));
+                movie.setType(resultSet.getString("Type"));
+
+                List<Genre> genres = getGenresByMovieID(movie.getMovieID());
+                movie.setGenres(genres);
+
+                movies.add(movie);
+            }
+        }
+
+        return movies;
+    }
+
+    
+
 }

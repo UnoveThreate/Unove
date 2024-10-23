@@ -10,8 +10,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <title>Unove Cinema - Trải nghiệm điện ảnh tuyệt vời</title>
 
         <!-- Bootstrap CSS -->
@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
         <style>
             :root {
                 --primary-color: #E2BFD9;
@@ -34,8 +35,8 @@
                 --accent-color: #ffd700;
             }
             html {
-    scroll-behavior: smooth;
-}
+                scroll-behavior: smooth;
+            }
             body {
                 background: linear-gradient(to bottom, #ffffff, #ffffff);
                 overflow-x: hidden;
@@ -878,37 +879,37 @@
                     overflow-x: auto;
                 }
             }
-             .movie-buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
+            .movie-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
 
-    .btn-book, .btn-details {
-        display: inline-block;
-        background-color: #e066ff;
-        color: #fff;
-        padding: 8px 15px;
-        border-radius: 5px;
-        text-decoration: none;
-        text-align: center;
-        transition: background-color 0.3s ease;
-        text-transform: uppercase;
-        font-weight: bold;
-        font-size: 0.9rem;
-        flex: 1;
-        margin: 0 5px;
-    }
+            .btn-book, .btn-details {
+                display: inline-block;
+                background-color: #e066ff;
+                color: #fff;
+                padding: 8px 15px;
+                border-radius: 5px;
+                text-decoration: none;
+                text-align: center;
+                transition: background-color 0.3s ease;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-size: 0.9rem;
+                flex: 1;
+                margin: 0 5px;
+            }
 
-    .btn-book:hover, .btn-details:hover {
-        background-color: #ff69b4;
-    }
+            .btn-book:hover, .btn-details:hover {
+                background-color: #ff69b4;
+            }
         </style>
     </head>
     <body>
 
         <jsp:include page="Header.jsp" />
-         
+
 
         <!<!-- Intro -->
         <section class="movie-ticket-promo">
@@ -962,39 +963,39 @@
         </div>
 
         <!-- Now Showing Section -->
-<section id="now-showing" class="py-5" data-aos="fade-up">
-    <div class="container">
-        <h2 class="section-title text-center" data-aos="fade-up" data-aos-delay="100">PHIM ĐANG CHIẾU</h2>
+        <section id="now-showing" class="py-5" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title text-center" data-aos="fade-up" data-aos-delay="100">PHIM ĐANG CHIẾU</h2>
 
-        <div class="swiper-container movie-carousel">
-            <div class="swiper-wrapper">
-                <c:forEach var="movie" items="${movies}" varStatus="status">
-                    <div class="swiper-slide">
-                        <div class="movie-card">
-                            <div class="movie-poster-container">
-                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster">
-                            </div>
-                            <div class="movie-info">
-                                <h3 class="movie-title">${movie.title}</h3>
-                                <p class="movie-genre">
-                                    <c:forEach var="genre" items="${movie.genres}" varStatus="genreStatus">
-                                        ${genre.genreName}${!genreStatus.last ? ', ' : ''}
-                                    </c:forEach>
-                                </p>
-                                <div class="movie-buttons">
-                                    <a href="${pageContext.request.contextPath}/showtimes" class="btn-book">ĐẶT VÉ</a>
-                                    <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-details">CHI TIẾT</a>
+                <div class="swiper-container movie-carousel">
+                    <div class="swiper-wrapper">
+                        <c:forEach var="movie" items="${movies}" varStatus="status">
+                            <div class="swiper-slide">
+                                <div class="movie-card">
+                                    <div class="movie-poster-container">
+                                        <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster">
+                                    </div>
+                                    <div class="movie-info">
+                                        <h3 class="movie-title">${movie.title}</h3>
+                                        <p class="movie-genre">
+                                            <c:forEach var="genre" items="${movie.genres}" varStatus="genreStatus">
+                                                ${genre.genreName}${!genreStatus.last ? ', ' : ''}
+                                            </c:forEach>
+                                        </p>
+                                        <div class="movie-buttons">
+                                            <a href="${pageContext.request.contextPath}/showtimes" class="btn-book">ĐẶT VÉ</a>
+                                            <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-details">CHI TIẾT</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </div>
-</section>
+        </section>
         <section class="promotions">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Tin tức - Khuyến mãi</h2>
@@ -1445,10 +1446,10 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-        duration: 1000,
-        once: true,
-        mirror: false
-    });
+            duration: 1000,
+            once: true,
+            mirror: false
+        });
 
 
         var myCarousel = document.querySelector('#movieCarousel')
