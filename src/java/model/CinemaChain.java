@@ -16,6 +16,7 @@ public class CinemaChain {
     private String avatarURL;
     private String information;
     private int userId;
+   
 
     // Constructors
     public CinemaChain() {
@@ -81,7 +82,7 @@ public class CinemaChain {
     public void setInformation(String information) {
         this.information = information;
     }
-
+    
     @Override
     public String toString() {
         return "CinemaChain{" + "cinemaChainID=" + cinemaChainID + ", name=" + name + ", information=" + information
