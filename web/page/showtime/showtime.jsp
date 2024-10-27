@@ -208,6 +208,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     </style>
   </head>
   <body>
+      
     <div class="container">
       <div class="header">
         <h1 class="title">Lịch chiếu phim</h1>

@@ -20,7 +20,7 @@ public class FileUploader {
     private final static String CLOUDINARY_URL = "cloudinary://483224641183916:0o4555j8ukzUqLpQfuzVFjVZFpw@dt7z1abo6";
 
     public FileUploader() {
-        cloudinary = new Cloudinary(CLOUDINARY_URL);//hard-coded url
+        cloudinary = new Cloudinary(CLOUDINARY_URL);// hard-coded url
     }
 
     public String uploadAndReturnUrl(File uploadFile, String fileName, String uploadFolder) throws IOException {

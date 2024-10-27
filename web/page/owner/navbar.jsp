@@ -69,7 +69,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/owner/manageCinemaChain">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/owner/cinemaChain/manageCinemaChain">
                                 <i class="fas fa-film"></i> Manage Cinema
                             </a>
                         </li>

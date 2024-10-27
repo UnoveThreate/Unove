@@ -1,33 +1,35 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 /**
- *
- * @author ASUS
+ * CanteenItem class representing items in the cinema canteen.
  */
 public class CanteenItem {
+
     private int canteenItemID;
-    private int cinemaChainID;
+    private int cinemaID;
     private String name;
     private float price;
     private int stock;
     private String status;
+    private String imageURL; // URL to the image of the item
+    private boolean isAvailable; // New field representing availability
 
     public CanteenItem() {
     }
 
-    public CanteenItem(int canteenItemID, int cinemaChainID, String name, float price, int stock, String status) {
+    public CanteenItem(int canteenItemID, int cinemaID, String name, float price, int stock, String status,
+            String image, boolean isAvailable) {
         this.canteenItemID = canteenItemID;
-        this.cinemaChainID = cinemaChainID;
+        this.cinemaID = cinemaID;
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.status = status;
+        this.imageURL = image;
+        this.isAvailable = isAvailable;
     }
 
+    // Getters and Setters
     public int getCanteenItemID() {
         return canteenItemID;
     }
@@ -36,12 +38,12 @@ public class CanteenItem {
         this.canteenItemID = canteenItemID;
     }
 
-    public int getCinemaChainID() {
-        return cinemaChainID;
+    public int getCinemaID() {
+        return cinemaID;
     }
 
-    public void setCinemaChainID(int cinemaChainID) {
-        this.cinemaChainID = cinemaChainID;
+    public void setCinemaID(int cinemaID) {
+        this.cinemaID = cinemaID;
     }
 
     public String getName() {
@@ -76,10 +78,33 @@ public class CanteenItem {
         this.status = status;
     }
 
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     @Override
     public String toString() {
-        return "CanteenItem{" + "canteenItemID=" + canteenItemID + ", cinemaChainID=" + cinemaChainID + ", name=" + name + ", price=" + price + ", stock=" + stock + ", status=" + status + '}';
+        return "CanteenItem{" +
+                "canteenItemID=" + canteenItemID +
+                ", cinemaID=" + cinemaID +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", stock=" + stock +
+                ", status='" + status + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                ", isAvailable=" + isAvailable +
+                '}';
     }
-    
-    
 }
