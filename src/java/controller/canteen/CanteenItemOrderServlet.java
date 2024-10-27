@@ -11,9 +11,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.BookingSession;
 import model.canteenItemTotal.CanteenItemOrder;
+import util.RouterURL;
 
 /**
  *
@@ -73,28 +76,38 @@ public class CanteenItemOrderServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
- protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        List<CanteenItemOrder> itemOrders = new ArrayList<>();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
-        // Lấy danh sách các canteen item từ request
+        if (bookingSession == null) {
+            bookingSession = new BookingSession();
+        }
+
+        // Duyệt qua các tham số để tìm và xử lý các `quantity` của `canteenItemID`
         for (String param : request.getParameterMap().keySet()) {
             if (param.startsWith("quantity_")) {
-                int canteenItemID = Integer.parseInt(param.split("_")[1]);
-                int quantity = Integer.parseInt(request.getParameter(param));
+                try {
+                    int canteenItemID = Integer.parseInt(param.split("_")[1]);
+                    int quantity = Integer.parseInt(request.getParameter(param));
 
-                // Chỉ thêm nếu số lượng lớn hơn 0
-                if (quantity > 0) {
-                    CanteenItemOrder itemOrder = new CanteenItemOrder(canteenItemID, quantity);
-                    itemOrders.add(itemOrder);
-                    
+                    if (quantity > 0) {
+                        // Thêm `canteenItemOrder` vào `BookingSession`
+                        bookingSession.addCanteenItemOrder(canteenItemID, quantity);
+                    }
+                } catch (NumberFormatException e) {
+                    // Xử lý nếu có lỗi định dạng số
+                    e.printStackTrace();
                 }
             }
         }
-        // get list canteen item 
-        System.out.println(itemOrders);
 
-        //redirect to confirm payment page 
+        // Cập nhật lại `bookingSession` trong session
+        session.setAttribute("bookingSession", bookingSession);
+
+        // Điều hướng đến trang xác nhận thanh toán hoặc trang tiếp theo
+        response.sendRedirect(RouterURL.ORDER_DETAIL);
     }
 
     /**

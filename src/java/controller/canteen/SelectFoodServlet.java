@@ -19,7 +19,7 @@ import util.RouterJSP;
  *
  * @author ASUS
  */
-@WebServlet(name = "SelectFoodServlet", urlPatterns = {"/SelectFoodServlet"})
+@WebServlet(name = "selectFoodServlet")
 public class SelectFoodServlet extends HttpServlet {
 
     /**

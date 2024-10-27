@@ -3,6 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import model.canteenItemTotal.CanteenItemOrder;
 
 public class BookingSession implements Serializable {
 
@@ -17,6 +18,7 @@ public class BookingSession implements Serializable {
 
     private MovieSlot movieSlot;
     private List<Seat> listSeats;
+    private List<CanteenItemOrder> itemOrders; //Thêm vào để lấy list order cho việc thanh toán
 
     public BookingSession() {
         this.selectedSeatIDs = new ArrayList<>();
@@ -38,9 +40,6 @@ public class BookingSession implements Serializable {
     public void setMovieSlot(MovieSlot movieSlot) {
         this.movieSlot = movieSlot;
     }
-
-   
-    
 
     // Getters and Setters
     public int getMovieSlotID() {
@@ -115,6 +114,22 @@ public class BookingSession implements Serializable {
         this.selectedSeatIDs.clear();
         this.totalPrice = 0;
         this.status = "Đang xử lý";
+    }
+
+    public List<CanteenItemOrder> getItemOrders() {
+        return itemOrders;
+    }
+
+    public void setItemOrders(List<CanteenItemOrder> itemOrders) {
+        this.itemOrders = itemOrders;
+    }
+
+    // Thêm vào phương thức này trong BookingSession:
+    public void addCanteenItemOrder(int canteenItemID, int quantity) {
+        if (itemOrders == null) {
+            itemOrders = new ArrayList<>();
+        }
+        itemOrders.add(new CanteenItemOrder(canteenItemID, quantity));
     }
 
     @Override
