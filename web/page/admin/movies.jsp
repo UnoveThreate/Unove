@@ -328,57 +328,62 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>#</th>
                                         <th>Tiêu đề</th>
-                                        <th>Hình ảnh</th>
+                                        <th>Rạp</th>
+                                        <th>Ảnh</th>
                                         <th>Ngày phát hành</th>
                                         <th>Đánh giá</th>
                                         <th>Trạng thái</th>
-                                        <th>Chuỗi rạp</th>
-                                        <th>Thao tác</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <c:forEach var="movie" items="${movies}">
+                                    <c:forEach var="movie" items="${movies}" >
                                         <tr>
-                                            <td>${movie.movieID}</td>
+                                            <td></td>
                                             <td>${movie.title}</td>
+                                            <td></td>
                                             <td>
                                                 <img src="${movie.imageURL}" alt="${movie.title}" style="width: 50px; height: auto;">
                                             </td>
                                             <td><fmt:formatDate value="${movie.datePublished}" pattern="dd/MM/yyyy" /></td>
                                             <td>${movie.rating}</td>
                                             <td>
+                                                ${movie.type == 'SHOWING' ? "Đang chiếu" : movie.type == 'COMMING' ? "Sắp  chiếu" : "N/A"}
+                                            </td>
+                                            <td>
                                                 <label class="switch">
                                                     <input type="checkbox" class="status-toggle" data-id="${movie.movieID}" ${movie.status ? 'checked' : ''}>
                                                     <span class="slider"></span>
                                                 </label>
                                             </td>
+
                                             <td>
                                                 <c:forEach var="chain" items="${movieCinemaChains[movie.movieID]}">
                                                     <img src="${chain.avatarURL}" alt="${chain.name}" title="${chain.name}" 
                                                          class="cinema-chain-logo">
                                                 </c:forEach>
                                             </td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-info edit-movie" 
-                                                        data-id="${movie.movieID}"
-                                                        data-title="${movie.title}"
-                                                        data-synopsis="${movie.synopsis}"
-                                                        data-datepublished="<fmt:formatDate value="${movie.datePublished}" pattern="yyyy-MM-dd" />"
-                                                        data-imageurl="${movie.imageURL}"
-                                                        data-rating="${movie.rating}"
-                                                        data-country="${movie.country}"
-                                                        data-linktrailer="${movie.linkTrailer}"
-                                                        data-cinemaid="${movie.cinemaID}"
-                                                        data-type="${movie.type}"
-                                                        data-status="${movie.status}">
-                                                    <i class="fas fa-edit mr-1"></i>Sửa
-                                                </button>
-                                                <button type="button" class="btn btn-sm btn-danger delete-movie" data-id="${movie.movieID}">
-                                                    <i class="fas fa-trash-alt mr-1"></i>Xóa
-                                                </button>
-                                            </td>
+                                            <!--                                            <td>
+                                                                                            <button type="button" class="btn btn-sm btn-info edit-movie" 
+                                                                                                    data-id="${movie.movieID}"
+                                                                                                    data-title="${movie.title}"
+                                                                                                    data-synopsis="${movie.synopsis}"
+                                                                                                    data-datepublished="<fmt:formatDate value="${movie.datePublished}" pattern="yyyy-MM-dd" />"
+                                                                                                    data-imageurl="${movie.imageURL}"
+                                                                                                    data-rating="${movie.rating}"
+                                                                                                    data-country="${movie.country}"
+                                                                                                    data-linktrailer="${movie.linkTrailer}"
+                                                                                                    data-cinemaid="${movie.cinemaID}"
+                                                                                                    data-type="${movie.type}"
+                                                                                                    data-status="${movie.status}">
+                                                                                                <i class="fas fa-edit mr-1"></i>Sửa
+                                                                                            </button>
+                                                                                            <button type="button" class="btn btn-sm btn-danger delete-movie" data-id="${movie.movieID}">
+                                                                                                <i class="fas fa-trash-alt mr-1"></i>Ban
+                                                                                            </button>
+                                                                                        </td>-->
                                         </tr>
                                     </c:forEach>
                                 </tbody>
@@ -426,51 +431,51 @@
                 </div>
                 <form id="addMovieForm">
                     <div class="modal-body">
-                            <input type="hidden" name="action" value="add">
-                            <div class="form-group">
-                                <label for="title">Tiêu đề</label>
-                                <input type="text" class="form-control" id="title" name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="synopsis">Tóm tắt</label>
-                                <textarea class="form-control" id="synopsis" name="synopsis" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="datePublished">Ngày phát hành</label>
-                                <input type="date" class="form-control" id="datePublished" name="datePublished" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="imageURL">URL Hình ảnh</label>
-                                <input type="url" class="form-control" id="imageURL" name="imageURL">
-                            </div>
-                            <div class="form-group">
-                                <label for="rating">Đánh giá</label>
-                                <input type="number" class="form-control" id="rating" name="rating" min="0" max="10" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label for="country">Quốc gia</label>
-                                <input type="text" class="form-control" id="country" name="country">
-                            </div>
-                            <div class="form-group">
-                                <label for="linkTrailer">Link Trailer</label>
-                                <input type="url" class="form-control" id="linkTrailer" name="linkTrailer">
-                            </div>
-                            <div class="form-group">
-                                <label for="cinemaID">ID Rạp chiếu</label>
-                                <input type="number" class="form-control" id="cinemaID" name="cinemaID">
-                            </div>
-                            <div class="form-group">
-                                <label for="type">Thể loại</label>
-                                <input type="text" class="form-control" id="type" name="type">
-                            </div>
-                            <div class="form-group">
-                                <label for="status">Trạng thái</label>
-                                <select class="form-control" id="status" name="status">
-                                    <option value="true">Đang chiếu</option>
-                                    <option value="false">Ngừng chiếu</option>
-                                </select>
-                            </div>
+                        <input type="hidden" name="action" value="add">
+                        <div class="form-group">
+                            <label for="title">Tiêu đề</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
                         </div>
+                        <div class="form-group">
+                            <label for="synopsis">Tóm tắt</label>
+                            <textarea class="form-control" id="synopsis" name="synopsis" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="datePublished">Ngày phát hành</label>
+                            <input type="date" class="form-control" id="datePublished" name="datePublished" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageURL">URL Hình ảnh</label>
+                            <input type="url" class="form-control" id="imageURL" name="imageURL">
+                        </div>
+                        <div class="form-group">
+                            <label for="rating">Đánh giá</label>
+                            <input type="number" class="form-control" id="rating" name="rating" min="0" max="10" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Quốc gia</label>
+                            <input type="text" class="form-control" id="country" name="country">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkTrailer">Link Trailer</label>
+                            <input type="url" class="form-control" id="linkTrailer" name="linkTrailer">
+                        </div>
+                        <div class="form-group">
+                            <label for="cinemaID">ID Rạp chiếu</label>
+                            <input type="number" class="form-control" id="cinemaID" name="cinemaID">
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Thể loại</label>
+                            <input type="text" class="form-control" id="type" name="type">
+                        </div>
+                        <div class="form-group">
+                            <label for="status">Trạng thái</label>
+                            <select class="form-control" id="status" name="status">
+                                <option value="true">Đang chiếu</option>
+                                <option value="false">Ngừng chiếu</option>
+                            </select>
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
@@ -492,53 +497,53 @@
                     </button>
                 </div>
                 <form id="editMovieForm">
-                   <div class="modal-body">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" id="editMovieID" name="movieID">
-                            <div class="form-group">
-                                <label for="editTitle">Tiêu đề</label>
-                                <input type="text" class="form-control" id="editTitle" name="title" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editSynopsis">Tóm tắt</label>
-                                <textarea class="form-control" id="editSynopsis" name="synopsis" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="editDatePublished">Ngày phát hành</label>
-                                <input type="date" class="form-control" id="editDatePublished" name="datePublished" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="editImageURL">URL Hình ảnh</label>
-                                <input type="url" class="form-control" id="editImageURL" name="imageURL">
-                            </div>
-                            <div class="form-group">
-                                <label for="editRating">Đánh giá</label>
-                                <input type="number" class="form-control" id="editRating" name="rating" min="0" max="10" step="0.1">
-                            </div>
-                            <div class="form-group">
-                                <label for="editCountry">Quốc gia</label>
-                                <input type="text" class="form-control" id="editCountry" name="country">
-                            </div>
-                            <div class="form-group">
-                                <label for="editLinkTrailer">Link Trailer</label>
-                                <input type="url" class="form-control" id="editLinkTrailer" name="linkTrailer">
-                            </div>
-                            <div class="form-group">
-                                <label for="editCinemaID">ID Rạp chiếu</label>
-                                <input type="number" class="form-control" id="editCinemaID" name="cinemaID">
-                            </div>
-                            <div class="form-group">
-                                <label for="editType">Thể loại</label>
-                                <input type="text" class="form-control" id="editType" name="type">
-                            </div>
-                            <div class="form-group">
-                                <label for="editStatus">Trạng thái</label>
-                                <select class="form-control" id="editStatus" name="status">
-                                    <option value="true">Đang chiếu</option>
-                                    <option value="false">Ngừng chiếu</option>
-                                </select>
-                            </div>
+                    <div class="modal-body">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" id="editMovieID" name="movieID">
+                        <div class="form-group">
+                            <label for="editTitle">Tiêu đề</label>
+                            <input type="text" class="form-control" id="editTitle" name="title" required>
                         </div>
+                        <div class="form-group">
+                            <label for="editSynopsis">Tóm tắt</label>
+                            <textarea class="form-control" id="editSynopsis" name="synopsis" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDatePublished">Ngày phát hành</label>
+                            <input type="date" class="form-control" id="editDatePublished" name="datePublished" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editImageURL">URL Hình ảnh</label>
+                            <input type="url" class="form-control" id="editImageURL" name="imageURL">
+                        </div>
+                        <div class="form-group">
+                            <label for="editRating">Đánh giá</label>
+                            <input type="number" class="form-control" id="editRating" name="rating" min="0" max="10" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="editCountry">Quốc gia</label>
+                            <input type="text" class="form-control" id="editCountry" name="country">
+                        </div>
+                        <div class="form-group">
+                            <label for="editLinkTrailer">Link Trailer</label>
+                            <input type="url" class="form-control" id="editLinkTrailer" name="linkTrailer">
+                        </div>
+                        <div class="form-group">
+                            <label for="editCinemaID">ID Rạp chiếu</label>
+                            <input type="number" class="form-control" id="editCinemaID" name="cinemaID">
+                        </div>
+                        <div class="form-group">
+                            <label for="editType">Thể loại</label>
+                            <input type="text" class="form-control" id="editType" name="type">
+                        </div>
+                        <div class="form-group">
+                            <label for="editStatus">Trạng thái</label>
+                            <select class="form-control" id="editStatus" name="status">
+                                <option value="true">Đang chiếu</option>
+                                <option value="false">Ngừng chiếu</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
