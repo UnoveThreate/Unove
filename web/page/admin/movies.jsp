@@ -426,8 +426,52 @@
                 </div>
                 <form id="addMovieForm">
                     <div class="modal-body">
-                        <!-- Giữ nguyên nội dung form thêm phim -->
-                    </div>
+                            <input type="hidden" name="action" value="add">
+                            <div class="form-group">
+                                <label for="title">Tiêu đề</label>
+                                <input type="text" class="form-control" id="title" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="synopsis">Tóm tắt</label>
+                                <textarea class="form-control" id="synopsis" name="synopsis" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="datePublished">Ngày phát hành</label>
+                                <input type="date" class="form-control" id="datePublished" name="datePublished" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="imageURL">URL Hình ảnh</label>
+                                <input type="url" class="form-control" id="imageURL" name="imageURL">
+                            </div>
+                            <div class="form-group">
+                                <label for="rating">Đánh giá</label>
+                                <input type="number" class="form-control" id="rating" name="rating" min="0" max="10" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Quốc gia</label>
+                                <input type="text" class="form-control" id="country" name="country">
+                            </div>
+                            <div class="form-group">
+                                <label for="linkTrailer">Link Trailer</label>
+                                <input type="url" class="form-control" id="linkTrailer" name="linkTrailer">
+                            </div>
+                            <div class="form-group">
+                                <label for="cinemaID">ID Rạp chiếu</label>
+                                <input type="number" class="form-control" id="cinemaID" name="cinemaID">
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Thể loại</label>
+                                <input type="text" class="form-control" id="type" name="type">
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Trạng thái</label>
+                                <select class="form-control" id="status" name="status">
+                                    <option value="true">Đang chiếu</option>
+                                    <option value="false">Ngừng chiếu</option>
+                                </select>
+                            </div>
+                        </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary">Thêm</button>
@@ -448,9 +492,53 @@
                     </button>
                 </div>
                 <form id="editMovieForm">
-                    <div class="modal-body">
-                        <!-- Giữ nguyên nội dung form sửa phim -->
-                    </div>
+                   <div class="modal-body">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" id="editMovieID" name="movieID">
+                            <div class="form-group">
+                                <label for="editTitle">Tiêu đề</label>
+                                <input type="text" class="form-control" id="editTitle" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editSynopsis">Tóm tắt</label>
+                                <textarea class="form-control" id="editSynopsis" name="synopsis" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="editDatePublished">Ngày phát hành</label>
+                                <input type="date" class="form-control" id="editDatePublished" name="datePublished" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editImageURL">URL Hình ảnh</label>
+                                <input type="url" class="form-control" id="editImageURL" name="imageURL">
+                            </div>
+                            <div class="form-group">
+                                <label for="editRating">Đánh giá</label>
+                                <input type="number" class="form-control" id="editRating" name="rating" min="0" max="10" step="0.1">
+                            </div>
+                            <div class="form-group">
+                                <label for="editCountry">Quốc gia</label>
+                                <input type="text" class="form-control" id="editCountry" name="country">
+                            </div>
+                            <div class="form-group">
+                                <label for="editLinkTrailer">Link Trailer</label>
+                                <input type="url" class="form-control" id="editLinkTrailer" name="linkTrailer">
+                            </div>
+                            <div class="form-group">
+                                <label for="editCinemaID">ID Rạp chiếu</label>
+                                <input type="number" class="form-control" id="editCinemaID" name="cinemaID">
+                            </div>
+                            <div class="form-group">
+                                <label for="editType">Thể loại</label>
+                                <input type="text" class="form-control" id="editType" name="type">
+                            </div>
+                            <div class="form-group">
+                                <label for="editStatus">Trạng thái</label>
+                                <select class="form-control" id="editStatus" name="status">
+                                    <option value="true">Đang chiếu</option>
+                                    <option value="false">Ngừng chiếu</option>
+                                </select>
+                            </div>
+                        </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary">Cập nhật</button>
