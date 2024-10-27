@@ -34,7 +34,7 @@ import org.cloudinary.json.JSONArray;
 import org.cloudinary.json.JSONObject;
 import util.Role;
 import util.RouterURL;
-import org.mindrot.jbcrypt.BCrypt;
+
 
 @WebServlet("/admin/*")
 public class AdminServlet extends HttpServlet {
@@ -316,7 +316,7 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
                         throw new IllegalArgumentException("Vui lòng điền đầy đủ thông tin");
                     }
 
-                    String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+                    String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
 
                     User newUser = new User();
                     newUser.setUsername(username);
@@ -459,7 +459,7 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
                     String ownerEmail = generateDefaultEmail(chainName);
 
                     // mã hóa mật khẩu
-                    String hashedPassword = BCrypt.hashpw(tempPassword, BCrypt.gensalt());
+                    String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(tempPassword);
 
                     // tạo tài khoản owner 
                     User newOwner = new User();
