@@ -183,7 +183,7 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 case "ADMIN" ->
-                    response.sendRedirect(RouterURL.CREATE_MOVIE_SLOT );
+                    response.sendRedirect(RouterURL.ADMIN_PAGE );
             }
 
         } else {
