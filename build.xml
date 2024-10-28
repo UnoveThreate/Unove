@@ -80,25 +80,4 @@
     <property name="ec2.user" value="ubuntu" />
     <property name="ec2.host" value="ec2-54-255-150-15.ap-southeast-1.compute.amazonaws.com" />
     <property name="ec2.tomcat.webapps.dir" value="/opt/tomcat/webapps" />
-
-
-    <target name="-post-dist">
-
-
-        <copy file="${dist.dir}/${war.file.name}" todir="${webapps.dir}" overwrite="true" />
-        <echo message="WAR file copied to Tomcat webapps directory: ${webapps.dir}" />
-
-
-        <exec executable="scp">
-            <arg value="-i" />
-            <arg value="${ec2.key}" />
-            <arg value="${dist.dir}/${war.file.name}" />
-            <arg value="${ec2.user}@${ec2.host}:${ec2.tomcat.webapps.dir}" />
-        </exec>
-
-        <echo message="WAR file deployed to EC2 Tomcat webapps directory: ${ec2.tomcat.webapps.dir}" />
-
-    </target>
-
-
 </project>
