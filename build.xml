@@ -68,16 +68,4 @@
     nbproject/build-impl.xml file. 
 
     -->
-
-    <property file="project.properties" />
-
-    <!-- Local Tomcat properties => test file build  => run -->
-    <property name="tomcat.home" value="C:/tool/apache-tomcat-10.1.29" />
-    <property name="webapps.dir" value="${tomcat.home}/webapps" />
-    <property name="war.file" value="${dist.dir}/${war.file.name}" />
-
-    <property name="ec2.keyfile" value="C:/Users/phanm/.ssh/unove-key-pem.pem" />
-    <property name="ec2.user" value="ubuntu" />
-    <property name="ec2.host" value="ec2-54-255-150-15.ap-southeast-1.compute.amazonaws.com" />
-    <property name="ec2.tomcat.webapps.dir" value="/opt/tomcat/webapps" />
 </project>
