@@ -137,34 +137,41 @@ public class MovieManagementDAO extends MySQLConnect {
     }
 }
 
-   public boolean deleteMovie(int movieID) {
+   public boolean deleteMovie(int movieID) throws SQLException {
     try {
         connection.setAutoCommit(false);
         
-        // xóa dữ liệu liên quan trong bảng movieingenre
+        // Xóa dữ liệu liên quan trong bảng movieingenre
         String deleteMovieInGenreSQL = "DELETE FROM movieingenre WHERE MovieID = ?";
-        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteMovieInGenreSQL)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteMovieInGenreSQL)) {
             pstmt.setInt(1, movieID);
             pstmt.executeUpdate();
         }
         
+        // Xóa dữ liệu liên quan trong bảng movieslot
+        String deleteMovieSlotSQL = "DELETE FROM movieslot WHERE MovieID = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteMovieSlotSQL)) {
+            pstmt.setInt(1, movieID);
+            pstmt.executeUpdate();
+        }
        
+        // Xóa phim từ bảng movie
         String deleteMovieSQL = "DELETE FROM movie WHERE MovieID = ?";
-        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteMovieSQL)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(deleteMovieSQL)) {
             pstmt.setInt(1, movieID);
             int affectedRows = pstmt.executeUpdate();
             
-            connection.commit();
-            return affectedRows > 0;
+            if (affectedRows > 0) {
+                connection.commit();
+                return true;
+            } else {
+                connection.rollback();
+                return false;
+            }
         }
     } catch (SQLException e) {
-        try {
-            connection.rollback();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        e.printStackTrace();
-        return false;
+        connection.rollback();
+        throw new SQLException("Không thể xóa phim do lỗi: " + e.getMessage(), e);
     } finally {
         try {
             connection.setAutoCommit(true);
@@ -173,6 +180,7 @@ public class MovieManagementDAO extends MySQLConnect {
         }
     }
 }
+
 
     public boolean updateMovieStatus(int movieID, boolean status) {
         String sql = "UPDATE movie SET Status = ? WHERE MovieID = ?";
