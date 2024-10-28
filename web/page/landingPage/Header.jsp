@@ -395,7 +395,7 @@
             padding: 15px 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-      
+
 
     </style>
 
@@ -444,9 +444,12 @@
                 </ul>
 
                 <div>
-                    <button id="searchButton" class="borderless-btn" onclick="showModal()">
-                        <i class="fa-solid fa-magnifying-glass"></i> 
-                    </button>
+                    <a href="${pageContext.request.contextPath}/filterMovies">
+                        <button id="searchButton" class="borderless-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i> 
+                        </button>
+                    </a>
+
 
                     <c:set var="movieName" value="${requestScope.movieName}"/>
                     <c:set var="movies" value="${requestScope.movies}"/>
@@ -460,24 +463,24 @@
                                         </div>
                                     </form>
                                 </div>
-                               <%--<c:if test="${not empty movies}">--%>
-                                    <!--<form id="movieContainerForm">-->
-                                        <%--<c:forEach var="movie" items="${movies}">--%>
-                                            <!--<div class="modal-body movie-details" id="movieDetailsContainer" onclick="displayMovieDetails('${movie.movieID}')">-->
-                                                <!--<img src="${movie.imageURL}" alt="${movie.title} image" class="movie-image" />-->
-                                                <!--<div class="movie-info">-->
-                                                    <!--<b style="font-size: 22px;">${movie.title}</b>-->
-                                                    <%--<c:set var="genresString" value="${fn:replace(movie.genres.toString(), '[', '')}" />--%>
-                                                    <%--<c:set var="genresString" value="${fn:replace(genresString, ']', '')}" />--%>
-                                                    <!--<p style="font-size: 18px;">${genresString}</p>-->
-                                                    <!--<p style="font-size: 18px;"><i class="fa-regular fa-star"></i> ${movie.rating}</p>-->
-                                                    <!--<button type="button" id="showingButton"><i class="fas fa-video" style="margin-right: 8px;"></i>ĐANG CHIẾU</button>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                            <!--<hr/>-->
-                                        <%--</c:forEach>--%>
-                                        <!--<input type="hidden" id="movieIDInput" name="movieID">-->
-                                    <!--</form>-->
+                                <%--<c:if test="${not empty movies}">--%>
+                                <!--<form id="movieContainerForm">-->
+                                <%--<c:forEach var="movie" items="${movies}">--%>
+                                    <!--<div class="modal-body movie-details" id="movieDetailsContainer" onclick="displayMovieDetails('${movie.movieID}')">-->
+                                        <!--<img src="${movie.imageURL}" alt="${movie.title} image" class="movie-image" />-->
+                                <!--<div class="movie-info">-->
+                                    <!--<b style="font-size: 22px;">${movie.title}</b>-->
+                                <%--<c:set var="genresString" value="${fn:replace(movie.genres.toString(), '[', '')}" />--%>
+                                <%--<c:set var="genresString" value="${fn:replace(genresString, ']', '')}" />--%>
+                                <!--<p style="font-size: 18px;">${genresString}</p>-->
+                                <!--<p style="font-size: 18px;"><i class="fa-regular fa-star"></i> ${movie.rating}</p>-->
+                                <!--<button type="button" id="showingButton"><i class="fas fa-video" style="margin-right: 8px;"></i>ĐANG CHIẾU</button>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--<hr/>-->
+                                <%--</c:forEach>--%>
+                                <!--<input type="hidden" id="movieIDInput" name="movieID">-->
+                                <!--</form>-->
                                 <%--</c:if>--%>
                                 <div class="modal-footer">
                                     <button style="background-color: rgb(216, 45, 139)" type="button" class="btn btn-primary" onclick="closeModal();" data-bs-dismiss="modal">Close</button>
@@ -503,7 +506,7 @@
                         </c:when>
                         <c:otherwise>
                             <li class="nav-item">
-                               <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
                             </li>
                         </c:otherwise>
                     </c:choose>

@@ -1,5 +1,6 @@
-package controller;
+package controller.filter_movie;
 
+import DAO.cinemaChainOwnerDAO.GenreDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,44 +15,47 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.owner.Genre;
 
 @WebServlet("/searchMoviesByGenre")
 public class SearchMovieByGenreServlet extends HttpServlet {
 
     private MovieDAO movieDAO;
+    private GenreDAO genreDAO; // Thêm thuộc tính GenreDAO
 
     @Override
     public void init() throws ServletException {
         try {
             movieDAO = new MovieDAO(getServletContext());
+            genreDAO = new GenreDAO(getServletContext()); // Khởi tạo GenreDAO
         } catch (Exception e) {
-            throw new ServletException("Error initializing MovieDAO", e);
+            throw new ServletException("Error initializing DAO", e);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy thể loại từ tham số request
         String genre = request.getParameter("genre");
         List<Movie> movies = null;
+        List<Genre> genres = null; // Danh sách thể loại
 
         try {
             if (genre != null && !genre.trim().isEmpty()) {
-                // Nếu có thể loại, gọi phương thức tìm kiếm
                 movies = movieDAO.getMoviesByGenre(genre);
             } else {
-                // Nếu không có thể loại, lấy tất cả phim
                 movies = movieDAO.getAllMovies();
             }
+
+            // Gọi phương thức getAllGenres từ GenreDAO
+            genres = genreDAO.getAllGenres();
         } catch (SQLException ex) {
             Logger.getLogger(SearchMovieByGenreServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        // Đặt danh sách phim vào thuộc tính request
         request.setAttribute("movies", movies);
-        // Chuyển tiếp đến trang JSP
-        request.getRequestDispatcher(RouterJSP.LANDING_PAGE).forward(request, response);
-
+        request.setAttribute("genres", genres); // Thiết lập thuộc tính genres
+        request.setAttribute("selectedGenre", genre); // Giữ giá trị thể loại đã chọn
+        request.getRequestDispatcher(RouterJSP.FILTER_MOVIE).forward(request, response);
     }
 }

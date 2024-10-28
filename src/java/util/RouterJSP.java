@@ -191,5 +191,5 @@ public class RouterJSP {
     
     public static String OWNER_EDIT_MOVIESLOT = "/page/owner/movieSlot/editMovieSlot.jsp";
     
-    public static String FILTER_MOVIE ="/page/user/movie/FilterMovie.jsp";
+     public static String FILTER_MOVIE ="/page/user/movie/FilterMovie.jsp";
 }

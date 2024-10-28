@@ -1,4 +1,4 @@
-package controller;
+package controller.filter_movie;
 
 import java.io.IOException;
 import java.util.List;
@@ -50,7 +50,7 @@ public class SearchMovieByTitleServlet extends HttpServlet {
         // Đặt danh sách phim vào thuộc tính request
         request.setAttribute("movies", movies);
         // Chuyển tiếp đến trang JSP
-        request.getRequestDispatcher(RouterJSP.LANDING_PAGE).forward(request, response);
+        request.getRequestDispatcher(RouterJSP.FILTER_MOVIE).forward(request, response);
     }
 
     @Override

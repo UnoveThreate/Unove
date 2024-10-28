@@ -188,4 +188,31 @@ public class MovieDAO extends MySQLConnect {
         return movies;
     }
 
+    public List<Movie> getMoviesByCountry(String countryName) throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        String sql = "SELECT * FROM movie WHERE Status = TRUE AND Country = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setString(1, countryName);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Movie movie = new Movie();
+                    movie.setMovieID(rs.getInt("MovieID"));
+                    movie.setTitle(rs.getString("Title"));
+                    movie.setSynopsis(rs.getString("Synopsis"));
+                    movie.setDatePublished(rs.getDate("DatePublished"));
+                    movie.setImageURL(rs.getString("ImageURL"));
+                    movie.setRating(rs.getFloat("Rating"));
+                    movie.setCountry(rs.getString("Country"));
+                    movie.setLinkTrailer(rs.getString("LinkTrailer"));
+                    movie.setCinemaID(rs.getInt("CinemaID"));
+                    movie.setStatus(rs.getBoolean("Status"));
+                    movies.add(movie);
+                }
+            }
+        }
+
+        return movies;
+    }
+
 }
