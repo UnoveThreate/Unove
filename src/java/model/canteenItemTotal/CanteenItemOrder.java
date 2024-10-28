@@ -12,6 +12,7 @@ public class CanteenItemOrder {
 
     private int canteenItemID;
     private int quantity;
+    private int orderID;
 
     public CanteenItemOrder() {
     }
@@ -19,6 +20,7 @@ public class CanteenItemOrder {
     public CanteenItemOrder(int canteenItemID, int quantity) {
         this.canteenItemID = canteenItemID;
         this.quantity = quantity;
+
     }
 
     public int getCanteenItemID() {
@@ -37,10 +39,23 @@ public class CanteenItemOrder {
         this.quantity = quantity;
     }
 
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public void setOrderID(int orderID) {
+        this.orderID = orderID;
+    }
+
+    public CanteenItemOrder(int canteenItemID, int quantity, int orderID) {
+        this.canteenItemID = canteenItemID;
+        this.quantity = quantity;
+        this.orderID = orderID;
+    }
+
     @Override
     public String toString() {
         return "CanteenItemOrder{" + "canteenItemID=" + canteenItemID + ", quantity=" + quantity + '}';
     }
 
-    
 }

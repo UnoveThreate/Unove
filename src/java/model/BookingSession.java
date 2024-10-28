@@ -15,10 +15,11 @@ public class BookingSession implements Serializable {
     private double totalPrice;
     private int userID;
     private String status;
-
     private MovieSlot movieSlot;
     private List<Seat> listSeats;
-    private List<CanteenItemOrder> itemOrders; //Thêm vào để lấy list order cho việc thanh toán
+
+    //Thêm vào để lấy list order cho việc thanh toán
+    private List<CanteenItemOrder> itemOrders;
 
     public BookingSession() {
         this.selectedSeatIDs = new ArrayList<>();
@@ -114,6 +115,19 @@ public class BookingSession implements Serializable {
         this.selectedSeatIDs.clear();
         this.totalPrice = 0;
         this.status = "Đang xử lý";
+
+    }
+
+    public void clearItem() {
+        this.itemOrders.clear();
+    }
+// Phương thức thêm món ăn với ID và số lượng
+
+    public void addCanteenItemOrder(int canteenItemID, int quantity) {
+        if (itemOrders == null) {
+            itemOrders = new ArrayList<>();
+        }
+        itemOrders.add(new CanteenItemOrder(canteenItemID, quantity));
     }
 
     public List<CanteenItemOrder> getItemOrders() {
@@ -124,25 +138,9 @@ public class BookingSession implements Serializable {
         this.itemOrders = itemOrders;
     }
 
-    // Thêm vào phương thức này trong BookingSession:
-    public void addCanteenItemOrder(int canteenItemID, int quantity) {
-        if (itemOrders == null) {
-            itemOrders = new ArrayList<>();
-        }
-        itemOrders.add(new CanteenItemOrder(canteenItemID, quantity));
-    }
-
     @Override
     public String toString() {
-        return "BookingSession{"
-                + "movieSlotID=" + movieSlotID
-                + ", movieID=" + movieID
-                + ", cinemaID=" + cinemaID
-                + ", cinemaChainID=" + cinemaChainID
-                + ", selectedSeatIDs=" + selectedSeatIDs
-                + ", totalPrice=" + totalPrice
-                + ", userID=" + userID
-                + ", status='" + status + '\''
-                + '}';
+        return "BookingSession{" + "movieSlotID=" + movieSlotID + ", movieID=" + movieID + ", cinemaID=" + cinemaID + ", cinemaChainID=" + cinemaChainID + ", selectedSeatIDs=" + selectedSeatIDs + ", totalPrice=" + totalPrice + ", userID=" + userID + ", status=" + status + ", movieSlot=" + movieSlot + ", listSeats=" + listSeats + ", itemOrders=" + itemOrders + '}';
     }
+
 }

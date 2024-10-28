@@ -4,6 +4,7 @@
  */
 package controller.booking;
 
+import DAO.canteenItem.CanteenItemSelectDAO;
 import DAO.payment.PaymentDAO;
 import model.BookingSession;
 import java.io.IOException;
@@ -17,8 +18,14 @@ import jakarta.servlet.http.HttpSession;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.ServletContext;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import model.CanteenItem;
 import model.Cinema;
 import model.Movie;
+import model.canteenItemTotal.CanteenItemOrder;
 import util.RouterJSP;
 
 /**
@@ -30,6 +37,7 @@ public class BookTicketServlet extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(BookTicketServlet.class.getName());
     private PaymentDAO paymentDAO;
+    private CanteenItemSelectDAO canteenItemselect;
 
     @Override
     public void init() throws ServletException {
@@ -38,6 +46,7 @@ public class BookTicketServlet extends HttpServlet {
             ServletContext context = getServletContext();
 
             this.paymentDAO = new PaymentDAO(context);
+            this.canteenItemselect = new CanteenItemSelectDAO(context);
             LOGGER.info("SelectSeatServlet initialized successfully");
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error initializing SelectSeatServlet", e);
@@ -65,7 +74,7 @@ public class BookTicketServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         HttpSession session = request.getSession();
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
@@ -74,32 +83,40 @@ public class BookTicketServlet extends HttpServlet {
             return;
         }
 
-        // Retrieve movieSlotID from session
-        Integer movieSlotID = (Integer) bookingSession.getMovieSlotID();
+        Integer movieSlotID = bookingSession.getMovieSlotID();
+        List<CanteenItemOrder> canteenItems = bookingSession.getItemOrders();
+        List<Map<String, Object>> itemDetails = new ArrayList<>();
 
-        // Use movieSlotID to obtain movieID and cinemaID
-        if (movieSlotID != null) {
-            Movie movie = paymentDAO.getMovieByMovieSlotID(movieSlotID);
-            Cinema cinema = paymentDAO.getCinemaByMovieSlot(movieSlotID);
+        for (CanteenItemOrder itemOrder : canteenItems) {
+            int canteenItemID = itemOrder.getCanteenItemID();
+            int quantity = itemOrder.getQuantity();
 
-            
+            CanteenItem canteenItem = canteenItemselect.getItemBycanteenItemID(canteenItemID);
 
-            System.out.println(cinema);
-            System.out.println(movie);
-
-
-            request.setAttribute("movie", movie);
-            request.setAttribute("cinema", cinema);
-            request.setAttribute("movieSlot", bookingSession.getMovieSlot());
-            request.setAttribute("selectedSeats", bookingSession.getListSeats());
-            request.setAttribute("totalPrice", bookingSession.getTotalPrice());
-
-            // Forward to orderDetail.jsp page
-            request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
-        } else {
-            request.setAttribute("errorMessage", "Không tìm thấy thông tin suất chiếu.");
-            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+            if (canteenItem != null) {
+                Map<String, Object> itemDetail = new HashMap<>();
+                itemDetail.put("name", canteenItem.getName());
+                itemDetail.put("price", canteenItem.getPrice());
+                itemDetail.put("quantity", quantity);
+                itemDetails.add(itemDetail);
+            } else {
+                LOGGER.warning("Canteen item with ID " + canteenItemID + " not found.");
+            }
         }
+
+        request.setAttribute("selectedCanteenItems", itemDetails);
+
+        // Lấy các thuộc tính khác từ `bookingSession` nếu cần thiết
+        request.setAttribute("movie", paymentDAO.getMovieByMovieSlotID(movieSlotID));
+        request.setAttribute("cinema", paymentDAO.getCinemaByMovieSlot(movieSlotID));
+        request.setAttribute("movieSlot", bookingSession.getMovieSlot());
+        request.setAttribute("selectedSeats", bookingSession.getListSeats());
+        request.setAttribute("totalPrice", bookingSession.getTotalPrice());
+
+//        bookingSession.clearItem();
+
+        // Điều hướng đến trang JSP hiển thị
+        request.getRequestDispatcher(RouterJSP.ORDER_DETAIL).forward(request, response);
     }
 
     @Override

@@ -205,7 +205,7 @@
                     height: 350px;
                 }
             }
-            
+
         </style>
     </head>
     <body>
@@ -240,6 +240,7 @@
                     <button id="trailerBtn">View Trailer</button>
 
 
+
                 </div>
 
                 <!-- Modal for movie trailer -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
@@ -250,16 +251,13 @@
                     </div>
                 </div>
 
-
-                <!-- Favorite Actions -->
-
-                <c:if test="${ not empty sessionScope.userID}">
+                <c:if test="${not empty sessionScope.userID}">
                     <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
                     <c:if test="${isFavoritedMovie == false}">
                         <form id="addToFavoriteForm">
                             <input type="hidden" name="isAddingToFavorite" value="true"/>
                             <input type="hidden" id="favoritedAtInput" name="favoritedAt"/>
-                            <a onclick="addToFavorite();" style="display: inline-block;text-decoration: none;cursor: pointer;margin-left: -6px;margin-top: 18px;">
+                            <a onclick="addToFavorite();" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px;">
                                 <span class="clWhite">
                                     <img src="assets/images/add-to-favorites.png"></img>
                                     Thêm vào yêu thích
@@ -272,7 +270,7 @@
                         <form id="deleteFavoriteMovieForm">
                             <input type="hidden" name="deletedFavouriteMovieInput" value="${movie.movieID}"/>
                             <input type="hidden" name="isDeletingInMovieInfo" value="true"/>
-                            <a onclick="deleteFavoriteMovie();" style="display: inline-block;text-decoration: none;cursor: pointer;margin-left: -6px;margin-top: 18px;">
+                            <a onclick="deleteFavoriteMovie();" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px;">
                                 <span class="clWhite">
                                     <img src="assets/images/delete-favorite.png"></img>
                                     Hủy yêu thích
@@ -280,6 +278,8 @@
                             </a>
                         </form>                                    
                     </c:if>
+
+
                     <form id="viewFavouriteMoviesForm">
                         <a onclick="viewFavouriteMovies();" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px;">
                             <span class="clWhite">
@@ -288,9 +288,10 @@
                             </span>
                         </a>
                     </form>
-
-
                 </c:if>
+                <!-- Favorite Actions -->
+
+
 
 
 
@@ -333,21 +334,19 @@
 
                 return year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
             }
-            //ham add favorite movie
             function addToFavorite() {
-                let favoritedAtInput = document.getElementById('favoritedAtInput');
-                favoritedAtInput.value = getCurrentDateTime();
-
-                callServlet('addToFavoriteForm', 'HandleDisplayMovieInfo?movieID=' + movieID, 'POST');
+                document.getElementById("favoritedAtInput").value = getCurrentDateTime();
+                document.getElementById("addToFavoriteForm").submit();
             }
 
             function deleteFavoriteMovie() {
-                callServlet('deleteFavoriteMovieForm', 'myfavouritemovie', 'POST');
+                document.getElementById("deleteFavoriteMovieForm").submit();
             }
 
             function viewFavouriteMovies() {
-                callServlet('viewFavouriteMoviesForm', 'myfavouritemovie', 'GET');
+                document.getElementById("viewFavouriteMoviesForm").submit();
             }
+
 
 
         </script>

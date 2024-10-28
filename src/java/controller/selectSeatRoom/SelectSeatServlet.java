@@ -54,12 +54,17 @@ public class SelectSeatServlet extends HttpServlet {
         LOGGER.info("doGet method started");
         try {
             HttpSession session = request.getSession();
+            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
             Integer userID = (Integer) session.getAttribute("userID");
 
             if (userID == null) {
                 request.setAttribute("errorMessage", "Login de thuc hien dat ghe");
                 response.sendRedirect(RouterURL.LOGIN);
                 return;
+            }
+            if (bookingSession != null ) {
+               session.removeAttribute("bookingSession");
+
             }
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
