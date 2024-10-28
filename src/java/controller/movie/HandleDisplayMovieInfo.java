@@ -70,7 +70,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
 
             Boolean isFavoritedMovie = null;
             if (userID != -1) {
-                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, Integer.parseInt(movieID));
+//                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, Integer.parseInt(movieID));
             }
 
             // Add movie to request attributes
