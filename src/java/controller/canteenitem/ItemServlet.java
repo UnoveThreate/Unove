@@ -51,23 +51,22 @@ public class ItemServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute("role");
-
-        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
-
-        if (bookingSession != null && bookingSession.getItemOrders() != null) {
-            bookingSession.getItemOrders().clear();
-            session.setAttribute("bookingSession", bookingSession);
-        }
         
-        if (bookingSession != null && bookingSession.getPriceCanteenItem() > 0) {
-            double resetTotalPrice = bookingSession.getTotalPrice() - bookingSession.getPriceCanteenItem();
-            bookingSession.setTotalPrice(resetTotalPrice);
-            bookingSession.setPriceCanteenItem(0);
-        }
-
         if (!util.Role.isRoleValid(role, util.Role.USER)) {
             response.sendRedirect(RouterURL.LOGIN);
             return;
+        }
+
+        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
+
+        if (bookingSession == null) {
+            response.sendRedirect(RouterURL.ERROR_PAGE);
+            return;
+        }
+
+        if (bookingSession.getItemOrders() != null && !bookingSession.getItemOrders().isEmpty()) {
+            bookingSession.getItemOrders().clear();
+            session.setAttribute("bookingSession", bookingSession);
         }
 
         String cinemaIDParam = request.getParameter("cinemaID");

@@ -12,21 +12,29 @@ public class BookingSession implements Serializable {
     private int cinemaID;
     private int cinemaChainID;
     private List<Integer> selectedSeatIDs;
-    private double totalPrice;
     private int userID;
     private String status;
     private MovieSlot movieSlot;
     private List<Seat> listSeats;
     private double priceCanteenItem;
-
-    //Thêm vào để lấy list order cho việc thanh toán
+    private double totalPrice;
+    private double priceTicket;
     private List<CanteenItemOrder> itemOrders;
 
     public BookingSession() {
+        this.itemOrders = new ArrayList();
         this.selectedSeatIDs = new ArrayList<>();
         this.status = "Đang xử lý";
     }
 
+    public double getPriceTicket() {
+        return priceTicket;
+    }
+
+    public void setPriceTicket(double priceTicket) {
+        this.priceTicket = priceTicket;
+    }
+    
     public double getPriceCanteenItem() {
         return priceCanteenItem;
     }
@@ -34,7 +42,7 @@ public class BookingSession implements Serializable {
     public void setPriceCanteenItem(double priceCanteenItem) {
         this.priceCanteenItem = priceCanteenItem;
     }
-    
+
     public List<Seat> getListSeats() {
         return listSeats;
     }
@@ -124,13 +132,11 @@ public class BookingSession implements Serializable {
         this.selectedSeatIDs.clear();
         this.totalPrice = 0;
         this.status = "Đang xử lý";
-
     }
 
     public void clearItem() {
         this.itemOrders.clear();
     }
-// Phương thức thêm món ăn với ID và số lượng
 
     public void addCanteenItemOrder(int canteenItemID, int quantity) {
         if (itemOrders == null) {

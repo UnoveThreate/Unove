@@ -101,10 +101,9 @@ public class CanteenItemOrderServlet extends HttpServlet {
 
         if (bookingSession == null) {
             bookingSession = new BookingSession();
+        } else if (!bookingSession.getItemOrders().isEmpty()) {
+            bookingSession.getItemOrders().clear();
         }
-
-        // Lấy totalPrice từ SelectSeatServlet (nếu có) và giữ giá trị đã lưu
-        double totalPrice = bookingSession.getTotalPrice();
 
         // Duyệt qua các tham số để tìm và xử lý các `quantity` của `canteenItemID`
         for (String param
@@ -126,10 +125,13 @@ public class CanteenItemOrderServlet extends HttpServlet {
                 }
             }
         }
+
         double canteenTotalPrice = calculateCanteenTotalPrice(bookingSession.getItemOrders());
-        bookingSession.setPriceCanteenItem(canteenTotalPrice);
-        
-        totalPrice += canteenTotalPrice;
+        double totalTicketPrice = bookingSession.getPriceTicket();
+        System.out.println("ticket :" + totalTicketPrice);
+        System.out.println("cateen: " + canteenTotalPrice);
+
+        double totalPrice = totalTicketPrice + canteenTotalPrice;
 
         bookingSession.setTotalPrice(totalPrice);
 

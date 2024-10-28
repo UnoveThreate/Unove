@@ -62,10 +62,11 @@ public class SelectSeatServlet extends HttpServlet {
                 response.sendRedirect(RouterURL.LOGIN);
                 return;
             }
+            
             if (bookingSession != null) {
                 session.removeAttribute("bookingSession");
-
             }
+            
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
                 int movieSlotID = Integer.parseInt(movieSlotIDParam);
@@ -155,10 +156,10 @@ public class SelectSeatServlet extends HttpServlet {
                 bookingSession.addSelectedSeatID(seat.getSeatID());
             }
 
-            double totalPrice = calculateTotalPrice(selectedSeats, movieSlot);
+            double totalPriceTicket = calculateTotalPrice(selectedSeats, movieSlot);
 
             // Cập nhật BookingSession trong session
-            bookingSession.setTotalPrice(totalPrice);
+            bookingSession.setPriceTicket(totalPriceTicket);
             bookingSession.setMovieSlotID(movieSlotID);
             bookingSession.setStatus("Đã đặt vé");
             bookingSession.setMovieSlot(movieSlot);
