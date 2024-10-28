@@ -51,5 +51,45 @@ public class CanteenItemSelectDAO extends MySQLConnect {
         System.out.println("Canteen items retrieved: " + itemList.size());
         return itemList;
     }
-}
 
+    public double getCanteenItemPriceById(int canteenItemID) {
+        double price = 0.0;
+        String sql = "SELECT Price FROM canteenitem WHERE CanteenItemID = ?";
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, canteenItemID);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                price = resultSet.getFloat("price");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return price;
+    }
+
+    public CanteenItem getItemBycanteenItemID(int canteenItemID) {
+        CanteenItem canteenItem = null;
+        String query = "SELECT CanteenItemID, Name, Price FROM CanteenItem WHERE CanteenItemID = ?";
+
+        try (PreparedStatement pstmt = this.connection.prepareStatement(query)) {
+            pstmt.setInt(1, canteenItemID);
+            ResultSet resultSet = pstmt.executeQuery();
+
+            if (resultSet.next()) {
+                canteenItem = new CanteenItem();
+                canteenItem.setCanteenItemID(resultSet.getInt("CanteenItemID"));
+                canteenItem.setName(resultSet.getString("Name"));
+                canteenItem.setPrice(resultSet.getFloat("Price"));
+                // Bạn có thể thêm các thuộc tính khác nếu cần
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return canteenItem;
+    }
+}

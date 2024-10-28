@@ -146,7 +146,7 @@
                 if (vnpPayDate != null) {
                     try {
                         // Parse the original date string (adjust the format according to the actual input format)
-                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmm"); // Example input format
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmmss"); // Example input format
                         Date date = inputFormat.parse(vnpPayDate);
                         // Format the date to the desired output format
                         SimpleDateFormat outputFormat = new SimpleDateFormat("HH:mm dd/MM/yyyy");
