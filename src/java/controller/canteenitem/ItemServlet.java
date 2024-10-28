@@ -16,12 +16,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.sql.Connection;
 import DAO.canteenItem.CanteenItemSelectDAO;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.BookingSession;
 import model.CanteenItem;
 import util.RouterJSP;
+import util.RouterURL;
 
 /**
  *
@@ -46,6 +49,27 @@ public class ItemServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String role = (String) session.getAttribute("role");
+
+        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
+
+        if (bookingSession != null && bookingSession.getItemOrders() != null) {
+            bookingSession.getItemOrders().clear();
+            session.setAttribute("bookingSession", bookingSession);
+        }
+        
+        if (bookingSession != null && bookingSession.getPriceCanteenItem() > 0) {
+            double resetTotalPrice = bookingSession.getTotalPrice() - bookingSession.getPriceCanteenItem();
+            bookingSession.setTotalPrice(resetTotalPrice);
+            bookingSession.setPriceCanteenItem(0);
+        }
+
+        if (!util.Role.isRoleValid(role, util.Role.USER)) {
+            response.sendRedirect(RouterURL.LOGIN);
+            return;
+        }
+
         String cinemaIDParam = request.getParameter("cinemaID");
         List<CanteenItem> canteenItemList = null;
 

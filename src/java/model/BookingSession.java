@@ -17,6 +17,7 @@ public class BookingSession implements Serializable {
     private String status;
     private MovieSlot movieSlot;
     private List<Seat> listSeats;
+    private double priceCanteenItem;
 
     //Thêm vào để lấy list order cho việc thanh toán
     private List<CanteenItemOrder> itemOrders;
@@ -26,6 +27,14 @@ public class BookingSession implements Serializable {
         this.status = "Đang xử lý";
     }
 
+    public double getPriceCanteenItem() {
+        return priceCanteenItem;
+    }
+
+    public void setPriceCanteenItem(double priceCanteenItem) {
+        this.priceCanteenItem = priceCanteenItem;
+    }
+    
     public List<Seat> getListSeats() {
         return listSeats;
     }
