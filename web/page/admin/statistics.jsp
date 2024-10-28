@@ -328,7 +328,7 @@
         }
     });
 
-    // Biểu đồ số vé bán được và doanh thu theo phim
+    // Biểu đồ số vé bán được và doanh thu theo phim của tất cả chuỗi rạp
     var ticketsAndRevenueByMovieCtx = document.getElementById('ticketsByMovieChart').getContext('2d');
     
     var movieLabels = Object.keys(ticketsSoldByMovie);
@@ -374,7 +374,7 @@
                 ...chartOptions.plugins,
                 title: {
                     display: true,
-                    text: 'Số vé bán được và doanh thu theo phim của chuỗi rạp'
+                    text: 'Số vé bán được và doanh thu theo phim của tất cả chuỗi rạp'
                 }
             },
             scales: {

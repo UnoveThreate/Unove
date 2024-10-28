@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Quản lý Chuỗi Rạp</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
@@ -144,6 +143,117 @@
             border-radius: 20px;
             padding: 5px 10px;
         }
+
+        /* CSS cho notification popup */
+        .notification-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1050;
+            display: none;
+            animation: fadeIn 0.3s ease;
+            min-width: 350px;
+        }
+
+        .notification-header {
+            margin-bottom: 20px;
+        }
+
+        .notification-header h4 {
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .notification-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .notification-value {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .notification-footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .close-btn {
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .copy-tooltip {
+            position: fixed;
+            background: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1060;
+        }
+
+        .backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040;
+            display: none;
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini">
@@ -193,7 +303,8 @@
                                                     data-name="${chain.name}"
                                                     data-avatar="${chain.avatarURL}"
                                                     data-info="${chain.information}">Sửa</button>
-                                            <button type="button" class="btn btn-sm btn-danger delete-cinema-chain" data-id="${chain.cinemaChainID}">Xóa</button>
+                                            <button type="button" class="btn btn-sm btn-danger delete-cinema-chain" 
+                                                    data-id="${chain.cinemaChainID}">Xóa</button>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -210,7 +321,6 @@
         All rights reserved.
     </footer>
 </div>
-
 
 <!-- Add Cinema Chain Modal -->
 <div class="modal fade" id="addCinemaChainModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -246,6 +356,7 @@
         </div>
     </div>
 </div>
+
 <!-- Edit Cinema Chain Modal -->
 <div class="modal fade" id="editCinemaChainModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -282,12 +393,54 @@
     </div>
 </div>
 
+<!-- Notification Popup -->
+<div class="backdrop" id="notificationBackdrop"></div>
+<div class="notification-popup" id="accountNotification">
+    <div class="notification-header">
+        <h4>Tài khoản owner mới</h4>
+    </div>
+    <div class="notification-content">
+        <div class="notification-item">
+            <span class="notification-label">Tên đăng nhập:</span>
+            <div class="notification-value">
+                <span id="ownerUsername"></span>
+                <button class="copy-btn" onclick="copyText('ownerUsername')">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+        <div class="notification-item">
+            <span class="notification-label">Mật khẩu tạm thời:</span>
+            <div class="notification-value">
+                <span id="ownerPassword"></span>
+                <button class="copy-btn" onclick="copyText('ownerPassword')">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+        <div class="notification-item">
+            <span class="notification-label">Email:</span>
+            <div class="notification-value">
+                <span id="ownerEmail"></span>
+                <button class="copy-btn" onclick="copyText('ownerEmail')">
+                    <i class="fas fa-copy"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="notification-footer">
+        <button class="close-btn" onclick="closeNotification()">Đóng</button>
+    </div>
+</div>
+
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
 <script>
 $(document).ready(function() {
     AOS.init({
@@ -308,7 +461,7 @@ $(document).ready(function() {
         }
     });
 
-     $('#addCinemaChainForm').submit(function(e) {
+    $('#addCinemaChainForm').submit(function(e) {
         e.preventDefault();
         $.ajax({
             url: '${pageContext.request.contextPath}/admin/cinemaChains',
@@ -317,13 +470,12 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 if (response.success) {
-                    alert(response.message);
                     $('#addCinemaChainModal').modal('hide');
-                    // hiển thị thông tin tài khoản 
-                    alert('Tài khoản owner mới:\nTên đăng nhập: ' + response.ownerUsername + 
-                          '\nMật khẩu tạm thời: ' + response.tempPassword + 
-                          '\nEmail: ' + response.ownerEmail);
-                    location.reload();
+                    showAccountNotification(
+                        response.ownerUsername,
+                        response.tempPassword,
+                        response.ownerEmail
+                    );
                 } else {
                     alert(response.message);
                 }
@@ -334,11 +486,13 @@ $(document).ready(function() {
             }
         });
     });
+
     $(document).on('click', '.edit-cinema-chain', function() {
         var cinemaChainID = $(this).data('id');
         var chainName = $(this).data('name');
         var avatarURL = $(this).data('avatar');
         var information = $(this).data('info');
+        
         $('#editCinemaChainID').val(cinemaChainID);
         $('#editChainName').val(chainName);
         $('#editAvatarURL').val(avatarURL);
@@ -369,12 +523,16 @@ $(document).ready(function() {
         });
     });
 
-    function deleteCinemaChain(cinemaChainID) {
+    $(document).on('click', '.delete-cinema-chain', function() {
+        var cinemaChainID = $(this).data('id');
         if (confirm('Bạn có chắc chắn muốn xóa chuỗi rạp này?')) {
             $.ajax({
                 url: '${pageContext.request.contextPath}/admin/cinemaChains',
                 type: 'POST',
-                data: { action: 'delete', cinemaChainID: cinemaChainID },
+                data: { 
+                    action: 'delete', 
+                    cinemaChainID: cinemaChainID 
+                },
                 dataType: 'json',
                 success: function(response) {
                     if (response.success) {
@@ -390,13 +548,50 @@ $(document).ready(function() {
                 }
             });
         }
-    }
-
-    $(document).on('click', '.delete-cinema-chain', function() {
-        var cinemaChainID = $(this).data('id');
-        deleteCinemaChain(cinemaChainID);
     });
 });
+
+// Notification functions
+function showAccountNotification(username, password, email) {
+    document.getElementById('ownerUsername').textContent = username;
+    document.getElementById('ownerPassword').textContent = password;
+    document.getElementById('ownerEmail').textContent = email;
+    document.getElementById('accountNotification').style.display = 'block';
+    document.getElementById('notificationBackdrop').style.display = 'block';
+}
+
+function closeNotification() {
+    document.getElementById('accountNotification').style.display = 'none';
+    document.getElementById('notificationBackdrop').style.display = 'none';
+    location.reload();
+}
+
+function copyText(elementId) {
+    const text = document.getElementById(elementId).textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        showTooltip('Đã sao chép!');
+    });
+}
+
+function showTooltip(message) {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'copy-tooltip';
+    tooltip.textContent = message;
+    
+    document.body.appendChild(tooltip);
+    
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+    tooltip.style.left = `${mouseX + 10}px`;
+    tooltip.style.top = `${mouseY - 20}px`;
+    
+    setTimeout(() => tooltip.style.opacity = '1', 0);
+    
+    setTimeout(() => {
+        tooltip.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(tooltip), 300);
+    }, 1500);
+}
 </script>
 </body>
 </html>

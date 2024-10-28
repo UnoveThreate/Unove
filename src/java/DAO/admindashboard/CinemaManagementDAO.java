@@ -84,16 +84,75 @@ public class CinemaManagementDAO extends MySQLConnect {
     }
 
     public boolean deleteCinema(int cinemaID) {
-        String sql = "DELETE FROM cinema WHERE CinemaID = ?";
-        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
+    try {
+        connection.setAutoCommit(false);
+        
+        // Cập nhật CinemaID của các phim liên quan thành NULL
+        String updateMoviesSQL = "UPDATE movie SET CinemaID = NULL WHERE CinemaID = ?";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(updateMoviesSQL)) {
+            pstmt.setInt(1, cinemaID);
+            pstmt.executeUpdate();
+        }
+        
+        // Xóa các bản ghi liên quan trong bảng movieslot 
+        String deleteMovieSlotSQL = "DELETE FROM movieslot WHERE RoomID IN (SELECT RoomID FROM room WHERE CinemaID = ?)";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteMovieSlotSQL)) {
+            pstmt.setInt(1, cinemaID);
+            pstmt.executeUpdate();
+        }
+        
+        // Xóa các bản ghi trong bảng roomtype liên quan đến các phòng của rạp
+        String deleteRoomTypeSQL = "DELETE FROM roomtype WHERE RoomID IN (SELECT RoomID FROM room WHERE CinemaID = ?)";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteRoomTypeSQL)) {
+            pstmt.setInt(1, cinemaID);
+            pstmt.executeUpdate();
+        }
+        
+        // Xóa các ghế liên quan đến các phòng của rạp
+        String deleteSeatsSQL = "DELETE FROM seat WHERE RoomID IN (SELECT RoomID FROM room WHERE CinemaID = ?)";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteSeatsSQL)) {
+            pstmt.setInt(1, cinemaID);
+            pstmt.executeUpdate();
+        }
+        
+        // Xóa các phòng liên quan đến rạp
+        String deleteRoomsSQL = "DELETE FROM room WHERE CinemaID = ?";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteRoomsSQL)) {
+            pstmt.setInt(1, cinemaID);
+            pstmt.executeUpdate();
+        }
+        
+        // Xóa rạp chiếu
+        String deleteCinemaSQL = "DELETE FROM cinema WHERE CinemaID = ?";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(deleteCinemaSQL)) {
             pstmt.setInt(1, cinemaID);
             int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
+            
+            if (affectedRows > 0) {
+                connection.commit();
+                return true;
+            } else {
+                connection.rollback();
+                return false;
+            }
+        }
+    } catch (SQLException e) {
+        try {
+            connection.rollback();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         }
     }
+}
+
 
     private Cinema extractCinemaFromResultSet(ResultSet rs) throws SQLException {
         Cinema cinema = new Cinema();
