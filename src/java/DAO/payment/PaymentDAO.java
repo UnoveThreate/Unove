@@ -25,14 +25,11 @@ import model.Seat;
  * @author DELL
  */
 public class PaymentDAO extends MySQLConnect {
- 
 
     public PaymentDAO(ServletContext context) throws Exception {
         super();
         connect(context); // Establish the connection from MySQLConnect
     }
-
-   
 
     public Cinema getCinemaById(int cinemaID) throws SQLException {
         Cinema cinema = null;
@@ -284,5 +281,19 @@ public class PaymentDAO extends MySQLConnect {
         }
 
         return cinema; // Return the list of cinemas for the given MovieSlotID
+    }
+
+    public boolean addCanteenItemToOrder(int orderID, int canteenItemID, int quantity) {
+        String sql = "INSERT INTO orderCanteenItem (orderID, canteenItemID, Quantity) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, orderID);
+            statement.setInt(2, canteenItemID);
+            statement.setInt(3, quantity);
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một bản ghi được chèn
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

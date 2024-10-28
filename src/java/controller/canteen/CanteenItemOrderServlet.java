@@ -4,6 +4,7 @@
  */
 package controller.canteen;
 
+import DAO.canteenItem.CanteenItemSelectDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,9 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import model.BookingSession;
 import model.canteenItemTotal.CanteenItemOrder;
+import util.RouterURL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.CanteenItem;
 
 /**
  *
@@ -23,6 +30,20 @@ import model.canteenItemTotal.CanteenItemOrder;
 public class CanteenItemOrderServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private CanteenItemSelectDAO canteenItemSelect;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            // Khởi tạo các DAO từ servlet context
+
+            canteenItemSelect = new CanteenItemSelectDAO(getServletContext());
+        } catch (Exception ex) {
+            // Ghi log lỗi nếu có vấn đề trong khởi tạo
+            Logger.getLogger(CanteenItemOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,28 +94,58 @@ public class CanteenItemOrderServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
- protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        List<CanteenItemOrder> itemOrders = new ArrayList<>();
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
 
-        // Lấy danh sách các canteen item từ request
-        for (String param : request.getParameterMap().keySet()) {
+        if (bookingSession == null) {
+            bookingSession = new BookingSession();
+        }
+
+        // Lấy totalPrice từ SelectSeatServlet (nếu có) và giữ giá trị đã lưu
+        double totalPrice = bookingSession.getTotalPrice();
+
+        // Duyệt qua các tham số để tìm và xử lý các `quantity` của `canteenItemID`
+        for (String param
+                : request.getParameterMap()
+                        .keySet()) {
             if (param.startsWith("quantity_")) {
-                int canteenItemID = Integer.parseInt(param.split("_")[1]);
-                int quantity = Integer.parseInt(request.getParameter(param));
+                try {
+                    int canteenItemID = Integer.parseInt(param.split("_")[1]);
+                    int quantity = Integer.parseInt(request.getParameter(param));
 
-                // Chỉ thêm nếu số lượng lớn hơn 0
-                if (quantity > 0) {
-                    CanteenItemOrder itemOrder = new CanteenItemOrder(canteenItemID, quantity);
-                    itemOrders.add(itemOrder);
-                    
+                    if (quantity > 0) {
+                        // Thêm `canteenItemOrder` vào `BookingSession`
+                        bookingSession.addCanteenItemOrder(canteenItemID, quantity);
+
+                    }
+                } catch (NumberFormatException e) {
+                    // Xử lý nếu có lỗi định dạng số
+                    e.printStackTrace();
                 }
             }
         }
-        // get list canteen item 
-        System.out.println(itemOrders);
+        double canteenTotalPrice = calculateCanteenTotalPrice(bookingSession.getItemOrders());
+        bookingSession.setPriceCanteenItem(canteenTotalPrice);
+        
+        totalPrice += canteenTotalPrice;
 
-        //redirect to confirm payment page 
+        bookingSession.setTotalPrice(totalPrice);
+
+        session.setAttribute("bookingSession", bookingSession);
+
+        // Điều hướng đến trang xác nhận thanh toán hoặc trang tiếp theo
+        response.sendRedirect(RouterURL.ORDER_DETAIL);
+    }
+
+    private double calculateCanteenTotalPrice(List<CanteenItemOrder> canteenItemOrders) {
+        double totalPrice = 0.0;
+        for (CanteenItemOrder itemOrder : canteenItemOrders) {
+            double itemPrice = canteenItemSelect.getCanteenItemPriceById(itemOrder.getCanteenItemID());
+            totalPrice = itemPrice * itemOrder.getQuantity();
+        }
+        return totalPrice;
     }
 
     /**

@@ -93,9 +93,9 @@ public class SeatDAO extends MySQLConnect {
     }
 
     public boolean isSeatBooked(int seatId, int movieSlotId) {
-        String sql = "SELECT COUNT(*) FROM Ticket t " +
-                "JOIN `Order` o ON t.OrderID = o.OrderID " +
-                "WHERE t.SeatID = ? AND o.MovieSlotID = ? AND t.Status = 'Đã đặt'";
+        String sql = "SELECT COUNT(*) FROM Ticket t "
+                + "JOIN `Order` o ON t.OrderID = o.OrderID "
+                + "WHERE t.SeatID = ? AND o.MovieSlotID = ? AND t.Status = 'Đã đặt'";
 
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setInt(1, seatId);
@@ -114,10 +114,10 @@ public class SeatDAO extends MySQLConnect {
 
     public List<Seat> getBookedSeatsByMovieSlotId(int movieSlotId) {
         List<Seat> bookedSeats = new ArrayList<>();
-        String sql = "SELECT s.* FROM Seat s " +
-                "JOIN Ticket t ON s.SeatID = t.SeatID " +
-                "JOIN `Order` o ON t.OrderID = o.OrderID " +
-                "WHERE o.MovieSlotID = ? AND t.Status = 'Đã đặt'";
+        String sql = "SELECT s.* FROM Seat s "
+                + "JOIN Ticket t ON s.SeatID = t.SeatID "
+                + "JOIN `Order` o ON t.OrderID = o.OrderID "
+                + "WHERE o.MovieSlotID = ? AND t.Status = 'Đã đặt'";
 
         try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setInt(1, movieSlotId);
@@ -181,4 +181,5 @@ public class SeatDAO extends MySQLConnect {
             return false;
         }
     }
+
 }

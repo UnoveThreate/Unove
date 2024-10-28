@@ -23,25 +23,16 @@ public class FavouriteMoviesDAO extends UserDAO {
         super(context);
     }
 
-    public boolean isFavoritedMovie(int userID, int movieID) throws SQLException {
-        String sqlQuery = "select * from FavoriteFilm where UserID = " + userID + " and MovieID = " + movieID;
-        ResultSet rs = super.getResultSet(sqlQuery);
-        return rs.next();
-    }
-
     public List<Movie> queryFavouriteMovies(int userID) throws SQLException {
         List<Movie> movies = new ArrayList<>();
-        String sqlQuery = "SELECT Movie.MovieID, CinemaID, Title, Synopsis, DatePublished, ImageURL, Rating, Country, Status "
-                + "FROM FavoriteFilm "
-                + "JOIN Movie ON FavoriteFilm.MovieID = Movie.MovieID "
-                + "WHERE UserID = ?";
+        String sqlQuery = "SELECT m.MovieID, m.Title, m.Synopsis, m.DatePublished, m.ImageURL, m.Rating, m.Country, m.Status "
+                + "FROM FavoriteFilm f JOIN Movie m ON f.MovieID = m.MovieID WHERE f.UserID = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sqlQuery)) {
             pstmt.setInt(1, userID);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                List<String> genres = super.getGenresFromMovieID(rs.getInt("MovieID"));
                 Movie movie = new Movie(
                         rs.getInt("MovieID"),
                         rs.getString("Title"),
@@ -51,7 +42,7 @@ public class FavouriteMoviesDAO extends UserDAO {
                         rs.getFloat("Rating"),
                         rs.getString("Status"),
                         rs.getString("Country"),
-                        genres
+                        getGenresFromMovieID(rs.getInt("MovieID"))
                 );
                 movies.add(movie);
             }
@@ -61,18 +52,20 @@ public class FavouriteMoviesDAO extends UserDAO {
 
     public int insertFavouriteMovie(int userID, int movieID, String favoritedAt) throws SQLException {
         String sql = "INSERT INTO FavoriteFilm (UserID, MovieID, FavoritedAt) VALUES (?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, userID);
-        ps.setInt(2, movieID);
-        ps.setString(3, favoritedAt);
-        return ps.executeUpdate();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.setInt(2, movieID);
+            ps.setString(3, favoritedAt);
+            return ps.executeUpdate();
+        }
     }
 
     public int deleteFavouriteMovie(int userID, int movieID) throws SQLException {
-        String sql = "DELETE FavoriteFilm WHERE UserID = ? AND MovieID = ?";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, userID);
-        ps.setInt(2, movieID);
-        return ps.executeUpdate();
+        String sql = "DELETE FROM FavoriteFilm WHERE UserID = ? AND MovieID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.setInt(2, movieID);
+            return ps.executeUpdate();
+        }
     }
 }
