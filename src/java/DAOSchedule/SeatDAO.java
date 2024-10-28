@@ -81,34 +81,41 @@ public class SeatDAO extends MySQLConnect {
         return null;
     }
 
-    private Seat mapResultSetToSeat(ResultSet resultSet) throws SQLException {
+    private Seat mapResultSetToSeat(ResultSet rs) throws SQLException {
         Seat seat = new Seat();
-        seat.setSeatID(resultSet.getInt("SeatID"));
-        seat.setRoomID(resultSet.getInt("RoomID"));
-        seat.setName(resultSet.getString("Name"));
-        seat.setCoordinateX(resultSet.getInt("CoordinateX"));
-        seat.setCoordinateY(resultSet.getInt("CoordinateY"));
-        //seat.setPrice(resultSet.getDouble("Price"));
+        seat.setSeatID(rs.getInt("SeatID"));
+        seat.setRoomID(rs.getInt("RoomID"));
+        seat.setName(rs.getString("Name"));
+        seat.setCoordinateX(rs.getInt("CoordinateX"));
+        seat.setCoordinateY(rs.getInt("CoordinateY"));
         return seat;
     }
 
     public boolean isSeatBooked(int seatId, int movieSlotId) {
-        String sql = "SELECT COUNT(*) FROM Ticket t "
-                + "JOIN `Order` o ON t.OrderID = o.OrderID "
-                + "WHERE t.SeatID = ? AND o.MovieSlotID = ? AND t.Status = 'Đã đặt'";
+        String sql = """
+                SELECT 
+                    Ticket.SeatID
+                FROM 
+                    Ticket
+                JOIN 
+                    `Order` ON Ticket.OrderID = `Order`.OrderID
+                WHERE 
+                    `Order`.MovieSlotID = ?
+                    AND Ticket.SeatID = ?
+                """;
 
-        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
-            statement.setInt(1, seatId);
-            statement.setInt(2, movieSlotId);
-
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return resultSet.getInt(1) > 0;
-                }
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            stmt.setInt(1, movieSlotId);
+            stmt.setInt(2, seatId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next(); // Trả về true nếu tìm thấy ghế
             }
         } catch (SQLException e) {
+            System.out.println("Error checking seat status: " + e.getMessage());
             e.printStackTrace();
         }
+        
         return false;
     }
 
@@ -181,5 +188,67 @@ public class SeatDAO extends MySQLConnect {
             return false;
         }
     }
+    public List<Integer> getBookedSeatIds(int movieSlotId) {
+        List<Integer> bookedSeatIds = new ArrayList<>();
+        String sql = """
+                SELECT 
+                    Ticket.SeatID
+                FROM 
+                    Ticket
+                JOIN 
+                    `Order` ON Ticket.OrderID = `Order`.OrderID
+                WHERE 
+                    `Order`.MovieSlotID = ?
+                """;
+
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
+            stmt.setInt(1, movieSlotId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    bookedSeatIds.add(rs.getInt("SeatID"));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting booked seat IDs: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return bookedSeatIds;
+    }
+    
+    public List<Seat> getBookedSeats(int movieSlotId) {
+        List<Seat> bookedSeats = new ArrayList<>();
+        String sql = """
+                SELECT 
+                    s.*
+                FROM 
+                    Ticket t
+                JOIN 
+                    `Order` o ON t.OrderID = o.OrderID
+                JOIN 
+                    Seat s ON t.SeatID = s.SeatID
+                WHERE 
+                    o.MovieSlotID = ?
+                """;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, movieSlotId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Seat seat = mapResultSetToSeat(rs);
+                    seat.setAvailable(false); // Đánh dấu là ghế đã được đặt
+                    bookedSeats.add(seat);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting booked seats: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        return bookedSeats;
+    }
+    
 
 }
