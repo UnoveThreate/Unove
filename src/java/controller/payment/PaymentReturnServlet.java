@@ -51,9 +51,10 @@ public class PaymentReturnServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         HttpSession session = request.getSession();
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
-
+        
         Integer userId = (Integer) session.getAttribute("userID");
         String email = (String) session.getAttribute("email");
         String amountStr = request.getParameter("vnp_Amount");
@@ -116,7 +117,7 @@ public class PaymentReturnServlet extends HttpServlet {
                 String code = Util.generateActivationCodeOrder();
                 LOGGER.log(Level.INFO, "Generated activation code: {0} for OrderID: {1}", new Object[]{code, orderID});
 
-                String qrCodeText = "http://localhost:8080/Unove/order/confirm?orderID=" + orderID + "&userID=" + userId + "&code=" + code;
+                String qrCodeText = "http://54.255.150.15:8080/Unove/order/confirm?orderID=" + orderID + "&userID=" + userId + "&code=" + code;
                 String fileName = "qrcode_" + orderID + "_" + userId;
                 String uploadFolder = "QRCode_F";
 

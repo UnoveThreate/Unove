@@ -82,7 +82,11 @@ public class CreateMovieSlotServlet extends HttpServlet {
         String type = request.getParameter("type");
         float price = Float.parseFloat(request.getParameter("price"));
         float discount = Float.parseFloat(request.getParameter("discount"));
-
+        if (discount < 0) {
+            discount = 0;
+        } else if (discount > 1) {
+            discount /= 100;
+        }
         // Đặt trạng thái mặc định là "Active"
         String status = "Active"; // Gán trực tiếp giá trị "Active"
 
