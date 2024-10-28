@@ -316,7 +316,7 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
                         throw new IllegalArgumentException("Vui lòng điền đầy đủ thông tin");
                     }
 
-                    String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
+                    String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);;
 
                     User newUser = new User();
                     newUser.setUsername(username);
@@ -466,6 +466,7 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
                     newOwner.setUsername(ownerUsername);
                     newOwner.setPassword(hashedPassword);
                     newOwner.setEmail(ownerEmail);
+                    newOwner.setStatus(1);
                     newOwner.setRole("OWNER");
                     int ownerID = userManagementDAO.addUser(newOwner);
 
