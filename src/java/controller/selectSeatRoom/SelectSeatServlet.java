@@ -62,11 +62,11 @@ public class SelectSeatServlet extends HttpServlet {
                 response.sendRedirect(RouterURL.LOGIN);
                 return;
             }
-            
+
             if (bookingSession != null) {
                 session.removeAttribute("bookingSession");
             }
-            
+
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
                 int movieSlotID = Integer.parseInt(movieSlotIDParam);
@@ -201,13 +201,7 @@ public class SelectSeatServlet extends HttpServlet {
 
     private double calculateTotalPrice(List<Seat> selectedSeats, MovieSlot movieSlot) {
         double basePrice = movieSlot.getPrice();
-        double discount = movieSlot.getDiscount();
-
-        if (discount > 1) {
-            discount /= 100;
-        }
-
-        return selectedSeats.size() * (basePrice - basePrice * discount);
+        return selectedSeats.size() * basePrice;
     }
 
     private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
