@@ -7,7 +7,6 @@
 <%@page import="java.util.List"%>
 <%@page import="util.RouterURL"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="/page/owner/navbar.jsp" />
 
 <!DOCTYPE html>
 

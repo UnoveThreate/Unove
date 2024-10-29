@@ -1,17 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Create Room</title>
+        <title>Tạo phòng</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     </head>
     <body>
         <div class="container mt-5">     
-            <h1>Create Room</h1>
+            <h1>Tạo phòng</h1>
 
             <form action="${pageContext.request.contextPath}/owner/room/createRoom" method="post">
                 <input type="hidden" name="cinemaID" value="${cinemaID}"/>
@@ -38,10 +37,10 @@
                     <input type="checkbox" name="roomType" value="Standard"> Standard<br>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Create Room</button>
+                <button type="submit" class="btn btn-primary">Tạo</button>
             </form>
 
-            <a href="${pageContext.request.contextPath}/owner/room/manageCinema?cinemaID=${cinemaID}" class="btn btn-secondary mt-3">Back to Cinema Management</a>
+            <a href="${pageContext.request.contextPath}/owner/room/manageRoom?cinemaID=${room.cinemaID}" class="btn btn-secondary mt-3">Quay lại</a>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
