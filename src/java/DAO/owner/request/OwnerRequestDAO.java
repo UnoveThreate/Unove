@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import model.User;
 
 /**
  *
@@ -24,18 +25,14 @@ public class OwnerRequestDAO extends MySQLConnect {
         connect(context); // Establish the connection
     }
 
-    // Method to add a new owner request with the extended fields
-    public boolean addOwnerRequest(int userID, String fullName, String email, String cinemaName, String cinemaAddress, String businessLicenseNumber, String businessLicenseFile) {
-        String sql = "INSERT INTO OwnerRequest (UserID, FullName, Email, CinemaName, CinemaAddress, BusinessLicenseNumber, BusinessLicenseFile, Status) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')";
+    // Add a new owner request
+    public boolean addOwnerRequest(User currentUser, String taxNumber, String businessLicenseFile) {
+        String sql = "INSERT INTO OwnerRequest (currentUser, TaxNumber, BusinessLicenseFile, Status) VALUES (?, ?, ?, 'pending')";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, userID);
-            pstmt.setString(2, fullName);
-            pstmt.setString(3, email);
-            pstmt.setString(4, cinemaName);
-            pstmt.setString(5, cinemaAddress);
-            pstmt.setString(6, businessLicenseNumber);
-            pstmt.setString(7, businessLicenseFile); // Store the file name
-
+            pstmt.setInt(1, currentUser);
+            pstmt.setString(2, taxNumber);
+            pstmt.setString(3, businessLicenseFile);
+            
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,15 +48,10 @@ public class OwnerRequestDAO extends MySQLConnect {
             while (rs.next()) {
                 OwnerRequest request = new OwnerRequest(
                         rs.getInt("RequestID"),
-                        rs.getInt("UserID"),
+                        rs.getInt("currentUser"),
                         rs.getTimestamp("RequestDate"),
                         rs.getString("Status"),
-                        rs.getString("Reason"),
-                        rs.getString("FullName"), // additional fields
-                        rs.getString("Email"),
-                        rs.getString("CinemaName"),
-                        rs.getString("CinemaAddress"),
-                        rs.getString("BusinessLicenseNumber"),
+                        rs.getString("TaxNumber"),
                         rs.getString("BusinessLicenseFile")
                 );
                 requests.add(request);

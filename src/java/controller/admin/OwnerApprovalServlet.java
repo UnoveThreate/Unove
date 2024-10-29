@@ -22,6 +22,7 @@ import model.User;
  */
 @WebServlet("/admin/ownerApproval")
 public class OwnerApprovalServlet extends HttpServlet {
+
     private OwnerRequestDAO ownerRequestDAO;
     private UserRoleUpdateDAO userRoleUpdateDAO;
 
@@ -41,13 +42,7 @@ public class OwnerApprovalServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User currentUser = (User) session.getAttribute("currentUser");
-
-        // Check if user is admin
-        if (currentUser == null || !"admin".equals(currentUser.getRole())) {
-            response.sendRedirect(request.getContextPath() + RouterURL.LOGIN);
-            return;
-        }
+        String roleUser = (String) session.getAttribute("role");
 
         // Fetch pending requests
         List<OwnerRequest> pendingRequests = ownerRequestDAO.getPendingRequests();
@@ -67,12 +62,6 @@ public class OwnerApprovalServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User currentUser = (User) session.getAttribute("currentUser");
 
-        // Check if user is admin
-        if (currentUser == null || !"admin".equals(currentUser.getRole())) {
-            response.sendRedirect(request.getContextPath() + RouterURL.LOGIN);
-            return;
-        }
-
         try {
             int requestID = Integer.parseInt(request.getParameter("requestID"));
             String status = request.getParameter("status");
@@ -83,23 +72,23 @@ public class OwnerApprovalServlet extends HttpServlet {
                 throw new IllegalArgumentException("Invalid status: " + status);
             }
 
+            // Update request status in the database
             if (ownerRequestDAO.updateRequestStatus(requestID, status, reason)) {
                 if ("approved".equals(status)) {
-                    // Get UserID from request to update role
                     int userID = ownerRequestDAO.getUserIDByRequestID(requestID);
                     userRoleUpdateDAO.updateUserRoleToOwner(userID);
                 }
-                response.sendRedirect(RouterURL.ADMIN_PAGE);
+
+                // For AJAX requests, return success response
+                response.setStatus(HttpServletResponse.SC_OK);
             } else {
-                request.setAttribute("error", "Failed to update request status.");
-                request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+                // Handle error
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Failed to update request status.");
             }
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "Invalid request ID format.");
-            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request ID format.");
         } catch (Exception e) {
-            request.setAttribute("error", "An error occurred: " + e.getMessage());
-            request.getRequestDispatcher(RouterJSP.ERROR_PAGE).forward(request, response);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "An error occurred: " + e.getMessage());
         }
     }
 }

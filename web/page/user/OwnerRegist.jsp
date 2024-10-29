@@ -13,47 +13,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Owner Registration Request</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h1>Register to Become an Owner</h1>
-        
-        <!-- Display error message if exists -->
-        <c:if test="${not empty error}">
-            <div class="alert alert-danger">
-                ${error}
+        <!-- Success Message -->
+        <c:if test="${not empty message}">
+            <div class="alert alert-success">
+                ${message}
+                <form action="${pageContext.request.contextPath}/Unove/display" method="get" class="mt-2">
+                    <button type="submit" class="btn btn-primary">Click here to return to the user profile</button>
+                </form>
             </div>
         </c:if>
 
-        <form action="<%= request.getContextPath() %>/registerAsOwner" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" class="form-control" id="fullName" name="fullName" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="cinemaName">Cinema Name</label>
-                <input type="text" class="form-control" id="cinemaName" name="cinemaName" required>
-            </div>
-            <div class="form-group">
-                <label for="cinemaAddress">Cinema Address</label>
-                <input type="text" class="form-control" id="cinemaAddress" name="cinemaAddress" required>
-            </div>
-            <div class="form-group">
-                <label for="businessLicenseNumber">Business License Number</label>
-                <input type="text" class="form-control" id="businessLicenseNumber" name="businessLicenseNumber" required>
-            </div>
-            <div class="form-group">
-                <label for="businessLicenseFile">Upload Business License</label>
-                <input type="file" class="form-control" id="businessLicenseFile" name="businessLicenseFile" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit Request</button>
-        </form>
+        <!-- Registration Form -->
+        <c:if test="${empty message}">
+            <h1>Register to Become an Owner</h1>
+            <form action="${pageContext.request.contextPath}/ownerRequest" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" value="${fullName}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="${email}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="taxNumber">Tax ID</label>
+                    <input type="text" class="form-control" id="taxNumber" name="taxNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="businessLicenseFile">Upload Business License</label>
+                    <input type="file" class="form-control" id="businessLicenseFile" name="businessLicenseFile" required>
+                </div>
+                <!-- Display error messages if any -->
+                <c:if test="${not empty error}">
+                    <div class="alert alert-danger">${error}</div>
+                </c:if>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </form>
+        </c:if>
     </div>
 
     <!-- Bootstrap JS and dependencies -->
