@@ -401,20 +401,20 @@
                         <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
                     </li>-->
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/showtimes">Schedule Movie</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/showtimes">Lịch chiếu phim</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Movie</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Phim</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Top Movies</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Top Phim</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Upcoming movies</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Phim sắp chiếu</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Cinema
+                            Rạp
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <c:forEach var="cinema" items="${cinemaNames}">
@@ -480,7 +480,7 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/display">Xem hồ sơ</a></li>
                                         <c:if test="${sessionScope.role eq 'OWNER'}">
-                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản lí Owner</a></li>
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản trị viên</a></li>
                                         </c:if>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>

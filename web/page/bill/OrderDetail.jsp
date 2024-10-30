@@ -13,243 +13,342 @@
         <title>Chi tiết vé - UNOVE Cinema</title>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <style>
-            body {
-                font-family: 'Poppins', sans-serif;
-                margin: 0;
-                padding: 0;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: #333;
-            }
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ffe6ef 0%, #ffd1dc 100%);
+        color: #333;
+        min-height: 100vh;
+    }
 
-            .ticket-container {
-                max-width: 1200px;
-                width: 95%;
-                margin: 100px auto 40px; /* Tăng margin-top để tránh bị che bởi header */
-                background-color: rgba(255, 255, 255, 0.95);
-                border-radius: 20px;
-                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-                overflow: hidden;
-                backdrop-filter: blur(10px);
-            }
+    .ticket-container {
+        max-width: 1200px;
+        width: 95%;
+        margin: 100px auto 40px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        backdrop-filter: blur(10px);
+        transition: all 0.5s ease;
+        border: 3px dashed #ff5d8f;
+    }
 
-            .ticket-header {
-                background: linear-gradient(90deg, #4a00e0 0%, #8e2de2 100%);
-                color: #ffffff;
-                text-align: center;
-                padding: 30px;
-                font-size: 32px;
-                font-weight: 700;
-                letter-spacing: 2px;
-                text-transform: uppercase;
-            }
+    .ticket-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+    }
 
-            .ticket-content {
-                display: flex;
-                flex-wrap: wrap;
-                padding: 40px;
-            }
+    .ticket-header {
+        background: linear-gradient(90deg, #ff8fab 0%, #ff5d8f 100%);
+        color: #ffffff;
+        text-align: center;
+        padding: 30px;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+    }
 
-            .info-section, .qr-section {
-                padding: 30px;
-                background-color: #ffffff;
-                border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                transition: all 0.3s ease;
-            }
+    .ticket-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, #fff, transparent);
+        animation: shimmer 2s infinite;
+    }
 
-            .info-section {
-                flex: 2;
-                margin-right: 40px;
-            }
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
 
-            .info-section:hover, .qr-section:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-            }
+    .ticket-content {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 40px;
+        gap: 40px;
+    }
 
-            .movie-title h2 {
-                color: #4a00e0;
-                margin-top: 0;
-                font-size: 28px;
-                border-bottom: 3px solid #4a00e0;
-                padding-bottom: 15px;
-                margin-bottom: 30px;
-            }
+    .info-section, .qr-section {
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-            .info-block {
-                margin-bottom: 25px;
-                position: relative;
-                padding-left: 40px;
-            }
+    .info-section {
+        flex: 2;
+        border: 2px dashed #ffd1dc;
+    }
 
-            .info-block h4 {
-                font-size: 18px;
-                color: #4a00e0;
-                margin: 0 0 10px 0;
-                font-weight: 600;
-            }
+    .info-section:hover, .qr-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
 
-            .info-block::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                top: 5px;
-                width: 25px;
-                height: 25px;
-                background-color: #4a00e0;
-                border-radius: 50%;
-                opacity: 0.2;
-            }
+    .movie-title h2 {
+        color: #ff5d8f;
+        margin-top: 0;
+        font-size: 28px;
+        border-bottom: 3px solid #ff5d8f;
+        padding-bottom: 15px;
+        margin-bottom: 30px;
+        position: relative;
+    }
 
-            .info-block i {
-                position: absolute;
-                left: 5px;
-                top: 10px;
-                color: #4a00e0;
-            }
+    .movie-title h2::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: #ff5d8f;
+        animation: widthAnim 2s ease-in-out infinite;
+    }
 
-            .info-block p, .info-block ul {
-                font-size: 16px;
-                color: #555;
-                margin: 0;
-                line-height: 1.6;
-            }
+    @keyframes widthAnim {
+        0% { width: 50px; }
+        50% { width: 100px; }
+        100% { width: 50px; }
+    }
 
-            .info-block ul {
-                list-style-type: none;
-                padding: 0;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
+    .info-block {
+        margin-bottom: 25px;
+        position: relative;
+        padding-left: 40px;
+        transition: all 0.3s ease;
+        
+    }
 
-            .info-block ul li {
-                background-color: #e8f0fe;
-                padding: 5px 15px;
-                border-radius: 20px;
-                display: inline-block;
-                transition: all 0.3s ease;
-            }
+    .info-block:hover {
+        transform: translateX(10px);
+    }
 
-            .info-block ul li:hover {
-                background-color: #4a00e0;
-                color: #ffffff;
-            }
+    .info-block h4 {
+        font-size: 18px;
+        color: #ff5d8f;
+        margin: 0 0 10px 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-            .payment-button {
-                display: block;
-                width: 100%;
-                padding: 15px;
-                background-color: #4a00e0;
-                color: #ffffff;
-                text-align: center;
-                font-size: 18px;
-                font-weight: 600;
-                border: none;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                margin-top: 30px;
-            }
+    .info-block i {
+        position: absolute;
+        left: 5px;
+        top: 3px;
+        font-size: 20px;
+        color: #ff5d8f;
+        transition: all 0.3s ease;
+    }
 
-            .payment-button:hover {
-                background-color: #3c00b7;
-                transform: translateY(-3px);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            }
+    .info-block:hover i {
+        transform: scale(1.2);
+    }
 
-            .qr-section {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-            }
+    .info-block p, .info-block ul {
+        font-size: 16px;
+        color: #555;
+        margin: 0;
+        line-height: 1.6;
+    }
 
-            .qr-section h4 {
-                font-size: 20px;
-                color: #4a00e0;
-                margin: 0 0 20px 0;
-                font-weight: 600;
-            }
+    .info-block ul {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
 
-            .qr-section img {
-                max-width: 200px;
-                border-radius: 15px;
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
-                transition: transform 0.3s ease;
-            }
+    .info-block ul li {
+        background-color: #fff0f5;
+        padding: 8px 15px;
+        border-radius: 20px;
+        display: inline-block;
+        transition: all 0.3s ease;
+        border: 1px solid #ffd1dc;
+        border: 2px dashed #ff8fab;
+    }
 
-            .qr-section img:hover {
-                transform: scale(1.05);
-            }
+    .info-block ul li:hover {
+        background-color: #ff5d8f;
+        color: #ffffff;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(255, 93, 143, 0.3);
+    }
 
-            .qr-section p {
-                font-size: 14px;
-                color: #666;
-                max-width: 250px;
-                line-height: 1.6;
-            }
+    .payment-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(45deg, #ff5d8f, #ff8fab);
+        color: #ffffff;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 30px;
+        position: relative;
+        overflow: hidden;
+        border: 2px dashed #ffffff;
+    }
 
-            @media (max-width: 1024px) {
-                .ticket-content {
-                    flex-direction: column;
-                }
-                .info-section, .qr-section {
-                    width: 100%;
-                    margin-right: 0;
-                    margin-bottom: 30px;
-                }
-            }
+    .payment-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 93, 143, 0.3);
+    }
 
-            @media (max-width: 768px) {
-                .ticket-container {
-                    width: 90%;
-                    margin: 80px auto 20px; /* Điều chỉnh margin-top cho màn hình nhỏ */
-                }
-                .ticket-header {
-                    font-size: 24px;
-                    padding: 20px;
-                }
-                .ticket-content {
-                    padding: 20px;
-                }
-                .info-section, .qr-section {
-                    padding: 20px;
-                }
-                .movie-title h2 {
-                    font-size: 22px;
-                }
-                .info-block h4 {
-                    font-size: 16px;
-                }
-                .info-block p, .info-block ul {
-                    font-size: 14px;
-                }
-                .payment-button {
-                    font-size: 16px;
-                    padding: 12px;
-                }
-            }
-        </style>
+    .payment-button::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+        transform: rotate(45deg);
+        animation: buttonShine 3s infinite;
+    }
+
+    @keyframes buttonShine {
+        0% { transform: translateX(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) rotate(45deg); }
+    }
+
+    .qr-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        border: 2px dashed #ff5d8f;
+    }
+
+    .qr-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 2px dashed #ff5d8f;
+        border-radius: 15px;
+        animation: borderDash 20s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes borderDash {
+        to { transform: rotate(360deg); }
+    }
+
+    .qr-section h4 {
+        font-size: 20px;
+        color: #ff5d8f;
+        margin: 0 0 20px 0;
+        font-weight: 600;
+    }
+
+    .qr-section img {
+        max-width: 200px;
+        border-radius: 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: all 0.5s ease;
+        border: 4px solid #fff;
+        border: 2px dashed #ff8fab;
+    padding: 10px;
+    }
+
+    .qr-section img:hover {
+        transform: scale(1.05) rotate(2deg);
+        box-shadow: 0 15px 30px rgba(255, 93, 143, 0.2);
+    }
+
+    .qr-section p {
+        font-size: 14px;
+        color: #666;
+        max-width: 250px;
+        line-height: 1.6;
+    }
+
+    @media (max-width: 1024px) {
+        .ticket-content {
+            flex-direction: column;
+        }
+        .info-section, .qr-section {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ticket-container {
+            width: 90%;
+            margin: 80px auto 20px;
+        }
+        .ticket-header {
+            font-size: 24px;
+            padding: 20px;
+        }
+        .ticket-content {
+            padding: 20px;
+        }
+        .info-section, .qr-section {
+            padding: 20px;
+        }
+        .movie-title h2 {
+            font-size: 22px;
+            border-bottom: 2px dashed #ff5d8f;
+        }
+        .info-block h4 {
+            font-size: 16px;
+        }
+        .info-block p, .info-block ul {
+            font-size: 14px;
+        }
+        .payment-button {
+            font-size: 16px;
+            padding: 12px;
+        }
+    }
+</style>
     </head>
     <body>
         <jsp:include page="../landingPage/Header.jsp" />
 
-        <div class="ticket-container">
-            <div class="ticket-header">Chi tiết vé</div>
+        <div class="ticket-container" data-aos="fade-up" data-aos-duration="1000">
+            <div class="ticket-header" data-aos="fade-down" data-aos-duration="1000">Chi tiết vé</div>
             <div class="ticket-content">
                 <!-- Movie Info Section -->
-                <div class="info-section">
+                <div class="info-section" data-aos="fade-right" data-aos-delay="200" data-aos-duration="1000">
                     <div class="movie-title">
-                        <h2><c:out value="${movie.title}" default="Chưa có thông tin phim"/></h2>
+                        <h2 data-aos="fade-up" data-aos-delay="300">
+                            <c:out value="${movie.title}" default="Chưa có thông tin phim"/>
+                        </h2>
                     </div>
-                    <div class="info-block">
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="400">
                         <h4><i class="fas fa-clock"></i> Thời Gian:</h4>
                         <p>
                             <c:if test="${not empty movieSlot}">
@@ -257,22 +356,25 @@
                                 <fmt:formatDate value="${movieSlot.endTime}" pattern="HH:mm" />
                             </c:if>
                             <c:if test="${empty movieSlot}">Chưa có thông tin</c:if>
-                            </p>
-                        </div>
-                        <div class="info-block">
-                            <h4><i class="fas fa-calendar-alt"></i> Ngày Chiếu:</h4>
-                            <p>
+                        </p>
+                    </div>
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="450">
+                        <h4><i class="fas fa-calendar-alt"></i> Ngày Chiếu:</h4>
+                        <p>
                             <c:if test="${not empty movieSlot}">
                                 <fmt:formatDate value="${movieSlot.startTime}" pattern="dd/MM/yyyy" />
                             </c:if>
                             <c:if test="${empty movieSlot}">Chưa có thông tin</c:if>
-                            </p>
-                        </div>
-                        <div class="info-block">
-                            <h4><i class="fas fa-film"></i> Rạp:</h4>
-                            <p><c:out value="${cinema.name}" default="Chưa có thông tin rạp"/></p>
+                        </p>
                     </div>
-                    <div class="info-block">
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="500">
+                        <h4><i class="fas fa-film"></i> Rạp:</h4>
+                        <p><c:out value="${cinema.name}" default="Chưa có thông tin rạp"/></p>
+                    </div>
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="550">
                         <h4><i class="fas fa-map-marker-alt"></i> Địa chỉ:</h4>
                         <p>
                             <c:out value="${cinema.address}" default=""/>
@@ -284,32 +386,34 @@
                             <c:out value="${cinema.commune}" default=""/>
                         </p>
                     </div>
-                    <div class="info-block">
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="600">
                         <h4><i class="fas fa-door-open"></i> Phòng Chiếu:</h4>
                         <p><c:out value="${movieSlot.roomID}" default="Chưa có thông tin"/></p>
                     </div>
-                    <div class="info-block">
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="650">
                         <h4><i class="fas fa-video"></i> Định Dạng:</h4>
                         <p><c:out value="${movieSlot.type}" default="Chưa có thông tin"/></p>
                     </div>
-                    <div class="info-block">
+
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="700">
                         <h4><i class="fas fa-couch"></i> Ghế:</h4>
                         <ul>
                             <c:choose>
                                 <c:when test="${not empty selectedSeats}">
                                     <c:forEach var="seat" items="${selectedSeats}">
                                         <li>${seat.name}</li>
-                                        </c:forEach>
-                                    </c:when>
-                                    <c:otherwise>
+                                    </c:forEach>
+                                </c:when>
+                                <c:otherwise>
                                     <li>Chưa chọn ghế</li>
-                                    </c:otherwise>
-                                </c:choose>
+                                </c:otherwise>
+                            </c:choose>
                         </ul>
                     </div>
-                    <!-- Existing content... -->
 
-                    <div class="info-block">
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="750">
                         <h4><i class="fas fa-utensils"></i> Đồ ăn và nước uống:</h4>
                         <ul>
                             <c:choose>
@@ -317,36 +421,53 @@
                                     <c:forEach var="item" items="${selectedCanteenItems}">
                                         <li>
                                             <c:out value="${item.name}" /> - 
-                                            Số lượng: <c:out value="${item.quantity}" /> 
-                                            
-                                          
+                                            Số lượng: <c:out value="${item.quantity}" />
                                         </li>
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
                                     <li>Chưa có đồ ăn và nước uống</li>
-                                    </c:otherwise>
-                                </c:choose>
+                                </c:otherwise>
+                            </c:choose>
                         </ul>
                     </div>
 
-                    <!-- Existing content... -->
-
-                    <div class="info-block">
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="800">
                         <h4><i class="fas fa-money-bill-wave"></i> Tạm Tính:</h4>
                         <p><fmt:formatNumber value="${totalPrice}" type="currency" currencySymbol="đ" maxFractionDigits="0"/></p>
                     </div>
+
                     <form action="<%= RouterURL.PAYMENT_VNPAY%>" method="get">
-                        <button type="submit" class="payment-button">Tiếp tục thanh toán</button>
+                        <button type="submit" class="payment-button" data-aos="zoom-in" data-aos-delay="850">
+                            Tiếp tục thanh toán
+                        </button>
                     </form>
                 </div>
+
                 <!-- QR Code Section -->
-                <div class="qr-section">
-                    <h4>Quét mã QR bằng VNPay để thanh toán</h4>
-                    <img src="https://jeju.com.vn/wp-content/uploads/2020/05/vnpay-qr-23-06-2020-2.jpg" alt="QR Code VNPay">
-                    <p>Sử dụng ứng dụng VNPay hoặc ứng dụng Camera hỗ trợ QR code để quét mã.</p>
+                <div class="qr-section" data-aos="fade-left" data-aos-delay="900">
+                    <h4 data-aos="fade-up" data-aos-delay="950">Quét mã QR bằng VNPay để thanh toán</h4>
+                    <img src="https://jeju.com.vn/wp-content/uploads/2020/05/vnpay-qr-23-06-2020-2.jpg" 
+                         alt="QR Code VNPay" 
+                         data-aos="zoom-in" 
+                         data-aos-delay="1000">
+                    <p data-aos="fade-up" data-aos-delay="1050">
+                        Sử dụng ứng dụng VNPay hoặc ứng dụng Camera hỗ trợ QR code để quét mã.
+                    </p>
                 </div>
             </div>
         </div>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                duration: 1000,
+                easing: 'ease-in-out',
+                once: true,
+                mirror: false,
+                anchorPlacement: 'top-bottom',
+                offset: 120
+            });
+        </script>
     </body>
 </html>
