@@ -137,6 +137,7 @@
 
                     .buttons {
                         margin-top: 40px;
+                        display:flex;
                     }
 
                     button {
@@ -149,6 +150,12 @@
                         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
                         transition: all 0.3s ease;
                     }
+                    #favourite
+                    #unFavourite:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 10px 20px rgba(255, 75, 43, 0.4);
+                    }
+                    
 
                     #trailerBtn {
                         background: linear-gradient(45deg, #ff4b2b, #ff416c);
@@ -291,48 +298,45 @@
                         </div>
                         <div class="buttons">
                             <button id="trailerBtn">View Trailer</button>
-                        </div>
+                        
 
                         <!-- Favorite Actions -->
                         <c:if test="${not empty sessionScope.userID}">
-                            <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
+                            <c:if test="${sessionScope.role ne 'OWNER'}">
+                                <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
 
-                            <c:if test="${isFavoritedMovie == false}">
-                                <form id="addToFavoriteForm" action="HandleDisplayMovieInfo"  method="post">
-                                    <input type="hidden" name="isAddingToFavorite" value="true"/>
-                                    <input type="hidden" id="favoritedAtInput" name="favoritedAt" value="${pageContext.request.requestURI}"/> <!-- Optional: Set a value for favoritedAt if needed -->
-                                    <input type="hidden" name="movieID" value="${movie.movieID}"/> <!-- Include the movieID -->
-                                    <button type="submit" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
-                                        <span class="clWhite">
-                                            <img src="assets/images/add-to-favorites.png"></img>
-                                            Thêm vào yêu thích
-                                        </span>
-                                    </button>
-                                </form>
+                                <c:if test="${isFavoritedMovie == false}">
+                                    <form action="HandleDisplayMovieInfo"  method="post">
+                                        <input type="hidden" name="isAddingToFavorite" value="true"/>
+                                        <input type="hidden" name="movieID" value="${movie.movieID}"/> <!-- Include the movieID -->
+                                        <button id="favourite" type="submit" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
+                                            <span class="clWhite">
+                                                <img src="assets/images/add-to-favorites.png"></img>
+
+                                            </span>
+                                        </button>
+                                    </form>
+                                </c:if>
+
+                                <c:if test="${isFavoritedMovie == true}">
+                                    <form action="myfavouritemovie" method="post">
+                                        <input type="hidden" name="deletedFavouriteMovieInput" value="${movie.movieID}"/>
+                                        <input type="hidden" name="isDeletingInMovieInfo" value="true"/>
+                                        <button id="unFavourite" type="submit" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
+                                            <span class="clWhite">
+                                                <img src="assets/images/delete-favorite.png"></img>
+
+                                            </span>
+                                        </button>
+                                    </form>                                    
+                                </c:if>
+
+
                             </c:if>
 
-                            <c:if test="${isFavoritedMovie == true}">
-                                <form id="deleteFavoriteMovieForm" action="myfavouritemovie" method="post">
-                                    <input type="hidden" name="deletedFavouriteMovieInput" value="${movie.movieID}"/>
-                                    <input type="hidden" name="isDeletingInMovieInfo" value="true"/>
-                                    <button type="submit" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
-                                        <span class="clWhite">
-                                            <img src="assets/images/delete-favorite.png"></img>
-                                            Hủy yêu thích
-                                        </span>
-                                    </button>
-                                </form>                                    
-                            </c:if>
 
-                            <form id="viewFavouriteMoviesForm" action="myfavouritemovie" method="get">
-                                <button type="submit" style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
-                                    <span class="clWhite">
-                                        <img src="assets/images/view-favourite-movies.png"></img>
-                                        Xem phim đã yêu thích
-                                    </span>
-                                </button>
-                            </form>
                         </c:if>
+                        </div>
 
 
 
@@ -399,7 +403,7 @@
                                 return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
                                     }
 
-                                   
+
                         </script>
                         </body>
                         </html>

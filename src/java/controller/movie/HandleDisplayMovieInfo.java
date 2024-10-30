@@ -12,10 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Movie;
 import util.RouterJSP;
+import util.RouterURL;
 
 @WebServlet(name = "HandleDisplayMovieInfo", urlPatterns = {"/HandleDisplayMovieInfo"})
 public class HandleDisplayMovieInfo extends HttpServlet {
@@ -60,7 +63,6 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             }
 
             // case favourite movies
-            
             HttpSession session = request.getSession();
             System.out.println(session.getAttribute("userID"));
 
@@ -97,28 +99,33 @@ public class HandleDisplayMovieInfo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        int userID = (int) session.getAttribute("userID");
-        int movieID = Integer.parseInt(request.getParameter("movieID"));
+        Integer userID = (Integer) session.getAttribute("userID");
 
-        boolean isAddingToFavorite = request.getParameter("isAddingToFavorite") != null && request.getParameter("isAddingToFavorite").equals("true");
-
-        if (isAddingToFavorite) {
-            String favoritedAt = request.getParameter("favoritedAt");
-            try {
-                favoriteMoviesDAO = new FavouriteMoviesDAO(request.getServletContext());
-                favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
-                doGet(request, response);
-            } catch (Exception ex) {
-                Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        if (userID == null) {
+            response.sendRedirect(RouterURL.LOGIN); // Chuyển hướng tới trang đăng nhập nếu userID không tồn tại
             return;
         }
 
-        String redirectUrl = "/Unove/HandleDisplayMovieInfo";
-        response.setContentType("text/plain");
-        response.getWriter().write(redirectUrl);
+        int movieID = Integer.parseInt(request.getParameter("movieID"));
+        boolean isAddingToFavorite = "true".equals(request.getParameter("isAddingToFavorite"));
 
-        doGet(request, response);
+        if (isAddingToFavorite) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String favoritedAt = currentDateTime.format(formatter);
+
+            try {
+
+                favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
+            } catch (Exception ex) {
+                Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra khi thêm vào yêu thích.");
+                return;
+            }
+        }
+
+        // Chuyển hướng đến trang mong muốn sau khi xử lý xong
+        response.sendRedirect("/Unove/HandleDisplayMovieInfo?movieID=" + movieID);
     }
 
 }

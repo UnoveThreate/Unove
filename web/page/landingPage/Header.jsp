@@ -397,9 +397,9 @@
                     <li class="nav-item">
                         <a class="icon-logo-btn nav-link active" aria-current="page" href= ""> <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader.png" alt="Logo"/></a>
                     </li>
-<!--                    <li class="nav-item">
-                        <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
-                    </li>-->
+                    <!--                    <li class="nav-item">
+                                            <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
+                                        </li>-->
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/showtimes">Schedule Movie</a>
                     </li>
@@ -481,6 +481,9 @@
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/display">Xem hồ sơ</a></li>
                                         <c:if test="${sessionScope.role eq 'OWNER'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản lí Owner</a></li>
+                                        </c:if>
+                                        <c:if test="${sessionScope.role ne 'OWNER'}">
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
                                         </c:if>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
