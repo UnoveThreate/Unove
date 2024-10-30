@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -134,23 +136,13 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Integer userID = (Integer) session.getAttribute("userID");
+        
 
         if (userID == null) {
             response.sendRedirect(RouterURL.LOGIN); // Chuyển hướng tới trang đăng nhập nếu userID không tồn tại
-        boolean isAddingToFavorite = request.getParameter("isAddingToFavorite") != null && 
-                                   request.getParameter("isAddingToFavorite").equals("true");
+     
 
-        if (isAddingToFavorite) {
-            String favoritedAt = request.getParameter("favoritedAt");
-            try {
-                favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
-                doGet(request, response);
-            } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, "Error adding movie to favorites", ex);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error adding to favorites");
-            }
-            return;
-        }
+       
 
         int movieID = Integer.parseInt(request.getParameter("movieID"));
         boolean isAddingToFavorite = "true".equals(request.getParameter("isAddingToFavorite"));
@@ -172,5 +164,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
 
         // Chuyển hướng đến trang mong muốn sau khi xử lý xong
         response.sendRedirect("/Unove/HandleDisplayMovieInfo?movieID=" + movieID);
+        }
     }
 }
+
