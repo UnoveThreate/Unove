@@ -7,39 +7,88 @@
     <head>
         <meta charset="UTF-8">
         <title>Lịch chiếu phim</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <style>
             body {
-                font-family: 'Roboto', sans-serif;
-                background: linear-gradient(135deg, #7E60BF, #B7E0FF);
+                font-family: 'Source Sans Pro', sans-serif;
                 margin: 0;
                 padding: 20px;
+                background: #ffe6ef;
                 color: #333;
-                line-height: 1.6;
+                min-height: 100vh;
+                position: relative;
+                overflow-x: hidden;
+            }
+
+            .wave-container {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                overflow: hidden;
+            }
+
+            .wave {
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                background: #ffccd5;
+                opacity: 0.5;
+            }
+
+            .wave-1 {
+                top: -50%;
+                border-radius: 40%;
+                animation: wave 20s infinite linear;
+            }
+
+            .wave-2 {
+                top: -60%;
+                border-radius: 35%;
+                animation: wave 15s infinite linear;
+                opacity: 0.3;
+            }
+
+            @keyframes wave {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
             }
 
             .container {
                 max-width: 1200px;
                 margin: auto;
                 padding: 30px;
-                background: linear-gradient(135deg, #fff0f5, #ffe4e1);
-                border-radius: 15px;
-                box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(10px);
+                position: relative;
+                z-index: 1;
+                border: 2px dashed rgba(126, 96, 191, 0.2);
             }
 
             .header {
-                background: linear-gradient(135deg, #7E60BF, #7E60BF);
+                background:#f8f0ff;
                 color: white;
                 padding: 20px;
                 border-radius: 10px;
                 margin-bottom: 30px;
+                border: 2px dashed #7e60bf;
             }
 
             .title {
                 font-size: 32px;
-                color: #FCFAEE;
+                color: #7E60BF;
                 text-align: center;
                 margin-bottom: 20px;
-                text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
             }
 
             .selector {
@@ -71,12 +120,15 @@
                 transition: all 0.3s ease;
                 padding: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border: 2px dashed #e0e0e0;
             }
 
             .selector-button:hover,
             .selector-button.active {
-                border-color: #eb2f96;
-                box-shadow: 0 0 10px rgba(235, 47, 150, 0.3);
+                border-color: #7E60BF;
+                box-shadow: 0 0 10px rgba(126, 96, 191, 0.3);
+                transform: translateY(-2px);
+                border: 2px dashed #7e60bf;
             }
 
             .cinema-chain-avatar {
@@ -98,7 +150,7 @@
 
             .selector-button:hover span,
             .selector-button.active span {
-                color: #eb2f96;
+                color: #7E60BF;
                 font-weight: bold;
             }
 
@@ -120,14 +172,22 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
                 min-width: 60px;
+                border: 2px dashed #7e60bf;
+            }
+
+            .date-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(126, 96, 191, 0.2);
+                border: 2px dashed #7e60bf;
+                
             }
 
             .date-button.active {
-                background-color: #7E60BF;
-                color: white;
+                background-color: #f8f0ff;
+                color: black;
                 border-color: #7E60BF;
+                border: 2px dashed #7E60BF;
             }
-
 
             .date-number {
                 font-size: 18px;
@@ -141,185 +201,204 @@
             .cinema-list {
                 display: flex;
                 flex-direction: column;
-                width: 100%;
-                max-width: 100%;
-                margin: 0;
-                border: none;
+                gap: 10px;
+                max-height: 300px;
+                overflow-y: auto;
+                padding: 10px;
+                background: rgba(255, 255, 255, 0.5);
+                border-radius: 10px;
+                border: 2px dashed #e0e0e0;
             }
 
             .cinema-item {
                 display: flex;
                 align-items: center;
-                width: 100%;
-                background-color: #fff;
-                padding: 12px 15px;
+                padding: 15px;
+                background: white;
+                border: none;
+                border-radius: 8px;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                border: none;
-                border-bottom: 1px solid #f0f0f0;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                width: 100%;
                 text-align: left;
-                position: relative;
+                color: #876ac3;
             }
 
-            .cinema-item:last-child {
-                border-bottom: none;
+            .cinema-item:hover {
+                transform: translateX(10px);
+                background-color: #f8f0ff;
+                box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
             }
 
-            .cinema-item:hover,
             .cinema-item.active {
-                background-color: #fce4ec;
+                background-color: #f8f0ff;
+                color: #876ac3;
             }
+            
 
             .cinema-name {
                 flex-grow: 1;
                 font-size: 14px;
-                color: #333;
-            }
-
-            .cinema-item::after {
-                content: '>';
-                position: absolute;
-                right: 15px;
-                color: #e91e63;
-                font-size: 18px;
-            }
-
-            .cinema-item:hover::after,
-            .cinema-item.active::after {
-                color: #c2185b;
             }
 
             .movie-list {
-                max-height: 600px;
-                overflow-y: auto;
-                background-color: white;
-                border-radius: 15px;
-                box-shadow: 0 10px 20px rgba(255, 105, 180, 0.2);
+                display: grid;
+                gap: 20px;
                 padding: 20px;
+                background: rgba(255, 255, 255, 0.5);
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+                border: 2px dashed rgba(126, 96, 191, 0.2);
             }
 
-            .movie-poster {
-                width: 100px;
-                height: 150px;
-                object-fit: cover;
-                border-radius: 8px;
-                margin-right: 20px; /* Tạo khoảng cách giữa poster và thông tin phim */
-                transition: all 0.3s ease;
-            }
-            .movie-item:hover .movie-poster {
-                transform: scale(1.05) rotate(2deg);
-                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            }
             .movie-item {
                 display: flex;
-                margin-bottom: 20px;
-                padding: 15px;
-                border-bottom: 1px solid #eee;
+                gap: 20px;
+                padding: 20px;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
                 transition: all 0.3s ease;
-                align-items: flex-start;
+                border: 2px dashed #e0e0e0;
             }
 
             .movie-item:hover {
-                background-color: rgba(255, 255, 255, 0.1);
                 transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(126, 96, 191, 0.15);
+            }
+
+            .movie-poster {
+                width: 120px;
+                height: 180px;
+                object-fit: cover;
+                border-radius: 8px;
+                transition: all 0.3s ease;
             }
 
             .movie-info {
                 flex: 1;
-                display: flex;
-                flex-direction: column;
             }
 
             .movie-title {
-                font-size: 18px;
-                font-weight: bold;
                 color: #7E60BF;
-                margin-bottom: 5px;
-            }
-
-            .movie-genres {
-                font-size: 14px;
-                color: #666;
+                font-size: 20px;
                 margin-bottom: 10px;
             }
 
             .genre-tag {
                 display: inline-block;
-                background-color: #f0f0f0;
-                padding: 2px 8px;
-                margin-right: 5px;
-                margin-bottom: 5px;
-                border-radius: 10px;
+                padding: 4px 12px;
+                background: #f0f0f0;
+                border-radius: 15px;
                 font-size: 12px;
+                margin: 0 5px 5px 0;
+                color: #666;
+            }
+
+            .showtime-group {
+                margin-top: 15px;
             }
 
             .showtime-type {
-                font-weight: bold;
-                margin-top: 10px;
-            }
-
-            .showtime-list {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-            .showtime-item {
-                display: inline-block;
-                background-color: #e6f7ff;
-                border: 1px solid #91d5ff;
-                border-radius: 20px;
-                padding: 5px 12px;
-                font-size: 14px;
-                color: #0050b3;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                margin-right: 8px;
+                color: #7E60BF;
+                font-weight: 600;
                 margin-bottom: 8px;
             }
 
+            .showtime-item {
+                display: inline-flex;
+                align-items: center;
+                padding: 8px 15px;
+                background: #f8f0ff;
+                border-radius: 20px;
+                margin: 0 10px 10px 0;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                border: 2px dashed #7e60bf;
+            }
+
             .showtime-item:hover {
-                background-color: #bae7ff;
-                border-color: #1890ff;
+                background: #D4BEE4;
+                color: black;
+                transform: translateY(-2px);
             }
 
-            .start-time {
-                font-weight: bold;
-            }
-
-            .end-time {
-                font-weight: normal;
-            }
-
-            .time-separator {
-                margin: 0 2px;
-                color: #8c8c8c;
-            }
             .error-message {
-                color: #ff1493;
-                font-weight: bold;
                 text-align: center;
-                padding: 15px;
-                background-color: #ffe4e1;
-                border: 1px solid #ffb3ba;
-                border-radius: 8px;
+                padding: 20px;
+                background: #fff0f0;
+                border-radius: 10px;
+                color: #ff4d4f;
                 margin-top: 20px;
             }
 
             @media (max-width: 768px) {
-                .movie-list {
-                    grid-template-columns: 1fr;
+                .container {
+                    padding: 15px;
+                }
+
+                .movie-item {
+                    flex-direction: column;
+                }
+
+                .movie-poster {
+                    width: 100%;
+                    height: 200px;
+                }
+            }
+            .empty-state {
+                text-align: center;
+                padding: 40px;
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
+                margin: 20px auto;
+                max-width: 400px;
+                border: 2px dashed rgba(126, 96, 191, 0.2);
+            }
+
+            .empty-state img {
+                animation: float 3s ease-in-out infinite;
+            }
+
+            @keyframes float {
+                0% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+                100% {
+                    transform: translateY(0px);
                 }
             }
 
+            .empty-state h2 {
+                color: #7E60BF;
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .empty-state p {
+                color: #666;
+                font-size: 16px;
+                margin-bottom: 30px;
+            }
         </style>
     </head>
     <body>
+        <div class="wave-container">
+            <div class="wave wave-1"></div>
+            <div class="wave wave-2"></div>
+        </div>
+
         <div class="container">
-            <div class="header">
+            <div class="header" data-aos="fade-down">
                 <h1 class="title">Lịch chiếu phim</h1>
             </div>
 
-            <div class="selector">
+            <div class="selector" data-aos="fade-up" data-aos-delay="100">
                 <h3>Chọn chuỗi rạp:</h3>
                 <div class="button-group" id="cinemaChainButtons">
                     <c:forEach var="chain" items="${cinemaChains}">
@@ -333,7 +412,7 @@
                 </div>
             </div>
 
-            <div class="selector">
+            <div class="selector" data-aos="fade-up" data-aos-delay="200">
                 <h3>Chọn rạp:</h3>
                 <div class="cinema-list" id="cinemaButtons">
                     <c:forEach var="cinema" items="${cinemas}">
@@ -343,15 +422,14 @@
                             <span class="cinema-name">${cinema.name}</span>
                         </button>
                     </c:forEach>
-                    
                 </div>
             </div>
 
-            <div class="selector">
+            <div class="selector" data-aos="fade-up" data-aos-delay="300">
                 <h3>Chọn ngày:</h3>
                 <div class="date-selector">
                     <c:forEach var="date" items="${availableDates}" varStatus="status">
-                        <button class="date-button ${date == selectedDate ? 'active' : ''} ${datesWithShowtimes.contains(date) ? 'has-showtimes' : ''}" 
+                        <button class="date-button ${date == selectedDate ? 'active' : ''}" 
                                 onclick="selectDate('${date}')">
                             <span class="date-number">${date.dayOfMonth}</span>
                             <span class="date-day">
@@ -375,7 +453,7 @@
                 </div>
             </div>
 
-            <div class="movie-list">
+            <div class="movie-list" data-aos="fade-up" data-aos-delay="400">
                 <c:choose>
                     <c:when test="${not empty movies}">
                         <c:forEach var="movie" items="${movies}">
@@ -408,57 +486,72 @@
                             </c:if>
                         </c:forEach>
                     </c:when>
-                    <c:otherwise>
-                        <p class="error-message">Không có phim nào đang chiếu.</p>
-                    </c:otherwise>
+
                 </c:choose>
             </div>
 
             <c:if test="${empty movieSlotsByMovie}">
-                <p class="error-message">Không có suất chiếu nào cho ngày đã chọn.</p>
-            </c:if>
-
-            <c:if test="${not empty errorMessage}">
-                <p class="error-message">${errorMessage}</p>
+                <div class="empty-state" data-aos="fade-up">
+                    <img src="images/not-found.svg" alt="No showtime found" 
+                         style="width: 150px; height: 150px; opacity: 0.5; margin-bottom: 20px;"
+                         data-aos="zoom-in">
+                    <h2 style="color: #000000; font-size: 24px; margin-bottom: 10px;"
+                        data-aos="fade-up" data-aos-delay="100">
+                        Úi, Suất chiếu không tìm thấy
+                    </h2>
+                    <p style="color: #666; font-size: 16px; margin-bottom: 30px;"
+                       data-aos="fade-up" data-aos-delay="200">
+                        Bạn hãy thử tìm ngày khác nhé
+                    </p>
+                </div>
             </c:if>
         </div>
 
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>
-            function selectCinemaChain(cinemaChainID) {
-                window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID;
-            }
+                                                        AOS.init({
+                                                            duration: 1000,
+                                                            easing: 'ease-in-out',
+                                                            once: true,
+                                                            mirror: false,
+                                                            offset: 50
+                                                        });
 
-            function selectCinema(cinemaID) {
-                const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-            }
+                                                        function selectCinemaChain(cinemaChainID) {
+                                                            window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID;
+                                                        }
 
-            function selectDate(date) {
-                const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-            }
+                                                        function selectCinema(cinemaID) {
+                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                            window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                                        }
 
-            function selectSlot(movieSlotID) {
-                var form = document.createElement('form');
-                form.method = "GET";
-                form.action = "selectSeat";
+                                                        function selectDate(date) {
+                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                                            window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                                        }
 
-                var actionInput = document.createElement('input');
-                actionInput.type = 'hidden';
-                actionInput.name = 'action';
-                actionInput.value = 'selectSlot';
-                form.appendChild(actionInput);
+                                                        function selectSlot(movieSlotID) {
+                                                            var form = document.createElement('form');
+                                                            form.method = "GET";
+                                                            form.action = "selectSeat";
 
-                var slotInput = document.createElement('input');
-                slotInput.type = 'hidden';
-                slotInput.name = 'movieSlotID';
-                slotInput.value = movieSlotID;
-                form.appendChild(slotInput);
+                                                            var actionInput = document.createElement('input');
+                                                            actionInput.type = 'hidden';
+                                                            actionInput.name = 'action';
+                                                            actionInput.value = 'selectSlot';
+                                                            form.appendChild(actionInput);
 
-                document.body.appendChild(form);
-                form.submit();
-            }
+                                                            var slotInput = document.createElement('input');
+                                                            slotInput.type = 'hidden';
+                                                            slotInput.name = 'movieSlotID';
+                                                            slotInput.value = movieSlotID;
+                                                            form.appendChild(slotInput);
+
+                                                            document.body.appendChild(form);
+                                                            form.submit();
+                                                        }
         </script>
     </body>
 </html>

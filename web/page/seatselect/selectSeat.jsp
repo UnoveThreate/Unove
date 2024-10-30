@@ -5,14 +5,59 @@
     <head>
         <meta charset="UTF-8">
         <title>Mua vé xem phim</title>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <style>
             body {
                 font-family: Arial, sans-serif;
-                background-color: #1c1c1c;
-                color: white;
                 margin: 0;
                 padding: 20px;
+                background: #ffe6ef;
+                color: #ffffff;
+                min-height: 100vh;
+                position: relative;
+                overflow-x: hidden;
             }
+
+            .wave-container {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: -1;
+                overflow: hidden;
+            }
+
+            .wave {
+                position: absolute;
+                width: 200%;
+                height: 200%;
+                background: #ffccd5;
+                opacity: 0.5;
+            }
+
+            .wave-1 {
+                top: -50%;
+                border-radius: 40%;
+                animation: wave 20s infinite linear;
+            }
+
+            .wave-2 {
+                top: -60%;
+                border-radius: 35%;
+                animation: wave 15s infinite linear;
+                opacity: 0.3;
+            }
+
+            @keyframes wave {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
             h1, h2, h3 {
                 text-align: center;
                 color: #ff4081;
@@ -22,6 +67,12 @@
                 margin: 20px 0;
                 font-weight: bold;
                 font-size: 24px;
+                
+                 border: 3px dashed #ff4081;
+    padding: 15px;
+    margin: 30px auto;
+    max-width: 900px;
+    border-radius: 10px;
             }
             .seats-container {
                 display: grid;
@@ -29,6 +80,9 @@
                 gap: 5px;
                 margin: 20px auto;
                 max-width: 900px;
+                 border: 2px dashed #722ed1;
+    padding: 20px;
+    border-radius: 15px;
             }
             .seat {
                 width: 40px;
@@ -57,6 +111,11 @@
                 color: #e71a0f;
                 text-align: right;
                 margin-top: 10px;
+                 border: 2px dashed #e71a0f;
+    padding: 15px;
+    margin: 20px auto;
+    max-width: 900px;
+    border-radius: 8px;
             }
             .book-button {
                 display: block;
@@ -78,6 +137,7 @@
             .info {
                 text-align: center;
                 margin-top: 20px;
+                
             }
             .info .seat {
                 display: inline-block;
@@ -96,84 +156,18 @@
                 margin: 0 10px;
                 font-size: 16px;
             }
-             body {
-                font-family: Arial, sans-serif;
-                background-color: #1c1c1c;
-                color: white;
-                margin: 0;
-                padding: 20px;
-            }
         </style>
-        <script>
-            const selectedSeats = [];
-            let totalPrice = 0;
-            const movieSlotPrice = ${selectedSlot.price};
-            const movieSlotDiscount = ${selectedSlot.discount};
-
-            function selectSeat(seat) {
-                if (!seat.classList.contains('available')) {
-                    return;
-                }
-
-                const seatID = seat.dataset.id;
-                // Tính giá vé đã áp dụng giảm giá
-                const seatPrice = movieSlotPrice * (1 - movieSlotDiscount);
-
-                if (selectedSeats.includes(seatID)) {
-                    // Bỏ chọn ghế
-                    seat.classList.remove('selected');
-                    selectedSeats.splice(selectedSeats.indexOf(seatID), 1);
-                    totalPrice -= seatPrice;
-                } else {
-                    // Chọn ghế
-                    seat.classList.add('selected');
-                    selectedSeats.push(seatID);
-                    totalPrice += seatPrice;
-                }
-
-                // Cập nhật UI
-                updateUI();
-            }
-
-            function updateUI() {
-                // Cập nhật input hidden chứa danh sách ghế đã chọn
-                document.getElementById('selectedSeatID').value = selectedSeats.join(',');
-                
-                // Cập nhật hiển thị tổng tiền
-                document.getElementById('totalPrice').textContent = 
-                    totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
-                
-                // Cập nhật trạng thái nút đặt vé
-                document.getElementById('bookButton').disabled = selectedSeats.length === 0;
-            }
-
-            // Kiểm tra form trước khi submit
-            document.addEventListener('DOMContentLoaded', function() {
-                document.querySelector('form').addEventListener('submit', function(e) {
-                    if (selectedSeats.length === 0) {
-                        e.preventDefault();
-                        alert('Vui lòng chọn ít nhất một ghế.');
-                        return;
-                    }
-
-                    // Kiểm tra xem có ghế nào đã bị đặt không
-                    const selectedElements = document.querySelectorAll('.seat.selected');
-                    for (let seat of selectedElements) {
-                        if (seat.classList.contains('unavailable')) {
-                            e.preventDefault();
-                            alert('Một số ghế bạn chọn đã có người đặt. Vui lòng chọn ghế khác.');
-                            return;
-                        }
-                    }
-                });
-            });
-        </script>
     </head>
     <body>
-        <h1>Mua vé xem phim</h1>
-        <div class="screen">MÀN HÌNH</div>
+        <div class="wave-container">
+            <div class="wave wave-1"></div>
+            <div class="wave wave-2"></div>
+        </div>
 
-        <div class="seats-container">
+        <h1 data-aos="fade-down">Mua vé xem phim</h1>
+        <div class="screen" data-aos="fade-up">MÀN HÌNH</div>
+
+        <div class="seats-container" data-aos="fade-up" data-aos-delay="200">
             <c:forEach var="row" begin="1" end="9">
                 <c:forEach var="col" begin="1" end="18">
                     <c:set var="currentSeat" value="${null}" />
@@ -200,17 +194,17 @@
             </c:forEach>
         </div>
 
-        <div class="total-price">
+        <div class="total-price" data-aos="fade-up" data-aos-delay="300">
             Tạm tính: <span id="totalPrice">0 ₫</span>
         </div>
 
-        <form action="selectSeat" method="post">
+        <form action="selectSeat" method="post" data-aos="fade-up" data-aos-delay="400">
             <input type="hidden" name="movieSlotID" value="${selectedSlot.movieSlotID}">
             <input type="hidden" id="selectedSeatID" name="selectedSeatID" value="">
             <button type="submit" disabled id="bookButton" class="book-button">Đặt Ghế</button>
         </form>
 
-        <div class="info">
+        <div class="info" data-aos="fade-up" data-aos-delay="500">
             <div class="seat available">.</div>
             <div class="seat selected">.</div>
             <div class="seat unavailable">.</div>
@@ -220,5 +214,67 @@
                 <span class="unavailable">Đã đặt</span>
             </div>
         </div>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                duration: 1000,
+                easing: 'ease-in-out',
+                once: true,
+                mirror: false
+            });
+
+            const selectedSeats = [];
+            let totalPrice = 0;
+            const movieSlotPrice = ${selectedSlot.price};
+            const movieSlotDiscount = ${selectedSlot.discount};
+
+            function selectSeat(seat) {
+                if (!seat.classList.contains('available')) {
+                    return;
+                }
+
+                const seatID = seat.dataset.id;
+                const seatPrice = movieSlotPrice * (1 - movieSlotDiscount);
+
+                if (selectedSeats.includes(seatID)) {
+                    seat.classList.remove('selected');
+                    selectedSeats.splice(selectedSeats.indexOf(seatID), 1);
+                    totalPrice -= seatPrice;
+                } else {
+                    seat.classList.add('selected');
+                    selectedSeats.push(seatID);
+                    totalPrice += seatPrice;
+                }
+
+                updateUI();
+            }
+
+            function updateUI() {
+                document.getElementById('selectedSeatID').value = selectedSeats.join(',');
+                document.getElementById('totalPrice').textContent = 
+                    totalPrice.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                document.getElementById('bookButton').disabled = selectedSeats.length === 0;
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    if (selectedSeats.length === 0) {
+                        e.preventDefault();
+                        alert('Vui lòng chọn ít nhất một ghế.');
+                        return;
+                    }
+
+                    const selectedElements = document.querySelectorAll('.seat.selected');
+                    for (let seat of selectedElements) {
+                        if (seat.classList.contains('unavailable')) {
+                            e.preventDefault();
+                            alert('Một số ghế bạn chọn đã có người đặt. Vui lòng chọn ghế khác.');
+                            return;
+                        }
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

@@ -34,7 +34,7 @@
                 --accent-color: #ffd700;
             }
             html {
-    scroll-behavior: smooth;
+                scroll-behavior: smooth;
 }
             body {
                 background: linear-gradient(to bottom, #ffffff, #ffffff);
@@ -50,6 +50,8 @@
                 box-shadow: 0 10px 30px #E2BFD9;
                 border-radius: 15px;
                 overflow: hidden;
+                border: 4px dashed #E2BFD9;
+    padding: 3px;
             }
             .carousel-item {
                 height: 450px;
@@ -185,6 +187,9 @@
             }
             .movie-card:hover .movie-info {
                 transform: translateY(0);
+                 border: 2px dashed #E2BFD9;
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
             }
             .movie-title {
                 font-size: 1.2rem;
@@ -946,7 +951,7 @@
                                     ${genre.genreName}${!genreStatus.last ? ', ' : ''}
                                 </c:forEach>
                             </p>
-                            <a href="${pageContext.request.contextPath}/showtimes" class="btn btn-book-now">Đặt vé ngay</a>
+                            <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn btn-book-now">Đặt vé ngay</a>
                         </div>
                     </div>
                 </c:forEach>
@@ -982,7 +987,7 @@
                                     </c:forEach>
                                 </p>
                                 <div class="movie-buttons">
-                                    <a href="${pageContext.request.contextPath}/showtimes" class="btn-book">ĐẶT VÉ</a>
+                                    <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-book">ĐẶT VÉ</a>
                                     <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-details">CHI TIẾT</a>
                                 </div>
                             </div>
@@ -995,6 +1000,7 @@
         </div>
     </div>
 </section>
+       
         <section class="promotions">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Tin tức - Khuyến mãi</h2>
