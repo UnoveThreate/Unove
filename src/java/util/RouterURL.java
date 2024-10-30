@@ -13,9 +13,9 @@ public class RouterURL {
     public static String LANDING_PAGE = "/Unove";
 
     public static String ERROR_PAGE = "/Unove/error";
-    
+
     public static String HOME_PAGE = "/Unove";
-    
+
     public static String REGISTER = "/Unove/register";
 
     public static String LOGIN = "/Unove/login";
@@ -87,10 +87,10 @@ public class RouterURL {
     public static String CINEMA_DETAIL_PAGE = "/Unove/cinemaDetail";
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/Unove/CanteenItemServlet";
-    
-    public static String MANAGE_MOVIE_SLOT = "/Unove/owner/movieSlot/manageMovieSlot";
-    
-    public static String CREATE_MOVIE_SLOT = "/Unove/owner/movieSlot/createMovieSlot";
-    
 
+    public static String MANAGE_MOVIE_SLOT = "/Unove/owner/movieSlot/manageMovieSlot";
+
+    public static String CREATE_MOVIE_SLOT = "/Unove/owner/movieSlot/createMovieSlot";
+
+    public static String SELECT_FOOD = "/canteenItem";
 }
