@@ -1,47 +1,55 @@
-package controller.owner.room;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+package controller.owner.seat;
 
 import DAO.cinemaChainOwnerDAO.CinemaChainDAO;
 import DAO.cinemaChainOwnerDAO.CinemaDAO;
 import DAO.cinemaChainOwnerDAO.RoomDAO;
-import jakarta.servlet.ServletContext;
+import DAO.cinemaChainOwnerDAO.SeatDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.ServletContext;
+
+import model.Cinema;
 import model.owner.Room;
-import util.Role;
-import util.RouterJSP;
-import util.RouterURL;
+import model.Seat;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import model.Cinema;
+import util.Role;
+import util.RouterJSP;
+import util.RouterURL;
 
-@WebServlet("/owner/room/manageRoom")
-public class ManageRoomServlet extends HttpServlet {
+@WebServlet("/owner/manageSeat")
+public class ManageSeatServlet extends HttpServlet {
 
-    private RoomDAO roomDAO;
     private CinemaChainDAO cinemaChainDAO;
     private CinemaDAO cinemaDAO;
+    private RoomDAO roomDAO;
+    private SeatDAO seatDAO;
 
     @Override
     public void init() throws ServletException {
         ServletContext context = getServletContext();
         try {
-            roomDAO = new RoomDAO(context);
             cinemaChainDAO = new CinemaChainDAO(context);
             cinemaDAO = new CinemaDAO(context);
+            roomDAO = new RoomDAO(context);
+            seatDAO = new SeatDAO(context);
         } catch (Exception e) {
-            throw new ServletException("Failed to initialize RoomDAO", e);
+            throw new ServletException("Error initializing DAO", e);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute("role");
         Integer userID = (Integer) session.getAttribute("userID");
@@ -53,28 +61,49 @@ public class ManageRoomServlet extends HttpServlet {
         }
         request.setCharacterEncoding("UTF-8");  // Cấu hình mã hóa đầu vào
         response.setCharacterEncoding("UTF-8"); // Cấu hình mã hóa đầu ra
-
         loadCinemas(request);
+        request.getRequestDispatcher(RouterJSP.MANAGE_SEAT_PAGE).forward(request, response);
+    }
 
-        // Get cinemaID from the request
-        String cinemaIDStr = request.getParameter("cinemaID");
-        Integer selectedCinemaID = null;
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String role = (String) session.getAttribute("role");
+        Integer userID = (Integer) session.getAttribute("userID");
 
-        if (cinemaIDStr != null && !cinemaIDStr.isEmpty()) {
+        // Check if user is logged in and has the owner role
+        if (userID == null || !Role.isRoleValid(role, Role.OWNER)) {
+            response.sendRedirect(RouterURL.LOGIN);
+            return;
+        }
+        loadCinemas(request);  // Luôn lấy danh sách cinema
+
+        String cinemaIDParam = request.getParameter("cinemaID");
+        String roomIDParam = request.getParameter("roomID");
+
+        if (cinemaIDParam != null && !cinemaIDParam.isEmpty()) {
+            int cinemaID = Integer.parseInt(cinemaIDParam);
             try {
-                selectedCinemaID = Integer.parseInt(cinemaIDStr); // Parse cinemaID to Integer
-                List<Room> rooms = roomDAO.getRoomsByCinemaID(selectedCinemaID); // Get rooms for the specific cinema
+                List<Room> rooms = roomDAO.getRoomsByCinemaID(cinemaID);
                 request.setAttribute("rooms", rooms);
-            } catch (NumberFormatException e) {
-                response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not a valid integer
-                return;
-            } catch (Exception e) {
-                throw new ServletException("Error retrieving rooms for cinema ID: " + cinemaIDStr, e);
+                request.setAttribute("selectedCinemaID", cinemaID);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
 
-        request.setAttribute("selectedCinemaID", selectedCinemaID); // Set selectedCinemaID for JSP
-        request.getRequestDispatcher(RouterJSP.OWNER_MANAGE_ROOM_PAGE).forward(request, response);
+        if (roomIDParam != null && !roomIDParam.isEmpty()) {
+            int roomID = Integer.parseInt(roomIDParam);
+            try {
+                List<Seat> seats = seatDAO.getSeatsByRoomID(roomID);
+                request.setAttribute("seats", seats);
+                request.setAttribute("selectedRoomID", roomID);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        request.getRequestDispatcher(RouterJSP.MANAGE_SEAT_PAGE).forward(request, response);
     }
 
     private void loadCinemas(HttpServletRequest request) {
@@ -102,4 +131,5 @@ public class ManageRoomServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
 }
