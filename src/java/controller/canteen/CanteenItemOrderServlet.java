@@ -145,7 +145,7 @@ public class CanteenItemOrderServlet extends HttpServlet {
         double totalPrice = 0.0;
         for (CanteenItemOrder itemOrder : canteenItemOrders) {
             double itemPrice = canteenItemSelect.getCanteenItemPriceById(itemOrder.getCanteenItemID());
-            totalPrice = itemPrice * itemOrder.getQuantity();
+            totalPrice += itemPrice * itemOrder.getQuantity();
         }
         return totalPrice;
     }
