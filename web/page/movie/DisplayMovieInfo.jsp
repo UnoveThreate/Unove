@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%> <%@ page import="model.Movie" %> <%@ taglib
          uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> <%@ taglib
-        uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <% Movie movie = (Movie) request.getAttribute("movie");%>
+    uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %> <% Movie movie = (Movie) request.getAttribute("movie");%>
 
         <!DOCTYPE html>
         <html lang="en">
@@ -194,6 +194,7 @@
                         transform: scale(1.1);
                     }
 
+
                     .modal {
                         display: none;
                         position: fixed;
@@ -297,7 +298,7 @@
                             <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
 
                             <c:if test="${isFavoritedMovie == false}">
-                                <form id="addToFavoriteForm" action="HandleDisplayMovieInfo" method="post">
+                                <form id="addToFavoriteForm" action="HandleDisplayMovieInfo"  method="post">
                                     <input type="hidden" name="isAddingToFavorite" value="true"/>
                                     <input type="hidden" id="favoritedAtInput" name="favoritedAt" value="${pageContext.request.requestURI}"/> <!-- Optional: Set a value for favoritedAt if needed -->
                                     <input type="hidden" name="movieID" value="${movie.movieID}"/> <!-- Include the movieID -->
@@ -333,87 +334,72 @@
                             </form>
                         </c:if>
 
-                    </div>
-                </div>
 
-                <div id="trailerModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <iframe
-                            id="trailerVideo"
-                            width="560"
-                            height="315"
-                            src="<%= movie.getLinkTrailer()%>"
-                            title="YouTube video player"
-                            frameborder="0"
-                            allowfullscreen
-                            ></iframe>
-                    </div>
-                </div>
 
-                <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-                <script>
-                    AOS.init({
-                        duration: 1000,
-                        once: true,
-                    });
 
-                    const trailerBtn = document.getElementById("trailerBtn");
-                    const posterPlayButton = document.getElementById("posterPlayButton");
-                    const trailerModal = document.getElementById("trailerModal");
-                    const closeBtn = document.querySelector(".close");
-                    const trailerVideo = document.getElementById("trailerVideo");
 
-                    function showTrailer() {
-                        trailerModal.style.display = "flex";
-                        trailerVideo.src += "?autoplay=1";
-                    }
+                        <div id="trailerModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <iframe
+                                    id="trailerVideo"
+                                    width="560"
+                                    height="315"
+                                    src="<%= movie.getLinkTrailer()%>"
+                                    title="YouTube video player"
+                                    frameborder="0"
+                                    allowfullscreen
+                                    ></iframe>
+                            </div>
+                        </div>
 
-                    function hideTrailer() {
-                        trailerModal.style.display = "none";
-                        trailerVideo.src = trailerVideo.src.split("?")[0];
-                    }
+                        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+                        <script>
+                            AOS.init({
+                                duration: 1000,
+                                once: true,
+                            });
 
-                    trailerBtn.onclick = showTrailer;
-                    posterPlayButton.onclick = showTrailer;
+                            const trailerBtn = document.getElementById("trailerBtn");
+                            const posterPlayButton = document.getElementById("posterPlayButton");
+                            const trailerModal = document.getElementById("trailerModal");
+                            const closeBtn = document.querySelector(".close");
+                            const trailerVideo = document.getElementById("trailerVideo");
 
-                    closeBtn.onclick = hideTrailer;
-
-                    window.onclick = function (event) {
-                        if (event.target == trailerModal) {
-                            hideTrailer();
-                        }
-                    };
-
-                    function getCurrentDateTime() {
-                        const now = new Date();
-                        const year = now.getFullYear();
-                        const month = String(now.getMonth() + 1).padStart(2, "0");
-                        const day = String(now.getDate()).padStart(2, "0");
-                        const hours = String(now.getHours()).padStart(2, "0");
-                        const minutes = String(now.getMinutes()).padStart(2, "0");
-                        const seconds = String(now.getSeconds()).padStart(2, "0");
-                        const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
-                        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                            function showTrailer() {
+                                trailerModal.style.display = "flex";
+                                trailerVideo.src += "?autoplay=1";
                             }
 
-                            function addToFavorite() {
-                                let favoritedAtInput = document.getElementById("favoritedAtInput");
-                                favoritedAtInput.value = getCurrentDateTime();
-                                callServlet(
-                                        "addToFavoriteForm",
-                                        "HandleDisplayMovieInfo?movieID=" + movieID,
-                                        "POST"
-                                        );
+                            function hideTrailer() {
+                                trailerModal.style.display = "none";
+                                trailerVideo.src = trailerVideo.src.split("?")[0];
                             }
 
-                            function deleteFavoriteMovie() {
-                                callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
-                            }
+                            trailerBtn.onclick = showTrailer;
+                            posterPlayButton.onclick = showTrailer;
 
-                            function viewFavouriteMovies() {
-                                callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
-                            }
-                </script>
-            </body>
-        </html>
+                            closeBtn.onclick = hideTrailer;
+
+                            window.onclick = function (event) {
+                                if (event.target == trailerModal) {
+                                    hideTrailer();
+                                }
+                            };
+
+                            function getCurrentDateTime() {
+                                const now = new Date();
+                                const year = now.getFullYear();
+                                const month = String(now.getMonth() + 1).padStart(2, "0");
+                                const day = String(now.getDate()).padStart(2, "0");
+                                const hours = String(now.getHours()).padStart(2, "0");
+                                const minutes = String(now.getMinutes()).padStart(2, "0");
+                                const seconds = String(now.getSeconds()).padStart(2, "0");
+                                const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+                                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                                    }
+
+                                   
+                        </script>
+                        </body>
+                        </html>

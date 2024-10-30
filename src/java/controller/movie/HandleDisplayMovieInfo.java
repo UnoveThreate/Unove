@@ -30,6 +30,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
         super.init();
         try {
             movieDAO = new MovieDAO(getServletContext());
+            favoriteMoviesDAO = new FavouriteMoviesDAO(getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,7 +60,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             }
 
             // case favourite movies
-            favoriteMoviesDAO = new FavouriteMoviesDAO(request.getServletContext());
+            
             HttpSession session = request.getSession();
             System.out.println(session.getAttribute("userID"));
 
@@ -70,7 +71,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
 
             Boolean isFavoritedMovie = null;
             if (userID != -1) {
-//                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, Integer.parseInt(movieID));
+                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, Integer.parseInt(movieID));
             }
 
             // Add movie to request attributes
@@ -113,7 +114,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             return;
         }
 
-        String redirectUrl = "/movie/HandleDisplayMovieInfo";
+        String redirectUrl = "/Unove/HandleDisplayMovieInfo";
         response.setContentType("text/plain");
         response.getWriter().write(redirectUrl);
 
