@@ -141,8 +141,7 @@
                     <table class="table movie-table">
                         <thead class="table-header">
                             <tr>
-                                <th scope="col">Tên phim</th>
-                                <th scope="col">Thể loại</th>                             
+                                <th scope="col">Tên phim</th>                         
                                 <th scope="col">Điểm số</th>
                                 <th scope="col">Xóa khỏi yêu thích</th>
                             </tr>
@@ -156,9 +155,7 @@
                                         ${movie.title}
                                     </div>
                                 </td>
-                                <c:set var="movieGenres" value="${fn:replace(movie.genres.toString(), '[', '')}" />
-                                <c:set var="movieGenres" value="${fn:replace(movieGenres, ']', '')}" />
-                                <td class="movie-genres">${movieGenres}</td>
+                               
                                 <td>${movie.rating}</td>
                                 <td>
                                     <button id="delete_${movie.movieID}" class="button-borderless" onclick="deleteFavouriteMovie('${movie.movieID}');">
@@ -179,7 +176,7 @@
             deletedFavouriteMovieInput.name = 'deletedFavouriteMovieInput';
             deletedFavouriteMovieInput.value = movieID;
             document.getElementById('favouriteMoviesForm').appendChild(deletedFavouriteMovieInput);
-            callServlet('favouriteMoviesForm', '/movie/myfavouritemovie', 'POST');
+            callServlet( 'myfavouritemovie', 'POST');
         }
     </script>
 </html>
