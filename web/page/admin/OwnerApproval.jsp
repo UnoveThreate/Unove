@@ -88,6 +88,8 @@
         <table class="table" id="handledRequestsTable">
             <thead>
                 <tr>
+                    <th>Username</th>
+                    <th>Email</th>
                     <th>Tax ID</th>
                     <th>Business License</th>
                     <th>Status</th>
@@ -95,7 +97,18 @@
                 </tr>
             </thead>
             <tbody id="handledRequests">
-                <!-- Handled requests will be dynamically added here -->
+                <c:forEach var="handledRequest" items="${handledRequests}">
+                    <tr>
+                        <td>${handledRequest.username}</td>
+                        <td>${handledRequest.email}</td>
+                        <td>${handledRequest.taxNumber}</td>
+                        <td>
+                            <img src="${handledRequest.businessLicenseFile}" alt="Business License" style="width: 100px; height: auto;" />
+                        </td>
+                        <td>${handledRequest.status}</td>
+                        <td>${handledRequest.reason}</td>
+                    </tr>
+                </c:forEach>
             </tbody>
         </table>
     </div>
@@ -142,6 +155,8 @@
 
                         // Add the handled request to the handled requests table
                         var newRow = `<tr>
+                                        <td>${$form.closest('tr').find('td:eq(0)').text()}</td>
+                                        <td>${$form.closest('tr').find('td:eq(1)').text()}</td>
                                         <td>${$form.closest('tr').find('td:eq(2)').text()}</td>
                                         <td>${$form.closest('tr').find('td:eq(3)').html()}</td>
                                         <td>${status}</td>
@@ -164,4 +179,5 @@
     </script>
 </body>
 </html>
+
 

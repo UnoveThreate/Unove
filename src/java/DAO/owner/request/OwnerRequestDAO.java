@@ -21,7 +21,7 @@ public class OwnerRequestDAO extends MySQLConnect {
 
     public OwnerRequestDAO(ServletContext context) throws Exception {
         super();
-        connect(context); // Establish the connection
+        connect(context);
     }
 
     // Add a new owner request
@@ -41,35 +41,32 @@ public class OwnerRequestDAO extends MySQLConnect {
 
     // Get pending owner requests for admin review
     public List<OwnerRequest> getPendingRequests() {
-    List<OwnerRequest> requests = new ArrayList<>();
-    String sql = "SELECT orq.*, u.Username, u.Email " +
-                 "FROM OwnerRequest orq " +
-                 "JOIN User u ON orq.UserID = u.UserID " +
-                 "WHERE orq.Status = 'pending'";
-    
-    try (PreparedStatement pstmt = connection.prepareStatement(sql); 
-         ResultSet rs = pstmt.executeQuery()) {
-        
-        while (rs.next()) {
-            OwnerRequest request = new OwnerRequest(
-                    rs.getInt("RequestID"),
-                    rs.getInt("UserID"),
-                    rs.getTimestamp("RequestDate"),
-                    rs.getString("Status"),
-                    rs.getString("TaxNumber"),
-                    rs.getString("BusinessLicenseFile")
-            );
-            // Set username and email
-            request.setUsername(rs.getString("Username"));
-            request.setEmail(rs.getString("Email"));
-            
-            requests.add(request);
+        List<OwnerRequest> requests = new ArrayList<>();
+        String sql = "SELECT orq.*, u.Username, u.Email "
+                + "FROM OwnerRequest orq "
+                + "JOIN User u ON orq.UserID = u.UserID "
+                + "WHERE orq.Status = 'pending'";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                OwnerRequest request = new OwnerRequest(
+                        rs.getInt("RequestID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("RequestDate"),
+                        rs.getString("Status"),
+                        rs.getString("TaxNumber"),
+                        rs.getString("BusinessLicenseFile")
+                );
+                request.setUsername(rs.getString("Username"));
+                request.setEmail(rs.getString("Email"));
+
+                requests.add(request);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return requests;
     }
-    return requests;
-}
 
     // Update request status (approve/reject) and add reason
     public boolean updateRequestStatus(int requestID, String status, String reason) {
@@ -113,5 +110,35 @@ public class OwnerRequestDAO extends MySQLConnect {
             e.printStackTrace();
         }
         return false;
+    }
+
+    // Check if a user is already an approved owner
+    public boolean isUserApprovedOwner(int userID) {
+        String sql = "SELECT COUNT(*) FROM OwnerRequest WHERE UserID = ? AND Status = 'approved'";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // Get the current status of a user's owner request
+    public String getRequestStatus(int userID) {
+        String sql = "SELECT Status FROM OwnerRequest WHERE UserID = ? ORDER BY RequestDate DESC LIMIT 1";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, userID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("Status");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return null if no request or an error occurs
     }
 }

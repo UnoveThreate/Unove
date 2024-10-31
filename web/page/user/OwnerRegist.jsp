@@ -37,7 +37,7 @@
             <!-- Registration Form -->
             <c:if test="${empty message}">
                 <h1>Register to Become an Owner</h1>
-                <form action="${pageContext.request.contextPath}/registerAsOwner" method="post" enctype="multipart/form-data">
+                <form action="${pageContext.request.contextPath}/registerAsOwner" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="form-group">
                         <label for="fullName">Full Name</label> 
                         <input type="text" class="form-control" id="fullName" name="fullName" value="${fullName}" readonly>
@@ -48,11 +48,9 @@
                     </div>
                     <div class="form-group">
                         <label for="taxNumber">Tax ID</label>
-                        <!-- lỗi ở đây nè -->
                         <input type="text" class="form-control" id="taxNumber" name="taxNumber" 
-                                title="Tax ID must be between 10 and 13 digits"> 
-                        <!-- lỗi ở đây nè -->
-                        <small class="form-text text-muted">Enter your 10-digit Tax ID number.</small>
+                               pattern="\d{10,13}" title="Tax ID must be between 10 and 13 digits" required>
+                        <small class="form-text text-muted">Enter your 10-13 digit Tax ID number.</small>
                         <div class="validation-error" id="taxNumberError"></div>
                     </div>
                     <div class="form-group">
@@ -76,5 +74,23 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         
+        <!-- JavaScript for client-side validation -->
+        <script>
+            function validateForm() {
+                const taxNumber = document.getElementById("taxNumber").value;
+                const taxNumberError = document.getElementById("taxNumberError");
+
+                // Clear previous error messages
+                taxNumberError.textContent = "";
+
+                // Validate Tax ID format
+                const taxIdPattern = /^\d{10,13}$/;
+                if (!taxIdPattern.test(taxNumber)) {
+                    taxNumberError.textContent = "Tax ID must be between 10 and 13 digits.";
+                    return false;
+                }
+                return true;
+            }
+        </script>
     </body>
 </html>

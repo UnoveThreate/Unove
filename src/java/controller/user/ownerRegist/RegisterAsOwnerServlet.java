@@ -82,27 +82,48 @@ public class RegisterAsOwnerServlet extends HttpServlet {
             response.sendRedirect(RouterURL.LOGIN);
             return;
         }
-        String taxID = request.getParameter("taxNumber");
 
-        // Validate Tax ID format
-        if (!isValidTaxID(taxID)) {
-            request.setAttribute("error", "Invalid tax ID format.");
+        try {
+            // Check if the user has a pending or approved request
+            String existingRequestStatus = ownerRequestDAO.getRequestStatus(userID);
+            if ("pending".equals(existingRequestStatus)) {
+                request.setAttribute("error", "Your request is currently under review; you cannot reapply.");
+                request.getRequestDispatcher(RouterJSP.OWNER_REGIST_PAGE).forward(request, response);
+                return;
+            } else if ("approved".equals(existingRequestStatus)) {
+                request.setAttribute("error", "You are already an owner.");
+                request.getRequestDispatcher(RouterJSP.OWNER_REGIST_PAGE).forward(request, response);
+                return;
+            }
+
+            // Validate Tax ID format
+            String taxID = request.getParameter("taxNumber");
+            if (!isValidTaxID(taxID)) {
+                request.setAttribute("error", "Invalid tax ID format.");
+                request.getRequestDispatcher(RouterJSP.OWNER_REGIST_PAGE).forward(request, response);
+                return;
+            }
+
+            // Handle file upload
+            Part filePart = request.getPart("businessLicenseFile");
+            String businessLicenseFile = uploadFile(filePart);
+
+            // Add owner request to the database
+            boolean success = ownerRequestDAO.addOwnerRequest(userID, taxID, businessLicenseFile);
+
+            if (!success) {
+                request.setAttribute("error", "Failed to submit request. Please try again.");
+            } else {
+                request.setAttribute("successMessage", "Your request has been submitted successfully.");
+            }
+
             request.getRequestDispatcher(RouterJSP.OWNER_REGIST_PAGE).forward(request, response);
-            return;
+
+        } catch (Exception e) {
+            Logger.getLogger(RegisterAsOwnerServlet.class.getName()).log(Level.SEVERE, null, e);
+            request.setAttribute("error", "An error occurred while processing your request.");
+            request.getRequestDispatcher(RouterJSP.OWNER_REGIST_PAGE).forward(request, response);
         }
-
-        // Handle file upload
-        Part filePart = request.getPart("businessLicenseFile");
-        String businessLicenseFile = uploadFile(filePart);
-
-        // Add owner request to the database
-        boolean success = ownerRequestDAO.addOwnerRequest(userID, taxID, businessLicenseFile);
-
-        if (!success) {
-            request.setAttribute("error", "Failed to submit request. Please try again.");
-        }
-
-        request.getRequestDispatcher(RouterJSP.OWNER_REGIST_PAGE).forward(request, response);
     }
 
     private boolean isValidTaxID(String taxID) {
