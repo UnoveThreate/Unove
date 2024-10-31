@@ -482,9 +482,9 @@
                                         <c:if test="${sessionScope.role eq 'OWNER'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản trị viên</a></li>
                                         </c:if>
-                                        <c:if test="${sessionScope.role ne 'OWNER'}">
+                                        
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
-                                        </c:if>
+                                     
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                 </ul>

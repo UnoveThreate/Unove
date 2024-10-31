@@ -158,9 +158,12 @@
                                
                                 <td>${movie.rating}</td>
                                 <td>
-                                    <button id="delete_${movie.movieID}" class="button-borderless" onclick="deleteFavouriteMovie('${movie.movieID}');">
+                                    <form action="myfavouritemovie" method="post">
+                                        <button id="delete_${movie.movieID}" class="button-borderless" onclick="deleteFavouriteMovie('${movie.movieID}');">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
+                                    </form>
+                                    
                                 </td>
                             </tr>
                         </c:forEach>
@@ -169,14 +172,5 @@
             </form>
         </div>
     </body>
-    <script>
-        function deleteFavouriteMovie(movieID) {
-            const deletedFavouriteMovieInput = document.createElement('input');
-            deletedFavouriteMovieInput.type = 'hidden';
-            deletedFavouriteMovieInput.name = 'deletedFavouriteMovieInput';
-            deletedFavouriteMovieInput.value = movieID;
-            document.getElementById('favouriteMoviesForm').appendChild(deletedFavouriteMovieInput);
-            callServlet( 'myfavouritemovie', 'POST');
-        }
-    </script>
+    
 </html>

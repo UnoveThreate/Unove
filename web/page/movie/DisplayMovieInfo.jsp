@@ -4,10 +4,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <% Movie movie = (Movie) request.getAttribute("movie");%>
 
+
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>
@@ -143,6 +145,8 @@
 
             .buttons {
                 margin-top: 40px;
+                display:flex;
+                gap: 300px;
             }
 
             button {
@@ -155,6 +159,22 @@
                 box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
                 transition: all 0.3s ease;
             }
+            #favourite,
+            #unFavourite {
+
+                background: #f8f0ff;
+                color: black;
+                margin-right: 20px;
+                border: 2px dashed #c0a3ff;
+            }
+
+            #favourite,
+            #unfavourite :hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px #c0a3ff;
+                background: #d4bee4;
+            }
+
 
             #trailerBtn {
                 background: #f8f0ff;
@@ -607,6 +627,7 @@
     </head>
 
     <body>
+
         <div class="container">
             <div class="poster" data-aos="fade-right"
                  style="background-image: url('<%= movie.getImageURL()%>')">
@@ -641,45 +662,29 @@
                 <div class="buttons">
                     <button id="trailerBtn">View Trailer</button>
                     <c:if test="${not empty sessionScope.userID}">
-                       
-                            <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
 
+
+                        <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
+
+
+                            <div class="d-flex align-items-center">
                             <c:if test="${isFavoritedMovie == false}">
                                 <form action="HandleDisplayMovieInfo" method="post">
                                     <input type="hidden" name="isAddingToFavorite" value="true" />
                                     <input type="hidden" name="movieID" value="${movie.movieID}" />
-                                    <!-- Include the movieID -->
-                                    <button type="submit"
-                                            style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
-                                        <span class="clWhite">
-                                            <img src="assets/images/add-to-favorites.png"></img>
-
-                                        </span>
+                                    <button id="favourite" type="submit" class="btn btn-outline-primary">
+                                        <i class="fas fa-star"></i> 
                                     </button>
                                 </form>
                             </c:if>
 
-                            <c:if test="${isFavoritedMovie == true}">
-                                <form action="myfavouritemovie" method="post">
-                                    <input type="hidden" name="deletedFavouriteMovieInput"
-                                           value="${movie.movieID}" />
-                                    <input type="hidden" name="isDeletingInMovieInfo" value="true" />
-                                    <button  type="submit"
-                                             style="display: inline-block; text-decoration: none; cursor: pointer; margin-left: -25px; background: none; border: none; padding: 0;">
-                                        <span class="clWhite">
-                                            <img src="assets/images/delete-favorite.png"></img>
-
-                                        </span>
-                                    </button>
-                                </form>
-                            </c:if>
+                            
                         </c:if>
+                    </div>
 
-
-                  
                 </div>
 
-              
+
             </div>
         </div>
         <!-- Booking Section -->
@@ -803,6 +808,8 @@
                         allowfullscreen></iframe>
             </div>
         </div>
+        
+
 
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>

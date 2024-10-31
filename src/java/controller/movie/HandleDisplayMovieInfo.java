@@ -56,7 +56,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             throws ServletException, IOException {
         try {
             // Get parameters
-            String userID = request.getParameter("userID");
+
             String movieIDStr = request.getParameter("movieID");
             String cinemaChainIDStr = request.getParameter("cinemaChainID");
             String cinemaIDStr = request.getParameter("cinemaID");
@@ -68,6 +68,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             }
 
             int movieID = Integer.parseInt(movieIDStr);
+
             Integer selectedCinemaChainID = cinemaChainIDStr != null ? Integer.parseInt(cinemaChainIDStr) : null;
             Integer selectedCinemaID = cinemaIDStr != null ? Integer.parseInt(cinemaIDStr) : null;
             LocalDate selectedDate = dateStr != null ? LocalDate.parse(dateStr) : LocalDate.now();
@@ -113,9 +114,16 @@ public class HandleDisplayMovieInfo extends HttpServlet {
                 availableDates.add(currentDate.plusDays(i));
             }
             
+            // task favourite movie
+            HttpSession session = request.getSession();
+            //check xem trong session co bien ton tai userID hay khong, neu khong thi ep kieu duoi dang integer
+            int userID = -1;
+            if (session.getAttribute("userID") != null) {
+                userID = (int) session.getAttribute("userID");
+            }
             Boolean isFavoritedMovie = null;
             if (userID != -1) {
-                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, Integer.parseInt(movieID));
+                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, movieID);
             }
 
             // Add movie to request attributes
@@ -143,31 +151,29 @@ public class HandleDisplayMovieInfo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Integer userID = (Integer) session.getAttribute("userID");
+        int userID = (int) session.getAttribute("userID");
+        int movieID = Integer.parseInt(request.getParameter("movieID"));
+        boolean isAddingToFavorite = request.getParameter("isAddingToFavorite") != null
+                && request.getParameter("isAddingToFavorite").equals("true");
 
-        if (userID == null) {
-            response.sendRedirect(RouterURL.LOGIN); // Chuyển hướng tới trang đăng nhập nếu userID không tồn tại
+        if (isAddingToFavorite) {
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String favoritedAt = currentDateTime.format(formatter);
 
-            int movieID = Integer.parseInt(request.getParameter("movieID"));
-            boolean isAddingToFavorite = "true".equals(request.getParameter("isAddingToFavorite"));
+            try {
 
-            if (isAddingToFavorite) {
-                LocalDateTime currentDateTime = LocalDateTime.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                String favoritedAt = currentDateTime.format(formatter);
+                favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
 
-                try {
-
-                    favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
-                } catch (Exception ex) {
-                    Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
-                    response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra khi thêm vào yêu thích.");
-                    return;
-                }
+            } catch (Exception ex) {
+                Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra khi thêm vào yêu thích.");
+                return;
             }
-
-            // Chuyển hướng đến trang mong muốn sau khi xử lý xong
-            response.sendRedirect("/Unove/HandleDisplayMovieInfo?movieID=" + movieID);
         }
+
+        // Chuyển hướng đến trang mong muốn sau khi xử lý xong
+        response.sendRedirect("/Unove/HandleDisplayMovieInfo?movieID=" + movieID);
     }
 }
+

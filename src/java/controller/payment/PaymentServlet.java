@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -140,14 +141,16 @@ public class PaymentServlet extends HttpServlet {
 
             // Tạo order ban đầu mà không có code và QR code
             int orderID = orderDAO.insertOrder(userID, movieSlotID, premiumTypeID, status, null, null);
-            ticketDAO.insertTickets(orderID, listSeats, "Pending");
+
             if (orderID != -1) {
+                ticketDAO.insertTickets(orderID, listSeats, "Pending");
+                setOrderCookies(response, orderID, userID, movieSlotID, totalPrice, premiumTypeID, "Pending");
                 PayMentService(orderID, totalPrice, request, response);
             } else {
                 response.getWriter().println("Đã có lỗi xảy ra khi tạo đơn hàng.");
             }
         } catch (Exception e) {
-             Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, e);
         }
 
     }
@@ -269,6 +272,33 @@ public class PaymentServlet extends HttpServlet {
             ipAdress = "Invalid IP:" + e.getMessage();
         }
         return ipAdress;
+    }
+
+    private void setOrderCookies(HttpServletResponse response, int orderID, int userID, int movieSlotID,
+            double totalPrice, Integer premiumTypeID, String status) {
+        Cookie orderIdCookie = new Cookie("orderID", String.valueOf(orderID));
+        Cookie userIdCookie = new Cookie("userID", String.valueOf(userID));
+        Cookie movieSlotIdCookie = new Cookie("movieSlotID", String.valueOf(movieSlotID));
+        Cookie totalPriceCookie = new Cookie("totalPrice", String.valueOf(totalPrice));
+        Cookie premiumTypeIdCookie = new Cookie("premiumTypeID", String.valueOf(premiumTypeID));
+        Cookie statusCookie = new Cookie("Pending", status);
+
+        // Thiết lập thời gian tồn tại của cookies (ví dụ: 30 phút)
+        int cookieExpiry = 30 * 60;
+        orderIdCookie.setMaxAge(cookieExpiry);
+        userIdCookie.setMaxAge(cookieExpiry);
+        movieSlotIdCookie.setMaxAge(cookieExpiry);
+        totalPriceCookie.setMaxAge(cookieExpiry);
+        premiumTypeIdCookie.setMaxAge(cookieExpiry);
+        statusCookie.setMaxAge(cookieExpiry);
+
+        // Thêm cookies vào phản hồi
+        response.addCookie(orderIdCookie);
+        response.addCookie(userIdCookie);
+        response.addCookie(movieSlotIdCookie);
+        response.addCookie(totalPriceCookie);
+        response.addCookie(premiumTypeIdCookie);
+        response.addCookie(statusCookie);
     }
 
     @Override
