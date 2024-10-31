@@ -6,6 +6,7 @@ package DAO.payment;
 
 import database.MySQLConnect;
 import jakarta.servlet.ServletContext;
+import java.security.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -266,7 +267,6 @@ public class PaymentDAO extends MySQLConnect {
             statement.setInt(1, movieSlotID);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    
                     cinema.setCinemaID(resultSet.getInt("CinemaID"));
                     cinema.setName(resultSet.getString("CinemaName"));
                     cinema.setAddress(resultSet.getString("Address"));
@@ -281,5 +281,19 @@ public class PaymentDAO extends MySQLConnect {
         }
 
         return cinema; // Return the list of cinemas for the given MovieSlotID
+    }
+
+    public boolean addCanteenItemToOrder(int orderID, int canteenItemID, int quantity) {
+        String sql = "INSERT INTO orderCanteenItem (orderID, canteenItemID, Quantity) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, orderID);
+            statement.setInt(2, canteenItemID);
+            statement.setInt(3, quantity);
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu có ít nhất một bản ghi được chèn
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

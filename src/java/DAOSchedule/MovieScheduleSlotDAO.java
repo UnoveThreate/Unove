@@ -13,15 +13,16 @@ import java.util.List;
 public class MovieScheduleSlotDAO extends MySQLConnect {
 
     public MovieScheduleSlotDAO(ServletContext context) throws Exception {
-        super(); 
+        super();
         connect(context);
     }
 
     public List<MovieSlot> getMovieSlotsByCinemaAndDate(int cinemaID, LocalDate date) {
         List<MovieSlot> movieSlots = new ArrayList<>();
-        String sql = "SELECT ms.* FROM MovieSlot ms " +
-                     "JOIN Room r ON ms.RoomID = r.RoomID " +
-                     "WHERE r.CinemaID = ? AND DATE(ms.StartTime) = ?";
+        String sql = "SELECT ms.* FROM MovieSlot ms "
+                + "JOIN Room r ON ms.RoomID = r.RoomID "
+                + "WHERE r.CinemaID = ? AND DATE(ms.StartTime) = ? "
+                + "AND ms.Status = 'Active'";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
@@ -35,15 +36,16 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return movieSlots; 
+        return movieSlots;
     }
 
     public List<LocalDate> getAvailableDates(int cinemaID) {
         List<LocalDate> dates = new ArrayList<>();
-        String sql = "SELECT DISTINCT DATE(StartTime) as show_date FROM MovieSlot ms " +
-                     "JOIN Room r ON ms.RoomID = r.RoomID " +
-                     "WHERE r.CinemaID = ? AND StartTime >= CURDATE() " +
-                     "ORDER BY show_date LIMIT 7";
+        String sql = "SELECT DISTINCT DATE(StartTime) as show_date FROM MovieSlot ms "
+                + "JOIN Room r ON ms.RoomID = r.RoomID "
+                + "WHERE r.CinemaID = ? AND StartTime >= CURDATE() "
+                + "AND ms.Status = 'Active' "
+                + "ORDER BY show_date LIMIT 7";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
@@ -55,12 +57,12 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return dates; 
+        return dates;
     }
 
     public MovieSlot getMovieSlotById(int movieSlotID) {
         MovieSlot movieSlot = null;
-        String sql = "SELECT * FROM MovieSlot WHERE MovieSlotID = ?";
+        String sql = "SELECT * FROM MovieSlot WHERE MovieSlotID = ? AND Status = 'Active'";
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, movieSlotID);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -76,7 +78,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
 
     public MovieSlot getLatestMovieSlot() {
         MovieSlot movieSlot = null;
-        String sql = "SELECT * FROM MovieSlot WHERE StartTime > NOW() ORDER BY StartTime ASC LIMIT 1";
+        String sql = "SELECT * FROM MovieSlot WHERE StartTime > NOW() AND Status = 'Active' ORDER BY StartTime ASC LIMIT 1";
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -101,5 +103,20 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         movieSlot.setDiscount(rs.getFloat("Discount"));
         movieSlot.setStatus(rs.getString("Status"));
         return movieSlot;
+    }
+
+    public int getCinemaIdByMovieSlotId(int movieSlotID) throws SQLException {
+        String sql = "SELECT r.CinemaID "
+                + "FROM MovieSlot ms "
+                + "JOIN Room r ON ms.RoomID = r.RoomID "
+                + "WHERE ms.MovieSlotID = ? AND ms.Status = 'Active'";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, movieSlotID);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("CinemaID");
+            }
+        }
+        return -1; 
     }
 }

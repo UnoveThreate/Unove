@@ -10,7 +10,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Update Room</title>
+        <title>Câp nhập phòng</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
             body {
@@ -34,7 +34,7 @@
     <body>
         <div class="container">
             <h1>Update Room</h1>
-            <form action="${pageContext.request.contextPath}/owner/updateRoom" method="post" onsubmit="return validateForm()">
+            <form action="${pageContext.request.contextPath}/owner/room/updateRoom" method="post" onsubmit="return validateForm()">
                 <input type="hidden" name="roomID" value="${room.roomID}">
                 <input type="hidden" name="cinemaID" value="${room.cinemaID}">
 
@@ -69,7 +69,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update Room</button>
+                <button type="submit" class="btn btn-primary">Cập nhập phòng</button>
             </form>
 
             <script>
@@ -83,7 +83,7 @@
                     return true; // Cho phép form gửi đi
                 }
             </script>
-            <a class="btn btn-secondary mt-3" href="${pageContext.request.contextPath}/owner/manageRoom?cinemaID=${room.cinemaID}">Back to Room Management</a>
+            <a class="btn btn-secondary mt-3" href="${pageContext.request.contextPath}/owner/room/manageRoom?cinemaID=${room.cinemaID}">Quay lại</a>
         </div>
     </body>
 </html>

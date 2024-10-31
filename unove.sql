@@ -1,5 +1,4 @@
 
-CREATE DATABASE Unove;
 USE Unove;
 
 -- Bảng PremiumType: Lưu các loại Premium của người dùng
@@ -36,38 +35,6 @@ CREATE TABLE User (
 );
 
 
-select * from unove.movieingenre;
-
-select * from unove.genre;
-
-INSERT INTO genre (GenreName)
-VALUES 
-('Horror'),
-('Action'),
-('Comedy'),
-('Drama'),
-('Vietnamese'),
-('Thriller');
-
-SELECT g.GenreName
-FROM genre g
-JOIN movieingenre mg ON g.GenreID = mg.GenreID
-WHERE mg.MovieID = 1;
-
--- MovieID 1 is a Vietnamese Action Movie
-INSERT INTO movieingenre (MovieID, GenreID)
-VALUES 
-(3, 2),  -- Action
-(3, 5);  -- Vietnamese
-
-SELECT g.GenreName as Genre FROM Genre g JOIN movieingenre m ON m.genreID = g.genreID WHERE m.MovieID =  3;
-
-
-select * from movie
-
-select * from unove.genre
-select * from movie
-SELECT g.GenreName as Genre FROM Genre g JOIN MovieinGerne movieingenregenrem ON m.MovieID = g.MovieID WHERE m.MovieID = 1 ;
 -- Bảng CinemaChain: Lưu thông tin chuỗi rạp chiếu phim
 CREATE TABLE CinemaChain (
     UserID INT,
@@ -195,6 +162,8 @@ CREATE TABLE `Order` (
     TimeCreated DATETIME,
     PremiumTypeID INT,
     Status VARCHAR(64) ,
+    Code varchar(100),
+    QRCode TEXT,
     FOREIGN KEY (UserID) REFERENCES User(UserID),
 	FOREIGN KEY (MovieSlotID) REFERENCES MovieSlot(MovieSlotID),
     FOREIGN KEY (PremiumTypeID) REFERENCES PremiumType(id)
@@ -229,6 +198,8 @@ CREATE TABLE CanteenItem (
     Price FLOAT,
     Stock INT,
     Status VARCHAR(64),
+    Image TEXT,
+    IsAvailable tinyint,
     FOREIGN KEY (CinemaID) REFERENCES Cinema(CinemaID)
 );
 
@@ -274,3 +245,19 @@ CREATE TABLE MemberVIP (
     FOREIGN KEY (user_id) REFERENCES User(UserID),
     FOREIGN KEY (cinema_id) REFERENCES Cinema(CinemaID)
 );
+
+CREATE EVENT IF NOT EXISTS update_pending_orders
+ON SCHEDULE EVERY 1 MINUTE -- Kiểm tra mỗi phút
+DO
+    UPDATE `order`
+    SET `Status` = 'Time Expired'
+    WHERE `Status` = 'pending' 
+	AND `TimeCreated` <= NOW() - INTERVAL 1 MINUTE;
+    
+CREATE EVENT IF NOT EXISTS update_pending_tickets
+ON SCHEDULE EVERY 1 MINUTE
+DO
+    UPDATE `ticket`
+    SET `Status` = 'Time Expired'
+    WHERE `Status` = 'Pending'
+	AND `TimeCreated` <= NOW() - INTERVAL 1 MINUTE;

@@ -14,7 +14,7 @@ import util.RouterURL;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/owner/deleteRoom")
+@WebServlet("/owner/room/deleteRoom")
 public class DeleteRoomServlet extends HttpServlet {
 
     private RoomDAO roomDAO;

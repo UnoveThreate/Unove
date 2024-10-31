@@ -57,7 +57,7 @@ public class MovieDAO extends MySQLConnect {
 
                     // Lấy danh sách thể loại của bộ phim từ bảng MovieInGenre
                     List<String> genres = new ArrayList<>();
-                    String genreQuery = "SELECT g.GenreName as Genre FROM Genre g JOIN movieingenre m ON m.genreID = g.genreID WHERE m.MovieID = ?;";
+                    String genreQuery = "SELECT g.GenreName as Genre FROM Genre g JOIN MovieInGenre m ON m.genreID = g.genreID WHERE m.MovieID = ?;";
 
                     try (PreparedStatement genrePstmt = connection.prepareStatement(genreQuery)) {
                         genrePstmt.setInt(1, movieID);

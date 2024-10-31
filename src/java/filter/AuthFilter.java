@@ -128,11 +128,10 @@ public class AuthFilter implements Filter {
 
             }
         }
-
-        session = httpRequest.getSession(true);
-        String urlStore = (String) httpRequest.getRequestURI();
+//        session = httpRequest.getSession(true);
+//        String urlStore = (String) httpRequest.getRequestURI();
 //        if (!urlStore.equals(RouterURL.LOGIN) && !url.contains("/LoginGoogleServlet") && !url.contains("/notifications")) {
-////
+//
 //            session.setAttribute("redirectTo", urlStore);
 //            // Store all request parameters in the session
 //            Enumeration<String> parameterNames = httpRequest.getParameterNames();
