@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.User;
 
 /**
  *
@@ -21,18 +20,18 @@ import model.User;
 public class OwnerRequestDAO extends MySQLConnect {
 
     public OwnerRequestDAO(ServletContext context) throws Exception {
-        super(); // Call the constructor of MySQLConnect
+        super();
         connect(context); // Establish the connection
     }
 
     // Add a new owner request
-    public boolean addOwnerRequest(User currentUser, String taxNumber, String businessLicenseFile) {
-        String sql = "INSERT INTO OwnerRequest (currentUser, TaxNumber, BusinessLicenseFile, Status) VALUES (?, ?, ?, 'pending')";
+    public boolean addOwnerRequest(int userID, String taxNumber, String businessLicenseFile) {
+        String sql = "INSERT INTO OwnerRequest (UserID, TaxNumber, BusinessLicenseFile, Status) VALUES (?, ?, ?, 'pending')";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, currentUser);
+            pstmt.setInt(1, userID);
             pstmt.setString(2, taxNumber);
             pstmt.setString(3, businessLicenseFile);
-            
+
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,29 +39,39 @@ public class OwnerRequestDAO extends MySQLConnect {
         }
     }
 
-    // Get pending owner requests for admin
+    // Get pending owner requests for admin review
     public List<OwnerRequest> getPendingRequests() {
-        List<OwnerRequest> requests = new ArrayList<>();
-        String sql = "SELECT * FROM OwnerRequest WHERE Status = 'pending'";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-            while (rs.next()) {
-                OwnerRequest request = new OwnerRequest(
-                        rs.getInt("RequestID"),
-                        rs.getInt("currentUser"),
-                        rs.getTimestamp("RequestDate"),
-                        rs.getString("Status"),
-                        rs.getString("TaxNumber"),
-                        rs.getString("BusinessLicenseFile")
-                );
-                requests.add(request);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    List<OwnerRequest> requests = new ArrayList<>();
+    String sql = "SELECT orq.*, u.Username, u.Email " +
+                 "FROM OwnerRequest orq " +
+                 "JOIN User u ON orq.UserID = u.UserID " +
+                 "WHERE orq.Status = 'pending'";
+    
+    try (PreparedStatement pstmt = connection.prepareStatement(sql); 
+         ResultSet rs = pstmt.executeQuery()) {
+        
+        while (rs.next()) {
+            OwnerRequest request = new OwnerRequest(
+                    rs.getInt("RequestID"),
+                    rs.getInt("UserID"),
+                    rs.getTimestamp("RequestDate"),
+                    rs.getString("Status"),
+                    rs.getString("TaxNumber"),
+                    rs.getString("BusinessLicenseFile")
+            );
+            // Set username and email
+            request.setUsername(rs.getString("Username"));
+            request.setEmail(rs.getString("Email"));
+            
+            requests.add(request);
         }
-        return requests;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return requests;
+}
 
-    // Update request status (approve/reject)
+    // Update request status (approve/reject) and add reason
     public boolean updateRequestStatus(int requestID, String status, String reason) {
         String sql = "UPDATE OwnerRequest SET Status = ?, Reason = ? WHERE RequestID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -76,7 +85,7 @@ public class OwnerRequestDAO extends MySQLConnect {
         }
     }
 
-    // Get UserID by RequestID
+    // Get UserID associated with a specific RequestID
     public int getUserIDByRequestID(int requestID) {
         String sql = "SELECT UserID FROM OwnerRequest WHERE RequestID = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -88,10 +97,10 @@ public class OwnerRequestDAO extends MySQLConnect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1; // or throw an exception if needed
+        return -1; // Return -1 if no userID found or an error occurs
     }
 
-    // Check if user has a pending request
+    // Check if a user has a pending request
     public boolean hasPendingRequest(int userID) {
         String sql = "SELECT COUNT(*) FROM OwnerRequest WHERE UserID = ? AND Status = 'pending'";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

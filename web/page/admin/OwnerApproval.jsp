@@ -1,3 +1,9 @@
+<%-- 
+    Document   : OwnerRegist
+    Created on : Oct 19, 2024, 10:05:55 AM
+    Author     : Kaan
+--%>
+
 <%@page import="util.RouterURL"%>
 <%@page contentType="text/html;charset=UTF-8" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -6,8 +12,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner Approval Requests</title>
+    <title>Owner Registration Approval</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Optional: Style for loading indicators and error messages */
+        .loading {
+            display: none;
+        }
+        .validation-error {
+            color: #dc3545;
+            font-size: 0.875em;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -26,6 +42,8 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Username</th> <!-- New column for Username -->
+                        <th>Email</th> <!-- New column for Email -->
                         <th>Tax ID</th>
                         <th>Business License</th>
                         <th>Status</th>
@@ -35,6 +53,8 @@
                 <tbody>
                     <c:forEach var="request" items="${pendingRequests}">
                         <tr id="request-${request.requestID}">
+                            <td>${request.username}</td> <!-- Display Username -->
+                            <td>${request.email}</td> <!-- Display Email -->
                             <td>${request.taxNumber}</td>
                             <td>
                                 <img src="${request.businessLicenseFile}" alt="Business License" style="width: 100px; height: auto;" />
@@ -43,13 +63,15 @@
                             <td>
                                 <form class="approval-form" method="post">
                                     <input type="hidden" name="requestID" value="${request.requestID}" />
-                                    <select name="status" class="form-control" required>
+                                    <select name="status" class="form-control status-select" required>
                                         <option value="">Select...</option>
                                         <option value="approved">Approve</option>
                                         <option value="rejected">Reject</option>
                                     </select>
+                                    <div class="validation-error status-error" style="display: none;">Please select a status.</div>
                                     <input type="text" name="reason" placeholder="Optional reason" class="form-control mt-2" />
-                                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                                    <button type="submit" class="btn btn-primary mt-2 submit-button">Submit</button>
+                                    <span class="loading ml-2">Processing...</span>
                                 </form>
                             </td>
                         </tr>
@@ -94,6 +116,18 @@
                 var status = $form.find('select[name="status"]').val();
                 var reason = $form.find('input[name="reason"]').val();
 
+                // Check if a valid status is selected
+                if (!status) {
+                    $form.find('.status-error').show();
+                    return;
+                } else {
+                    $form.find('.status-error').hide();
+                }
+
+                // Disable the button and show loading indicator
+                $form.find('.submit-button').prop('disabled', true);
+                $form.find('.loading').show();
+
                 $.ajax({
                     url: "${pageContext.request.contextPath}/admin/ownerApproval",
                     type: "POST",
@@ -108,15 +142,21 @@
 
                         // Add the handled request to the handled requests table
                         var newRow = `<tr>
-                                        <td>${$form.closest('tr').find('td:eq(0)').text()}</td>
-                                        <td>${$form.closest('tr').find('td:eq(1)').html()}</td>
+                                        <td>${$form.closest('tr').find('td:eq(2)').text()}</td>
+                                        <td>${$form.closest('tr').find('td:eq(3)').html()}</td>
                                         <td>${status}</td>
                                         <td>${reason}</td>
                                     </tr>`;
                         $('#handledRequests').append(newRow);
                     },
                     error: function(xhr, status, error) {
-                        alert('Error occurred: ' + error);
+                        // Display inline error
+                        $form.append(`<div class="validation-error">Error occurred: ${error}</div>`);
+                    },
+                    complete: function() {
+                        // Re-enable button and hide loading indicator after request is complete
+                        $form.find('.submit-button').prop('disabled', false);
+                        $form.find('.loading').hide();
                     }
                 });
             });
@@ -124,3 +164,4 @@
     </script>
 </body>
 </html>
+

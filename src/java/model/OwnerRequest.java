@@ -13,22 +13,40 @@ import java.sql.Timestamp;
 public class OwnerRequest {
 
     private int requestID;
-    private User currentUser;
+    private int userID;
     private Timestamp requestDate;
     private String status;
     private String taxNumber;
     private String businessLicenseFile;
+    private String username;
+    private String email;
 
-    public OwnerRequest() {
-    }
-
-    public OwnerRequest(int requestID, User currentUser, Timestamp requestDate, String status, String reason, String taxNumber) {
+    public OwnerRequest(int requestID, int userID, Timestamp requestDate, String status, String taxNumber, String businessLicenseFile) {
         this.requestID = requestID;
-        this.currentUser = currentUser;
+        this.userID = userID;
         this.requestDate = requestDate;
         this.status = status;
         this.taxNumber = taxNumber;
         this.businessLicenseFile = businessLicenseFile;
+    }
+
+    public OwnerRequest() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public int getRequestID() {
@@ -39,12 +57,12 @@ public class OwnerRequest {
         this.requestID = requestID;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public Timestamp getRequestDate() {
@@ -81,9 +99,7 @@ public class OwnerRequest {
 
     @Override
     public String toString() {
-        return "OwnerRequest{" + "requestID=" + requestID + ", currentUser=" + currentUser + ", requestDate=" + requestDate + ", status=" + status + ", taxNumber=" + taxNumber + ", businessLicenseFile=" + businessLicenseFile + '}';
+        return "OwnerRequest{" + "requestID=" + requestID + ", userID=" + userID + ", requestDate=" + requestDate + ", status=" + status + ", taxNumber=" + taxNumber + ", businessLicenseFile=" + businessLicenseFile + '}';
     }
-
-   
 
 }

@@ -14,7 +14,6 @@ import util.RouterJSP;
 import java.io.IOException;
 import java.util.List;
 import model.OwnerRequest;
-import model.User;
 
 /**
  *
@@ -44,8 +43,10 @@ public class OwnerApprovalServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String roleUser = (String) session.getAttribute("role");
 
-        // Fetch pending requests
+        // Fetch pending requests with additional user information
         List<OwnerRequest> pendingRequests = ownerRequestDAO.getPendingRequests();
+
+        // Set pending requests as an attribute
         request.setAttribute("pendingRequests", pendingRequests);
 
         // Set attribute if no requests found
@@ -60,7 +61,6 @@ public class OwnerApprovalServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User currentUser = (User) session.getAttribute("currentUser");
 
         try {
             int requestID = Integer.parseInt(request.getParameter("requestID"));
