@@ -1044,7 +1044,6 @@
                 </div>
             </div>
         </section>
-
         <section class="promotions">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Tin tức - Khuyến mãi</h2>

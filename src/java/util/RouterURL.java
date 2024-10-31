@@ -87,6 +87,10 @@ public class RouterURL {
     public static String CINEMA_DETAIL_PAGE = "/Unove/cinemaDetail";
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/Unove/CanteenItemServlet";
+    
+    public static String ADMIN_OWNER_APPROVAL = "/Unove/admin/ownerApproval"; // Admin approval servlet
+    
+    public static String REGISTER_AS_OWNER = "/Unove/registerAsOwner";
 
     public static String MANAGE_MOVIE_SLOT = "/Unove/owner/movieSlot/manageMovieSlot";
 

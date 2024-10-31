@@ -427,9 +427,12 @@
                 </ul>
 
                 <div>
-                    <button id="searchButton" class="borderless-btn" onclick="showModal()">
-                        <i class="fa-solid fa-magnifying-glass"></i> 
-                    </button>
+                    <a href="${pageContext.request.contextPath}/filterMovies">
+                        <button id="searchButton" class="borderless-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i> 
+                        </button>
+                    </a>
+
 
                     <c:set var="movieName" value="${requestScope.movieName}"/>
                     <c:set var="movies" value="${requestScope.movies}"/>

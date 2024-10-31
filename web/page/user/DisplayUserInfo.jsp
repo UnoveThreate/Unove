@@ -383,7 +383,11 @@
                                         <button class="btn  btn-warning cpw">Return </button>
                                     </form>
                                 </div>
-
+                                <div class="col-3">
+                                    <form action="${pageContext.request.contextPath}/page/user/OwnerRegist.jsp" class="text-center">
+                                        <button class="btn btn-success cpw">Register to become an owner</button>
+                                    </form>
+                                </div>
 
                             </div>
                         </div>
@@ -393,7 +397,7 @@
         </div>
 
         <script>
-           document.addEventListener('DOMContentLoaded', function () {
+            document.addEventListener('DOMContentLoaded', function () {
                 const tinhSelect = document.getElementById('tinh');
                 const quanSelect = document.getElementById('quan');
                 const phuongSelect = document.getElementById('phuong');
