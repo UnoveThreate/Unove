@@ -1,5 +1,4 @@
 
-CREATE DATABASE Unove;
 USE Unove;
 
 -- Bảng PremiumType: Lưu các loại Premium của người dùng
@@ -163,6 +162,8 @@ CREATE TABLE `Order` (
     TimeCreated DATETIME,
     PremiumTypeID INT,
     Status VARCHAR(64) ,
+    Code varchar(100),
+    QRCode TEXT,
     FOREIGN KEY (UserID) REFERENCES User(UserID),
 	FOREIGN KEY (MovieSlotID) REFERENCES MovieSlot(MovieSlotID),
     FOREIGN KEY (PremiumTypeID) REFERENCES PremiumType(id)
@@ -197,6 +198,8 @@ CREATE TABLE CanteenItem (
     Price FLOAT,
     Stock INT,
     Status VARCHAR(64),
+    Image TEXT,
+    IsAvailable tinyint,
     FOREIGN KEY (CinemaID) REFERENCES Cinema(CinemaID)
 );
 
@@ -249,4 +252,12 @@ DO
     UPDATE `order`
     SET `Status` = 'Time Expired'
     WHERE `Status` = 'pending' 
+	AND `TimeCreated` <= NOW() - INTERVAL 1 MINUTE;
+    
+CREATE EVENT IF NOT EXISTS update_pending_tickets
+ON SCHEDULE EVERY 1 MINUTE
+DO
+    UPDATE `ticket`
+    SET `Status` = 'Time Expired'
+    WHERE `Status` = 'Pending'
 	AND `TimeCreated` <= NOW() - INTERVAL 1 MINUTE;

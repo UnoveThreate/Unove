@@ -28,6 +28,7 @@ import util.RouterJSP;
  */
 @WebServlet(name = "FavouriteMoviesServlet", urlPatterns = {"/myfavouritemovie"})
 public class FavouriteMoviesServlet extends HttpServlet {
+
     FavouriteMoviesDAO fmd;
 
     /**
@@ -47,7 +48,7 @@ public class FavouriteMoviesServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FavouriteMovieServlet</title>");            
+            out.println("<title>Servlet FavouriteMovieServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FavouriteMovieServlet at " + request.getContextPath() + "</h1>");
@@ -65,20 +66,18 @@ public class FavouriteMoviesServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-    
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        int userID = (int)session.getAttribute("1");
+        int userID = (int) session.getAttribute("userID");
+
         try {
             fmd = new FavouriteMoviesDAO(request.getServletContext());
             List<Movie> favouriteMovies = fmd.queryFavouriteMovies(userID);
 //            Collections.sort(favouriteMovies, new StatusMovieComparator());
             request.setAttribute("favouriteMovies", favouriteMovies);
-            for(Movie movie : favouriteMovies) {
+            for (Movie movie : favouriteMovies) {
                 System.out.println(movie);
             }
             request.getRequestDispatcher(RouterJSP.FAVOURITE_MOVIE_PAGE).forward(request, response);
@@ -87,8 +86,7 @@ public class FavouriteMoviesServlet extends HttpServlet {
         } catch (Exception ex) {
             Logger.getLogger(FavouriteMoviesServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }
 
     /**
@@ -103,24 +101,23 @@ public class FavouriteMoviesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        int userID = (int)session.getAttribute("userID");
+        int userID = (int) session.getAttribute("userID");
         int movieID = Integer.parseInt(request.getParameter("deletedFavouriteMovieInput"));
         boolean isDeletingInMovieInfo = request.getParameter("isDeletingInMovieInfo") != null && request.getParameter("isDeletingInMovieInfo").equals("true");
         try {
             fmd = new FavouriteMoviesDAO(request.getServletContext());
             fmd.deleteFavouriteMovie(userID, movieID);
-            if(isDeletingInMovieInfo) {
+            if (isDeletingInMovieInfo) {
                 response.sendRedirect("HandleDisplayMovieInfo?movieID=" + movieID);
                 return;
             }
             List<Movie> favouriteMovies = fmd.queryFavouriteMovies(userID);
-            Collections.sort(favouriteMovies, new StatusMovieComparator());
             request.setAttribute("favouriteMovies", favouriteMovies);
             request.getRequestDispatcher(RouterJSP.FAVOURITE_MOVIE_PAGE).forward(request, response);
         } catch (Exception ex) {
             Logger.getLogger(FavouriteMoviesServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     /**
@@ -133,15 +130,4 @@ public class FavouriteMoviesServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-}
-
-class StatusMovieComparator implements Comparator<Movie> {
-
-    @Override
-    public int compare(Movie movie1, Movie movie2) {
-        if(movie1.getStatus().equals(movie2.getStatus())) return 0;
-        if(movie1.getStatus().equals("SHOWING")) return -1;
-        return 1;
-    }
-    
 }

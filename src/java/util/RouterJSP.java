@@ -15,7 +15,7 @@ public class RouterJSP {
     public String HOMEPAGE = "/page/home/Home.jsp";
 
     public static String ERROR_PAGE = "/page/error/ErrorPage.jsp";
-    
+
     public static String OWNER_DASHBOARD = "/page/ownerdashboard/dashboard.jsp";
 
     public String REGISTER = "/page/auth/Register.jsp";
@@ -82,7 +82,6 @@ public class RouterJSP {
     public static String VIEW_ORDER = "/page/bill/Bill.jsp";
 
     //public static String SCHEDULE_MOVIE = "/page/movie/schedule/ScheduleMovie.jsp";
-
     public String UPDATE_CINEMACHAIN = "/page/owner/manage/UpdateCinemaChain.jsp";
 
     public String UPDATE_BANNER = "/page/owner/manage/UpdateBanner.jsp";
@@ -168,15 +167,15 @@ public class RouterJSP {
     public static String OWNER_MANAGE_ROOM_PAGE = "/page/owner/room/owner_manage_room.jsp";
 
     public static String OWNER_ROOM_UPDATE_PAGE = "/page/owner/room/owner_update_room.jsp";
-    
+
     public static String CATEEN_ORDER_ITEM = "/page/canteen/Item.jsp";
 
     public static String ORDER_DETAIL = "/page/bill/OrderDetail.jsp";
 
     public static String CANTEEN_ITEM_PAGE = "/page/canteen/Item.jsp";
-    
+
     public static String OWNER_CREATE_MOVIESLOT = "/page/owner/movieSlot/createMovieSlot.jsp";
-    
+
     public static String OWNER_MANAGE_MOVIESLOT = "/page/owner/movieSlot/manageMovieSlot.jsp";
 
     public String TOP_MOVIES = "/page/movie/topMovies/TopMovie.jsp";
@@ -185,11 +184,19 @@ public class RouterJSP {
 
     public static String CANTEEN_ITEM_UPLOAD_PAGE = "/page/owner/CanteenItemUpload.jsp";
         
+    public static String OWNER_APPROVAL_PAGE = "/page/admin/OwnerApproval.jsp"; // Admin owner approval page
+    
+    public static String OWNER_REGIST_PAGE = "/page/user/OwnerRegist.jsp"; // Admin owner approval page
+
+    public static String OWNER_REGIST_SUCCESS_PAGE = "/page/user/ownerRequestSuccess.jsp"; // Admin owner approval page
+
     public static String CONFIRM_TICKET = "/page/owner/owner_confirm.jsp";
-    
+
     public static String VIEW_RESULT_TICKET = "/page/owner/owner_ResultConfirm.jsp";
-    
+
     public static String OWNER_EDIT_MOVIESLOT = "/page/owner/movieSlot/editMovieSlot.jsp";
     
      public static String FILTER_MOVIE ="/page/user/movie/FilterMovie.jsp";
+
+    public static String MANAGE_SEAT_PAGE = "/page/owner/seat/manageSeat.jsp";
 }

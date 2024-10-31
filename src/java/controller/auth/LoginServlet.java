@@ -183,7 +183,7 @@ public class LoginServlet extends HttpServlet {
                 }
 
                 case "ADMIN" ->
-                    request.getRequestDispatcher("/admin").forward(request, response);
+                    response.sendRedirect(RouterURL.ADMIN_PAGE );
             }
 
         } else {
