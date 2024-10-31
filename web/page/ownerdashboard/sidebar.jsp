@@ -80,7 +80,7 @@
         // Check each link to see if it matches the current URL
         if (currentUrl.endsWith("/dashboard")) {
             document.getElementById("dashboardLink").classList.add("active");
-        } else if (currentUrl.endsWith("/manageCinema")) {
+        } else if (currentUrl.endsWith("/manageCinemaChain")) {
             document.getElementById("manageCinemaLink").classList.add("active");
         } else if (currentUrl.endsWith("/movie")) {
             document.getElementById("manageMovieLink").classList.add("active");
