@@ -213,8 +213,6 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
     private double calculateTotalPrice(List<Seat> selectedSeats, MovieSlot movieSlot) {
         double basePrice = movieSlot.getPrice();
-        double discount = movieSlot.getDiscount();
-
         return selectedSeats.size() * basePrice;
     }
 
