@@ -62,7 +62,7 @@
 
             h1, h2, h3 {
                 text-align: center;
-                color: #ffffff;
+                color: red !important;
             }
             .screen {
                 text-align: center;
@@ -93,7 +93,7 @@
                 align-items: center;
                 justify-content: center;
                 border: 1px solid #ccc;
-                border-radius: 5px;
+                border-radius: 9px !important;
                 cursor: pointer;
                 font-size: 12px;
             }
@@ -141,24 +141,55 @@
                 margin-top: 20px;
 
             }
-            .info .seat {
-                display: inline-block;
-                width: 50px;
-                height: 50px;
-                line-height: 50px;
-                margin: 5px;
+            /* Cập nhật phần CSS cho chú thích ghế */
+            .info {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                margin: 30px auto;
+                max-width: 900px;
+                padding: 15px;
                 border-radius: 10px;
-                font-weight: bold;
-            }
-            .info .description {
-                display: block;
-                margin-top: 10px;
-            }
-            .info .description span {
-                margin: 0 10px;
-                font-size: 16px;
             }
 
+            .info .seat-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .info .seat {
+                width: 24px;
+                height: 24px;
+                margin: 0;
+                border-radius: 4px !important;
+            }
+
+            /* Cập nhật màu sắc cho các loại ghế */
+            .info .seat.available {
+                background-color: #8940FF !important;
+            }
+
+            .info .seat.selected {
+                background-color: #E6007E !important;
+            }
+
+            .info .seat.unavailable {
+                background-color: #404040 !important;
+            }
+
+            .info .description {
+                display: flex;
+                gap: 30px;
+                color: #404040;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .info .description span {
+                margin: 0;
+            }
             /* Breadcrumb styles */
             .breadcrumb-nav {
                 background-color: transparent;
@@ -246,15 +277,7 @@
             }
 
 
-            .info .seat {
-                display: inline-block;
-                width: 50px;
-                height: 50px;
-                line-height: 50px;
-                margin: 5px;
-                border-radius: 10px;
-                font-weight: bold;
-            }
+
             .swal2-popup {
                 border-radius: 15px !important;
                 font-family: Arial, sans-serif !important;
@@ -275,6 +298,7 @@
                 font-size: 16px !important;
                 border-radius: 8px !important;
             }
+
         </style>
     </head>
     <body>
@@ -334,13 +358,17 @@
         </form>
 
         <div class="info" data-aos="fade-up" data-aos-delay="500">
-            <div class="seat available">.</div>
-            <div class="seat selected">.</div>
-            <div class="seat unavailable">.</div>
-            <div class="description">
-                <span class="available">Có sẵn</span>
-                <span class="selected">Ghế bạn chọn</span>
-                <span class="unavailable">Đã đặt</span>
+            <div class="seat-item">
+                <div class="seat available"></div>
+                <span>Có sẵn</span>
+            </div>
+            <div class="seat-item">
+                <div class="seat selected"></div>
+                <span>Ghế bạn chọn</span>
+            </div>
+            <div class="seat-item">
+                <div class="seat unavailable"></div>
+                <span>Đã đặt</span>
             </div>
         </div>
 
@@ -367,28 +395,79 @@
                                          const seatID = seat.dataset.id;
                                          const seatPrice = movieSlotPrice;
 
+                                         // kiểm tra nếu đang bỏ chọn ghế
                                          if (selectedSeats.includes(seatID)) {
-                                             // bỏ chọn ghế
+                                             // xử lý bỏ chọn ghế 
                                              seat.classList.remove('selected');
                                              selectedSeats.splice(selectedSeats.indexOf(seatID), 1);
                                              totalPrice -= seatPrice;
                                          } else {
-                                             // kiểm tra số lượng ghế đã chọn
+                                             // kiểm tra số lượng ghế tối đa
                                              if (selectedSeats.length >= MAX_SEATS) {
                                                  Swal.fire({
                                                      title: 'Thông báo',
                                                      text: 'Quý khách chỉ có thể chọn tối đa ' + MAX_SEATS + ' ghế 1 lần.',
                                                      icon: 'warning',
                                                      confirmButtonText: 'Đồng ý',
-                                                     confirmButtonColor: '#722ed1',
-                                                     background: '#fff',
-                                                     customClass: {
-                                                         title: 'swal-title',
-                                                         content: 'swal-text'
-                                                     }
+                                                     confirmButtonColor: '#722ed1'
                                                  });
                                                  return;
                                              }
+
+                                             // lấy tất cả ghế trong cùng một hàng
+                                             const currentRow = seat.textContent.charAt(0);
+                                             const allSeatsInRow = Array.from(document.querySelectorAll('.seat'))
+                                                     .filter(s => s.textContent.startsWith(currentRow));
+
+                                             // sắp xếp ghế theo số thứ tự
+                                             allSeatsInRow.sort((a, b) => {
+                                                 const colA = parseInt(a.textContent.slice(1));
+                                                 const colB = parseInt(b.textContent.slice(1));
+                                                 return colA - colB;
+                                             });
+
+                                             // tìm vị trí của ghế hiện tại trong mảng
+                                             const currentIndex = allSeatsInRow.findIndex(s => s === seat);
+
+                                             // kiểm tra ghế trống giữa
+                                             for (let i = 1; i < allSeatsInRow.length - 1; i++) {
+                                                 const prevSeat = allSeatsInRow[i - 1];
+                                                 const currentSeat = allSeatsInRow[i];
+                                                 const nextSeat = allSeatsInRow[i + 1];
+
+                                                 if (currentSeat === seat) {
+                                                     if (prevSeat && nextSeat &&
+                                                             prevSeat.classList.contains('selected') &&
+                                                             nextSeat.classList.contains('selected')) {
+                                                         Swal.fire({
+                                                             title: 'Thông báo',
+                                                             text: 'Không được để trống 1 ghế giữa 2 ghế đã chọn',
+                                                             icon: 'warning',
+                                                             confirmButtonText: 'Đồng ý',
+                                                             confirmButtonColor: '#722ed1'
+                                                         });
+                                                         return;
+                                                     }
+                                                 }
+
+                                                 // kiểm tra nếu ghế hiện tại đã được chọn và tạo khoảng trống
+                                                 if (!currentSeat.classList.contains('selected') &&
+                                                         !currentSeat.classList.contains('unavailable') &&
+                                                         currentSeat !== seat &&
+                                                         ((prevSeat.classList.contains('selected') || prevSeat === seat) &&
+                                                                 (nextSeat.classList.contains('selected') || nextSeat === seat))) {
+                                                     Swal.fire({
+                                                         title: 'Thông báo',
+                                                         text: 'Không được bỏ trống 1 chỗ giữa 2 ghế.',
+                                                         icon: 'warning',
+                                                         confirmButtonText: 'Đồng ý',
+                                                         confirmButtonColor: '#722ed1'
+                                                     });
+                                                     return;
+                                                 }
+                                             }
+
+                                             // nếu mọi điều kiện đều đúng, cho phép chọn ghế
                                              seat.classList.add('selected');
                                              selectedSeats.push(seatID);
                                              totalPrice += seatPrice;
@@ -396,7 +475,6 @@
 
                                          updateUI();
                                      }
-
                                      function updateUI() {
                                          document.getElementById('selectedSeatID').value = selectedSeats.join(',');
                                          document.getElementById('totalPrice').textContent =
