@@ -35,8 +35,7 @@
                         padding: 50px;
                         max-width: 1200px;
                         margin: 40px auto;
-                        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-                        border: 2px dashed rgba(126, 96, 191, 0.2);
+                        border: 5px dashed rgba(126, 96, 191, 0.2);
                     }
 
                     .poster {
@@ -46,11 +45,9 @@
                         border-radius: 20px;
                         background-size: cover;
                         background-position: center;
-                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
                         position: relative;
                         overflow: hidden;
                         transition: transform 0.5s ease, box-shadow 0.5s ease;
-                        border: 3px dashed #7E60BF;
                         padding: 3px;
                     }
 
@@ -96,7 +93,7 @@
                         font-weight: 700;
                         color: #ffffff;
                         margin-bottom: 20px;
-                        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
                     }
 
                     .ratings {
@@ -109,17 +106,17 @@
                         font-size: 24px;
                         display: flex;
                         align-items: center;
-                        background: linear-gradient(45deg, #ffd700, #ffa500);
+                        background: #d4bee4;
                         padding: 8px 15px;
                         border-radius: 30px;
-                        color: #000000;
+                        color: white;
                         font-weight: bold;
                         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                     }
 
                     .rating i {
                         margin-right: 10px;
-                        color: #000000;
+                        color: white;
                     }
 
                     .metadata {
@@ -134,7 +131,7 @@
                     }
 
                     .metadata strong {
-                        color: #ffd700;
+                        color: #d4bee4;
                         font-weight: 600;
                     }
 
@@ -149,7 +146,6 @@
                         font-weight: bold;
                         border-radius: 50px;
                         font-size: 18px;
-                        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
                         transition: all 0.3s ease;
                     }
 
@@ -157,12 +153,11 @@
                         background: #f8f0ff;
                         color: black;
                         margin-right: 20px;
-                         border: 2px dashed #c0a3ff;
+                        border: 3px dashed #c0a3ff;
                     }
 
                     #trailerBtn:hover {
                         transform: translateY(-5px);
-                        box-shadow: 0 10px 20px #c0a3ff;
                         background: #d4bee4;
                     }
 
@@ -324,7 +319,6 @@
                         padding: 30px;
                         background: rgba(255, 255, 255, 0.95);
                         border-radius: 20px;
-                        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
                         backdrop-filter: blur(10px);
                         position: relative;
                         z-index: 1;
@@ -373,16 +367,14 @@
                         cursor: pointer;
                         transition: all 0.3s ease;
                         padding: 8px;
-                        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                        border: 2px dashed #e0e0e0;
+                        border: 3px dashed #e0e0e0;
                     }
 
                     .selector-button:hover,
                     .selector-button.active {
                         border-color: #7E60BF;
-                        box-shadow: 0 0 10px rgba(126, 96, 191, 0.3);
                         transform: translateY(-2px);
-                        border: 2px dashed #7E60BF;
+                        border: 3px dashed #7E60BF;
                     }
 
                     .cinema-chain-avatar {
@@ -426,12 +418,11 @@
                         cursor: pointer;
                         transition: all 0.3s ease;
                         min-width: 60px;
-                        border: 2px dashed #7e60bf;
+                        border: 3px dashed #7e60bf;
                     }
 
                     .date-button:hover {
                         transform: translateY(-2px);
-                        box-shadow: 0 5px 15px rgba(126, 96, 191, 0.2);
                     }
 
                     .date-button.active {
@@ -458,7 +449,7 @@
                         padding: 10px;
                         background: rgba(255, 255, 255, 0.5);
                         border-radius: 10px;
-                        border: 2px dashed #e0e0e0;
+                        border: 3px dashed #e0e0e0;
                     }
 
                     .cinema-item {
@@ -470,7 +461,6 @@
                         border-radius: 8px;
                         cursor: pointer;
                         transition: all 0.3s ease;
-                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
                         width: 100%;
                         text-align: left;
                     }
@@ -478,12 +468,11 @@
                     .cinema-item:hover {
                         transform: translateX(10px);
                         background-color: #f8f0ff;
-                        box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
                     }
 
                     .cinema-item.active {
-                        background-color: #7E60BF;
-                        color: white;
+                        background-color: #f8f0ff;
+                        color: black;
                     }
 
                     .cinema-name {
@@ -498,7 +487,7 @@
                         background: rgba(255, 255, 255, 0.5);
                         border-radius: 15px;
                         backdrop-filter: blur(10px);
-                        border: 2px dashed rgba(126, 96, 191, 0.2);
+                        border: 3px dashed rgba(126, 96, 191, 0.2);
                     }
 
                     .movie-item {
@@ -507,14 +496,12 @@
                         padding: 20px;
                         background: white;
                         border-radius: 12px;
-                        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
                         transition: all 0.3s ease;
-                        border: 2px dashed #e0e0e0;
+                        border: 3px dashed #e0e0e0;
                     }
 
                     .movie-item:hover {
                         transform: translateY(-5px);
-                        box-shadow: 0 8px 25px rgba(126, 96, 191, 0.15);
                     }
 
                     .movie-poster {
@@ -564,7 +551,7 @@
                         margin: 0 10px 10px 0;
                         cursor: pointer;
                         transition: all 0.3s ease;
-                        border: 2px dashed #7e60bf;
+                        border: 3px dashed #7e60bf;
                     }
 
                     .showtime-item:hover {
@@ -633,88 +620,358 @@
                         font-size: 16px;
                         margin-bottom: 30px;
                     }
+                    #favourite,
+                    #unFavourite {
+
+                        background: #f8f0ff;
+                        color: black;
+                        margin-right: 20px;
+                        border: 3px dashed #c0a3ff;
+                    }
+
+                    #favourite,
+                    #unfavourite :hover {
+                        transform: translateY(-5px);
+                        background: #d4bee4;
+                    }
+
+                    .breadcrumb-nav {
+                        background-color: transparent;
+                        padding: 15px 0;
+                        margin: 20px auto;
+                        max-width: 1200px;
+                        width: 95%;
+                        overflow: hidden;
+                    }
+
+                    .breadcrumb {
+                        margin-bottom: 0;
+                        padding: 15px 30px;
+                        background: rgba(255, 255, 255, 0.95);
+                        border-radius: 20px;
+                        backdrop-filter: blur(10px);
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 5px;
+                    }
+
+                    .breadcrumb-item {
+                        color: #7E60BF;
+                        opacity: 0;
+                        animation: fadeIn 0.5s ease forwards;
+                    }
+
+                    .breadcrumb-item + .breadcrumb-item::before {
+                        content: '\276F'  !important;
+                        color: #b2b2b2  !important;
+                    }
+
+                    .breadcrumb-item a {
+                        color: #7E60BF;
+                        text-decoration: none;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    }
+
+                    .breadcrumb-item a:hover {
+                        color: #d4bee4;
+                        transform: translateY(-2px);
+                    }
+
+                    .breadcrumb-item.active {
+                        color: #666;
+                    }
+
+                    @keyframes fadeIn {
+                        from {
+                            opacity: 0;
+                            transform: translateX(-20px);
+                        }
+                        to {
+                            opacity: 1;
+                            transform: translateX(0);
+                        }
+                    }
+
+
+                    .movie-details-container {
+                        max-width: 1200px;
+                        margin: 40px auto;
+                        padding: 30px;
+                        background: rgba(255, 255, 255, 0.95);
+                        border-radius: 20px;
+                        border: 4px dashed #7E60BF;
+                    }
+
+
+                    .movie-info-section {
+                        display: flex;
+                        gap: 40px;
+                        margin-bottom: 40px;
+                    }
+
+                    .movie-poster {
+                        width: 300px;
+                        height: 450px;
+                        border-radius: 15px;
+                        overflow: hidden;
+                        position: relative;
+                    }
+
+                    .movie-poster img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .movie-content {
+                        flex: 1;
+                    }
+
+                    .movie-title {
+                        color: #7E60BF;
+                        font-size: 32px;
+                        margin-bottom: 20px;
+                    }
+
+
+                    .movie-metadata {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 20px;
+                        margin: 20px 0;
+                    }
+
+                    .movie-metadata-item {
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    }
+
+                    .movie-metadata-label {
+                        color: #666;
+                        font-size: 14px;
+                    }
+
+                    .movie-metadata-value {
+                        color: #7E60BF;
+                        font-weight: 600;
+                        font-size: 14px;
+                        background-color: #f8f0ff;
+                        padding: 4px 12px;
+                        border-radius: 15px;
+                        border: 2px dashed #7E60BF;
+                    }
+                    .movie-actions {
+                        display: flex;
+                        gap: 15px;
+                        margin-top: 25px;
+                    }
+
+                    .action-button {
+                        position: relative;
+                        padding: 12px 24px;
+                        background: #f8f0ff;
+                        border: none;
+                        cursor: pointer;
+                        font-weight: 600;
+                        font-size: 16px;
+                        color: #7E60BF;
+                        border-radius: 15px;
+                        transition: all 0.3s ease;
+                        overflow: hidden;
+                        z-index: 1;
+                    }
+
+
+                    .action-button::before {
+                        content: '';
+                        position: absolute;
+                        top: -2px;
+                        left: -2px;
+                        right: -2px;
+                        bottom: -2px;
+                        background: linear-gradient(45deg, #7E60BF, #d4bee4, #7E60BF);
+                        z-index: -1;
+                        border-radius: 17px;
+                        background-size: 200%;
+                        animation: borderAnimation 3s linear infinite;
+                    }
+
+
+                    .action-button::after {
+                        content: '';
+                        position: absolute;
+                        inset: 2px;
+                        background: #f8f0ff;
+                        border-radius: 13px;
+                        z-index: -1;
+                    }
+
+
+                    .action-button i {
+                        margin-right: 8px;
+                        transition: transform 0.3s ease;
+                    }
+
+
+                    .action-button:hover {
+                        transform: translateY(-3px);
+
+                    }
+
+                    .action-button:hover i {
+                        transform: scale(1.2);
+                    }
+
+
+                    .action-button:active {
+                        transform: translateY(1px);
+                    }
+
+
+                    #favourite {
+                        background: linear-gradient(45deg, #f8f0ff, #fff);
+                    }
+
+                    #favourite i {
+                        color: #FFD700;
+                    }
+
+
+                    #unFavourite {
+                        background: linear-gradient(45deg, #fff0f0, #fff);
+                    }
+
+                    #unFavourite i {
+                        color: #ff4d4d;
+                    }
+
+
+                    @keyframes borderAnimation {
+                        0% {
+                            background-position: 0% 50%;
+                        }
+                        50% {
+                            background-position: 100% 50%;
+                        }
+                        100% {
+                            background-position: 0% 50%;
+                        }
+                    }
+
+
+                    .action-button .ripple {
+                        position: absolute;
+                        border-radius: 50%;
+                        background: rgba(255, 255, 255, 0.7);
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        pointer-events: none;
+                    }
+
+                    @keyframes ripple {
+                        to {
+                            transform: scale(4);
+                            opacity: 0;
+                        }
+                    }
+                     .start-time strong {
+                color : #7e60bf;
+            }
+
                 </style>
             </head>
             <body>
-                <div class="container">
-                    <div
-                        class="poster"
-                        data-aos="fade-right"
-                        style="background-image: url('<%= movie.getImageURL()%>')"
-                        >
-                        <button class="play-button" id="posterPlayButton">
-                            <i class="fas fa-play"></i>
-                        </button>
-                    </div>
-                    <div class="movie-details" data-aos="fade-left">
-                        <h1 class="movie-title"><%= movie.getTitle()%></h1>
-                        <div class="ratings">
-                            <div class="rating">
-                                <i class="fas fa-star"></i> <%= movie.getRating()%>
-                            </div>
-                        </div>
-                        <p><%= movie.getSynopsis()%></p>
-                        <div class="metadata">
-                            <div>Published: <strong><%= movie.getDatePublished()%></strong></div>
-                            <div>Genre: <strong><%= movie.getGenresAsString()%></strong></div>
-                            <div>Country: <strong><%= movie.getCountry()%></strong></div>
-                        </div>
-                        <div class="buttons">
-                            <button id="trailerBtn">View Trailer</button>
+                <jsp:include page="../landingPage/Header.jsp" />
+
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="breadcrumb-nav" data-aos="fade-down" data-aos-duration="800">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item" data-aos="fade-right" data-aos-delay="100">
+                            <a href="${pageContext.request.contextPath}/">Trang chủ</a>
+                        </li>
+                        <li class="breadcrumb-item" data-aos="fade-right" data-aos-delay="200">
+                            <a href="${pageContext.request.contextPath}/movies">Phim</a>
+                        </li>
+                        <li class="breadcrumb-item active" data-aos="fade-right" data-aos-delay="300" aria-current="page">
+                            <%= movie.getTitle()%>
+                        </li>
+                    </ol>
+                </nav>
+
+                <!-- Movie Details Container -->
+                <div class="movie-details-container">
+                    <div class="movie-info-section">
+                        <div class="movie-poster" data-aos="fade-right">
+                            <img src="<%= movie.getImageURL()%>" alt="<%= movie.getTitle()%>">
+                            <button class="play-button" id="posterPlayButton">
+                                <i class="fas fa-play"></i>
+                            </button>
                         </div>
 
-                        <!-- Favorite Actions -->
-                        <c:if test="${ not empty sessionScope.userID}">
-                            <c:set
-                                var="isFavoritedMovie"
-                                value="${requestScope.isFavoritedMovie}"
-                                ></c:set>
-                            <c:if test="${isFavoritedMovie == false}">
-                                <form id="addToFavoriteForm">
-                                    <input type="hidden" name="isAddingToFavorite" value="true" />
-                                    <input type="hidden" id="favoritedAtInput" name="favoritedAt" />
-                                    <a onclick="addToFavorite();">
-                                        <span class="clWhite">
-                                            <img
-                                                src="assets/images/add-to-favorites.png"
-                                                alt="Add to favorites"
-                                                />
-                                            Thêm vào yêu thích
-                                        </span>
-                                    </a>
-                                </form>
-                            </c:if>
-                            <c:if test="${isFavoritedMovie == true}">
-                                <form id="deleteFavoriteMovieForm">
-                                    <input
-                                        type="hidden"
-                                        name="deletedFavouriteMovieInput"
-                                        value="${movie.movieID}"
-                                        />
-                                    <input type="hidden" name="isDeletingInMovieInfo" value="true" />
-                                    <a onclick="deleteFavoriteMovie();">
-                                        <span class="clWhite">
-                                            <img
-                                                src="assets/images/delete-favorite.png"
-                                                alt="Remove from favorites"
-                                                />
-                                            Hủy yêu thích
-                                        </span>
-                                    </a>
-                                </form>
-                            </c:if>
-                            <form id="viewFavouriteMoviesForm">
-                                <a onclick="viewFavouriteMovies();">
-                                    <span class="clWhite">
-                                        <img
-                                            src="assets/images/view-favourite-movies.png"
-                                            alt="View favorite movies"
-                                            />
-                                        Xem phim đã yêu thích
-                                    </span>
-                                </a>
-                            </form>
-                        </c:if>
+                        <div class="movie-content" data-aos="fade-left">
+                            <h1 class="movie-title"><%= movie.getTitle()%></h1>
+
+                            <!-- Rating -->
+                            <div class="movie-rating" data-aos="fade-up" data-aos-delay="100">
+                                <i class="fas fa-star"></i>
+                                <span class="rating-value"><%= movie.getRating()%></span>
+                            </div>
+
+                            <!-- Synopsis -->
+                            <div class="movie-synopsis" data-aos="fade-up" data-aos-delay="200">
+                                <%= movie.getSynopsis()%>
+                            </div>
+
+                            <!-- Metadata -->
+                            <div class="movie-metadata">
+                                <div class="movie-metadata-item" data-aos="fade-up" data-aos-delay="300">
+                                    <span class="movie-metadata-label">Ngày chiếu:</span>
+                                    <span class="movie-metadata-value"><%= movie.getDatePublished()%></span>
+                                </div>
+                                <div class="movie-metadata-item" data-aos="fade-up" data-aos-delay="400">
+                                    <span class="movie-metadata-label">Thể loại:</span>
+                                    <span class="movie-metadata-value"><%= movie.getGenresAsString()%></span>
+                                </div>
+                                <div class="movie-metadata-item" data-aos="fade-up" data-aos-delay="500">
+                                    <span class="movie-metadata-label">Quốc gia:</span>
+                                    <span class="movie-metadata-value"><%= movie.getCountry()%></span>
+                                </div>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="movie-actions" data-aos="fade-up" data-aos-delay="600">
+                                <button id="trailerBtn" class="action-button">
+                                    <i class="fas fa-play"></i> Xem Trailer
+                                </button>
+
+                                <c:if test="${not empty sessionScope.userID}">
+                                    <c:set var="isFavoritedMovie" value="${requestScope.isFavoritedMovie}"></c:set>
+                                        <div class="favorite-actions">
+                                        <c:if test="${isFavoritedMovie == false}">
+                                            <form action="HandleDisplayMovieInfo" method="post">
+                                                <input type="hidden" name="isAddingToFavorite" value="true" />
+                                                <input type="hidden" name="movieID" value="${movie.movieID}" />
+                                                <button id="favourite" type="submit" class="action-button">
+                                                    <i class="fas fa-star"></i> Yêu thích
+                                                </button>
+                                            </form>
+                                        </c:if>
+
+                                        <c:if test="${isFavoritedMovie == true}">
+                                            <form action="myfavouritemovie" method="post">
+                                                <input type="hidden" name="deletedFavouriteMovieInput" value="${movie.movieID}" />
+                                                <input type="hidden" name="isDeletingInMovieInfo" value="true" />
+                                                <button id="unFavourite" type="submit" class="action-button">
+                                                    <i class="fas fa-trash-alt"></i> Bỏ yêu thích
+                                                </button>
+                                            </form>
+                                        </c:if>
+                                    </div>
+                                </c:if>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- Booking Section -->
@@ -725,7 +982,7 @@
 
                     <!-- Chọn chuỗi rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="100">
-                        <h3>Chọn chuỗi rạp:</h3>
+                        <!--                        <h3>Chọn chuỗi rạp:</h3>-->
                         <div class="button-group" id="cinemaChainButtons">
                             <c:forEach var="chain" items="${cinemaChains}">
                                 <button class="selector-button ${chain.cinemaChainID == selectedCinemaChainID ? 'active' : ''}" 
@@ -741,7 +998,7 @@
 
                     <!-- Chọn rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="200">
-                        <h3>Chọn rạp:</h3>
+                        <!--                        <h3>Chọn rạp:</h3>-->
                         <div class="cinema-list" id="cinemaButtons">
                             <c:forEach var="cinema" items="${chainCinemas[selectedCinemaChainID]}">
                                 <button class="cinema-item ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
@@ -755,7 +1012,7 @@
 
                     <!-- Chọn ngày -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="300">
-                        <h3>Chọn ngày:</h3>
+                        <!--                        <h3>Chọn ngày:</h3>-->
                         <div class="date-selector">
                             <c:forEach var="date" items="${availableDates}" varStatus="status">
                                 <button class="date-button ${date == selectedDate ? 'active' : ''}" 
@@ -799,7 +1056,7 @@
                                             <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
                                                 <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
                                                 <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
-                                                <span class="start-time">${formattedStartTime}</span>
+                                                <span class="start-time"><strong>${formattedStartTime}</strong></span>
                                                 <span class="time-separator">~</span>
                                                 <span class="end-time">${formattedEndTime}</span>
                                             </div>
@@ -814,8 +1071,8 @@
                         <div class="empty-state" data-aos="fade-up">
                             <img src="images/not-found.svg" alt="No showtime found" 
                                  style="width: 150px; height: 150px; opacity: 0.5; margin-bottom: 20px;">
-                            <h2>Không có suất chiếu</h2>
-                            <p>Vui lòng chọn ngày khác hoặc rạp khác</p>
+                            <h2>Úi, Suất chiếu không tìm thấy</h2>
+                            <p>Bạn hãy thử tìm ngày khác nhé</p>
                         </div>
                     </c:if>
                 </div>

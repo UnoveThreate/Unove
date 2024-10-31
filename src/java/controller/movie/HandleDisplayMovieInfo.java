@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +27,7 @@ import model.Cinema;
 import model.MovieSlot;
 import model.Movie;
 import util.RouterJSP;
+import util.RouterURL;
 
 @WebServlet(name = "HandleDisplayMovieInfo", urlPatterns = {"/HandleDisplayMovieInfo"})
 public class HandleDisplayMovieInfo extends HttpServlet {
@@ -53,8 +56,9 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             throws ServletException, IOException {
         try {
             // Get parameters
+
             String movieIDStr = request.getParameter("movieID");
-            String cinemaChainIDStr = request.getParameter("cinemaChainID"); 
+            String cinemaChainIDStr = request.getParameter("cinemaChainID");
             String cinemaIDStr = request.getParameter("cinemaID");
             String dateStr = request.getParameter("date");
 
@@ -64,6 +68,7 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             }
 
             int movieID = Integer.parseInt(movieIDStr);
+
             Integer selectedCinemaChainID = cinemaChainIDStr != null ? Integer.parseInt(cinemaChainIDStr) : null;
             Integer selectedCinemaID = cinemaIDStr != null ? Integer.parseInt(cinemaIDStr) : null;
             LocalDate selectedDate = dateStr != null ? LocalDate.parse(dateStr) : LocalDate.now();
@@ -78,27 +83,27 @@ public class HandleDisplayMovieInfo extends HttpServlet {
 
             // Get cinema chains showing this movie
             List<CinemaChain> chains = cinemaChainMovieDAO.getCinemaChainsByMovie(movieID);
-            
+
             // Maps for cinemas and showtimes
             Map<Integer, List<Cinema>> chainCinemas = new HashMap<>();
             Map<Integer, List<MovieSlot>> cinemaShowtimes = new HashMap<>();
-            
+
             // For each chain, get cinemas and showtimes
             for (CinemaChain chain : chains) {
                 // Get cinemas for this chain
                 List<Cinema> cinemas = cinemaChainMovieDAO.getCinemasByChainAndMovie(
-                    chain.getCinemaChainID(), movieID);
+                        chain.getCinemaChainID(), movieID);
                 chainCinemas.put(chain.getCinemaChainID(), cinemas);
-                
+
                 // Get showtimes for selected cinema
                 if (selectedCinemaID != null && selectedDate != null) {
                     List<MovieSlot> slots = cinemaChainMovieDAO.getMovieSlotsByCinemaAndMovie(
-                        selectedCinemaID, movieID, selectedDate);
+                            selectedCinemaID, movieID, selectedDate);
                     cinemaShowtimes.put(selectedCinemaID, slots);
-                    
+
                     // Debug log
-                    LOGGER.info(String.format("Found %d slots for cinema %d on %s", 
-                        slots.size(), selectedCinemaID, selectedDate));
+                    LOGGER.info(String.format("Found %d slots for cinema %d on %s",
+                            slots.size(), selectedCinemaID, selectedDate));
                 }
             }
 
@@ -109,8 +114,22 @@ public class HandleDisplayMovieInfo extends HttpServlet {
                 availableDates.add(currentDate.plusDays(i));
             }
 
+            // task favourite movie
+            HttpSession session = request.getSession();
+            //check xem trong session co bien ton tai userID hay khong, neu khong thi ep kieu duoi dang integer
+            int userID = -1;
+            if (session.getAttribute("userID") != null) {
+                userID = (int) session.getAttribute("userID");
+            }
+            Boolean isFavoritedMovie = null;
+            if (userID != -1) {
+                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, movieID);
+            }
+
+            // Add movie to request attributes
             // Set attributes
             request.setAttribute("movie", movie);
+            request.setAttribute("isFavoritedMovie", isFavoritedMovie);
             request.setAttribute("cinemaChains", chains);
             request.setAttribute("chainCinemas", chainCinemas);
             request.setAttribute("cinemaShowtimes", cinemaShowtimes);
@@ -134,26 +153,26 @@ public class HandleDisplayMovieInfo extends HttpServlet {
         HttpSession session = request.getSession();
         int userID = (int) session.getAttribute("userID");
         int movieID = Integer.parseInt(request.getParameter("movieID"));
-
-        boolean isAddingToFavorite = request.getParameter("isAddingToFavorite") != null && 
-                                   request.getParameter("isAddingToFavorite").equals("true");
+        boolean isAddingToFavorite = request.getParameter("isAddingToFavorite") != null
+                && request.getParameter("isAddingToFavorite").equals("true");
 
         if (isAddingToFavorite) {
-            String favoritedAt = request.getParameter("favoritedAt");
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String favoritedAt = currentDateTime.format(formatter);
+
             try {
+
                 favoriteMoviesDAO.insertFavouriteMovie(userID, movieID, favoritedAt);
-                doGet(request, response);
+
             } catch (Exception ex) {
-                LOGGER.log(Level.SEVERE, "Error adding movie to favorites", ex);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error adding to favorites");
+                Logger.getLogger(HandleDisplayMovieInfo.class.getName()).log(Level.SEVERE, null, ex);
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra khi thêm vào yêu thích.");
+                return;
             }
-            return;
         }
 
-        String redirectUrl = "/movie/HandleDisplayMovieInfo";
-        response.setContentType("text/plain");
-        response.getWriter().write(redirectUrl);
-
-        doGet(request, response);
+        // Chuyển hướng đến trang mong muốn sau khi xử lý xong
+        response.sendRedirect("/Unove/HandleDisplayMovieInfo?movieID=" + movieID);
     }
 }

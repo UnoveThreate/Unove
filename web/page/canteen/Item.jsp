@@ -22,15 +22,16 @@
                 color: #333;
                 position: relative;
             }
-            .container {
-    border: 3px dashed var(--momo-pink);
-    padding: 30px;
-    border-radius: 20px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
 
-            .pattern-bg {
+            .canteen-page .container {
+                border: 4px dashed var(--momo-pink);
+                padding: 30px;
+                border-radius: 20px;
+                margin-top: 30px;
+                margin-bottom: 30px;
+            }
+
+            .canteen-page .pattern-bg {
                 position: fixed;
                 top: 0;
                 left: 0;
@@ -41,8 +42,8 @@
                 background: linear-gradient(to bottom, #fff, #ffe6ef30);
             }
 
-            .pattern-bg::before,
-            .pattern-bg::after {
+            .canteen-page .pattern-bg::before,
+            .canteen-page .pattern-bg::after {
                 content: '';
                 position: absolute;
                 left: 0;
@@ -52,27 +53,26 @@
                 opacity: 0.3;
             }
 
-            .pattern-bg::before {
+            .canteen-page .pattern-bg::before {
                 top: 15%;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFB6C1' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23F1DAFF' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
                 animation: wave 20s linear infinite;
             }
 
-            .pattern-bg::after {
+            .canteen-page .pattern-bg::after {
                 top: 35%;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFC0CB' fill-opacity='1' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,149.3C672,149,768,203,864,224C960,245,1056,235,1152,208C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23F1DAFF' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
                 animation: wave 15s linear infinite reverse;
             }
 
-
-            .pattern-bg::before {
+            .canteen-page .pattern-bg::before {
                 content: '';
                 position: absolute;
                 top: 25%;
                 left: -50%;
                 width: 200%;
                 height: 100%;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23FFB6C1' fill-opacity='0.8' d='M0,128L48,144C96,160,192,192,288,197.3C384,203,480,181,576,165.3C672,149,768,139,864,154.7C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+               background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23F1DAFF' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
                 background-repeat: repeat-x;
                 animation: wave 25s linear infinite;
                 opacity: 0.4;
@@ -86,7 +86,8 @@
                     transform: translateX(-50%);
                 }
             }
-            .page-title {
+
+            .canteen-page .page-title {
                 color: var(--momo-pink);
                 font-size: 2.8rem;
                 font-weight: bold;
@@ -96,8 +97,8 @@
                 text-shadow: 2px 2px 4px rgba(165, 0, 100, 0.1);
             }
 
-            .card {
-                background: var(--card-pink);
+            .canteen-page .card {
+                background: var(--card-pink) !important;
                 border: none;
                 border-radius: 20px;
                 transition: all 0.3s ease;
@@ -105,16 +106,15 @@
                 margin: 15px 0;
                 overflow: hidden;
                 box-shadow: 0 4px 15px rgba(165, 0, 100, 0.1);
-                border: 2px dashed var(--momo-pink-light) !important;
-    background: var(--card-pink);
+                border: 3px dashed var(--momo-pink-light) !important;
             }
 
-            .card:hover {
+            .canteen-page .card:hover {
                 transform: translateY(-5px);
                 box-shadow: 0 8px 25px rgba(165, 0, 100, 0.2);
             }
 
-            .card-img-top {
+            .canteen-page .card-img-top {
                 width: 140px;
                 height: 170px;
                 object-fit: contain;
@@ -123,30 +123,30 @@
                 padding: 10px;
             }
 
-            .card:hover .card-img-top {
+            .canteen-page .card:hover .card-img-top {
                 transform: scale(1.08);
             }
 
-            .card-title {
+            .canteen-page .card-title {
                 color: var(--momo-pink);
                 font-size: 1.4rem;
                 font-weight: bold;
                 margin: 15px 0;
             }
 
-            .card-text {
+            .canteen-page .card-text {
                 color: #FF4081 !important;
                 font-size: 1.2rem;
                 font-weight: bold;
                 margin: 10px 0;
             }
 
-            .quantity-wrapper {
+            .canteen-page .quantity-wrapper {
                 position: relative;
                 display: inline-block;
             }
 
-            .quantity {
+            .canteen-page .quantity {
                 width: 80px;
                 text-align: center;
                 padding: 8px 25px 8px 10px;
@@ -160,10 +160,10 @@
                 appearance: none;
                 -webkit-appearance: none;
                 -moz-appearance: textfield;
-                border: 2px dashed #FF69B4;
+                border: 3px dashed #FF69B4;
             }
 
-            .quantity-controls {
+            .canteen-page .quantity-controls {
                 position: absolute;
                 right: 5px;
                 top: 50%;
@@ -173,7 +173,7 @@
                 gap: 2px;
             }
 
-            .quantity-btn {
+            .canteen-page .quantity-btn {
                 background: none;
                 border: none;
                 color: #FF69B4;
@@ -183,18 +183,17 @@
                 line-height: 1;
             }
 
-            .quantity-btn:hover {
+            .canteen-page .quantity-btn:hover {
                 color: #FF1493;
             }
 
-
-            .quantity::-webkit-inner-spin-button,
-            .quantity::-webkit-outer-spin-button {
+            .canteen-page .quantity::-webkit-inner-spin-button,
+            .canteen-page .quantity::-webkit-outer-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
             }
 
-            .total-price {
+            .canteen-page .total-price {
                 position: fixed;
                 right: 30px;
                 top: 30px;
@@ -207,7 +206,7 @@
                 box-shadow: 0 5px 15px rgba(165, 0, 100, 0.2);
                 z-index: 1000;
                 animation: pulse 2s infinite;
-                border: 2px dashed #fff;
+                border: 3px dashed #fff;
             }
 
             @keyframes pulse {
@@ -222,7 +221,7 @@
                 }
             }
 
-            .btn {
+            .canteen-page .btn {
                 padding: 12px 35px;
                 border-radius: 30px;
                 font-weight: bold;
@@ -231,31 +230,31 @@
                 margin: 0 10px;
             }
 
-
-            .btn-next {
+            .canteen-page .btn-next {
                 background: #ffe6ef;
-                border: 2px dashed var(--momo-pink-light);
+                border: 3px dashed var(--momo-pink-light);
             }
 
-            .btn-back {
+            .canteen-page .btn-back {
                 background: white;
                 border: 2px solid #ffe6ef;
-                border: 2px dashed var(--momo-pink);
+                border: 3px dashed var(--momo-pink);
             }
-            .btn:hover {
+
+            .canteen-page .btn:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(165, 0, 100, 0.2);
             }
 
-            .btn-back:hover {
+            .canteen-page .btn-back:hover {
                 background: #e5e5e5;
             }
 
-            .btn-next:hover {
+            .canteen-page .btn-next:hover {
                 background: #FF4081;
             }
 
-            .action-buttons {
+            .canteen-page .action-buttons {
                 display: flex;
                 justify-content: center;
                 margin-top: 40px;
@@ -263,11 +262,11 @@
             }
 
             @media (max-width: 768px) {
-                .page-title {
+                .canteen-page .page-title {
                     font-size: 2rem;
                 }
 
-                .total-price {
+                .canteen-page .total-price {
                     right: 50%;
                     transform: translateX(50%);
                     top: auto;
@@ -276,100 +275,166 @@
                     text-align: center;
                 }
 
-                .action-buttons {
+                .canteen-page .action-buttons {
                     flex-direction: column;
                     gap: 10px;
                     align-items: center;
-                     border-top: 2px dashed var(--momo-pink);
-    padding-top: 20px;
-    margin-top: 30px;
+                    border-top: 3px dashed var(--momo-pink);
+                    padding-top: 20px;
+                    margin-top: 30px;
                 }
 
-                .btn {
+                .canteen-page .btn {
                     width: 80%;
                     margin: 5px 0;
+                }
+            }
+
+            .breadcrumb-nav {
+                background-color: transparent;
+                padding: 15px 0;
+                margin: 20px auto;
+                max-width: 1200px;
+            }
+
+            .breadcrumb {
+                margin-bottom: 0;
+                padding: 15px 30px;
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+                /*    border: 3px dashed var(--momo-pink-light);*/
+            }
+
+            .breadcrumb-item {
+                color: var(--momo-pink);
+            }
+
+            .breadcrumb-item a {
+                color: #7e60bf;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            .breadcrumb-item a:hover {
+                color: #d9c6e7;
+            }
+
+            .breadcrumb-item.active {
+                color: #666;
+            }
+
+            .breadcrumb-item + .breadcrumb-item::before {
+                content: "\276f" !important;
+                color: #b2b2b2;
+            }
+
+
+            @media (max-width: 768px) {
+                .breadcrumb-nav {
+                    padding: 10px;
+                    margin: 10px;
+                }
+
+                .breadcrumb {
+                    padding: 10px 15px;
+                    font-size: 14px;
                 }
             }
         </style>
     </head>
     <body>
-        <div class="pattern-bg"></div>
-        <div class="container mt-5">
-            <h1 class="page-title" data-aos="fade-down">COMBO - BẮP NƯỚC</h1>
+        <jsp:include page="/page/landingPage/Header.jsp" />
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/showtimes">Lịch chiếu phim</a></li>
+                <li class="breadcrumb-item"><a href="#" onclick="history.back(); return false;">Chọn ghế</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Combo - Bắp nước</li>
+            </ol>
+        </nav>
 
-            <form action="submitCanteenItems" method="post">
-                <div class="row">
-                    <c:forEach var="item" items="${canteenItemList}" varStatus="status">
-                        <div class="col-md-4" data-aos="fade-up" data-aos-delay="${status.index * 100}">
-                            <div class="card text-center">
-                                <img src="${item.imageURL}" class="card-img-top" alt="${item.name}">
-                                <div class="card-body">
-                                    <h2 class="card-title">${item.name}</h2>
-                                    <p class="card-text">Giá: ${item.price} VNĐ</p>
-                                    <div class="quantity-wrapper">
-                                        <input type="number" min="0" value="0" class="quantity" 
-                                               data-price="${item.price}" 
-                                               name="quantity_${item.canteenItemID}" 
-                                               onchange="calculateTotal()" />
-                                        <div class="quantity-controls">
-                                            <button type="button" class="quantity-btn" onclick="increaseQuantity(this)">▲</button>
-                                            <button type="button" class="quantity-btn" onclick="decreaseQuantity(this)">▼</button>
+        <div class="canteen-page">
+            <div class="pattern-bg"></div>
+            <div class="container mt-5">
+                <h1 class="page-title" data-aos="fade-down">COMBO - BẮP NƯỚC</h1>
+
+                <form action="submitCanteenItems" method="post">
+                    <div class="row">
+                        <c:forEach var="item" items="${canteenItemList}" varStatus="status">
+                            <div class="col-md-4" data-aos="fade-up" data-aos-delay="${status.index * 100}">
+                                <div class="card text-center">
+                                    <img src="${item.imageURL}" class="card-img-top" alt="${item.name}">
+                                    <div class="card-body">
+                                        <h2 class="card-title">${item.name}</h2>
+                                        <p class="card-text">Giá: ${item.price} VNĐ</p>
+                                        <div class="quantity-wrapper">
+                                            <input type="number" min="0" value="0" class="quantity" 
+                                                   data-price="${item.price}" 
+                                                   name="quantity_${item.canteenItemID}" 
+                                                   onchange="calculateTotal()" />
+                                            <div class="quantity-controls">
+                                                <button type="button" class="quantity-btn" onclick="increaseQuantity(this)">▲</button>
+                                                <button type="button" class="quantity-btn" onclick="decreaseQuantity(this)">▼</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
-                </div>
+                        </c:forEach>
+                    </div>
 
-                <div class="total-price" id="totalPrice" data-aos="fade-left">
-                    Tổng: 0 VNĐ
-                </div>
+                    <div class="total-price" id="totalPrice" data-aos="fade-left">
+                        Tổng: 0 VNĐ
+                    </div>
 
-                <div class="action-buttons" data-aos="fade-up">
-                    <button type="button" class="btn btn-back" onclick="history.back()">
-                        <i class="fas fa-arrow-left me-2"></i>Quay lại
-                    </button>
-                    <button type="submit" class="btn btn-next">
-                        Tiếp tục<i class="fas fa-arrow-right ms-2"></i>
-                    </button>
-                </div>
-            </form>
+                    <div class="action-buttons" data-aos="fade-up">
+                        <button type="button" class="btn btn-back" onclick="history.back()">
+                            <i class="fas fa-arrow-left me-2"></i>Quay lại
+                        </button>
+                        <button type="submit" class="btn btn-next">
+                            Tiếp tục<i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>
-                        AOS.init({
-                            duration: 800,
-                            easing: 'ease-in-out',
-                            once: true
-                        });
-
-                        function calculateTotal() {
-                            let total = 0;
-                            const quantities = document.querySelectorAll('.quantity');
-
-                            quantities.forEach(input => {
-                                const price = parseFloat(input.dataset.price);
-                                const quantity = parseInt(input.value);
-                                total += price * quantity;
+                            AOS.init({
+                                duration: 800,
+                                easing: 'ease-in-out',
+                                once: true
                             });
 
-                            document.getElementById('totalPrice').innerText = 'Tổng: ' + total + ' VNĐ';
-                        }
-                        function increaseQuantity(btn) {
-                            const input = btn.closest('.quantity-wrapper').querySelector('.quantity');
-                            input.value = parseInt(input.value) + 1;
-                            calculateTotal();
-                        }
+                            function calculateTotal() {
+                                let total = 0;
+                                const quantities = document.querySelectorAll('.quantity');
 
-                        function decreaseQuantity(btn) {
-                            const input = btn.closest('.quantity-wrapper').querySelector('.quantity');
-                            if (parseInt(input.value) > 0) {
-                                input.value = parseInt(input.value) - 1;
+                                quantities.forEach(input => {
+                                    const price = parseFloat(input.dataset.price);
+                                    const quantity = parseInt(input.value);
+                                    total += price * quantity;
+                                });
+
+                                document.getElementById('totalPrice').innerText = 'Tổng: ' + total + ' VNĐ';
+                            }
+                            function increaseQuantity(btn) {
+                                const input = btn.closest('.quantity-wrapper').querySelector('.quantity');
+                                input.value = parseInt(input.value) + 1;
                                 calculateTotal();
                             }
-                        }
+
+                            function decreaseQuantity(btn) {
+                                const input = btn.closest('.quantity-wrapper').querySelector('.quantity');
+                                if (parseInt(input.value) > 0) {
+                                    input.value = parseInt(input.value) - 1;
+                                    calculateTotal();
+                                }
+                            }
         </script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

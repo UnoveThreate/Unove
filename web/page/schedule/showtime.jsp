@@ -35,7 +35,7 @@
                 position: absolute;
                 width: 200%;
                 height: 200%;
-                background: #ffccd5;
+                background: #f1daff;
                 opacity: 0.5;
             }
 
@@ -71,7 +71,7 @@
                 backdrop-filter: blur(10px);
                 position: relative;
                 z-index: 1;
-                border: 2px dashed rgba(126, 96, 191, 0.2);
+                border: 3px dashed rgba(126, 96, 191, 0.2);
             }
 
             .header {
@@ -80,7 +80,7 @@
                 padding: 20px;
                 border-radius: 10px;
                 margin-bottom: 30px;
-                border: 2px dashed #7e60bf;
+                border: 3px dashed #7e60bf;
             }
 
             .title {
@@ -120,7 +120,7 @@
                 transition: all 0.3s ease;
                 padding: 8px;
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                border: 2px dashed #e0e0e0;
+                border: 3px dashed #e0e0e0;
             }
 
             .selector-button:hover,
@@ -128,12 +128,12 @@
                 border-color: #7E60BF;
                 box-shadow: 0 0 10px rgba(126, 96, 191, 0.3);
                 transform: translateY(-2px);
-                border: 2px dashed #7e60bf;
+                border: 3px dashed #7e60bf;
             }
 
             .cinema-chain-avatar {
-                width: 40px;
-                height: 40px;
+                width: 56px;
+                height: 56px;
                 object-fit: contain;
                 margin-bottom: 5px;
             }
@@ -147,6 +147,7 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
             }
+
 
             .selector-button:hover span,
             .selector-button.active span {
@@ -172,21 +173,21 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
                 min-width: 60px;
-                border: 2px dashed #7e60bf;
+                border: 3px dashed #7e60bf;
             }
 
             .date-button:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 5px 15px rgba(126, 96, 191, 0.2);
-                border: 2px dashed #7e60bf;
-                
+                border: 3px dashed #7e60bf;
+
             }
 
             .date-button.active {
                 background-color: #f8f0ff;
                 color: black;
                 border-color: #7E60BF;
-                border: 2px dashed #7E60BF;
+                border: 3px dashed #7E60BF;
             }
 
             .date-number {
@@ -207,7 +208,7 @@
                 padding: 10px;
                 background: rgba(255, 255, 255, 0.5);
                 border-radius: 10px;
-                border: 2px dashed #e0e0e0;
+                border: 3px dashed #e0e0e0;
             }
 
             .cinema-item {
@@ -235,7 +236,7 @@
                 background-color: #f8f0ff;
                 color: #876ac3;
             }
-            
+
 
             .cinema-name {
                 flex-grow: 1;
@@ -249,7 +250,7 @@
                 background: rgba(255, 255, 255, 0.5);
                 border-radius: 15px;
                 backdrop-filter: blur(10px);
-                border: 2px dashed rgba(126, 96, 191, 0.2);
+                border: 3px dashed rgba(126, 96, 191, 0.2);
             }
 
             .movie-item {
@@ -260,7 +261,7 @@
                 border-radius: 12px;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
                 transition: all 0.3s ease;
-                border: 2px dashed #e0e0e0;
+                border: 3px dashed #e0e0e0;
             }
 
             .movie-item:hover {
@@ -315,7 +316,7 @@
                 margin: 0 10px 10px 0;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                border: 2px dashed #7e60bf;
+                border: 3px dashed #7e60bf;
             }
 
             .showtime-item:hover {
@@ -385,9 +386,97 @@
                 font-size: 16px;
                 margin-bottom: 30px;
             }
+
+            .breadcrumb-nav {
+                background-color: transparent;
+                padding: 15px 0;
+                margin: 20px auto;
+                max-width: 1200px;
+            }
+
+            .breadcrumb {
+                margin-bottom: 0;
+                padding: 15px 30px;
+                background: rgba(255, 255, 255, 0.95);
+                border-radius: 20px;
+                backdrop-filter: blur(10px);
+            }
+
+            .breadcrumb-item a {
+                color: #7E60BF;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                font-weight: 500;
+            }
+
+            .breadcrumb-item a:hover {
+                color: #D4BEE4;
+                transform: translateX(5px);
+            }
+
+            .breadcrumb-item.active {
+                color: #666;
+                font-weight: 500;
+            }
+
+            .breadcrumb-item + .breadcrumb-item::before {
+                content: "\276F" !important;
+                color: #b2b2b2;
+            }
+
+
+            @media (max-width: 768px) {
+                .breadcrumb-nav {
+                    padding: 10px;
+                    margin: 10px;
+                }
+
+                .breadcrumb {
+                    padding: 10px 15px;
+                    font-size: 14px;
+                }
+            }
+            .start-time strong {
+                color : #7e60bf;
+            }
+            .showtime-grid {
+                margin-top: 15px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .showtime-slots {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                align-items: center;
+            }
+            .movie-poster-link {
+                display: block;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .movie-poster-link:hover {
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
         </style>
     </head>
     <body>
+
+        <jsp:include page="/page/landingPage/Header.jsp" />
+
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Lịch chiếu phim</li>
+                </ol>
+            </div>
+        </nav>
         <div class="wave-container">
             <div class="wave wave-1"></div>
             <div class="wave wave-2"></div>
@@ -399,7 +488,7 @@
             </div>
 
             <div class="selector" data-aos="fade-up" data-aos-delay="100">
-                <h3>Chọn chuỗi rạp:</h3>
+                <!--                <h3>Chọn chuỗi rạp:</h3>-->
                 <div class="button-group" id="cinemaChainButtons">
                     <c:forEach var="chain" items="${cinemaChains}">
                         <button class="selector-button ${chain.cinemaChainID == selectedCinemaChainID ? 'active' : ''}" 
@@ -413,7 +502,7 @@
             </div>
 
             <div class="selector" data-aos="fade-up" data-aos-delay="200">
-                <h3>Chọn rạp:</h3>
+                <!--                <h3>Chọn rạp:</h3>-->
                 <div class="cinema-list" id="cinemaButtons">
                     <c:forEach var="cinema" items="${cinemas}">
                         <button class="cinema-item ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
@@ -424,9 +513,8 @@
                     </c:forEach>
                 </div>
             </div>
-
             <div class="selector" data-aos="fade-up" data-aos-delay="300">
-                <h3>Chọn ngày:</h3>
+                <!--                <h3>Chọn ngày:</h3>-->
                 <div class="date-selector">
                     <c:forEach var="date" items="${availableDates}" varStatus="status">
                         <button class="date-button ${date == selectedDate ? 'active' : ''}" 
@@ -459,7 +547,12 @@
                         <c:forEach var="movie" items="${movies}">
                             <c:if test="${not empty movieSlotsByMovie[movie]}">
                                 <div class="movie-item">
-                                    <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster" onerror="this.src='path/to/default/image.jpg';" />
+                                    <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="movie-poster-link">
+                                        <img src="${movie.imageURL}" 
+                                             alt="${movie.title}" 
+                                             class="movie-poster" 
+                                             onerror="this.src='path/to/default/image.jpg';" />
+                                    </a>
                                     <div class="movie-info">
                                         <h3 class="movie-title">${movie.title}</h3>
                                         <div class="movie-genres">
@@ -468,90 +561,103 @@
                                             </c:forEach>
                                         </div>
                                         <div class="showtime-grid">
+                                            <c:set var="currentType" value="" />
+                                            <!-- nhóm type suất chiêuys -->
                                             <c:forEach var="slot" items="${movieSlotsByMovie[movie]}">
-                                                <div class="showtime-group">
-                                                    <div class="showtime-type">${slot.type}</div>
-                                                    <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
-                                                        <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
-                                                        <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
-                                                        <span class="start-time">${formattedStartTime}</span>
-                                                        <span class="time-separator">~</span>
-                                                        <span class="end-time">${formattedEndTime}</span>
-                                                    </div>
+                                                <c:if test="${currentType ne slot.type}">
+                                                    <c:if test="${not empty currentType}">
+                                                    </div> 
+                                                </div> 
+                                            </c:if>
+                                            <div class="showtime-group">
+                                                <div class="showtime-type">${slot.type}</div>
+                                                <div class="showtime-slots">
+                                                    <c:set var="currentType" value="${slot.type}" />
+                                                </c:if>
+                                                <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
+                                                    <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
+                                                    <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
+                                                    <span class="start-time"><strong>${formattedStartTime}</strong></span>
+                                                    <span class="time-separator">~</span>
+                                                    <span class="end-time">${formattedEndTime}</span>
                                                 </div>
                                             </c:forEach>
-                                        </div>
-                                    </div>
+                                            <c:if test="${not empty currentType}">
+                                            </div> 
+                                        </div> 
+                                    </c:if>
                                 </div>
-                            </c:if>
-                        </c:forEach>
-                    </c:when>
+                            </div>
+                        </div>
+                    </c:if>
+                </c:forEach>
+            </c:when>
 
-                </c:choose>
-            </div>
+        </c:choose>
+    </div>
 
-            <c:if test="${empty movieSlotsByMovie}">
-                <div class="empty-state" data-aos="fade-up">
-                    <img src="images/not-found.svg" alt="No showtime found" 
-                         style="width: 150px; height: 150px; opacity: 0.5; margin-bottom: 20px;"
-                         data-aos="zoom-in">
-                    <h2 style="color: #000000; font-size: 24px; margin-bottom: 10px;"
-                        data-aos="fade-up" data-aos-delay="100">
-                        Úi, Suất chiếu không tìm thấy
-                    </h2>
-                    <p style="color: #666; font-size: 16px; margin-bottom: 30px;"
-                       data-aos="fade-up" data-aos-delay="200">
-                        Bạn hãy thử tìm ngày khác nhé
-                    </p>
-                </div>
-            </c:if>
+    <c:if test="${empty movieSlotsByMovie}">
+        <div class="empty-state" data-aos="fade-up">
+            <img src="images/not-found.svg" alt="No showtime found" 
+                 style="width: 150px; height: 150px; opacity: 0.5; margin-bottom: 20px;"
+                 data-aos="zoom-in">
+            <h2 style="color: #000000; font-size: 24px; margin-bottom: 10px;"
+                data-aos="fade-up" data-aos-delay="100">
+                Úi, Suất chiếu không tìm thấy
+            </h2>
+            <p style="color: #666; font-size: 16px; margin-bottom: 30px;"
+               data-aos="fade-up" data-aos-delay="200">
+                Bạn hãy thử tìm ngày khác nhé
+            </p>
         </div>
+    </c:if>
+</div>
 
-        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <script>
-                                                        AOS.init({
-                                                            duration: 1000,
-                                                            easing: 'ease-in-out',
-                                                            once: true,
-                                                            mirror: false,
-                                                            offset: 50
-                                                        });
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+                                                    AOS.init({
+                                                        duration: 1000,
+                                                        easing: 'ease-in-out',
+                                                        once: true,
+                                                        mirror: false,
+                                                        offset: 50
+                                                    });
 
-                                                        function selectCinemaChain(cinemaChainID) {
-                                                            window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID;
-                                                        }
+                                                    function selectCinemaChain(cinemaChainID) {
+                                                        window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID;
+                                                    }
 
-                                                        function selectCinema(cinemaID) {
-                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                            window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-                                                        }
+                                                    function selectCinema(cinemaID) {
+                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                        window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                                    }
 
-                                                        function selectDate(date) {
-                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                                                            window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-                                                        }
+                                                    function selectDate(date) {
+                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                        const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                                        window.location.href = 'showtimes?cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                                    }
 
-                                                        function selectSlot(movieSlotID) {
-                                                            var form = document.createElement('form');
-                                                            form.method = "GET";
-                                                            form.action = "selectSeat";
+                                                    function selectSlot(movieSlotID) {
+                                                        var form = document.createElement('form');
+                                                        form.method = "GET";
+                                                        form.action = "selectSeat";
 
-                                                            var actionInput = document.createElement('input');
-                                                            actionInput.type = 'hidden';
-                                                            actionInput.name = 'action';
-                                                            actionInput.value = 'selectSlot';
-                                                            form.appendChild(actionInput);
+                                                        var actionInput = document.createElement('input');
+                                                        actionInput.type = 'hidden';
+                                                        actionInput.name = 'action';
+                                                        actionInput.value = 'selectSlot';
+                                                        form.appendChild(actionInput);
 
-                                                            var slotInput = document.createElement('input');
-                                                            slotInput.type = 'hidden';
-                                                            slotInput.name = 'movieSlotID';
-                                                            slotInput.value = movieSlotID;
-                                                            form.appendChild(slotInput);
+                                                        var slotInput = document.createElement('input');
+                                                        slotInput.type = 'hidden';
+                                                        slotInput.name = 'movieSlotID';
+                                                        slotInput.value = movieSlotID;
+                                                        form.appendChild(slotInput);
 
-                                                            document.body.appendChild(form);
-                                                            form.submit();
-                                                        }
-        </script>
-    </body>
+                                                        document.body.appendChild(form);
+                                                        form.submit();
+                                                    }
+</script>
+</body>
 </html>
