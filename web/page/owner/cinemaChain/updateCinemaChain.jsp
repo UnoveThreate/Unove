@@ -3,16 +3,10 @@
     Created on : 8 thg 10, 2024, 02:52:29
     Author     : nguyendacphong
 --%>
-<%-- 
-    Document   : updateCinemaChain
-    Created on : 07 thg 10, 2024
-    Author     : nguyendacphong
---%>
 
 <%@page import="util.RouterURL"%>
 <%@page import="model.CinemaChain"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:include page="/page/owner/navbar.jsp" />
 
 <!DOCTYPE html>
 <html lang="vi">

@@ -10,9 +10,9 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <title>Unove Cinema - Trải nghiệm điện ảnh tuyệt vời</title>
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <title>Unove Cinema - Mua vé xem phim Online giá rẻ</title>
 
         <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,6 +26,10 @@
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        <script src="https://unpkg.com/split-type"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
         <style>
             :root {
                 --primary-color: #E2BFD9;
@@ -34,8 +38,8 @@
                 --accent-color: #ffd700;
             }
             html {
-    scroll-behavior: smooth;
-}
+                scroll-behavior: smooth;
+            }
             body {
                 background: linear-gradient(to bottom, #ffffff, #ffffff);
                 overflow-x: hidden;
@@ -50,6 +54,8 @@
                 box-shadow: 0 10px 30px #E2BFD9;
                 border-radius: 15px;
                 overflow: hidden;
+                border: 4px dashed #E2BFD9;
+                padding: 3px;
             }
             .carousel-item {
                 height: 450px;
@@ -165,26 +171,68 @@
             }
             .movie-card {
                 position: relative;
-                overflow: hidden;
+                width: 100%;
+                aspect-ratio: 3/4; /* Tỷ lệ chuẩn cho poster phim */
                 border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                margin: 10px;
             }
+
+            .movie-poster-container {
+                width: 100%;
+                height: 100%;
+                position: relative;
+            }
+
             .movie-poster {
                 width: 100%;
-                height: auto;
+                height: 100%;
+                object-fit: cover;
                 transition: transform 0.3s ease;
             }
+
             .movie-info {
                 position: absolute;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0));
                 padding: 20px;
+                background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 60%, transparent 100%);
                 transform: translateY(100%);
                 transition: transform 0.3s ease;
             }
+
+
+            .swiper-container.movie-carousel {
+                padding: 20px 0;
+                overflow: visible;
+            }
+
+            .swiper-slide {
+                height: auto;
+                display: flex;
+                align-items: stretch;
+            }
+
+
+            @media (max-width: 1024px) {
+                .swiper-container.movie-carousel {
+                    padding: 15px 0;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .movie-card {
+                    aspect-ratio: 2/3;
+                }
+            }
             .movie-card:hover .movie-info {
                 transform: translateY(0);
+                border: 3px dashed #E2BFD9;
+                transform: translateY(-5px);
+                transition: all 0.3s ease;
             }
             .movie-title {
                 font-size: 1.2rem;
@@ -878,37 +926,38 @@
                     overflow-x: auto;
                 }
             }
-             .movie-buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
+            .movie-buttons {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
 
-    .btn-book, .btn-details {
-        display: inline-block;
-        background-color: #e066ff;
-        color: #fff;
-        padding: 8px 15px;
-        border-radius: 5px;
-        text-decoration: none;
-        text-align: center;
-        transition: background-color 0.3s ease;
-        text-transform: uppercase;
-        font-weight: bold;
-        font-size: 0.9rem;
-        flex: 1;
-        margin: 0 5px;
-    }
+            .btn-book, .btn-details {
+                display: inline-block;
+                background-color: #e066ff;
+                color: #fff;
+                padding: 8px 15px;
+                border-radius: 5px;
+                text-decoration: none;
+                text-align: center;
+                transition: background-color 0.3s ease;
+                text-transform: uppercase;
+                font-weight: bold;
+                font-size: 0.9rem;
+                flex: 1;
+                margin: 0 5px;
+            }
 
-    .btn-book:hover, .btn-details:hover {
-        background-color: #ff69b4;
-    }
+            .btn-book:hover, .btn-details:hover {
+                background-color: #ff69b4;
+            }
+
         </style>
     </head>
     <body>
 
         <jsp:include page="Header.jsp" />
-         
+
 
         <!<!-- Intro -->
         <section class="movie-ticket-promo">
@@ -918,7 +967,7 @@
                         <h2 class="promo-title">Mua vé xem phim Online trên Unove</h2>
                         <p class="promo-description">Với nhiều ưu đãi hấp dẫn và kết nối với tất cả các rạp lớn phủ rộng khắp Việt Nam. Đặt vé ngay tại Unove!</p>
                         <ul class="promo-features">
-                            <li><strong>Mua vé Online</strong>, trải nghiệm phim hay</li>
+                            <li>Mua vé Online, <strong>trải nghiệm phim hay</strong></li>
                             <li><strong>Đặt vé an toàn</strong> trên Unove</li>
                             <li>Tha hồ <strong>chọn chỗ ngồi, mua bắp nước</strong> tiện lợi.</li>
                             <li><strong>Lịch sử đặt vé</strong> được lưu lại ngay</li>
@@ -946,7 +995,7 @@
                                     ${genre.genreName}${!genreStatus.last ? ', ' : ''}
                                 </c:forEach>
                             </p>
-                            <a href="${pageContext.request.contextPath}/showtimes" class="btn btn-book-now">Đặt vé ngay</a>
+                            <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn btn-book-now">Đặt vé ngay</a>
                         </div>
                     </div>
                 </c:forEach>
@@ -962,39 +1011,39 @@
         </div>
 
         <!-- Now Showing Section -->
-<section id="now-showing" class="py-5" data-aos="fade-up">
-    <div class="container">
-        <h2 class="section-title text-center" data-aos="fade-up" data-aos-delay="100">PHIM ĐANG CHIẾU</h2>
+        <section id="now-showing" class="py-5" data-aos="fade-up">
+            <div class="container">
+                <h2 class="section-title text-center" data-aos="fade-up" data-aos-delay="100">PHIM ĐANG CHIẾU</h2>
 
-        <div class="swiper-container movie-carousel">
-            <div class="swiper-wrapper">
-                <c:forEach var="movie" items="${movies}" varStatus="status">
-                    <div class="swiper-slide">
-                        <div class="movie-card">
-                            <div class="movie-poster-container">
-                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster">
-                            </div>
-                            <div class="movie-info">
-                                <h3 class="movie-title">${movie.title}</h3>
-                                <p class="movie-genre">
-                                    <c:forEach var="genre" items="${movie.genres}" varStatus="genreStatus">
-                                        ${genre.genreName}${!genreStatus.last ? ', ' : ''}
-                                    </c:forEach>
-                                </p>
-                                <div class="movie-buttons">
-                                    <a href="${pageContext.request.contextPath}/showtimes" class="btn-book">ĐẶT VÉ</a>
-                                    <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-details">CHI TIẾT</a>
+                <div class="swiper-container movie-carousel">
+                    <div class="swiper-wrapper">
+                        <c:forEach var="movie" items="${movies}" varStatus="status">
+                            <div class="swiper-slide">
+                                <div class="movie-card">
+                                    <div class="movie-poster-container">
+                                        <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster">
+                                    </div>
+                                    <div class="movie-info">
+                                        <h3 class="movie-title">${movie.title}</h3>
+                                        <p class="movie-genre">
+                                            <c:forEach var="genre" items="${movie.genres}" varStatus="genreStatus">
+                                                ${genre.genreName}${!genreStatus.last ? ', ' : ''}
+                                            </c:forEach>
+                                        </p>
+                                        <div class="movie-buttons">
+                                            <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-book">ĐẶT VÉ</a>
+                                            <a href="${pageContext.request.contextPath}/HandleDisplayMovieInfo?movieID=${movie.movieID}" class="btn-details">CHI TIẾT</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-        </div>
-    </div>
-</section>
+        </section>
         <section class="promotions">
             <div class="container">
                 <h2 class="section-title text-center mb-5">Tin tức - Khuyến mãi</h2>
@@ -1443,12 +1492,219 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const heroTitle = new SplitType('.promo-title', {types: 'chars'});
+            gsap.from(heroTitle.chars, {
+                duration: 0.8,
+                y: 100,
+                opacity: 0,
+                stagger: 0.02,
+                ease: "back.out(1.7)"
+            });
+
+            gsap.from(".promo-title", {
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: "power3.out"
+            });
+
+            gsap.from(".promo-description", {
+                duration: 1,
+                y: 30,
+                opacity: 0,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+
+            gsap.from(".promo-features li", {
+                duration: 0.8,
+                x: -50,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+            gsap.from(".btn-book-now", {
+                duration: 1,
+                scale: 0,
+                opacity: 0,
+                delay: 1,
+                ease: "elastic.out(1, 0.3)"
+            });
+
+
+            gsap.from("#movieCarousel", {
+                scrollTrigger: {
+                    trigger: "#movieCarousel",
+                    start: "top center+=100",
+                    toggleActions: "play none none reverse"
+                },
+                duration: 1.5,
+                scale: 0.8,
+                opacity: 0,
+                ease: "power3.out"
+            });
+
+
+            gsap.from(".movie-card", {
+                scrollTrigger: {
+                    trigger: "#now-showing",
+                    start: "top center+=100",
+                    toggleActions: "play none none reverse"
+                },
+                duration: 1,
+                y: 100,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+
+            gsap.from(".faq-title", {
+                scrollTrigger: {
+                    trigger: ".faq-section",
+                    start: "top center+=100"
+                },
+                duration: 1,
+                x: -100,
+                opacity: 0
+            });
+
+            gsap.from(".faq-item", {
+                scrollTrigger: {
+                    trigger: ".faq-section",
+                    start: "top center+=100"
+                },
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2
+            });
+
+
+            gsap.from("footer .footer-title", {
+                scrollTrigger: {
+                    trigger: "footer",
+                    start: "top bottom-=100"
+                },
+                duration: 0.8,
+                y: 30,
+                opacity: 0,
+                stagger: 0.2
+            });
+
+            gsap.from("footer .social-icons a", {
+                scrollTrigger: {
+                    trigger: "footer",
+                    start: "top bottom-=100"
+                },
+                duration: 0.5,
+                scale: 0,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "back.out(1.7)"
+            });
+
+
+            gsap.from(".price-table", {
+                scrollTrigger: {
+                    trigger: ".price-table",
+                    start: "top center+=100"
+                },
+                duration: 1,
+                y: 50,
+                opacity: 0,
+                ease: "power3.out"
+            });
+
+            gsap.from(".price-table tr", {
+                scrollTrigger: {
+                    trigger: ".price-table",
+                    start: "top center+=100"
+                },
+                duration: 0.5,
+                opacity: 0,
+                y: 20,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+
+
+            gsap.from(".promo-card", {
+                scrollTrigger: {
+                    trigger: ".promotions",
+                    start: "top center+=100"
+                },
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+
+
+            gsap.from(".navbar-nav .nav-item", {
+                duration: 0.5,
+                opacity: 0,
+                y: -20,
+                stagger: 0.1,
+                ease: "power3.out",
+                delay: 0.5
+            });
+
+
+            ScrollTrigger.refresh();
+        });
+
+
+        document.querySelectorAll('.movie-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, {
+                    duration: 0.3,
+                    y: -10,
+                    scale: 1.02,
+                    ease: "power2.out"
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    duration: 0.3,
+                    y: 0,
+                    scale: 1,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    gsap.to(window, {
+                        duration: 1,
+                        scrollTo: {
+                            y: target,
+                            offsetY: 70
+                        },
+                        ease: "power3.inOut"
+                    });
+                }
+            });
+        });
+    </script>
     <script>
         AOS.init({
-        duration: 1000,
-        once: true,
-        mirror: false
-    });
+            duration: 1000,
+            once: true,
+            mirror: false
+        });
 
 
         var myCarousel = document.querySelector('#movieCarousel')

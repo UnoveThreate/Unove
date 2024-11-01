@@ -89,38 +89,21 @@
         }
 
         .navbar {
-            background: linear-gradient(135deg, #D4BEE4 0%, #D4BEE4 100%);
+            background: linear-gradient(135deg, #E2BFD9 0%, #E2BFD9 100%) !important;
             padding: 15px 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-
-        .navbar-brand {
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            transition: all 0.3s ease;
-        }
-
-        .navbar-brand:hover {
-            color: #f0f4f8;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
-        .nav-link {
+        .navbar-brand, .nav-link {
             color: #ffffff !important;
             font-weight: 500;
-            padding: 10px 15px !important;
-            border-radius: 25px;
-            transition: all 0.3s ease;
         }
 
         .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
         }
+
 
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.5);
@@ -272,7 +255,7 @@
         #searchButton {
             margin-left: 20px;
             padding: 10px 20px;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            background: linear-gradient(135deg, #E2BFD9 0%, #E2BFD9 100%) !important;
             color: white;
             border: none;
             border-radius: 25px;
@@ -395,7 +378,7 @@
             padding: 15px 0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-      
+
 
     </style>
 
@@ -404,7 +387,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light" >
         <div class="container-fluid">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/Unove" style="font-style:normal; font-weight: 600">Unove</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/" style="font-style:normal; font-weight: 600">Unove</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -414,24 +397,24 @@
                     <li class="nav-item">
                         <a class="icon-logo-btn nav-link active" aria-current="page" href= ""> <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader.png" alt="Logo"/></a>
                     </li>
+                    <!--                    <li class="nav-item">
+                                            <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
+                                        </li>-->
                     <li class="nav-item">
-                        <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/showtimes">Lịch chiếu phim</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/showtimes">Schedule Movie</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Phim</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/filter-movies">Movie</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Top Phim</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Top Movies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Upcoming movies</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/top-movies">Phim sắp chiếu</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Cinema
+                            Rạp
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <c:forEach var="cinema" items="${cinemaNames}">
@@ -444,9 +427,12 @@
                 </ul>
 
                 <div>
-                    <button id="searchButton" class="borderless-btn" onclick="showModal()">
-                        <i class="fa-solid fa-magnifying-glass"></i> 
-                    </button>
+                    <a href="${pageContext.request.contextPath}/filterMovies">
+                        <button id="searchButton" class="borderless-btn">
+                            <i class="fa-solid fa-magnifying-glass"></i> 
+                        </button>
+                    </a>
+
 
                     <c:set var="movieName" value="${requestScope.movieName}"/>
                     <c:set var="movies" value="${requestScope.movies}"/>
@@ -460,24 +446,24 @@
                                         </div>
                                     </form>
                                 </div>
-                               <%--<c:if test="${not empty movies}">--%>
-                                    <!--<form id="movieContainerForm">-->
-                                        <%--<c:forEach var="movie" items="${movies}">--%>
-                                            <!--<div class="modal-body movie-details" id="movieDetailsContainer" onclick="displayMovieDetails('${movie.movieID}')">-->
-                                                <!--<img src="${movie.imageURL}" alt="${movie.title} image" class="movie-image" />-->
-                                                <!--<div class="movie-info">-->
-                                                    <!--<b style="font-size: 22px;">${movie.title}</b>-->
-                                                    <%--<c:set var="genresString" value="${fn:replace(movie.genres.toString(), '[', '')}" />--%>
-                                                    <%--<c:set var="genresString" value="${fn:replace(genresString, ']', '')}" />--%>
-                                                    <!--<p style="font-size: 18px;">${genresString}</p>-->
-                                                    <!--<p style="font-size: 18px;"><i class="fa-regular fa-star"></i> ${movie.rating}</p>-->
-                                                    <!--<button type="button" id="showingButton"><i class="fas fa-video" style="margin-right: 8px;"></i>ĐANG CHIẾU</button>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
-                                            <!--<hr/>-->
-                                        <%--</c:forEach>--%>
-                                        <!--<input type="hidden" id="movieIDInput" name="movieID">-->
-                                    <!--</form>-->
+                                <%--<c:if test="${not empty movies}">--%>
+                                <!--<form id="movieContainerForm">-->
+                                <%--<c:forEach var="movie" items="${movies}">--%>
+                                    <!--<div class="modal-body movie-details" id="movieDetailsContainer" onclick="displayMovieDetails('${movie.movieID}')">-->
+                                        <!--<img src="${movie.imageURL}" alt="${movie.title} image" class="movie-image" />-->
+                                <!--<div class="movie-info">-->
+                                    <!--<b style="font-size: 22px;">${movie.title}</b>-->
+                                <%--<c:set var="genresString" value="${fn:replace(movie.genres.toString(), '[', '')}" />--%>
+                                <%--<c:set var="genresString" value="${fn:replace(genresString, ']', '')}" />--%>
+                                <!--<p style="font-size: 18px;">${genresString}</p>-->
+                                <!--<p style="font-size: 18px;"><i class="fa-regular fa-star"></i> ${movie.rating}</p>-->
+                                <!--<button type="button" id="showingButton"><i class="fas fa-video" style="margin-right: 8px;"></i>ĐANG CHIẾU</button>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--<hr/>-->
+                                <%--</c:forEach>--%>
+                                <!--<input type="hidden" id="movieIDInput" name="movieID">-->
+                                <!--</form>-->
                                 <%--</c:if>--%>
                                 <div class="modal-footer">
                                     <button style="background-color: rgb(216, 45, 139)" type="button" class="btn btn-primary" onclick="closeModal();" data-bs-dismiss="modal">Close</button>
@@ -495,15 +481,22 @@
                                     <c:out value="${sessionScope.username}" />
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/display">View Profile</a></li>
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/display">Xem hồ sơ</a></li>
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
+                                        <c:if test="${sessionScope.role eq 'OWNER'}">
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản trị viên</a></li>
+                                        </c:if>
+                                        
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
+                                     
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Log Out</a></li>
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                 </ul>
                             </li>
                         </c:when>
                         <c:otherwise>
                             <li class="nav-item">
-                               <a class="nav-link" href="${pageContext.request.contextPath}/login">Login</a>
+                                <a class="nav-link" href="${pageContext.request.contextPath}/login">Đăng nhập</a>
                             </li>
                         </c:otherwise>
                     </c:choose>

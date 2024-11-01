@@ -128,19 +128,19 @@ public class AuthFilter implements Filter {
 
             }
         }
-        session = httpRequest.getSession(true);
-        String urlStore = (String) httpRequest.getRequestURI();
-        if (!urlStore.equals(RouterURL.LOGIN) && !url.contains("/LoginGoogleServlet") && !url.contains("/notifications")) {
-
-            session.setAttribute("redirectTo", urlStore);
-            // Store all request parameters in the session
-            Enumeration<String> parameterNames = httpRequest.getParameterNames();
-            while (parameterNames.hasMoreElements()) {
-                String paramName = parameterNames.nextElement();
-                String paramValue = httpRequest.getParameter(paramName);
-                session.setAttribute("param_" + paramName, paramValue);
-            }
-        }
+//        session = httpRequest.getSession(true);
+//        String urlStore = (String) httpRequest.getRequestURI();
+//        if (!urlStore.equals(RouterURL.LOGIN) && !url.contains("/LoginGoogleServlet") && !url.contains("/notifications")) {
+//
+//            session.setAttribute("redirectTo", urlStore);
+//            // Store all request parameters in the session
+//            Enumeration<String> parameterNames = httpRequest.getParameterNames();
+//            while (parameterNames.hasMoreElements()) {
+//                String paramName = parameterNames.nextElement();
+//                String paramValue = httpRequest.getParameter(paramName);
+//                session.setAttribute("param_" + paramName, paramValue);
+//            }
+//        }
 
         String loginURI = httpRequest.getContextPath() + "/login";
         //Có thể phải coi lại đề phòng lỗi url

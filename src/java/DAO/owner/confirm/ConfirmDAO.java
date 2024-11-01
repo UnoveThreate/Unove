@@ -69,4 +69,48 @@ public class ConfirmDAO extends MySQLConnect {
         return isValid;
     }
 
+    public boolean checkConfirmTicket(int orderID) {
+        boolean isValid = false;
+        String sql = "SELECT * FROM ticket WHERE OrderID = ? and status = 'success'";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            ResultSet resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                // Valid order found
+                isValid = true;
+                // Update status to 'Confirmed'
+                confirmOrderTicket(orderID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Returns false if no matching ticket is found or an error occurs
+    }
+
+    public boolean confirmOrderTicket(int orderID) {
+        String sql = "UPDATE Ticket SET status = 'Confirmed' WHERE orderID = ? AND status = 'success'";
+
+        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+
+            // Set the parameters for the prepared statement
+            ps.setInt(1, orderID);
+
+            // Execute the update
+            int rowsAffected = ps.executeUpdate();
+
+            // Check if the order was updated
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log the error
+            // Return false if an error occurs
+            return false;
+        }
+
+    }
+
 }
