@@ -58,6 +58,7 @@ public class ConfirmOrderServlet extends HttpServlet {
             String orderIdParam = request.getParameter("orderID");
             String userIdParam = request.getParameter("userID");
             String codeParam = request.getParameter("code");
+
             int orderId = 0;
             int userId = 0;
             boolean IsParametersValid = true;
@@ -85,6 +86,7 @@ public class ConfirmOrderServlet extends HttpServlet {
 
             // Forward to the confirmation JSP with order details
             request.setAttribute("code", codeParam);
+
             request.setAttribute("orderID", orderId);
             request.setAttribute("userID", userId);
             request.getRequestDispatcher(RouterJSP.CONFIRM_TICKET).forward(request, response);
@@ -127,12 +129,14 @@ public class ConfirmOrderServlet extends HttpServlet {
         }
 
         boolean isOrderConfirmed = confirmDAO.checkConfirmOrder(orderID, userID, codeParam);
+        boolean isTicketConfirmed = confirmDAO.checkConfirmTicket(orderID);
         String resultMessage;
 
-        if (isOrderConfirmed) {
+        if (isOrderConfirmed || isTicketConfirmed) {
+
             resultMessage = "Xác nhận vé đặt thành công.";
         } else {
-            resultMessage = "Thông tin không hợp lệ";
+            resultMessage = "Đã xảy ra lỗi khi cập nhật trạng thái vé.";
         }
 
         request.setAttribute("message", resultMessage);
