@@ -126,6 +126,18 @@ public class HandleDisplayMovieInfo extends HttpServlet {
                 isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, movieID);
             }
 
+            // task favourite movie
+            HttpSession session = request.getSession();
+            //check xem trong session co bien ton tai userID hay khong, neu khong thi ep kieu duoi dang integer
+            int userID = -1;
+            if (session.getAttribute("userID") != null) {
+                userID = (int) session.getAttribute("userID");
+            }
+            Boolean isFavoritedMovie = null;
+            if (userID != -1) {
+                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, movieID);
+            }
+
             // Add movie to request attributes
             // Set attributes
             request.setAttribute("movie", movie);
@@ -176,4 +188,3 @@ public class HandleDisplayMovieInfo extends HttpServlet {
         response.sendRedirect("/Unove/HandleDisplayMovieInfo?movieID=" + movieID);
     }
 }
-

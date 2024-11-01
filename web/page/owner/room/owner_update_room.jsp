@@ -6,12 +6,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Update Room</title>
+        <title>Câp nhập phòng</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
             body {
@@ -70,7 +69,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update Room</button>
+                <button type="submit" class="btn btn-primary">Cập nhập phòng</button>
             </form>
 
             <script>
@@ -84,7 +83,7 @@
                     return true; // Cho phép form gửi đi
                 }
             </script>
-            <a class="btn btn-secondary mt-3" href="${pageContext.request.contextPath}/owner/room/manageRoom?cinemaID=${room.cinemaID}">Back to Room Management</a>
+            <a class="btn btn-secondary mt-3" href="${pageContext.request.contextPath}/owner/room/manageRoom?cinemaID=${room.cinemaID}">Quay lại</a>
         </div>
     </body>
 </html>

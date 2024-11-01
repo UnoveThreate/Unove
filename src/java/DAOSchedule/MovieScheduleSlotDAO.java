@@ -21,7 +21,8 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         List<MovieSlot> movieSlots = new ArrayList<>();
         String sql = "SELECT ms.* FROM MovieSlot ms "
                 + "JOIN Room r ON ms.RoomID = r.RoomID "
-                + "WHERE r.CinemaID = ? AND DATE(ms.StartTime) = ?";
+                + "WHERE r.CinemaID = ? AND DATE(ms.StartTime) = ? "
+                + "AND ms.Status = 'Active'";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, cinemaID);
@@ -43,6 +44,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         String sql = "SELECT DISTINCT DATE(StartTime) as show_date FROM MovieSlot ms "
                 + "JOIN Room r ON ms.RoomID = r.RoomID "
                 + "WHERE r.CinemaID = ? AND StartTime >= CURDATE() "
+                + "AND ms.Status = 'Active' "
                 + "ORDER BY show_date LIMIT 7";
 
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
@@ -60,7 +62,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
 
     public MovieSlot getMovieSlotById(int movieSlotID) {
         MovieSlot movieSlot = null;
-        String sql = "SELECT * FROM MovieSlot WHERE MovieSlotID = ?";
+        String sql = "SELECT * FROM MovieSlot WHERE MovieSlotID = ? AND Status = 'Active'";
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, movieSlotID);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -76,7 +78,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
 
     public MovieSlot getLatestMovieSlot() {
         MovieSlot movieSlot = null;
-        String sql = "SELECT * FROM MovieSlot WHERE StartTime > NOW() ORDER BY StartTime ASC LIMIT 1";
+        String sql = "SELECT * FROM MovieSlot WHERE StartTime > NOW() AND Status = 'Active' ORDER BY StartTime ASC LIMIT 1";
         try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -107,7 +109,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
         String sql = "SELECT r.CinemaID "
                 + "FROM MovieSlot ms "
                 + "JOIN Room r ON ms.RoomID = r.RoomID "
-                + "WHERE ms.MovieSlotID = ?";
+                + "WHERE ms.MovieSlotID = ? AND ms.Status = 'Active'";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, movieSlotID);
             ResultSet rs = pstmt.executeQuery();
@@ -115,7 +117,6 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
                 return rs.getInt("CinemaID");
             }
         }
-        return -1; // Trả về -1 nếu không tìm thấy
+        return -1; 
     }
-
 }

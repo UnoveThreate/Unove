@@ -7,7 +7,6 @@
 <%@page import="model.Cinema"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<jsp:include page="/page/owner/navbar.jsp" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -73,12 +72,12 @@
                 </tr>
             </table>
 
-            <div class="buttons">
-                <a href="<%= RouterURL.OWNER_EDIT_CINEMA%>?cinemaID=${cinema.cinemaID}" class="btn btn-primary">Edit</a>
-                <a href="<%= RouterURL.MANAGE_MOVIES%>?cinemaID=${cinema.cinemaID}" class="btn btn-secondary">Manage Movies</a>
-                <a href="<%= RouterURL.MANAGE_ROOM%>?cinemaID=${cinema.cinemaID}" class="btn btn-secondary">Manage Room</a>
-                <a href="${pageContext.request.contextPath}/owner/movieSlot/manageMovieSlot?cinemaID=${cinema.cinemaID}" class="btn btn-primary">Manage Movie Slot</a>
-            </div>
+            <!--            <div class="buttons">
+                            <a href="<%= RouterURL.OWNER_EDIT_CINEMA%>?cinemaID=${cinema.cinemaID}" class="btn btn-primary">Edit</a>
+                            <a href="<%= RouterURL.MANAGE_MOVIES%>?cinemaID=${cinema.cinemaID}" class="btn btn-secondary">Manage Movies</a>
+                            <a href="<%= RouterURL.MANAGE_ROOM%>?cinemaID=${cinema.cinemaID}" class="btn btn-secondary">Manage Room</a>
+                            <a href="${pageContext.request.contextPath}/owner/movieSlot/manageMovieSlot?cinemaID=${cinema.cinemaID}" class="btn btn-primary">Manage Movie Slot</a>
+                        </div>-->
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

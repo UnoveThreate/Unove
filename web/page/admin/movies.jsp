@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap4.min.css">
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <style>
             :root {
                 --primary-color: #3498db;
@@ -282,6 +283,27 @@
                 max-width: 100%;
                 max-height: 100%;
                 object-fit: contain;
+            }
+            .swal2-popup {
+                border-radius: 15px !important;
+                font-family: 'Source Sans Pro', sans-serif !important;
+            }
+
+            .swal2-title {
+                color: #2c3e50 !important;
+                font-size: 24px !important;
+            }
+
+            .swal2-text {
+                color: #34495e !important;
+                font-size: 16px !important;
+            }
+
+            .swal2-confirm, .swal2-cancel {
+                border-radius: 50px !important;
+                padding: 12px 30px !important;
+                font-size: 16px !important;
+                font-weight: 500 !important;
             }
         </style>
     </style>
@@ -661,6 +683,7 @@
             $(document).on('change', '.status-toggle', function () {
                 var movieID = $(this).data('id');
                 var newStatus = this.checked;
+                var toggleElement = this;
 
                 $.ajax({
                     url: '${pageContext.request.contextPath}/admin/movies',
@@ -673,16 +696,33 @@
                     dataType: 'json',
                     success: function (response) {
                         if (response.success) {
-                            alert('Cập nhật trạng thái thành công');
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Cập nhật trạng thái thành công',
+                                icon: 'success',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#3498db'
+                            });
                         } else {
-                            alert('Lỗi: ' + response.message);
-                            $(this).prop('checked', !newStatus);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: response.message,
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                                confirmButtonColor: '#e74c3c'
+                            });
+                            $(toggleElement).prop('checked', !newStatus);
                         }
                     },
                     error: function (xhr, status, error) {
-                        console.error("Error details:", xhr.responseText);
-                        alert('Có lỗi xảy ra khi cập nhật trạng thái phim');
-                        $(this).prop('checked', !newStatus);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Có lỗi xảy ra khi cập nhật trạng thái phim',
+                            icon: 'error',
+                            confirmButtonText: 'OK',
+                            confirmButtonColor: '#e74c3c'
+                        });
+                        $(toggleElement).prop('checked', !newStatus);
                     }
                 });
             });

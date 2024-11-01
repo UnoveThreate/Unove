@@ -1,5 +1,7 @@
 package controller.owner.room;
 
+import DAO.cinemaChainOwnerDAO.CinemaChainDAO;
+import DAO.cinemaChainOwnerDAO.CinemaDAO;
 import DAO.cinemaChainOwnerDAO.RoomDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
@@ -14,18 +16,24 @@ import util.RouterJSP;
 import util.RouterURL;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
+import model.Cinema;
 
 @WebServlet("/owner/room/manageRoom")
 public class ManageRoomServlet extends HttpServlet {
 
     private RoomDAO roomDAO;
+    private CinemaChainDAO cinemaChainDAO;
+    private CinemaDAO cinemaDAO;
 
     @Override
     public void init() throws ServletException {
         ServletContext context = getServletContext();
         try {
             roomDAO = new RoomDAO(context);
+            cinemaChainDAO = new CinemaChainDAO(context);
+            cinemaDAO = new CinemaDAO(context);
         } catch (Exception e) {
             throw new ServletException("Failed to initialize RoomDAO", e);
         }
@@ -43,24 +51,55 @@ public class ManageRoomServlet extends HttpServlet {
             response.sendRedirect(RouterURL.LOGIN);
             return;
         }
+        request.setCharacterEncoding("UTF-8");  // Cấu hình mã hóa đầu vào
+        response.setCharacterEncoding("UTF-8"); // Cấu hình mã hóa đầu ra
+
+        loadCinemas(request);
 
         // Get cinemaID from the request
         String cinemaIDStr = request.getParameter("cinemaID");
-        if (cinemaIDStr == null || cinemaIDStr.isEmpty()) {
-            response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not provided
+        Integer selectedCinemaID = null;
+
+        if (cinemaIDStr != null && !cinemaIDStr.isEmpty()) {
+            try {
+                selectedCinemaID = Integer.parseInt(cinemaIDStr); // Parse cinemaID to Integer
+                List<Room> rooms = roomDAO.getRoomsByCinemaID(selectedCinemaID); // Get rooms for the specific cinema
+                request.setAttribute("rooms", rooms);
+            } catch (NumberFormatException e) {
+                response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not a valid integer
+                return;
+            } catch (Exception e) {
+                throw new ServletException("Error retrieving rooms for cinema ID: " + cinemaIDStr, e);
+            }
+        }
+
+        request.setAttribute("selectedCinemaID", selectedCinemaID); // Set selectedCinemaID for JSP
+        request.getRequestDispatcher(RouterJSP.OWNER_MANAGE_ROOM_PAGE).forward(request, response);
+    }
+
+    private void loadCinemas(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+
+        // Kiểm tra xem userID có trong session không
+        Integer userID = (Integer) session.getAttribute("userID");
+        if (userID == null) {
+            System.out.println("userID không có trong session");
             return;
         }
 
         try {
-            Integer cinemaID = Integer.parseInt(cinemaIDStr); // Parse cinemaID to Integer
-            List<Room> rooms = roomDAO.getRoomsByCinemaID(cinemaID); // Get rooms for the specific cinema
-            request.setAttribute("rooms", rooms);
-            request.setAttribute("cinemaID", cinemaID); // Pass cinemaID to the JSP for further use
-            request.getRequestDispatcher(RouterJSP.OWNER_MANAGE_ROOM_PAGE).forward(request, response);
-        } catch (NumberFormatException e) {
-            response.sendRedirect(RouterURL.MANAGE_CINEMA); // Redirect if cinemaID is not a valid integer
-        } catch (Exception e) {
-            throw new ServletException("Error retrieving rooms for cinema ID: " + cinemaIDStr, e);
+            int cinemaChainID = cinemaChainDAO.getCinemaChainByUserID(userID).getCinemaChainID();
+            List<Cinema> cinemas = cinemaDAO.getCinemasByCinemaChainID(cinemaChainID);
+
+            if (cinemas == null || cinemas.isEmpty()) {
+                System.out.println("Không có cinema nào trong cinemaChainID: " + cinemaChainID);
+            } else {
+                System.out.println("Danh sách cinema đã lấy thành công.");
+            }
+
+            request.setAttribute("cinemas", cinemas);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

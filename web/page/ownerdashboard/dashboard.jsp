@@ -8,74 +8,126 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Unove Dashboard</title>
 
-        <!-- Google Font: Source Sans Pro -->
+        <!-- CSS Libraries -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-        <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-        <!-- Theme style -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css">
-        <!-- overlayScrollbars -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.0/css/OverlayScrollbars.min.css">
-        <!-- FullCalendar CSS -->
         <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
         <style>
+            :root {
+                --primary-color: #007bff;
+                --success-color: #28a745;
+                --warning-color: #ffc107;
+                --danger-color: #dc3545;
+                --info-color: #17a2b8;
+            }
+
             .fc-event {
                 border: none;
                 padding: 2px;
+                transition: transform 0.3s ease;
             }
+
+            .fc-event:hover {
+                transform: scale(1.02);
+            }
+
             .fc-event-main {
                 padding: 2px;
-                background-color: #3788d8;
+                background-color: var(--primary-color);
                 color: white;
                 border-radius: 3px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             }
+
             .fc-event-title {
                 font-weight: bold;
+                margin-bottom: 2px;
             }
+
             .fc-event-time, .fc-event-location {
                 font-size: 0.8em;
+                opacity: 0.9;
+            }
+
+            .small-box {
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .small-box:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .card {
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            }
+
+            .table-responsive {
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .table th {
+                background-color: #9664dd;
+                color: white;
+                border: none;
+            }
+
+            .table-hover tbody tr:hover {
+                background-color: #F5EFFF;
+            }
+
+            .badge {
+                padding: 5px 10px;
+                border-radius: 15px;
             }
         </style>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
-
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-                <!-- Left navbar links -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                            <i class="fas fa-bars"></i>
+                        </a>
                     </li>
                 </ul>
             </nav>
-            <!-- /.navbar -->
 
             <!-- Main Sidebar Container -->
             <jsp:include page="sidebar.jsp" />
 
-            <!-- Content Wrapper. Contains page content -->
+            <!-- Content Wrapper -->
             <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
+                <!-- Content Header -->
                 <div class="content-header">
                     <div class="container-fluid">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1 class="m-0">Dashboard</h1>
+                                <h1 class="m-0" data-aos="fade-right">Dashboard</h1>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /.content-header -->
-
-                <!-- Main content -->
+                                <!-- Main content -->
                 <section class="content">
                     <div class="container-fluid">
                         <!-- Small boxes (Stat box) -->
                         <div class="row">
-                            <div class="col-lg-3 col-6">
-                                <!-- small box -->
+                            <div class="col-lg-3 col-6" data-aos="fade-up" data-aos-delay="100">
                                 <div class="small-box bg-info">
                                     <div class="inner">
                                         <h3><fmt:formatNumber value="${dashboardData.totalRevenue}" type="currency" currencySymbol="₫" maxFractionDigits="0"/></h3>
@@ -86,9 +138,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <div class="col-lg-3 col-6">
-                                <!-- small box -->
+                            <div class="col-lg-3 col-6" data-aos="fade-up" data-aos-delay="200">
                                 <div class="small-box bg-success">
                                     <div class="inner">
                                         <h3>${dashboardData.totalTicketsSold}</h3>
@@ -99,9 +149,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <div class="col-lg-3 col-6">
-                                <!-- small box -->
+                            <div class="col-lg-3 col-6" data-aos="fade-up" data-aos-delay="300">
                                 <div class="small-box bg-warning">
                                     <div class="inner">
                                         <h3>${dashboardData.totalMovieSlots}</h3>
@@ -112,9 +160,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- ./col -->
-                            <div class="col-lg-3 col-6">
-                                <!-- small box -->
+                            <div class="col-lg-3 col-6" data-aos="fade-up" data-aos-delay="400">
                                 <div class="small-box bg-danger">
                                     <div class="inner">
                                         <h3><fmt:formatNumber value="${dashboardData.averageSeatOccupancy}" type="number" maxFractionDigits="2"/>%</h3>
@@ -125,15 +171,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- ./col -->
                         </div>
-                        <!-- /.row -->
 
-                        <!-- Main row -->
+                        <!-- Charts Row -->
                         <div class="row">
-                            <!-- Left col -->
-                            <section class="col-lg-6 connectedSortable">
-                                <!-- Biểu đồ doanh thu -->
+                            <section class="col-lg-6 connectedSortable" data-aos="fade-right" data-aos-delay="500">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">
@@ -147,9 +189,7 @@
                                 </div>
                             </section>
 
-                            <!-- Right col -->
-                            <section class="col-lg-6 connectedSortable">
-                                <!-- Biểu đồ số lượng vé -->
+                            <section class="col-lg-6 connectedSortable" data-aos="fade-left" data-aos-delay="500">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">
@@ -164,8 +204,8 @@
                             </section>
                         </div>
 
-                        <!-- Thống kê doanh thu theo phim -->
-                        <div class="row mt-4">
+                        <!-- Movie Revenue Stats -->
+                        <div class="row mt-4" data-aos="fade-up" data-aos-delay="600">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -186,8 +226,8 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach items="${dashboardData.movieRevenueStats}" var="movie">
-                                                    <tr>
+                                                <c:forEach items="${dashboardData.movieRevenueStats}" var="movie" varStatus="status">
+                                                    <tr data-aos="fade-up" data-aos-delay="${600 + (status.index * 50)}">
                                                         <td>${movie.title}</td>
                                                         <td>${movie.totalTickets}</td>
                                                         <td>${movie.successTickets}</td>
@@ -202,8 +242,8 @@
                             </div>
                         </div>
 
-                        <!-- Lịch chiếu phim sắp tới -->
-                        <div class="row mt-4">
+                        <!-- Calendar -->
+                        <div class="row mt-4" data-aos="fade-up" data-aos-delay="700">
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -215,33 +255,33 @@
                                 </div>
                             </div>
                         </div>
-
-                    </div><!-- /.container-fluid -->
+                    </div>
                 </section>
-                <!-- /.content -->
             </div>
-            <!-- /.content-wrapper -->
+
             <footer class="main-footer">
                 <strong>Copyright &copy; 2023 <a href="#">Unove</a>.</strong>
                 All rights reserved.
             </footer>
         </div>
-        <!-- ./wrapper -->
 
-        <!-- jQuery -->
+        <!-- Scripts -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <!-- Bootstrap 4 -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
-        <!-- AdminLTE App -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/js/adminlte.min.js"></script>
-        <!-- ChartJS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-        <!-- FullCalendar JS -->
         <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js'></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-
-
+        <!-- Initialize AOS -->
         <script>
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                mirror: false,
+                offset: 50
+            });
             document.addEventListener('DOMContentLoaded', function () {
                 // Biểu đồ doanh thu
                 var ctxRevenue = document.getElementById('revenueChart').getContext('2d');

@@ -6,28 +6,29 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>My Favourite Movie</title>
+        <title>Phim Yêu Thích</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">        
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> 
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <style>
             body {
-                background-color: #f8f9fa;
-                font-family: 'Roboto', sans-serif;
+                background-color: #fff1f6;
+                font-family: 'Poppins', sans-serif;
                 color: #333;
             }
 
             .container {
-                background-color: #fff;
+                background-color: #ffffff;
                 padding: 30px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 20px rgba(226, 191, 217, 0.3);
                 border-radius: 12px;
                 margin: 40px auto;
                 max-width: 1200px;
+                border: 3px dashed #E2BFD9;
             }
 
             h2 {
-                color: #212529;
+                color: #e2147e;
                 font-size: 2.8rem;
                 font-weight: 700;
                 text-align: center;
@@ -40,7 +41,7 @@
                 display: block;
                 width: 60px;
                 height: 4px;
-                background-color: #007bff;
+                background: linear-gradient(to right, #E2BFD9, #e2147e);
                 margin: 0.75rem auto 0;
                 border-radius: 4px;
             }
@@ -48,129 +49,155 @@
             .movie-table {
                 width: 100%;
                 border-spacing: 0 15px;
+                border-collapse: separate;
             }
 
-            .movie-table th, .movie-table td {
-                padding: 15px 20px;
-                text-align: left;
+            .movie-table td, .movie-table th {
+                padding: .75rem;
                 vertical-align: middle;
-                border-bottom: 1px solid #dee2e6;
+                border: none;
             }
 
             .movie-table img {
                 width: 60px;
-                height: auto;
+                height: 90px;
+                object-fit: cover;
                 margin-right: 20px;
                 border-radius: 6px;
-                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+                border: 3px dashed #E2BFD9;
+                padding: 3px;
+                transition: transform 0.3s ease;
+            }
+
+            .movie-table img:hover {
+                transform: scale(1.1);
+            }
+
+            .table-header {
+                background: linear-gradient(45deg, #E2BFD9, #e2147e);
+                color: white;
+                font-weight: 600;
+                text-transform: uppercase;
+                border-radius: 10px;
+            }
+
+            .table-header th {
+                border: none;
+                padding: 15px;
+            }
+
+            .table-row {
+                background-color: #ffffff;
+                transition: all 0.3s ease;
+                border-radius: 10px;
+                border: 3px dashed #E2BFD9;
+                cursor: pointer;
+            }
+
+            .table-row:hover {
+                background-color: #fff1f6;
+                transform: translateY(-3px);
             }
 
             .movie-title {
                 display: flex;
                 align-items: center;
-                font-weight: bold;
-            }
-
-            .table-header {
-                background-color: #007bff;
-                color: white;
-                font-weight: 600;
-                text-transform: uppercase;
-            }
-
-            .table-header th {
-                border: none;
-            }
-
-            .table-row {
-                background-color: #ffffff;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                transition: background-color 0.3s ease, box-shadow 0.3s ease;
+                padding: 10px;
                 border-radius: 10px;
+                width: 100%;
             }
 
-            .table-row:hover {
-                background-color: #f1f3f5;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            .button-borderless {
+            .delete-btn {
+                background: none;
                 border: none;
-                background-color: transparent;
-                color: #dc3545;
+                color: #e2147e;
                 cursor: pointer;
+                padding: 8px;
+                border-radius: 50%;
+                transition: all 0.3s ease;
+            }
+
+            .delete-btn:hover {
+                color: #E2BFD9;
+                transform: scale(1.1);
+                background-color: rgba(226, 191, 217, 0.1);
+            }
+
+            .delete-btn i {
                 font-size: 1.4rem;
-                transition: color 0.2s;
-            }
-
-            .button-borderless:hover {
-                color: #bd2130;
-            }
-
-            .movie-genres {
-                color: #495057;
-                font-size: 0.95rem;
             }
 
             @media (max-width: 768px) {
                 .container {
-                    padding: 20px;
-                }
-
-                .movie-table th, .movie-table td {
-                    padding: 10px;
+                    padding: 15px;
+                    margin: 20px;
                 }
 
                 h2 {
                     font-size: 2rem;
                 }
 
+                .movie-table th, .movie-table td {
+                    padding: 10px;
+                }
+
                 .movie-table img {
                     width: 40px;
+                    height: 60px;
                 }
             }
-
         </style>
-        <script src="javascript/style.js"></script>
     </head>
     <body>
-        <div class="container">
-            <h2 class="text-center my-4">Bộ phim yêu thích</h2>
+        <jsp:include page="/page/landingPage/Header.jsp"/>
+
+        <div class="container" data-aos="fade-up">
+            <h2 class="text-center my-4" data-aos="fade-down">Phim Yêu Thích</h2>
             <c:set var="movies" value="${requestScope.favouriteMovies}" scope="request"></c:set>
-                <form id="favouriteMoviesForm">
-                    <table class="table movie-table">
-                        <thead class="table-header">
-                            <tr>
-                                <th scope="col">Tên phim</th>                         
-                                <th scope="col">Điểm số</th>
-                                <th scope="col">Xóa khỏi yêu thích</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="movie" items="${movies}">
-                            <tr class="table-row" onclick="window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}'">
-                                <td>
-                                    <div class="movie-title">
-                                        <img src="${movie.imageURL}" alt="${movie.title}">
-                                        ${movie.title}
-                                    </div>
-                                </td>
-                               
-                                <td>${movie.rating}</td>
-                                <td>
-                                    <form action="myfavouritemovie" method="post">
-                                        <button id="delete_${movie.movieID}" class="button-borderless" onclick="deleteFavouriteMovie('${movie.movieID}');">
+
+                <table class="table movie-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col">Tên phim</th>                         
+                            <th scope="col">Đánh giá</th>
+                            <th scope="col">Xóa khỏi yêu thích</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="movie" items="${movies}" varStatus="status">
+                        <tr class="table-row" 
+                            data-aos="fade-up" 
+                            data-aos-delay="${status.index * 100}">
+                            <td onclick="window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}'">
+                                <div class="movie-title">
+                                    <img src="${movie.imageURL}" alt="${movie.title}">
+                                    ${movie.title}
+                                </div>
+                            </td>
+                            <td onclick="window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}'">
+                                ${movie.rating}
+                            </td>
+                            <td>
+                                <form action="myfavouritemovie" method="POST" style="margin:0">
+                                    <input type="hidden" name="deletedFavouriteMovieInput" value="${movie.movieID}">
+                                    <button type="submit" class="delete-btn" onclick="event.stopPropagation();">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
-                                    </form>
-                                    
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </form>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
         </div>
+
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+                                        AOS.init({
+                                            duration: 800,
+                                            once: true,
+                                            offset: 100
+                                        });
+        </script>
     </body>
-    
 </html>
