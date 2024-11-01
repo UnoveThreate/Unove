@@ -123,4 +123,6 @@ public class MovieDAO extends MySQLConnect {
 
         return reviews; // Trả về danh sách các review của bộ phim có movieID tương ứng dưới dạng ArrayList
     }
+    
+    
 }
