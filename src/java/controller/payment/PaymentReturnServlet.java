@@ -13,6 +13,7 @@ import util.Util;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -51,19 +52,42 @@ public class PaymentReturnServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+        Cookie[] cookies = request.getCookies();
+
+        Integer userID = null;
+        Double totalPrice = null;
+       
+
         HttpSession session = request.getSession();
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
-        
-        Integer userId = (Integer) session.getAttribute("userID");
+
         String email = (String) session.getAttribute("email");
         String amountStr = request.getParameter("vnp_Amount");
         String vnp_ResponseCode = request.getParameter("vnp_ResponseCode");
         String vnp_TxnRef = request.getParameter("vnp_TxnRef");
         List<Seat> listSeats = bookingSession.getListSeats();
         List<CanteenItemOrder> itemOrders = bookingSession.getItemOrders();
+        int orderID = Integer.parseInt(vnp_TxnRef);
 
-        if (userId == null) {
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                switch (cookie.getName()) {
+                    case "orderID":
+                        orderID = Integer.parseInt(cookie.getValue());
+                        break;
+                    case "userID":
+                        userID = Integer.parseInt(cookie.getValue());
+                        break;
+                    case "totalPrice":
+                        totalPrice = Double.parseDouble(cookie.getValue());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        if (userID == null) {
             LOGGER.log(Level.WARNING, "UserID not found in session.");
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "UserID not found in session!");
             return;
@@ -75,12 +99,10 @@ public class PaymentReturnServlet extends HttpServlet {
             return;
         }
 
-        int orderID = Integer.parseInt(vnp_TxnRef);
-
         if ("00".equals(vnp_ResponseCode)) {
             try {
                 if (email == null) {
-                    email = userDAO.getEmailByUserId(userId);
+                    email = userDAO.getEmailByUserId(userID);
                 }
                 orderDAO.updateOrderStatus(orderID, "success");
                 LOGGER.log(Level.INFO, "Order status updated to 'success' for OrderID: {0}", orderID);
@@ -117,8 +139,8 @@ public class PaymentReturnServlet extends HttpServlet {
                 String code = Util.generateActivationCodeOrder();
                 LOGGER.log(Level.INFO, "Generated activation code: {0} for OrderID: {1}", new Object[]{code, orderID});
 
-                String qrCodeText = "http://localhost:8080/Unove/order/confirm?orderID=" + orderID + "&userID=" + userId + "&code=" + code;
-                String fileName = "qrcode_" + orderID + "_" + userId;
+                String qrCodeText = "http://localhost:8080/Unove/order/confirm?orderID=" + orderID + "&userID=" + userID + "&code=" + code;
+                String fileName = "qrcode_" + orderID + "_" + userID;
                 String uploadFolder = "QRCode_F";
 
                 String qrCode = Util.generateQRCodeAndUpload(qrCodeText, fileName, uploadFolder);

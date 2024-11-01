@@ -22,6 +22,8 @@
                         margin: 0;
                         padding: 0;
                         font-family: "Poppins", sans-serif;
+                  
+                  
                         background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
                         color: white;
                         min-height: 100vh;
@@ -973,12 +975,8 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
-                <!-- Booking Section -->
-                <div class="container">
-                    <div class="header" data-aos="fade-down">
-                        <h1 class="title">Lịch chiếu ${movie.title}</h1>
-                    </div>
 
                     <!-- Chọn chuỗi rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="100">
@@ -1020,24 +1018,27 @@
                                     <span class="date-number">${date.dayOfMonth}</span>
                                     <span class="date-day">
                                         <c:choose>
-                                            <c:when test="${status.index == 0}">Hôm nay</c:when>
-                                            <c:otherwise>
-                                                <c:choose>
-                                                    <c:when test="${date.dayOfWeek.value == 1}">Thứ 2</c:when>
-                                                    <c:when test="${date.dayOfWeek.value == 2}">Thứ 3</c:when>
-                                                    <c:when test="${date.dayOfWeek.value == 3}">Thứ 4</c:when>
-                                                    <c:when test="${date.dayOfWeek.value == 4}">Thứ 5</c:when>
-                                                    <c:when test="${date.dayOfWeek.value == 5}">Thứ 6</c:when>
-                                                    <c:when test="${date.dayOfWeek.value == 6}">Thứ 7</c:when>
-                                                    <c:when test="${date.dayOfWeek.value == 7}">CN</c:when>
-                                                </c:choose>
-                                            </c:otherwise>
+                                            <c:when test="${date.dayOfWeek.value == 1}">Thứ 2
+                                            </c:when>
+                                            <c:when test="${date.dayOfWeek.value == 2}">Thứ 3
+                                            </c:when>
+                                            <c:when test="${date.dayOfWeek.value == 3}">Thứ 4
+                                            </c:when>
+                                            <c:when test="${date.dayOfWeek.value == 4}">Thứ 5
+                                            </c:when>
+                                            <c:when test="${date.dayOfWeek.value == 5}">Thứ 6
+                                            </c:when>
+                                            <c:when test="${date.dayOfWeek.value == 6}">Thứ 7
+                                            </c:when>
+                                            <c:when test="${date.dayOfWeek.value == 7}">CN</c:when>
                                         </c:choose>
-                                    </span>
-                                </button>
-                            </c:forEach>
-                        </div>
-                    </div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </span>
+                        </button>
+                    </c:forEach>
+                </div>
+            </div>
 
                     <!-- Hiển thị suất chiếu -->
                     <div class="movie-list" data-aos="fade-up" data-aos-delay="400">
@@ -1074,122 +1075,114 @@
                             <h2>Úi, Suất chiếu không tìm thấy</h2>
                             <p>Bạn hãy thử tìm ngày khác nhé</p>
                         </div>
-                    </c:if>
-                </div>
-
-                <div id="trailerModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <iframe
-                            id="trailerVideo"
-                            width="560"
-                            height="315"
-                            src="<%= movie.getLinkTrailer()%>"
-                            title="YouTube video player"
-                            frameborder="0"
-                            allowfullscreen
-                            ></iframe>
                     </div>
+                </c:if>
+            </div>
+
+            <c:if test="${empty cinemaShowtimes[selectedCinemaID] && selectedCinemaID != null}">
+                <div class="empty-state" data-aos="fade-up">
+                    <img src="images/not-found.svg" alt="No showtime found"
+                         style="width: 150px; height: 150px; opacity: 0.5; margin-bottom: 20px;">
+                    <h2>Không có suất chiếu</h2>
+                    <p>Vui lòng chọn ngày khác hoặc rạp khác</p>
                 </div>
+            </c:if>
+        </div>
 
-                <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-                <script>
-                                                AOS.init({
-                                                    duration: 1000,
-                                                    once: true,
-                                                });
+        <div id="trailerModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <iframe id="trailerVideo" width="560" height="315"
+                        src="<%= movie.getLinkTrailer()%>" title="YouTube video player" frameborder="0"
+                        allowfullscreen></iframe>
+            </div>
+        </div>
+        
 
-                                                const trailerBtn = document.getElementById("trailerBtn");
-                                                const posterPlayButton = document.getElementById("posterPlayButton");
-                                                const trailerModal = document.getElementById("trailerModal");
-                                                const closeBtn = document.querySelector(".close");
-                                                const trailerVideo = document.getElementById("trailerVideo");
 
-                                                function showTrailer() {
-                                                    trailerModal.style.display = "flex";
-                                                    trailerVideo.src += "?autoplay=1";
-                                                }
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+                                             AOS.init({
+                                                 duration: 1000,
+                                                 once: true,
+                                             });
 
-                                                function hideTrailer() {
-                                                    trailerModal.style.display = "none";
-                                                    trailerVideo.src = trailerVideo.src.split("?")[0];
-                                                }
+                                             const trailerBtn = document.getElementById("trailerBtn");
+                                             const posterPlayButton = document.getElementById("posterPlayButton");
+                                             const trailerModal = document.getElementById("trailerModal");
+                                             const closeBtn = document.querySelector(".close");
+                                             const trailerVideo = document.getElementById("trailerVideo");
 
-                                                trailerBtn.onclick = showTrailer;
-                                                posterPlayButton.onclick = showTrailer;
+                                             function showTrailer() {
+                                                 trailerModal.style.display = "flex";
+                                                 trailerVideo.src += "?autoplay=1";
+                                             }
 
-                                                closeBtn.onclick = hideTrailer;
+                                             function hideTrailer() {
+                                                 trailerModal.style.display = "none";
+                                                 trailerVideo.src = trailerVideo.src.split("?")[0];
+                                             }
 
-                                                window.onclick = function (event) {
-                                                    if (event.target == trailerModal) {
-                                                        hideTrailer();
-                                                    }
-                                                };
+                                             trailerBtn.onclick = showTrailer;
+                                             posterPlayButton.onclick = showTrailer;
 
-                                                function getCurrentDateTime() {
-                                                    const now = new Date();
-                                                    const year = now.getFullYear();
-                                                    const month = String(now.getMonth() + 1).padStart(2, "0");
-                                                    const day = String(now.getDate()).padStart(2, "0");
-                                                    const hours = String(now.getHours()).padStart(2, "0");
-                                                    const minutes = String(now.getMinutes()).padStart(2, "0");
-                                                    const seconds = String(now.getSeconds()).padStart(2, "0");
-                                                    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
-                                                    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
-                                                        }
+                                             closeBtn.onclick = hideTrailer;
 
-                                                        function addToFavorite() {
-                                                            let favoritedAtInput = document.getElementById("favoritedAtInput");
-                                                            favoritedAtInput.value = getCurrentDateTime();
-                                                            callServlet(
-                                                                    "addToFavoriteForm",
-                                                                    "HandleDisplayMovieInfo?movieID=" + movieID,
-                                                                    "POST"
-                                                                    );
-                                                        }
+                                             window.onclick = function (event) {
+                                                 if (event.target == trailerModal) {
+                                                     hideTrailer();
+                                                 }
+                                             };
 
-                                                        function deleteFavoriteMovie() {
-                                                            callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
-                                                        }
+                                             function getCurrentDateTime() {
+                                                 const now = new Date();
+                                                 const year = now.getFullYear();
+                                                 const month = String(now.getMonth() + 1).padStart(2, "0");
+                                                 const day = String(now.getDate()).padStart(2, "0");
+                                                 const hours = String(now.getHours()).padStart(2, "0");
+                                                 const minutes = String(now.getMinutes()).padStart(2, "0");
+                                                 const seconds = String(now.getSeconds()).padStart(2, "0");
+                                                 const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+                                                 return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                                                     }
 
-                                                        function viewFavouriteMovies() {
-                                                            callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
-                                                        }
-                                                        function selectCinemaChain(cinemaChainID) {
-                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
-                                                        }
 
-                                                        function selectCinema(cinemaID) {
-                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-                                                        }
+                                                     function selectCinemaChain(cinemaChainID) {
+                                                         window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
+                                                     }
 
-                                                        function selectDate(date) {
-                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-                                                        }
+                                                     function selectCinema(cinemaID) {
+                                                         const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                         window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                                     }
 
-                                                        function selectSlot(movieSlotID) {
-                                                            var form = document.createElement('form');
-                                                            form.method = "GET";
-                                                            form.action = "selectSeat";
+                                                     function selectDate(date) {
+                                                         const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                         const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                                         window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                                     }
 
-                                                            var actionInput = document.createElement('input');
-                                                            actionInput.type = 'hidden';
-                                                            actionInput.name = 'action';
-                                                            actionInput.value = 'selectSlot';
-                                                            form.appendChild(actionInput);
+                                                     function selectSlot(movieSlotID) {
+                                                         var form = document.createElement('form');
+                                                         form.method = "GET";
+                                                         form.action = "selectSeat";
 
-                                                            var slotInput = document.createElement('input');
-                                                            slotInput.type = 'hidden';
-                                                            slotInput.name = 'movieSlotID';
-                                                            slotInput.value = movieSlotID;
-                                                            form.appendChild(slotInput);
+                                                         var actionInput = document.createElement('input');
+                                                         actionInput.type = 'hidden';
+                                                         actionInput.name = 'action';
+                                                         actionInput.value = 'selectSlot';
+                                                         form.appendChild(actionInput);
 
-                                                            document.body.appendChild(form);
-                                                            form.submit();
-                                                        }
-                </script>
-            </body>
-        </html>
+                                                         var slotInput = document.createElement('input');
+                                                         slotInput.type = 'hidden';
+                                                         slotInput.name = 'movieSlotID';
+                                                         slotInput.value = movieSlotID;
+                                                         form.appendChild(slotInput);
+
+                                                         document.body.appendChild(form);
+                                                         form.submit();
+                                                     }
+        </script>
+    </body>
+
+</html>

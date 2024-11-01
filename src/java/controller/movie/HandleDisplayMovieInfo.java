@@ -113,6 +113,18 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             for (int i = 0; i < 7; i++) {
                 availableDates.add(currentDate.plusDays(i));
             }
+            
+            // task favourite movie
+            HttpSession session = request.getSession();
+            //check xem trong session co bien ton tai userID hay khong, neu khong thi ep kieu duoi dang integer
+            int userID = -1;
+            if (session.getAttribute("userID") != null) {
+                userID = (int) session.getAttribute("userID");
+            }
+            Boolean isFavoritedMovie = null;
+            if (userID != -1) {
+                isFavoritedMovie = favoriteMoviesDAO.isFavoritedMovie(userID, movieID);
+            }
 
             // task favourite movie
             HttpSession session = request.getSession();
