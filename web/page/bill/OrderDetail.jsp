@@ -32,7 +32,7 @@
                 border-radius: 20px;
                 overflow: hidden;
                 backdrop-filter: blur(10px);
-                transition: all 0.5s ease;
+                transition: all 5s ease;
             }
 
             .ticket-container:hover {
@@ -61,7 +61,7 @@
                 width: 100%;
                 height: 4px;
                 background: linear-gradient(90deg, transparent, #fff, transparent);
-                animation: shimmer 2s infinite;
+                animation: shimmer 5s infinite;
             }
 
             @keyframes shimmer {
@@ -85,7 +85,7 @@
                 background-color: #ffffff;
                 border-radius: 15px;
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
             .info-section {
@@ -254,7 +254,7 @@
                 height: 200%;
                 background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
                 transform: rotate(45deg);
-                animation: buttonShine 3s infinite;
+                animation: buttonShine 0.5s infinite;
             }
 
             @keyframes buttonShine {
@@ -536,7 +536,7 @@
                         </ul>
                     </div>
 
-                    <div class="info-block" data-aos="fade-up" data-aos-delay="750">
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="200">
                         <h4><i class="fas fa-utensils"></i> Đồ ăn và nước uống:</h4>
                         <ul>
                             <c:choose>
@@ -555,7 +555,7 @@
                         </ul>
                     </div>
 
-                    <div class="info-block" data-aos="fade-up" data-aos-delay="800">
+                    <div class="info-block" data-aos="fade-up" data-aos-delay="200">
                         <h4><i class="fas fa-money-bill-wave"></i> Tạm Tính:</h4>
                         <ul>
                             <li>
@@ -565,20 +565,20 @@
                     </div>
 
                     <form action="<%= RouterURL.PAYMENT_VNPAY%>" method="get">
-                        <button type="submit" class="payment-button" data-aos="zoom-in" data-aos-delay="850">
+                        <button type="submit" class="payment-button" data-aos="zoom-in" data-aos-delay="800">
                             Tiếp tục thanh toán
                         </button>
                     </form>
                 </div>
 
                 <!-- QR Code Section -->
-                <div class="qr-section" data-aos="fade-left" data-aos-delay="900">
-                    <h4 data-aos="fade-up" data-aos-delay="950">Quét mã QR bằng VNPay để thanh toán</h4>
+                <div class="qr-section" data-aos="fade-left" data-aos-delay="200">
+                    <h4 data-aos="fade-up" data-aos-delay="200">Quét mã QR bằng VNPay để thanh toán</h4>
                     <img src="https://jeju.com.vn/wp-content/uploads/2020/05/vnpay-qr-23-06-2020-2.jpg" 
                          alt="QR Code VNPay" 
                          data-aos="zoom-in" 
-                         data-aos-delay="1000">
-                    <p data-aos="fade-up" data-aos-delay="1050">
+                         data-aos-delay="200">
+                    <p data-aos="fade-up" data-aos-delay="200">
                         Sử dụng ứng dụng VNPay hoặc ứng dụng Camera hỗ trợ QR code để quét mã.
                     </p>
                 </div>
@@ -588,12 +588,12 @@
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
         <script>
                     AOS.init({
-                        duration: 1000,
+                        duration: 400,
                         easing: 'ease-in-out',
                         once: true,
                         mirror: false,
                         anchorPlacement: 'top-bottom',
-                        offset: 120
+                        offset: 20
                     });
         </script>
     </body>
