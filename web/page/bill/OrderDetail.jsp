@@ -254,7 +254,7 @@
                 height: 200%;
                 background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
                 transform: rotate(45deg);
-                animation: buttonShine 0.5s infinite;
+                animation: buttonShine 5s infinite;
             }
 
             @keyframes buttonShine {
