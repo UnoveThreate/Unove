@@ -13,6 +13,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <jsp:include page="sidebar.jsp" />
     <div class="container mt-4">
         <h1 class="mb-4">Quản lý Người dùng</h1>
         

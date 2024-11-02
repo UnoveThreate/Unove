@@ -19,6 +19,12 @@
           </a>
         </li>
         <li class="nav-item">
+          <a href="${pageContext.request.contextPath}/admin/users" class="nav-link">
+            <i class="nav-icon fas fa-chart-pie"></i>
+            <p>Quản Lí Người Dùng</p>
+          </a>
+        </li>
+        <li class="nav-item">
           <a href="${pageContext.request.contextPath}/admin/cinemaChains" class="nav-link">
             <i class="nav-icon fas fa-film"></i>
             <p>Quản Lí Chuỗi Rạp</p>

@@ -83,19 +83,24 @@
         .custom-modal .modal-content {
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
             border: none;
         }
 
         .navbar {
-            background: linear-gradient(135deg, #E2BFD9 0%, #E2BFD9 100%) !important;
+            position: fixed !important;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white !important;
             padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ebebeb;
         }
 
         .navbar-brand, .nav-link {
-            color: #ffffff !important;
+            color: #f171b7 !important;
             font-weight: 500;
         }
 
@@ -255,20 +260,16 @@
         #searchButton {
             margin-left: 20px;
             padding: 10px 20px;
-            background: linear-gradient(135deg, #E2BFD9 0%, #E2BFD9 100%) !important;
-            color: white;
+            color: #f171b7;
             border: none;
-            border-radius: 25px;
-            font-size: 16px;
+            font-size: 25px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         #searchButton:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
 
         #searchButton:active {
@@ -291,7 +292,6 @@
             height: 50px;
             border: none;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             object-fit: cover;
             transition: transform 0.3s ease;
         }
@@ -356,10 +356,6 @@
             }
         }
 
-        /* Navbar Gradient */
-        .navbar {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
 
         /* Dropdown Menu Gradient */
         .dropdown-menu {
@@ -373,11 +369,66 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .navbar {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            padding: 15px 0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        body {
+            padding-top: 80px !important;
         }
+
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 60px !important;
+            }
+        }
+
+        .navbar .dropdown-menu {
+            margin-top: 0;
+        }
+
+        .wave-container {
+            z-index: -1;
+        }
+
+        .modal {
+            z-index: 1050;
+        }
+        .navbar-brand {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    line-height: 1;
+}
+
+.brand-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ff4d8d;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.brand-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ff8fb4;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+/* Hover effect */
+.navbar-brand:hover .brand-name {
+    background: linear-gradient(45deg, #ff4d8d, #ff8fb4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
+}
 
 
     </style>
@@ -387,7 +438,12 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light" >
         <div class="container-fluid">
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/" style="font-style:normal; font-weight: 600">Unove</a>
+            <a class="navbar-brand" href="${pageContext.request.contextPath}/">
+    <div class="brand-text">
+        <div class="brand-name">UNOVE</div>
+        <div class="brand-subtitle">CINEMA</div>
+    </div>
+</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -395,7 +451,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="wrapper-navbar-header navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="icon-logo-btn nav-link active" aria-current="page" href= ""> <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader.png" alt="Logo"/></a>
+                        <a class="icon-logo-btn nav-link active" aria-current="page" href= ""> <img class="icon-logo_header" src="${pageContext.request.contextPath}/page/image/logoHeader1.svg" alt="Logo"/></a>
                     </li>
                     <!--                    <li class="nav-item">
                                             <button type="button" class="btn btn-warning"><a class="nav-link" href="${pageContext.request.contextPath}/movie/schedule">BUY TICKET</a></button>
@@ -486,9 +542,9 @@
                                         <c:if test="${sessionScope.role eq 'OWNER'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản trị viên</a></li>
                                         </c:if>
-                                        
-                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
-                                     
+                                         <c:if test="${sessionScope.role eq 'ADMIN'}">
+                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard">Quản trị viên</a></li>
+                                        </c:if>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                 </ul>

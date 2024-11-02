@@ -12,8 +12,8 @@
         <style>
             body {
                 font-family: 'Source Sans Pro', sans-serif;
-                margin: 0;
-                padding: 20px;
+                padding: 0 !important;
+                margin: 0 !important;
                 background: #ffe6ef;
                 color: #333;
                 min-height: 100vh;
@@ -21,45 +21,45 @@
                 overflow-x: hidden;
             }
 
-            .wave-container {
-                position: fixed;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                z-index: -1;
-                overflow: hidden;
-            }
-
-            .wave {
-                position: absolute;
-                width: 200%;
-                height: 200%;
-                background: #f1daff;
-                opacity: 0.5;
-            }
-
-            .wave-1 {
-                top: -50%;
-                border-radius: 40%;
-                animation: wave 20s infinite linear;
-            }
-
-            .wave-2 {
-                top: -60%;
-                border-radius: 35%;
-                animation: wave 15s infinite linear;
-                opacity: 0.3;
-            }
-
-            @keyframes wave {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
+            /*            .wave-container {
+                            position: fixed;
+                            width: 100%;
+                            height: 100%;
+                            top: 0;
+                            left: 0;
+                            z-index: -1;
+                            overflow: hidden;
+                        }
+            
+                        .wave {
+                            position: absolute;
+                            width: 200%;
+                            height: 200%;
+                            background: #f1daff;
+                            opacity: 0.5;
+                        }
+            
+                        .wave-1 {
+                            top: -50%;
+                            border-radius: 40%;
+                            animation: wave 20s infinite linear;
+                        }
+            
+                        .wave-2 {
+                            top: -60%;
+                            border-radius: 35%;
+                            animation: wave 15s infinite linear;
+                            opacity: 0.3;
+                        }
+            
+                        @keyframes wave {
+                            0% {
+                                transform: rotate(0deg);
+                            }
+                            100% {
+                                transform: rotate(360deg);
+                            }
+                        }*/
 
             .container {
                 max-width: 1200px;
@@ -71,7 +71,7 @@
                 backdrop-filter: blur(10px);
                 position: relative;
                 z-index: 1;
-                border: 3px dashed rgba(126, 96, 191, 0.2);
+                border: 1px solid #ebebeb;
             }
 
             .header {
@@ -80,7 +80,7 @@
                 padding: 20px;
                 border-radius: 10px;
                 margin-bottom: 30px;
-                border: 3px dashed #7e60bf;
+                border: 1px solid #ebebeb;
             }
 
             .title {
@@ -119,16 +119,14 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
                 padding: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                border: 3px dashed #e0e0e0;
+                border: 1px solid #ebebeb;
             }
 
             .selector-button:hover,
             .selector-button.active {
                 border-color: #7E60BF;
-                box-shadow: 0 0 10px rgba(126, 96, 191, 0.3);
                 transform: translateY(-2px);
-                border: 3px dashed #7e60bf;
+                border: 1px solid #7e60bf;
             }
 
             .cinema-chain-avatar {
@@ -173,13 +171,12 @@
                 cursor: pointer;
                 transition: all 0.3s ease;
                 min-width: 60px;
-                border: 3px dashed #7e60bf;
+                border: 1px solid #ebebeb;
             }
 
             .date-button:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(126, 96, 191, 0.2);
-                border: 3px dashed #7e60bf;
+                border: 1px solid #7E60BF;
 
             }
 
@@ -187,7 +184,7 @@
                 background-color: #f8f0ff;
                 color: black;
                 border-color: #7E60BF;
-                border: 3px dashed #7E60BF;
+                border: 1px solid #7E60BF;
             }
 
             .date-number {
@@ -202,55 +199,68 @@
             .cinema-list {
                 display: flex;
                 flex-direction: column;
-                gap: 10px;
-                max-height: 300px;
-                overflow-y: auto;
-                padding: 10px;
-                background: rgba(255, 255, 255, 0.5);
-                border-radius: 10px;
-                border: 3px dashed #e0e0e0;
+                gap: 1px;
+                background-color: #fff;
+                border-radius: 12px;
+                overflow: hidden;
+                padding: 0;
+                box-shadow: none;
+                max-height: none;
             }
 
             .cinema-item {
                 display: flex;
                 align-items: center;
-                padding: 15px;
-                background: white;
+                padding: 16px;
+                background: #fff;
                 border: none;
-                border-radius: 8px;
+                border-radius: 0;
                 cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                transition: all 0.2s ease;
+                box-shadow: none;
                 width: 100%;
                 text-align: left;
-                color: #876ac3;
+                color: #222222;
+                position: relative;
+                border-bottom: 1px solid #ebebeb;
+            }
+
+            .cinema-item:last-child {
+                border-bottom: none;
             }
 
             .cinema-item:hover {
-                transform: translateX(10px);
                 background-color: #f8f0ff;
-                box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
+                transform: none;
             }
 
             .cinema-item.active {
                 background-color: #f8f0ff;
-                color: #876ac3;
             }
-
 
             .cinema-name {
                 flex-grow: 1;
                 font-size: 14px;
+                font-weight: 400;
+                color: #222222;
+            }
+
+            .cinema-item::after {
+                content: '›';
+                position: absolute;
+                right: 16px;
+                color: #999;
+                font-size: 20px;
             }
 
             .movie-list {
                 display: grid;
-                gap: 20px;
-                padding: 20px;
-                background: rgba(255, 255, 255, 0.5);
-                border-radius: 15px;
-                backdrop-filter: blur(10px);
-                border: 3px dashed rgba(126, 96, 191, 0.2);
+                gap: 0;
+                padding: 0;
+                background: #fff;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid #ebebeb;
             }
 
             .movie-item {
@@ -258,16 +268,23 @@
                 gap: 20px;
                 padding: 20px;
                 background: white;
-                border-radius: 12px;
-                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+                border-radius: 0;
+                box-shadow: none;
                 transition: all 0.3s ease;
-                border: 3px dashed #e0e0e0;
+                border: none;
+                border-bottom: 1px solid #ebebeb;
+            }
+
+            .movie-item:last-child {
+                border-bottom: none;
             }
 
             .movie-item:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 8px 25px rgba(126, 96, 191, 0.15);
+                background-color: #f8f0ff;
+                transform: none;
             }
+
+
 
             .movie-poster {
                 width: 120px;
@@ -282,7 +299,7 @@
             }
 
             .movie-title {
-                color: #7E60BF;
+                color: #414141;
                 font-size: 20px;
                 margin-bottom: 10px;
             }
@@ -302,7 +319,7 @@
             }
 
             .showtime-type {
-                color: #7E60BF;
+                color: #414141;
                 font-weight: 600;
                 margin-bottom: 8px;
             }
@@ -316,7 +333,7 @@
                 margin: 0 10px 10px 0;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                border: 3px dashed #7e60bf;
+                border: 1px solid #7E60BF;
             }
 
             .showtime-item:hover {
@@ -353,10 +370,8 @@
                 padding: 40px;
                 background: white;
                 border-radius: 15px;
-                box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
                 margin: 20px auto;
                 max-width: 400px;
-                border: 2px dashed rgba(126, 96, 191, 0.2);
             }
 
             .empty-state img {
@@ -397,9 +412,11 @@
             .breadcrumb {
                 margin-bottom: 0;
                 padding: 15px 30px;
-                background: rgba(255, 255, 255, 0.95);
+                background: transparent !important;
                 border-radius: 20px;
-                backdrop-filter: blur(10px);
+                backdrop-filter: none !important;
+                border: none !important;
+                box-shadow: none !important;
             }
 
             .breadcrumb-item a {
@@ -422,6 +439,11 @@
             .breadcrumb-item + .breadcrumb-item::before {
                 content: "\276F" !important;
                 color: #b2b2b2;
+            }
+            .breadcrumb-nav .container {
+                border: none !important;
+                background: transparent !important;
+                box-shadow: none !important;
             }
 
 
@@ -462,6 +484,132 @@
                 transform: scale(1.05);
                 opacity: 0.9;
             }
+            .showtimes-intro {
+                padding: 60px 0;
+                background-color: #fff5f8;
+            }
+
+            .intro-title {
+                color: #e6007e;
+                font-size: 2.5rem;
+                font-weight: 700;
+                margin-bottom: 20px;
+            }
+
+            .intro-desc {
+                color: #666;
+                font-size: 1rem;
+                line-height: 1.6;
+                margin-bottom: 30px;
+            }
+
+            .intro-features {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .intro-features li {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+                font-size: 1rem;
+                color: #333;
+            }
+
+            .intro-features i {
+                color: #e6007e;
+                margin-right: 10px;
+                font-size: 1.2rem;
+            }
+
+            .highlight {
+                color: #e6007e;
+                font-weight: 500;
+            }
+
+            .intro-image {
+                text-align: center;
+            }
+
+            .intro-image img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 20px;
+            }
+
+
+            @media (max-width: 991px) {
+                .showtimes-intro {
+                    padding: 40px 0;
+                }
+
+                .intro-title {
+                    font-size: 2rem;
+                }
+
+                .intro-image {
+                    margin-top: 30px;
+                }
+            }
+
+            @media (max-width: 767px) {
+                .intro-title {
+                    font-size: 1.8rem;
+                }
+
+                .intro-features li {
+                    font-size: 0.9rem;
+                }
+            }
+            .showtimes-intro .container {
+                border: none !important;
+                box-shadow: none !important;
+                background: transparent !important;
+                padding: 0 !important;
+            }
+
+            .showtimes-intro {
+                background-color: #fff5f8;
+                padding: 60px 0;
+                margin-bottom: 30px;
+            }
+
+
+            .showtimes-intro .row {
+                margin: 0 auto;
+                max-width: 1200px;
+                padding: 0 15px;
+            }
+
+
+
+
+            .showtimes-intro {
+                padding: 60px 0;
+                background-color: #fff5f8;
+                margin: 30px 0 !important;
+                width: 100vw !important;
+                position: relative;
+                left: 50%;
+                right: 50%;
+                margin-left: -50vw !important;
+                margin-right: -50vw !important;
+            }
+            .showtimes-intro .container {
+                max-width: 100% !important;
+                padding: 0 80px !important;
+                margin: 0 !important;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .showtimes-intro .container {
+                    padding: 0 20px !important;
+                }
+            }
+
+
         </style>
     </head>
     <body>
@@ -477,10 +625,43 @@
                 </ol>
             </div>
         </nav>
-        <div class="wave-container">
-            <div class="wave wave-1"></div>
-            <div class="wave wave-2"></div>
-        </div>
+        <section class="showtimes-intro">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="intro-title">Lịch chiếu phim trên Unove</h2>
+                        <p class="intro-desc">Khám phá thế giới điện ảnh tại những rạp chiếu phim hàng đầu, cùng với thông tin lịch chiếu mới nhất và những bộ phim đang hot nhất hiện nay.</p>
+                        <ul class="intro-features">
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Lịch chiếu luôn <span class="highlight">cập nhật sớm nhất</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Suất chiếu đầy đủ <span class="highlight">các rạp</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Đặt lịch chiếu <span class="highlight">mua vé siêu nhanh</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-check-circle"></i>
+                                Đặt vé lịch chiếu phim <span class="highlight">yêu thích mọi nơi</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="intro-image">
+                            <img src="images/banner-schedule.jpg" alt="Showtimes Illustration">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--        <div class="wave-container">
+                    <div class="wave wave-1"></div>
+                    <div class="wave wave-2"></div>
+                </div>-->
 
         <div class="container">
             <div class="header" data-aos="fade-down">
