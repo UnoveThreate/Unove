@@ -30,11 +30,9 @@
                 margin: 100px auto 40px;
                 background-color: rgba(255, 255, 255, 0.95);
                 border-radius: 20px;
-                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
                 overflow: hidden;
                 backdrop-filter: blur(10px);
                 transition: all 0.5s ease;
-                border: 3px dashed #ff5d8f;
             }
 
             .ticket-container:hover {
@@ -92,7 +90,7 @@
 
             .info-section {
                 flex: 2;
-                border: 3px dashed #ff8fab;
+                border: 2px solid #ff8fab;
             }
 
             .info-section:hover, .qr-section:hover {
@@ -180,7 +178,7 @@
                 border-radius: 20px;
                 display: inline-block;
                 transition: all 0.3s ease;
-                border: 3px dashed #ff8fab;
+                border: 3px solid #ff8fab;
             }
 
             .info-value:hover {
@@ -212,7 +210,7 @@
                 display: inline-block;
                 transition: all 0.3s ease;
                 border: 1px solid #ffd1dc;
-                border: 3px dashed #ff8fab;
+                border: 2px solid #ff8fab;
             }
 
             .info-block ul li:hover {
@@ -240,7 +238,6 @@
                 margin-top: 30px;
                 position: relative;
                 overflow: hidden;
-                border: 3px dashed #ffffff;
             }
 
             .payment-button:hover {
@@ -277,7 +274,7 @@
                 justify-content: center;
                 text-align: center;
                 position: relative;
-                border: 3px dashed #ff5d8f;
+                border: 2px solid #ff5d8f;
             }
 
             .qr-section::before {
@@ -287,17 +284,12 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                border: 3px dashed #ff5d8f;
                 border-radius: 15px;
-                animation: borderDash 20s linear infinite;
+/*                animation: borderDash 20s linear infinite;*/
                 pointer-events: none;
             }
 
-            @keyframes borderDash {
-                to {
-                    transform: rotate(360deg);
-                }
-            }
+            
 
             .qr-section h4 {
                 font-size: 20px;

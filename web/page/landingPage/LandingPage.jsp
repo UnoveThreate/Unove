@@ -51,7 +51,6 @@
             #movieCarousel {
                 max-width: 800px;
                 margin: 20px auto;
-                box-shadow: 0 10px 30px #E2BFD9;
                 border-radius: 15px;
                 overflow: hidden;
                 border: 4px dashed #E2BFD9;
@@ -951,6 +950,7 @@
             .btn-book:hover, .btn-details:hover {
                 background-color: #ff69b4;
             }
+            
 
         </style>
     </head>

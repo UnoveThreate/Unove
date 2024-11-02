@@ -21,7 +21,7 @@
                     html {
                         margin: 0;
                         padding: 0;
-                        font-family: "Poppins", sans-serif;
+                        font-family: 'Source Sans Pro', sans-serif;
                         background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
                         color: white;
                         min-height: 100vh;
@@ -31,11 +31,10 @@
                         display: flex;
                         background: rgba(255, 255, 255, 0.05);
                         backdrop-filter: blur(10px);
-                        border-radius: 30px;
                         padding: 50px;
                         max-width: 1200px;
                         margin: 40px auto;
-                        border: 5px dashed rgba(126, 96, 191, 0.2);
+                        border: 1px solid rgba(126, 96, 191, 0.2);
                     }
 
                     .poster {
@@ -153,7 +152,7 @@
                         background: #f8f0ff;
                         color: black;
                         margin-right: 20px;
-                        border: 3px dashed #c0a3ff;
+                        border: 1px solid #c0a3ff;
                     }
 
                     #trailerBtn:hover {
@@ -202,28 +201,37 @@
                         top: 0;
                         width: 100%;
                         height: 100%;
-                        background-color: rgba(0, 0, 0, 0.9);
+                        background-color: rgba(0, 0, 0, 0.8);
                         justify-content: center;
                         align-items: center;
                         transition: opacity 0.5s ease;
                     }
 
                     .modal-content {
-                        background-color: #1e1e1e;
-                        color: #f0f0f0;
-                        padding: 40px;
-                        border-radius: 20px;
+                        background-color: #fff;
+                        color: #333;
+                        padding: 20px;
+                        border-radius: 15px;
                         position: relative;
                         text-align: center;
-                        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+                        max-width: 800px;
+                        width: 90%;
+                    }
+
+                    .modal-content iframe {
+                        width: 100%;
+                        height: 450px;
+                        border: none;
+                        border-radius: 10px;
                     }
 
                     .close {
                         position: absolute;
                         top: 15px;
                         right: 25px;
-                        color: #ffffff;
-                        font-size: 40px;
+                        color: #333;
+                        font-size: 30px;
                         font-weight: bold;
                         cursor: pointer;
                         transition: all 0.3s ease;
@@ -231,9 +239,8 @@
 
                     .close:hover {
                         color: #ff416c;
-                        transform: scale(1.2) rotate(90deg);
+                        transform: scale(1.2);
                     }
-
                     @media (max-width: 768px) {
                         .container {
                             flex-direction: column;
@@ -314,29 +321,31 @@
                     }
 
                     .container {
+                        display: flex;
+                        flex-direction: column;
                         max-width: 1200px;
                         margin: auto;
                         padding: 30px;
                         background: rgba(255, 255, 255, 0.95);
                         border-radius: 20px;
-                        backdrop-filter: blur(10px);
-                        position: relative;
-                        z-index: 1;
+                        border: 1px solid #ebebeb;
                     }
 
                     .header {
-                        background: linear-gradient(135deg, #7E60BF, #7E60BF);
+                        background:#f8f0ff !important;
                         color: white;
                         padding: 20px;
                         border-radius: 10px;
                         margin-bottom: 30px;
+                        border: 1px solid #ebebeb;
                     }
 
                     .title {
                         font-size: 32px;
-                        color: #FCFAEE;
+                        color: #7E60BF;
                         text-align: center;
                         margin-bottom: 20px;
+                        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
                     }
 
                     .selector {
@@ -367,19 +376,19 @@
                         cursor: pointer;
                         transition: all 0.3s ease;
                         padding: 8px;
-                        border: 3px dashed #e0e0e0;
+                        border: 1px solid #ebebeb;
                     }
 
                     .selector-button:hover,
                     .selector-button.active {
                         border-color: #7E60BF;
                         transform: translateY(-2px);
-                        border: 3px dashed #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
 
                     .cinema-chain-avatar {
-                        width: 40px;
-                        height: 40px;
+                        width: 56px;
+                        height: 56px;
                         object-fit: contain;
                         margin-bottom: 5px;
                     }
@@ -418,17 +427,20 @@
                         cursor: pointer;
                         transition: all 0.3s ease;
                         min-width: 60px;
-                        border: 3px dashed #7e60bf;
+                        border: 1px solid #ebebeb;
                     }
 
                     .date-button:hover {
                         transform: translateY(-2px);
+                        border: 1px solid #7E60BF;
+
                     }
 
                     .date-button.active {
                         background-color: #f8f0ff;
                         color: black;
                         border-color: #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
 
                     .date-number {
@@ -443,51 +455,64 @@
                     .cinema-list {
                         display: flex;
                         flex-direction: column;
-                        gap: 10px;
-                        max-height: 300px;
-                        overflow-y: auto;
-                        padding: 10px;
-                        background: rgba(255, 255, 255, 0.5);
-                        border-radius: 10px;
-                        border: 3px dashed #e0e0e0;
+                        gap: 1px;
+                        background-color: #fff;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        padding: 0;
+                        box-shadow: none;
+                        max-height: none;
                     }
 
                     .cinema-item {
                         display: flex;
                         align-items: center;
-                        padding: 15px;
-                        background: white;
+                        padding: 16px;
+                        background: #fff;
                         border: none;
-                        border-radius: 8px;
+                        border-radius: 0;
                         cursor: pointer;
-                        transition: all 0.3s ease;
+                        transition: all 0.2s ease;
+                        box-shadow: none;
                         width: 100%;
                         text-align: left;
+                        color: #222222;
+                        position: relative;
+                        border-bottom: 1px solid #ebebeb;
                     }
 
                     .cinema-item:hover {
                         transform: translateX(10px);
                         background-color: #f8f0ff;
                     }
+                    .cinema-item::after {
+                        content: '›';
+                        position: absolute;
+                        right: 16px;
+                        color: #999;
+                        font-size: 20px;
+                    }
 
                     .cinema-item.active {
                         background-color: #f8f0ff;
                         color: black;
                     }
-
                     .cinema-name {
                         flex-grow: 1;
                         font-size: 14px;
+                        font-weight: 400;
+                        color: #222222;
                     }
 
                     .movie-list {
                         display: grid;
-                        gap: 20px;
-                        padding: 20px;
-                        background: rgba(255, 255, 255, 0.5);
-                        border-radius: 15px;
-                        backdrop-filter: blur(10px);
-                        border: 3px dashed rgba(126, 96, 191, 0.2);
+                        flex-direction: column;
+                        gap: 0;
+                        padding: 0;
+                        background: #fff;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        border: 1px solid #ebebeb;
                     }
 
                     .movie-item {
@@ -495,21 +520,21 @@
                         gap: 20px;
                         padding: 20px;
                         background: white;
-                        border-radius: 12px;
+                        border-radius: 0;
+                        box-shadow: none;
                         transition: all 0.3s ease;
-                        border: 3px dashed #e0e0e0;
+                        border: none;
+                        border-bottom: 1px solid #ebebeb;
+                    }
+
+
+                    .movie-item:last-child {
+                        border-bottom: none;
                     }
 
                     .movie-item:hover {
-                        transform: translateY(-5px);
-                    }
-
-                    .movie-poster {
-                        width: 120px;
-                        height: 180px;
-                        object-fit: cover;
-                        border-radius: 8px;
-                        transition: all 0.3s ease;
+                        background-color: #f8f0ff;
+                        transform: none;
                     }
 
                     .movie-info {
@@ -517,7 +542,7 @@
                     }
 
                     .movie-title {
-                        color: #7E60BF;
+                        color: #434343;
                         font-size: 20px;
                         margin-bottom: 10px;
                     }
@@ -537,7 +562,7 @@
                     }
 
                     .showtime-type {
-                        color: #7E60BF;
+                        color: #414141;
                         font-weight: 600;
                         margin-bottom: 8px;
                     }
@@ -551,7 +576,11 @@
                         margin: 0 10px 10px 0;
                         cursor: pointer;
                         transition: all 0.3s ease;
-                        border: 3px dashed #7e60bf;
+                        border: 1px solid #7E60BF;
+                        max-width: 120px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
 
                     .showtime-item:hover {
@@ -588,7 +617,6 @@
                         padding: 40px;
                         background: white;
                         border-radius: 15px;
-                        box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
                         margin: 20px auto;
                         max-width: 400px;
                     }
@@ -610,7 +638,7 @@
                     }
 
                     .empty-state h2 {
-                        color: #7E60BF;
+                        color: #434343;
                         font-size: 24px;
                         margin-bottom: 10px;
                     }
@@ -626,7 +654,7 @@
                         background: #f8f0ff;
                         color: black;
                         margin-right: 20px;
-                        border: 3px dashed #c0a3ff;
+                        border: 1px solid #c0a3ff;
                     }
 
                     #favourite,
@@ -700,7 +728,7 @@
                         padding: 30px;
                         background: rgba(255, 255, 255, 0.95);
                         border-radius: 20px;
-                        border: 4px dashed #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
 
 
@@ -728,11 +756,7 @@
                         flex: 1;
                     }
 
-                    .movie-title {
-                        color: #7E60BF;
-                        font-size: 32px;
-                        margin-bottom: 20px;
-                    }
+
 
 
                     .movie-metadata {
@@ -760,7 +784,7 @@
                         background-color: #f8f0ff;
                         padding: 4px 12px;
                         border-radius: 15px;
-                        border: 2px dashed #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
                     .movie-actions {
                         display: flex;
@@ -876,9 +900,20 @@
                             opacity: 0;
                         }
                     }
-                     .start-time strong {
-                color : #7e60bf;
-            }
+                    .start-time strong {
+                        color : #7e60bf;
+                    }
+                    .movie-poster {
+                        width: 120px;
+                        height: 180px;
+                        object-fit: cover;
+                        border-radius: 8px;
+                        margin-right: 20px;
+                    }
+
+                    .movie-info {
+                        flex: 1;
+                    }
 
                 </style>
             </head>
@@ -977,12 +1012,11 @@
                 <!-- Booking Section -->
                 <div class="container">
                     <div class="header" data-aos="fade-down">
-                        <h1 class="title">Lịch chiếu ${movie.title}</h1>
+                        <h1 class="title">Lịch chiếu phim ${movie.title}</h1>
                     </div>
 
                     <!-- Chọn chuỗi rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="100">
-                        <!--                        <h3>Chọn chuỗi rạp:</h3>-->
                         <div class="button-group" id="cinemaChainButtons">
                             <c:forEach var="chain" items="${cinemaChains}">
                                 <button class="selector-button ${chain.cinemaChainID == selectedCinemaChainID ? 'active' : ''}" 
@@ -998,7 +1032,6 @@
 
                     <!-- Chọn rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="200">
-                        <!--                        <h3>Chọn rạp:</h3>-->
                         <div class="cinema-list" id="cinemaButtons">
                             <c:forEach var="cinema" items="${chainCinemas[selectedCinemaChainID]}">
                                 <button class="cinema-item ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
@@ -1012,7 +1045,6 @@
 
                     <!-- Chọn ngày -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="300">
-                        <!--                        <h3>Chọn ngày:</h3>-->
                         <div class="date-selector">
                             <c:forEach var="date" items="${availableDates}" varStatus="status">
                                 <button class="date-button ${date == selectedDate ? 'active' : ''}" 
@@ -1042,28 +1074,21 @@
                     <!-- Hiển thị suất chiếu -->
                     <div class="movie-list" data-aos="fade-up" data-aos-delay="400">
                         <c:if test="${not empty cinemaShowtimes[selectedCinemaID]}">
-                            <div class="movie-item">
-                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster" />
-                                <div class="movie-info">
-                                    <h3 class="movie-title">${movie.title}</h3>
-                                    <div class="movie-genres">
-                                        <c:forEach var="genre" items="${movie.genres}">
-                                            <span class="genre-tag">${genre}</span>
-                                        </c:forEach>
-                                    </div>
-                                    <div class="showtime-grid">
-                                        <c:forEach var="slot" items="${cinemaShowtimes[selectedCinemaID]}">
-                                            <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
-                                                <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
-                                                <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
-                                                <span class="start-time"><strong>${formattedStartTime}</strong></span>
-                                                <span class="time-separator">~</span>
-                                                <span class="end-time">${formattedEndTime}</span>
-                                            </div>
-                                        </c:forEach>
+                            <c:forEach var="slot" items="${cinemaShowtimes[selectedCinemaID]}">
+                                <div class="movie-item">
+                                    <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster" />
+                                    <div class="movie-info">
+                                        <h3 class="movie-title">${movie.title}</h3>
+                                        <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
+                                            <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
+                                            <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
+                                            <span class="start-time"><strong>${formattedStartTime}</strong></span>
+                                            <span class="time-separator">~</span>
+                                            <span class="end-time">${formattedEndTime}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                         </c:if>
                     </div>
 
@@ -1094,102 +1119,102 @@
 
                 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
                 <script>
-                                                AOS.init({
-                                                    duration: 1000,
-                                                    once: true,
-                                                });
+                                            AOS.init({
+                                                duration: 1000,
+                                                once: true,
+                                            });
 
-                                                const trailerBtn = document.getElementById("trailerBtn");
-                                                const posterPlayButton = document.getElementById("posterPlayButton");
-                                                const trailerModal = document.getElementById("trailerModal");
-                                                const closeBtn = document.querySelector(".close");
-                                                const trailerVideo = document.getElementById("trailerVideo");
+                                            const trailerBtn = document.getElementById("trailerBtn");
+                                            const posterPlayButton = document.getElementById("posterPlayButton");
+                                            const trailerModal = document.getElementById("trailerModal");
+                                            const closeBtn = document.querySelector(".close");
+                                            const trailerVideo = document.getElementById("trailerVideo");
 
-                                                function showTrailer() {
-                                                    trailerModal.style.display = "flex";
-                                                    trailerVideo.src += "?autoplay=1";
+                                            function showTrailer() {
+                                                trailerModal.style.display = "flex";
+                                                trailerVideo.src += "?autoplay=1";
+                                            }
+
+                                            function hideTrailer() {
+                                                trailerModal.style.display = "none";
+                                                trailerVideo.src = trailerVideo.src.split("?")[0];
+                                            }
+
+                                            trailerBtn.onclick = showTrailer;
+                                            posterPlayButton.onclick = showTrailer;
+
+                                            closeBtn.onclick = hideTrailer;
+
+                                            window.onclick = function (event) {
+                                                if (event.target == trailerModal) {
+                                                    hideTrailer();
                                                 }
+                                            };
 
-                                                function hideTrailer() {
-                                                    trailerModal.style.display = "none";
-                                                    trailerVideo.src = trailerVideo.src.split("?")[0];
-                                                }
-
-                                                trailerBtn.onclick = showTrailer;
-                                                posterPlayButton.onclick = showTrailer;
-
-                                                closeBtn.onclick = hideTrailer;
-
-                                                window.onclick = function (event) {
-                                                    if (event.target == trailerModal) {
-                                                        hideTrailer();
+                                            function getCurrentDateTime() {
+                                                const now = new Date();
+                                                const year = now.getFullYear();
+                                                const month = String(now.getMonth() + 1).padStart(2, "0");
+                                                const day = String(now.getDate()).padStart(2, "0");
+                                                const hours = String(now.getHours()).padStart(2, "0");
+                                                const minutes = String(now.getMinutes()).padStart(2, "0");
+                                                const seconds = String(now.getSeconds()).padStart(2, "0");
+                                                const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+                                                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
                                                     }
-                                                };
 
-                                                function getCurrentDateTime() {
-                                                    const now = new Date();
-                                                    const year = now.getFullYear();
-                                                    const month = String(now.getMonth() + 1).padStart(2, "0");
-                                                    const day = String(now.getDate()).padStart(2, "0");
-                                                    const hours = String(now.getHours()).padStart(2, "0");
-                                                    const minutes = String(now.getMinutes()).padStart(2, "0");
-                                                    const seconds = String(now.getSeconds()).padStart(2, "0");
-                                                    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
-                                                    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
-                                                        }
+                                                    function addToFavorite() {
+                                                        let favoritedAtInput = document.getElementById("favoritedAtInput");
+                                                        favoritedAtInput.value = getCurrentDateTime();
+                                                        callServlet(
+                                                                "addToFavoriteForm",
+                                                                "HandleDisplayMovieInfo?movieID=" + movieID,
+                                                                "POST"
+                                                                );
+                                                    }
 
-                                                        function addToFavorite() {
-                                                            let favoritedAtInput = document.getElementById("favoritedAtInput");
-                                                            favoritedAtInput.value = getCurrentDateTime();
-                                                            callServlet(
-                                                                    "addToFavoriteForm",
-                                                                    "HandleDisplayMovieInfo?movieID=" + movieID,
-                                                                    "POST"
-                                                                    );
-                                                        }
+                                                    function deleteFavoriteMovie() {
+                                                        callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
+                                                    }
 
-                                                        function deleteFavoriteMovie() {
-                                                            callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
-                                                        }
+                                                    function viewFavouriteMovies() {
+                                                        callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
+                                                    }
+                                                    function selectCinemaChain(cinemaChainID) {
+                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
+                                                    }
 
-                                                        function viewFavouriteMovies() {
-                                                            callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
-                                                        }
-                                                        function selectCinemaChain(cinemaChainID) {
-                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
-                                                        }
+                                                    function selectCinema(cinemaID) {
+                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                                    }
 
-                                                        function selectCinema(cinemaID) {
-                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-                                                        }
+                                                    function selectDate(date) {
+                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                        const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                                    }
 
-                                                        function selectDate(date) {
-                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-                                                        }
+                                                    function selectSlot(movieSlotID) {
+                                                        var form = document.createElement('form');
+                                                        form.method = "GET";
+                                                        form.action = "selectSeat";
 
-                                                        function selectSlot(movieSlotID) {
-                                                            var form = document.createElement('form');
-                                                            form.method = "GET";
-                                                            form.action = "selectSeat";
+                                                        var actionInput = document.createElement('input');
+                                                        actionInput.type = 'hidden';
+                                                        actionInput.name = 'action';
+                                                        actionInput.value = 'selectSlot';
+                                                        form.appendChild(actionInput);
 
-                                                            var actionInput = document.createElement('input');
-                                                            actionInput.type = 'hidden';
-                                                            actionInput.name = 'action';
-                                                            actionInput.value = 'selectSlot';
-                                                            form.appendChild(actionInput);
+                                                        var slotInput = document.createElement('input');
+                                                        slotInput.type = 'hidden';
+                                                        slotInput.name = 'movieSlotID';
+                                                        slotInput.value = movieSlotID;
+                                                        form.appendChild(slotInput);
 
-                                                            var slotInput = document.createElement('input');
-                                                            slotInput.type = 'hidden';
-                                                            slotInput.name = 'movieSlotID';
-                                                            slotInput.value = movieSlotID;
-                                                            form.appendChild(slotInput);
-
-                                                            document.body.appendChild(form);
-                                                            form.submit();
-                                                        }
+                                                        document.body.appendChild(form);
+                                                        form.submit();
+                                                    }
                 </script>
             </body>
         </html>
