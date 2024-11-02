@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 import model.BookingSession;
 import model.Order;
 import model.Seat;
+import model.canteenItemTotal.CanteenItemOrder;
 import util.RouterJSP;
 import util.RouterURL;
 import util.Util;
@@ -52,6 +53,7 @@ public class PaymentServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(PaymentServlet.class.getName());
     private OrderDAO orderDAO;
     private TicketDAO ticketDAO;
+    Gson gson = new Gson();
 
     @Override
     public void init() throws ServletException {
@@ -130,6 +132,7 @@ public class PaymentServlet extends HttpServlet {
             double totalPrice = bookingSession.getTotalPrice();
             String status = "Pending";
             List<Seat> listSeats = bookingSession.getListSeats();
+            List<CanteenItemOrder> listCanteenItem = bookingSession.getItemOrders();
 
             // Lấy premiumTypeID từ bảng user
             Integer premiumTypeID = orderDAO.getPremiumTypeIDByUserId(userID);
@@ -144,7 +147,7 @@ public class PaymentServlet extends HttpServlet {
 
             if (orderID != -1) {
                 ticketDAO.insertTickets(orderID, listSeats, "Pending");
-                setOrderCookies(response, orderID, userID, movieSlotID, totalPrice, premiumTypeID, "Pending");
+                setOrderCookies(response, orderID, userID, movieSlotID, totalPrice, premiumTypeID, "Pending", listSeats, listCanteenItem);
                 PayMentService(orderID, totalPrice, request, response);
             } else {
                 response.getWriter().println("Đã có lỗi xảy ra khi tạo đơn hàng.");
@@ -250,7 +253,6 @@ public class PaymentServlet extends HttpServlet {
         job.addProperty("code", "00");
         job.addProperty("message", "success");
         job.addProperty("data", paymentUrl);
-        Gson gson = new Gson();
 
         res.sendRedirect(paymentUrl);
 
@@ -275,30 +277,59 @@ public class PaymentServlet extends HttpServlet {
     }
 
     private void setOrderCookies(HttpServletResponse response, int orderID, int userID, int movieSlotID,
-            double totalPrice, Integer premiumTypeID, String status) {
-        Cookie orderIdCookie = new Cookie("orderID", String.valueOf(orderID));
-        Cookie userIdCookie = new Cookie("userID", String.valueOf(userID));
-        Cookie movieSlotIdCookie = new Cookie("movieSlotID", String.valueOf(movieSlotID));
-        Cookie totalPriceCookie = new Cookie("totalPrice", String.valueOf(totalPrice));
-        Cookie premiumTypeIdCookie = new Cookie("premiumTypeID", String.valueOf(premiumTypeID));
-        Cookie statusCookie = new Cookie("Pending", status);
+            double totalPrice, Integer premiumTypeID, String status, List<Seat> listSeats, List<CanteenItemOrder> listCanteenItem) {
+        try {
+            Cookie orderIdCookie = new Cookie("orderID", String.valueOf(orderID));
+            Cookie userIdCookie = new Cookie("userID", String.valueOf(userID));
+            Cookie movieSlotIdCookie = new Cookie("movieSlotID", String.valueOf(movieSlotID));
+            Cookie totalPriceCookie = new Cookie("totalPrice", String.valueOf(totalPrice));
+            Cookie premiumTypeIdCookie = new Cookie("premiumTypeID", String.valueOf(premiumTypeID));
+            Cookie statusCookie = new Cookie("status", status);
 
-        // Thiết lập thời gian tồn tại của cookies (ví dụ: 30 phút)
-        int cookieExpiry = 30 * 60;
-        orderIdCookie.setMaxAge(cookieExpiry);
-        userIdCookie.setMaxAge(cookieExpiry);
-        movieSlotIdCookie.setMaxAge(cookieExpiry);
-        totalPriceCookie.setMaxAge(cookieExpiry);
-        premiumTypeIdCookie.setMaxAge(cookieExpiry);
-        statusCookie.setMaxAge(cookieExpiry);
+// Chuyển đổi listSeats sang chuỗi JSON
+            String jsonSeatList = gson.toJson(listSeats);
 
-        // Thêm cookies vào phản hồi
-        response.addCookie(orderIdCookie);
-        response.addCookie(userIdCookie);
-        response.addCookie(movieSlotIdCookie);
-        response.addCookie(totalPriceCookie);
-        response.addCookie(premiumTypeIdCookie);
-        response.addCookie(statusCookie);
+// Mã hóa chuỗi JSON để lưu vào cookie
+            String seatListValue = URLEncoder.encode(jsonSeatList, StandardCharsets.UTF_8.toString());
+
+// Tạo cookie với giá trị đã mã hóa
+            Cookie seatCookie = new Cookie("listSeats", seatListValue);
+            response.addCookie(seatCookie);
+
+// Chuyển đổi listSeats sang chuỗi JSON
+
+            String jsonCanteenItemList = gson.toJson(listCanteenItem);
+
+// Mã hóa chuỗi JSON để lưu vào cookie
+            String canteenItemListValue = URLEncoder.encode(jsonCanteenItemList, StandardCharsets.UTF_8.toString());
+
+// Tạo cookie với giá trị đã mã hóa
+            Cookie canteenItemCookie = new Cookie("listCanteenItems", canteenItemListValue);
+            response.addCookie(canteenItemCookie);
+
+// Thiết lập thời gian tồn tại của cookies (ví dụ: 30 phút)
+            int cookieExpiry = 30 * 60;
+            orderIdCookie.setMaxAge(cookieExpiry);
+            userIdCookie.setMaxAge(cookieExpiry);
+            movieSlotIdCookie.setMaxAge(cookieExpiry);
+            totalPriceCookie.setMaxAge(cookieExpiry);
+            premiumTypeIdCookie.setMaxAge(cookieExpiry);
+            statusCookie.setMaxAge(cookieExpiry);
+            seatCookie.setMaxAge(cookieExpiry);
+            canteenItemCookie.setMaxAge(cookieExpiry);
+
+// Thêm cookies vào phản hồi
+            response.addCookie(orderIdCookie);
+            response.addCookie(userIdCookie);
+            response.addCookie(movieSlotIdCookie);
+            response.addCookie(totalPriceCookie);
+            response.addCookie(premiumTypeIdCookie);
+            response.addCookie(statusCookie);
+            response.addCookie(seatCookie);
+            response.addCookie(canteenItemCookie);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(PaymentServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
