@@ -48,7 +48,7 @@ public class MySQLConnect {
         /**
          * Connection - URL : serverName / portNumber / databaseName
          */
-        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName;
+        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName+"?autoReconnect=true";
 
         dataSource.setUrl(url);
         dataSource.setUsername(username);
