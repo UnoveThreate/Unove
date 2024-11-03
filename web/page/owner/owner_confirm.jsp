@@ -5,7 +5,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Confirm Ticket</title>
-        <style>/* style.css */
+        <style>
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: #f0f4f8;
@@ -22,42 +22,49 @@
                 padding: 40px;
                 border-radius: 12px;
                 box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                max-width: 500px;
+                max-width: 600px;
                 width: 100%;
+                margin: 20px;
+            }
+
+            h2, h1 {
+                text-align: center;
+                color: #333333;
             }
 
             h2 {
-                text-align: center;
-                color: #333333;
-                font-size: 24px;
-                margin-bottom: 20px;
+                font-size: 20px;
+                margin-top: 20px;
+            }
+
+            p {
+                font-size: 14px;
+                color: #555555;
+                margin: 10px 0;
+                padding: 0 10px;
+            }
+
+            ul {
+                list-style-type: none;
+                padding: 0;
+                margin: 10px 0;
+            }
+
+            li {
+                background-color: #e9ecef;
+                margin: 5px 0;
+                padding: 10px;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+
+            li:hover {
+                background-color: #d0d7dc;
             }
 
             .form-group {
-                margin-bottom: 20px;
-            }
-
-            label {
-                font-size: 14px;
-                color: #555555;
-                margin-bottom: 8px;
-                display: block;
-            }
-
-            input[type="text"] {
-                width: 100%;
-                padding: 12px 15px;
-                border: 1px solid #dddddd;
-                border-radius: 8px;
-                background-color: #f9fafb;
-                transition: border-color 0.3s ease;
-                font-size: 14px;
-                color: #333333;
-            }
-
-            input[type="text"]:focus {
-                border-color: #007bff;
-                outline: none;
+                margin-top: 20px;
+                text-align: center;
             }
 
             input[type="submit"] {
@@ -77,44 +84,47 @@
                 background-color: #0056b3;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             }
-
-            input[type="submit"]:focus {
-                outline: none;
-            }
-
-            input[type="submit"]:active {
-                background-color: #004b9c;
-                box-shadow: none;
-            }
-
-            .btn-primary {
-                display: inline-block;
-                text-align: center;
-            }
-
-            @media (max-width: 600px) {
-                .container {
-                    padding: 20px;
-                    margin: 10px;
-                }
-            }
         </style>
     </head>
     <body>
 
         <div class="container">
-            <h2>Confirm Ticket Details</h2>
+            <h1>Confirm Ticket Details</h1>
 
             <form action="${pageContext.request.contextPath}/order/confirm" method="post">
                 <input type="hidden" name="orderID" value="${orderID}" />
                 <input type="hidden" name="userID" value="${userID}" />
+                <input type="hidden" name="code" value="${code}" />
 
-                <div class="form-group">
-                    <label for="code">OrderID: </label>
-                    <input type="text" id="orderID" name="orderID" value="${orderID}" readonly />
-                     <label for="code">Code: </label>
-                    <input type="text" id="code" name="code" value="${code}" readonly />
-                </div>
+                <h2>Order Information</h2>
+                <p><strong>Time Created:</strong> ${orderDetails.timeCreated}</p>
+
+                <h2>Movie Information</h2>
+                <p><strong>Title:</strong> ${orderDetails.movieTitle}</p>
+                <p><strong>Room:</strong> ${orderDetails.roomName} </p>
+                <p><strong>Synopsis:</strong> ${orderDetails.synopsis}</p>
+                <p><strong>Country:</strong> ${orderDetails.country}</p>
+                <p><strong>Start Time:</strong> ${orderDetails.startTime}</p>
+                <p><strong>End Time:</strong> ${orderDetails.endTime}</p>
+
+                <h2>Cinema Information</h2>
+                <p><strong>Cinema:</strong> ${orderDetails.cinemaName}</p>
+                <p><strong>Address:</strong> ${orderDetails.address}, ${orderDetails.commune}, ${orderDetails.district}, ${orderDetails.province}</p>
+
+                <h2>Seats</h2>
+                <ul>
+                    <c:forEach var="seat" items="${seats}">
+                        <li>${seat.name}</li>
+                        </c:forEach>
+                </ul>
+
+                <h2>Canteen Items</h2>
+                <ul>
+                    <c:forEach var="item" items="${canteenItems}">
+                        <li>${item.name} - ${item.price}</li>
+                        </c:forEach>
+                </ul>
+
 
                 <div class="form-group">
                     <input type="submit" value="Confirm Ticket" class="btn btn-primary" />
