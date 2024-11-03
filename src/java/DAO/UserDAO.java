@@ -38,7 +38,7 @@ public class UserDAO extends MySQLConnect {
 
     public ResultSet getResultSet(String sqlQuery) throws SQLException {
         ResultSet rs = null;
-        try(PreparedStatement per = connection.prepareStatement(sqlQuery);) {
+        try (PreparedStatement per = connection.prepareStatement(sqlQuery);) {
             rs = per.executeQuery();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -46,21 +46,19 @@ public class UserDAO extends MySQLConnect {
         return rs;
     }
 
-    public ResultSet checkLogin(String username_email, String password) throws SQLException {
+    public boolean checkLogin(String username_email, String password) throws SQLException {
         String sqlQuery = "SELECT 1 FROM `User` WHERE (Username = ? OR Email = ?) AND Password = ? AND Status = 1";
-        ResultSet rs = null;
-
         try (PreparedStatement st = connection.prepareStatement(sqlQuery);) {
             st.setString(1, username_email);
             st.setString(2, username_email);
             st.setString(3, password);
-
-            rs = st.executeQuery();
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return rs;
+        return false;
     }
 
 // Sample password hashing function (replace this with your actual implementation)
@@ -333,9 +331,6 @@ public class UserDAO extends MySQLConnect {
 
         return duplicate;
     }
-
-   
-     
 
     public String getEmailByUserId(int userId) {
         String email = null;

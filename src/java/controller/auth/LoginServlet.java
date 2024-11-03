@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 import model.User;
 import util.RouterJSP;
 import util.RouterURL;
-import java.sql.ResultSet;
 import java.util.Enumeration;
 
 /**
@@ -101,11 +100,9 @@ public class LoginServlet extends HttpServlet {
         Boolean ok = null;
         User user;
         String role = "";
-        ResultSet rs;
 
         try {
-            rs = userDAO.checkLogin(username_email, hash);
-            ok = rs.next();
+            ok = userDAO.checkLogin(username_email, hash);
         } catch (SQLException ex) {
             Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
