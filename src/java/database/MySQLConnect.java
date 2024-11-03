@@ -55,17 +55,17 @@ public class MySQLConnect {
         dataSource.setPassword(password);
 
         // Configure pool settings
-        dataSource.setInitialSize(2);        // Initial pool size
-        dataSource.setMaxTotal(5);          // Max number of connections
-        dataSource.setMaxIdle(3);            // Max idle connections
-        dataSource.setMinIdle(1);            // Min idle connections
-        dataSource.setMaxWaitMillis(10000);  // Max wait time for connection
-        dataSource.setConnectionProperties("connectTimeout=10000");
-        dataSource.setMinEvictableIdleTimeMillis(30000); // Minimum time in ms a connection may sit idle before being eligible for eviction
-        dataSource.setTimeBetweenEvictionRunsMillis(30000); // Run eviction every 30 seconds
+        dataSource.setInitialSize(3);
+        dataSource.setMaxTotal(20);
+        dataSource.setMaxIdle(5);
+        dataSource.setMinIdle(2);
+        dataSource.setMaxWaitMillis(10000);
+        dataSource.setTestOnBorrow(true); // Validate connections before borrowing
+        dataSource.setValidationQuery("SELECT 1"); // Simple validation query
         dataSource.setRemoveAbandonedOnBorrow(true);
-        dataSource.setRemoveAbandonedOnMaintenance(true);
-        dataSource.setRemoveAbandonedTimeout(60); // Remove connections that have been idle for more than 60 seconds
+        dataSource.setRemoveAbandonedTimeout(60); // Seconds
+        dataSource.setTimeBetweenEvictionRunsMillis(30000);
+        dataSource.setMinEvictableIdleTimeMillis(60000); // 1 minute
 
         // Load MySQL JDBC Driver
         Class.forName("com.mysql.cj.jdbc.Driver");
