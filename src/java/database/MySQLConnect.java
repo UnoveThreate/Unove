@@ -21,7 +21,7 @@ public class MySQLConnect {
 
     private Connection getConnection() throws SQLException {
         Connection connection = dataSource.getConnection();
-        logger.info("Current active connections: ", dataSource.getNumActive());
+        System.out.println("Current active connections: " + dataSource.getNumActive());
         return connection;
     }
 
@@ -48,19 +48,24 @@ public class MySQLConnect {
         /**
          * Connection - URL : serverName / portNumber / databaseName
          */
-        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName+"?autoReconnect=true";
+        String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName;
 
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
         // Configure pool settings
-        dataSource.setInitialSize(5);        // Initial pool size
-        dataSource.setMaxTotal(10);          // Max number of connections
-        dataSource.setMaxIdle(5);            // Max idle connections
-        dataSource.setMinIdle(2);            // Min idle connections
+        dataSource.setInitialSize(2);        // Initial pool size
+        dataSource.setMaxTotal(5);          // Max number of connections
+        dataSource.setMaxIdle(3);            // Max idle connections
+        dataSource.setMinIdle(1);            // Min idle connections
         dataSource.setMaxWaitMillis(10000);  // Max wait time for connection
-        dataSource.setConnectionProperties("connectTimeout=10000"); // Set timeout in milliseconds
+        dataSource.setConnectionProperties("connectTimeout=10000");
+        dataSource.setMinEvictableIdleTimeMillis(30000); // Minimum time in ms a connection may sit idle before being eligible for eviction
+        dataSource.setTimeBetweenEvictionRunsMillis(30000); // Run eviction every 30 seconds
+        dataSource.setRemoveAbandonedOnBorrow(true);
+        dataSource.setRemoveAbandonedOnMaintenance(true);
+        dataSource.setRemoveAbandonedTimeout(60); // Remove connections that have been idle for more than 60 seconds
 
         // Load MySQL JDBC Driver
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -71,7 +76,7 @@ public class MySQLConnect {
             logger.info("Connection established to the MySQL database.");
             return connection;
         } catch (SQLException ex) {
-            //Timeout
+            //Timeout 
             if (ex.getErrorCode() == 0) {
                 logger.error("Connection request timed out after waiting for {} ms", dataSource.getMaxWaitMillis());
                 throw new SQLException("Connection request timed out", ex);
