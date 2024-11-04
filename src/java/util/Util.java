@@ -28,7 +28,7 @@ public class Util {
     private static final int CODE_LENGTH = 8;
     private static final SecureRandom RANDOM = new SecureRandom();
     
-    private static final String QR_CODE_IMAGE_PATH = "qrcode.png";
+    private static final String QR_CODE_IMAGE_PATH = "/tmp/qrcode.png";
 
     public static String getRanDom() {
         Random rnd = new Random();
