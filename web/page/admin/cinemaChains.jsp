@@ -36,7 +36,6 @@
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
             overflow: hidden;
             transition: all 0.3s ease;
-            border: 3px dashed #3f51b5;
             padding : 3px;
         }
         .card:hover {
@@ -100,7 +99,6 @@
         .modal-content {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 15px;
-            border: 3px dashed #E2BFD9;
         }
         .modal-header {
             background: linear-gradient(60deg, #1e3c72 0%, #2a5298 100%);

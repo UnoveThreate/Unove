@@ -195,7 +195,7 @@ public class CinemaManagementDAO extends MySQLConnect {
     }
     public boolean isCinemaExist(String name, String address, String province, String district, String commune, int cinemaChainID) {
     String sql = "SELECT COUNT(*) FROM cinema WHERE Name = ? AND Address = ? AND Province = ? AND District = ? AND Commune = ? AND CinemaChainID = ?";
-    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+    try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
         pstmt.setString(1, name);
         pstmt.setString(2, address);
         pstmt.setString(3, province);
@@ -214,7 +214,7 @@ public class CinemaManagementDAO extends MySQLConnect {
 
 public boolean isCinemaExistExcludeSelf(int cinemaID, String name, String address, String province, String district, String commune, int cinemaChainID) {
     String sql = "SELECT COUNT(*) FROM cinema WHERE Name = ? AND Address = ? AND Province = ? AND District = ? AND Commune = ? AND CinemaChainID = ? AND CinemaID != ?";
-    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+    try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
         pstmt.setString(1, name);
         pstmt.setString(2, address);
         pstmt.setString(3, province);
@@ -278,7 +278,7 @@ public List<Cinema> getCinemasShowingMovie(int movieId) {
                  "JOIN movieslot ms ON r.RoomID = ms.RoomID " +
                  "WHERE ms.MovieID = ? AND ms.StartTime > NOW()";
     try (
-         PreparedStatement stmt = connection.prepareStatement(sql)) {
+         PreparedStatement stmt = this.connection.prepareStatement(sql)) {
         stmt.setInt(1, movieId);
         try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {

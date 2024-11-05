@@ -581,10 +581,6 @@
                 max-width: 1200px;
                 padding: 0 15px;
             }
-
-
-
-
             .showtimes-intro {
                 padding: 60px 0;
                 background-color: #fff5f8;
@@ -625,7 +621,7 @@
                 </ol>
             </div>
         </nav>
-        <section class="showtimes-intro">
+<!--        <section class="showtimes-intro">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-6">
@@ -657,7 +653,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section>-->
         <!--        <div class="wave-container">
                     <div class="wave wave-1"></div>
                     <div class="wave wave-2"></div>
