@@ -125,7 +125,7 @@ public class StatisticsDAO extends MySQLConnect {
             while (rs.next()) {
                 String name = rs.getString("Name");
                 double revenue = rs.getDouble("revenue");
-                double percentage = (revenue / totalRevenue) * 100;
+                double percentage = totalRevenue != 0 ? (revenue / totalRevenue) * 100 : 0;
 
                 Map<String, Object> chainData = new LinkedHashMap<>();
                 chainData.put("revenue", revenue);
