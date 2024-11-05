@@ -87,6 +87,7 @@ CREATE TABLE MovieReview (
     Rating TINYINT,
     TimeCreated DATETIME,
     Content VARCHAR(255) CHARACTER SET utf8mb4,
+	EmailSent TINYINT,
     FOREIGN KEY (UserID) REFERENCES User(UserID),
     FOREIGN KEY (MovieID) REFERENCES Movie(MovieID)
 );
@@ -202,6 +203,18 @@ CREATE TABLE CanteenItem (
     IsAvailable tinyint,
     FOREIGN KEY (CinemaID) REFERENCES Cinema(CinemaID)
 );
+
+CREATE TABLE `ordercanteenitem` (
+  `CanteenItemOrderID` int NOT NULL AUTO_INCREMENT,
+  `CanteenItemID` int DEFAULT NULL,
+  `OrderID` int DEFAULT NULL,
+  `Quantity` int DEFAULT NULL,
+  PRIMARY KEY (`CanteenItemOrderID`),
+  KEY `CanteenItemID` (`CanteenItemID`),
+  KEY `OrderID` (`OrderID`),
+  CONSTRAINT `ordercanteenitem_ibfk_1` FOREIGN KEY (`CanteenItemID`) REFERENCES `canteenitem` (`CanteenItemID`),
+  CONSTRAINT `ordercanteenitem_ibfk_2` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng LikedMovieReview: Lưu thông tin người dùng thích các đánh giá phim
 CREATE TABLE LikedMovieReview (
