@@ -103,13 +103,13 @@ public class MovieManagementDAO extends MySQLConnect {
             }
 
             // Xóa tất cả các thể loại hiện tại của phim
-            try (PreparedStatement pstmt = connection.prepareStatement(deleteGenresSQL)) {
+            try (PreparedStatement pstmt = this.connection.prepareStatement(deleteGenresSQL)) {
                 pstmt.setInt(1, movie.getMovieID());
                 pstmt.executeUpdate();
             }
 
             // Thêm các thể loại mới
-            try (PreparedStatement pstmt = connection.prepareStatement(insertGenreSQL)) {
+            try (PreparedStatement pstmt = this.connection.prepareStatement(insertGenreSQL)) {
                 for (int genreID : genreIDs) {
                     pstmt.setInt(1, movie.getMovieID());
                     pstmt.setInt(2, genreID);
@@ -143,7 +143,7 @@ public class MovieManagementDAO extends MySQLConnect {
 
             // Xóa dữ liệu liên quan trong bảng movieingenre
             String deleteMovieInGenreSQL = "DELETE FROM movieingenre WHERE MovieID = ?";
-            try (PreparedStatement pstmt = connection.prepareStatement(deleteMovieInGenreSQL)) {
+            try (PreparedStatement pstmt = this.connection.prepareStatement(deleteMovieInGenreSQL)) {
                 pstmt.setInt(1, movieID);
                 pstmt.executeUpdate();
             }
@@ -157,7 +157,7 @@ public class MovieManagementDAO extends MySQLConnect {
 
             // Xóa phim từ bảng movie
             String deleteMovieSQL = "DELETE FROM movie WHERE MovieID = ?";
-            try (PreparedStatement pstmt = connection.prepareStatement(deleteMovieSQL)) {
+            try (PreparedStatement pstmt = this.connection.prepareStatement(deleteMovieSQL)) {
                 pstmt.setInt(1, movieID);
                 int affectedRows = pstmt.executeUpdate();
 
@@ -196,7 +196,7 @@ public class MovieManagementDAO extends MySQLConnect {
                     + "END "
                     + "WHERE m.MovieID = ?";
 
-            try (PreparedStatement movieStmt = connection.prepareStatement(updateMovieSql); PreparedStatement slotStmt = connection.prepareStatement(updateSlotsSql)) {
+            try (PreparedStatement movieStmt = this.connection.prepareStatement(updateMovieSql); PreparedStatement slotStmt = this.connection.prepareStatement(updateSlotsSql)) {
 
                 // update movie status
                 movieStmt.setBoolean(1, status);
@@ -206,17 +206,17 @@ public class MovieManagementDAO extends MySQLConnect {
                 // update tất cả movieslot của movie này
                 slotStmt.setInt(1, movieID);
                 slotStmt.executeUpdate();
-                connection.commit();
+                this.connection.commit();
                 return true;
 
             } catch (SQLException e) {
 
-                connection.rollback();
+                this.connection.rollback();
                 e.printStackTrace();
                 return false;
             } finally {
 
-                connection.setAutoCommit(true);
+                this.connection.setAutoCommit(true);
             }
 
         } catch (SQLException e) {
