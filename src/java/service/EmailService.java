@@ -25,6 +25,7 @@ import model.Seat;
 import model.Ticket;
 import model.User;
 import model.ticket.TicketOrderDetails;
+import util.Config;
 
 /**
  * Sends an email to the user.
@@ -339,10 +340,11 @@ public class EmailService {
 
     // Method to send a review request email
     public void sendReviewRequestEmail(String toEmail, int movieID) throws SQLException  {
+        
         String fromEmail = "dacphong2092003@gmail.com";  // your email
         String password = "cbki yoeg hoqh usiq";  // your app password
         String subject = "Yêu cầu đánh giá phim";
-        String reviewLink = "http://localhost:8080/Unove/movie/reviewMovie?movieID=" + movieID;
+        String reviewLink = Config.DOMAIN+"/Unove/movie/reviewMovie?movieID=" + movieID;
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
