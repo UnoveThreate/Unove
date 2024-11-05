@@ -80,11 +80,12 @@ public class CreateRoomServlet extends HttpServlet {
         String roomName = request.getParameter("roomName");
         String[] roomTypeArray = request.getParameterValues("roomType"); // Lấy danh sách các loại phòng từ form
         List<String> roomTypes = Arrays.asList(roomTypeArray); // Chuyển thành List<String>
-
+        Integer capacity = Integer.valueOf(request.getParameter("capacity"));
         // Tạo một đối tượng Room mới
         Room newRoom = new Room();
         newRoom.setRoomName(roomName);
         newRoom.setRoomTypes(roomTypes);
+        newRoom.setCapacity(capacity);
         newRoom.setCinemaID(cinemaID); // Gán cinemaID cho phòng
 
         try {

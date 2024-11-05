@@ -915,6 +915,56 @@
                         flex: 1;
                     }
 
+                    /*                    Phần css Movie Review của Phong*/
+                    .review-section {
+                        margin-top: 20px;
+                    }
+
+                    .review-container {
+                        display: flex;
+                        flex-direction: column;
+                        padding: 15px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        margin-bottom: 20px;
+                    }
+
+                    .user-info {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 10px;
+                    }
+
+                    .avatar img {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                    }
+
+                    .user-name strong {
+                        font-size: 16px;
+                        color: #333;
+                    }
+
+                    .review-content .review-rating {
+                        font-size: 14px;
+                        color: #ffcc00;
+                        margin-bottom: 5px;
+                    }
+
+                    .review-content .review-text p {
+                        margin: 0;
+                        font-size: 15px;
+                        color: #555;
+                    }
+
+                    .review-time {
+                        font-size: 12px;
+                        color: #888;
+                        margin-top: 5px;
+                    }
+
                 </style>
             </head>
             <body>
@@ -1116,6 +1166,48 @@
                             ></iframe>
                     </div>
                 </div>
+                <!--                                Phần display Movie review của Phong-->
+                <div class="review-section">
+                    <h3 class="review-heading">Đánh giá của người dùng</h3>
+
+                    <c:if test="${empty userReviews}">
+                        <p>Chưa có bình luận nào</p>
+                    </c:if>
+
+                    <c:forEach var="entry" items="${userReviews}">
+                        <!-- Retrieve the user and review objects from the map entry -->
+                        <c:set var="user" value="${entry.key}" />
+                        <c:set var="review" value="${entry.value}" />
+
+                        <div class="review-container">
+                            <!-- User info -->
+                            <div class="user-info">
+                                <div class="avatar">
+                                    <img src="${user.avatarLink}" alt="${user.fullName}" />
+                                </div>
+                                <div class="user-name">
+                                    <strong>${user.fullName}</strong>
+                                </div>
+                            </div>
+
+                            <!-- Review content -->
+                            <div class="review-content">
+                                <div class="review-rating">
+                                    <img src="assets/images/yellow_star_icon.png" alt="Star" style="width: 20px;" />
+                                    <span>${review.rating}/5</span>
+                                </div>
+                                <div class="review-text">
+                                    <p>${review.content}</p>
+                                </div>
+                                <div class="review-time">
+                                    <small>Vào lúc: ${review.timeCreated}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                    </c:forEach>
+                </div>
+
 
                 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
                 <script>
