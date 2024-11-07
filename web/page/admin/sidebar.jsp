@@ -42,6 +42,13 @@
             <p>Thống Kê Chi Tiết</p>
           </a>
         </li>
+        <!-- New Button for Movie Discounts -->
+        <li class="nav-item">
+          <a href="${pageContext.request.contextPath}/admin/discount/movieDiscount" class="nav-link">
+            <i class="nav-icon fas fa-tag"></i>
+            <p>Quản Lí Giảm Giá Phim</p>
+          </a>
+        </li>
       </ul>
     </nav>
     <!-- /.sidebar-menu -->

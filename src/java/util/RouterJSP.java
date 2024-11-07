@@ -199,4 +199,6 @@ public class RouterJSP {
      public static String FILTER_MOVIE ="/page/user/movie/FilterMovie.jsp";
 
     public static String MANAGE_SEAT_PAGE = "/page/owner/seat/manageSeat.jsp";
+    
+    public static String MOVIE_DISCOUNT_PAGE ="/page/admin/ManageDiscount.jsp";
 }
