@@ -918,6 +918,7 @@
                     /*                    Phần css Movie Review của Phong*/
                     .review-section {
                         margin-top: 20px;
+                        transform: translateX(30px); /* Di chuyển toàn bộ div sang phải 20px */
                     }
 
                     .review-container {
@@ -963,6 +964,25 @@
                         font-size: 12px;
                         color: #888;
                         margin-top: 5px;
+                    }
+
+                    .review-section button {
+                        background-color: #007bff; /* Màu nền xanh dương */
+                        color: white; /* Màu chữ trắng */
+                        border: none; /* Bỏ viền */
+                        padding: 10px 20px; /* Khoảng cách xung quanh chữ */
+                        font-size: 16px; /* Cỡ chữ */
+                        border-radius: 5px; /* Bo góc */
+                        cursor: pointer; /* Con trỏ chuột kiểu pointer khi di chuột vào */
+                        transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi hover */
+                    }
+
+                    .review-section button:hover {
+                        background-color: #0056b3; /* Màu nền khi hover */
+                    }
+
+                    .review-section button:focus {
+                        outline: none; /* Bỏ viền focus khi nhấn */
                     }
 
                 </style>
@@ -1169,6 +1189,7 @@
                 <!--                                Phần display Movie review của Phong-->
                 <div class="review-section">
                     <h3 class="review-heading">Đánh giá của người dùng</h3>
+                    <button onclick="window.location.href = 'http://localhost:8080/Unove/movie/reviewMovie?movieID=${movie.movieID}'">Viết đánh giá</button>
 
                     <c:if test="${empty userReviews}">
                         <p>Chưa có bình luận nào</p>
@@ -1211,102 +1232,102 @@
 
                 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
                 <script>
-                                            AOS.init({
-                                                duration: 1000,
-                                                once: true,
-                                            });
+                        AOS.init({
+                            duration: 1000,
+                            once: true,
+                        });
 
-                                            const trailerBtn = document.getElementById("trailerBtn");
-                                            const posterPlayButton = document.getElementById("posterPlayButton");
-                                            const trailerModal = document.getElementById("trailerModal");
-                                            const closeBtn = document.querySelector(".close");
-                                            const trailerVideo = document.getElementById("trailerVideo");
+                        const trailerBtn = document.getElementById("trailerBtn");
+                        const posterPlayButton = document.getElementById("posterPlayButton");
+                        const trailerModal = document.getElementById("trailerModal");
+                        const closeBtn = document.querySelector(".close");
+                        const trailerVideo = document.getElementById("trailerVideo");
 
-                                            function showTrailer() {
-                                                trailerModal.style.display = "flex";
-                                                trailerVideo.src += "?autoplay=1";
-                                            }
+                        function showTrailer() {
+                            trailerModal.style.display = "flex";
+                            trailerVideo.src += "?autoplay=1";
+                        }
 
-                                            function hideTrailer() {
-                                                trailerModal.style.display = "none";
-                                                trailerVideo.src = trailerVideo.src.split("?")[0];
-                                            }
+                        function hideTrailer() {
+                            trailerModal.style.display = "none";
+                            trailerVideo.src = trailerVideo.src.split("?")[0];
+                        }
 
-                                            trailerBtn.onclick = showTrailer;
-                                            posterPlayButton.onclick = showTrailer;
+                        trailerBtn.onclick = showTrailer;
+                        posterPlayButton.onclick = showTrailer;
 
-                                            closeBtn.onclick = hideTrailer;
+                        closeBtn.onclick = hideTrailer;
 
-                                            window.onclick = function (event) {
-                                                if (event.target == trailerModal) {
-                                                    hideTrailer();
-                                                }
-                                            };
+                        window.onclick = function (event) {
+                            if (event.target == trailerModal) {
+                                hideTrailer();
+                            }
+                        };
 
-                                            function getCurrentDateTime() {
-                                                const now = new Date();
-                                                const year = now.getFullYear();
-                                                const month = String(now.getMonth() + 1).padStart(2, "0");
-                                                const day = String(now.getDate()).padStart(2, "0");
-                                                const hours = String(now.getHours()).padStart(2, "0");
-                                                const minutes = String(now.getMinutes()).padStart(2, "0");
-                                                const seconds = String(now.getSeconds()).padStart(2, "0");
-                                                const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
-                                                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
-                                                    }
+                        function getCurrentDateTime() {
+                            const now = new Date();
+                            const year = now.getFullYear();
+                            const month = String(now.getMonth() + 1).padStart(2, "0");
+                            const day = String(now.getDate()).padStart(2, "0");
+                            const hours = String(now.getHours()).padStart(2, "0");
+                            const minutes = String(now.getMinutes()).padStart(2, "0");
+                            const seconds = String(now.getSeconds()).padStart(2, "0");
+                            const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+                            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                                }
 
-                                                    function addToFavorite() {
-                                                        let favoritedAtInput = document.getElementById("favoritedAtInput");
-                                                        favoritedAtInput.value = getCurrentDateTime();
-                                                        callServlet(
-                                                                "addToFavoriteForm",
-                                                                "HandleDisplayMovieInfo?movieID=" + movieID,
-                                                                "POST"
-                                                                );
-                                                    }
+                                function addToFavorite() {
+                                    let favoritedAtInput = document.getElementById("favoritedAtInput");
+                                    favoritedAtInput.value = getCurrentDateTime();
+                                    callServlet(
+                                            "addToFavoriteForm",
+                                            "HandleDisplayMovieInfo?movieID=" + movieID,
+                                            "POST"
+                                            );
+                                }
 
-                                                    function deleteFavoriteMovie() {
-                                                        callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
-                                                    }
+                                function deleteFavoriteMovie() {
+                                    callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
+                                }
 
-                                                    function viewFavouriteMovies() {
-                                                        callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
-                                                    }
-                                                    function selectCinemaChain(cinemaChainID) {
-                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
-                                                    }
+                                function viewFavouriteMovies() {
+                                    callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
+                                }
+                                function selectCinemaChain(cinemaChainID) {
+                                    window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
+                                }
 
-                                                    function selectCinema(cinemaID) {
-                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-                                                    }
+                                function selectCinema(cinemaID) {
+                                    const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                    window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                }
 
-                                                    function selectDate(date) {
-                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                        const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-                                                    }
+                                function selectDate(date) {
+                                    const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                    const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                    window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                }
 
-                                                    function selectSlot(movieSlotID) {
-                                                        var form = document.createElement('form');
-                                                        form.method = "GET";
-                                                        form.action = "selectSeat";
+                                function selectSlot(movieSlotID) {
+                                    var form = document.createElement('form');
+                                    form.method = "GET";
+                                    form.action = "selectSeat";
 
-                                                        var actionInput = document.createElement('input');
-                                                        actionInput.type = 'hidden';
-                                                        actionInput.name = 'action';
-                                                        actionInput.value = 'selectSlot';
-                                                        form.appendChild(actionInput);
+                                    var actionInput = document.createElement('input');
+                                    actionInput.type = 'hidden';
+                                    actionInput.name = 'action';
+                                    actionInput.value = 'selectSlot';
+                                    form.appendChild(actionInput);
 
-                                                        var slotInput = document.createElement('input');
-                                                        slotInput.type = 'hidden';
-                                                        slotInput.name = 'movieSlotID';
-                                                        slotInput.value = movieSlotID;
-                                                        form.appendChild(slotInput);
+                                    var slotInput = document.createElement('input');
+                                    slotInput.type = 'hidden';
+                                    slotInput.name = 'movieSlotID';
+                                    slotInput.value = movieSlotID;
+                                    form.appendChild(slotInput);
 
-                                                        document.body.appendChild(form);
-                                                        form.submit();
-                                                    }
+                                    document.body.appendChild(form);
+                                    form.submit();
+                                }
                 </script>
             </body>
         </html>

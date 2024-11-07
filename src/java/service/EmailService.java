@@ -20,7 +20,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import model.owner.MovieSlot;
-import model.Order;
+import model.Order_Update;
 import model.Seat;
 import model.Ticket;
 import model.User;
@@ -307,31 +307,25 @@ public class EmailService {
     // Method to send review request emails
 
     public void sendReviewEmails() throws SQLException {
-        List<Order> confirmedOrders = movieReviewDAO.getConfirmedOrders();
-        System.out.println("Confirmed Orders Count: " + confirmedOrders.size());
-        for (Order order : confirmedOrders) {
-            MovieSlot movieSlot = movieSlotDAO.getMovieSlotById(order.getMovieSlotID());
-            System.out.println("Processing Order ID: " + order.getOrderID() + " with MovieSlot ID: " + order.getMovieSlotID());
+        // Lấy danh sách các đơn hàng có trạng thái "Confirmed"
+        List<Order_Update> confirmedOrders = movieReviewDAO.getConfirmedOrders();
 
-            if (movieSlot.getEndTime().isBefore(LocalDateTime.now())) {
-                int userID = order.getUserID();
-                int movieID = movieSlot.getMovieID();
+        for (Order_Update order : confirmedOrders) {
+            // Kiểm tra xem email yêu cầu đánh giá đã được gửi chưa
+            if (!order.isReviewRequestSent()) {
+                MovieSlot movieSlot = movieSlotDAO.getMovieSlotById(order.getMovieSlotID());
 
-                System.out.println("User ID: " + userID + ", Movie ID: " + movieID);
-                boolean canReview = movieReviewDAO.canReview(userID, movieID);
-                boolean hasReviewed = movieReviewDAO.hasReviewed(userID, movieID);
-                System.out.println("Can Review: " + canReview + ", Has Reviewed: " + hasReviewed);
+                // Kiểm tra thời gian kết thúc của phim, chỉ gửi email nếu phim đã kết thúc
+                if (movieSlot.getEndTime().isBefore(LocalDateTime.now())) {
+                    int userID = order.getUserID();
+                    int movieID = movieSlot.getMovieID();
 
-                if (canReview && !hasReviewed) {
                     String email = movieReviewDAO.getUserEmail(userID);
                     if (email != null && !email.isEmpty()) {
-                        sendReviewRequestEmail(email, movieID);
-                        System.out.println("Email sent to user " + userID + " for movieID " + movieID);
+                        sendReviewRequestEmail(email, movieID);  // Gửi email
 
-                        // Mark email as sent
-                        movieReviewDAO.markEmailSent(userID, movieID);
-                    } else {
-                        System.out.println("Email is null or empty for User ID: " + userID);
+                        // Đánh dấu đã gửi email trong bảng `Order`
+                        movieReviewDAO.markReviewRequestSent(order.getOrderID());
                     }
                 }
             }
@@ -339,12 +333,12 @@ public class EmailService {
     }
 
     // Method to send a review request email
-    public void sendReviewRequestEmail(String toEmail, int movieID) throws SQLException  {
-        
+    public void sendReviewRequestEmail(String toEmail, int movieID) throws SQLException {
+
         String fromEmail = "dacphong2092003@gmail.com";  // your email
         String password = "cbki yoeg hoqh usiq";  // your app password
         String subject = "Yêu cầu đánh giá phim";
-        String reviewLink = Config.DOMAIN+"/Unove/movie/reviewMovie?movieID=" + movieID;
+        String reviewLink = Config.DOMAIN + "/Unove/movie/reviewMovie?movieID=" + movieID;
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
