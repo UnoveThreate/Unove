@@ -7,7 +7,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<jsp:include page="/page/admin/sidebar.jsp" />
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -148,8 +147,11 @@
             }
         </style>
     </head>
-    <body class="hold-transition sidebar-mini">
+    <body class="hold-transition sidebar-mini">   
+
+        <jsp:include page="/page/admin/sidebar.jsp" />  
         <div class="content-wrapper">
+
             <div class="content-header">
                 <h1>Manage Discounts</h1>
             </div>
@@ -229,20 +231,29 @@
             document.getElementById('addDiscountForm').addEventListener('submit', function (event) {
                 event.preventDefault();
 
+                // Tạo một FormData từ form để gửi thông tin đúng cách
                 const formData = new FormData(this);
 
-                // Use contextPath to dynamically insert the context path into the URL
+                // Chuyển FormData thành chuỗi URL encoded
+                const urlEncodedData = new URLSearchParams(formData).toString();
+
                 fetch('${pageContext.request.contextPath}/admin/discount/movieDiscount', {
                     method: 'POST',
-                    body: formData
+                    body: urlEncodedData,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded' // Thiết lập loại dữ liệu là form-urlencoded
+                    }
                 })
                         .then(response => {
                             if (response.ok) {
-                                alert('Discount added successfully!');
-                                closeAddDiscountModal();
+                                return response.json();  // Giả sử servlet trả về JSON
                             } else {
-                                alert('Failed to add discount.');
+                                throw new Error('Failed to add discount.');
                             }
+                        })
+                        .then(data => {
+                            alert(data.message);  // Hiển thị thông điệp trả về từ servlet
+                            closeAddDiscountModal();
                         })
                         .catch(error => {
                             console.error('Error:', error);
@@ -255,6 +266,7 @@
                 document.getElementById('endDate').min = startDate;
             }
         </script>
+
 
     </body>
 </html>
