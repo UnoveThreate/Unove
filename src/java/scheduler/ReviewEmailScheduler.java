@@ -30,7 +30,7 @@ public class ReviewEmailScheduler {
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Error occurred while sending review emails", e);
             }
-        }, 0, 1, TimeUnit.MINUTES);
+        }, 0, 30, TimeUnit.MINUTES);
     }
 
     private void sendReviewEmails(OrderDAO orderDAO, MovieSlotDAO movieSlotDAO, EmailService emailService) throws SQLException {
