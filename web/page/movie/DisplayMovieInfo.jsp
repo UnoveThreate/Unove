@@ -14,6 +14,7 @@
                     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
                     />
                 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
                 <style>
                     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
 
@@ -984,6 +985,45 @@
                     .review-section button:focus {
                         outline: none; /* Bỏ viền focus khi nhấn */
                     }
+                    /* Cấu hình cơ bản của nút like */
+                    .likeButton {
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        outline: none;
+                        padding: 10px;
+                        transition: transform 0.3s ease, color 0.3s ease;
+
+                    }
+
+
+                    /* Hiệu ứng khi hover vào nút like */
+                    .likeButton:hover i {
+                        color: red; /* Màu đỏ khi hover */
+                        transform: scale(1.1); /* Phóng to icon khi hover */
+                    }
+
+                    /* Màu xanh lá cây khi chưa like */
+                    .likeButton i {
+                        color: white;
+                        font-size: 24px;
+                        transition: color 0.3s ease, transform 0.2s ease;
+                    }
+
+                    /* Khi đã like, màu đỏ */
+                    .likeButton.liked i {
+                        color: red; /* Màu đỏ khi like */
+                    }
+
+                    /* Hiệu ứng nhấp nhảy khi nhấn vào like */
+                    .likeButton.liked:active i {
+                        transform: scale(0.9); /* Thu nhỏ icon khi nhấn */
+                    }
+
+                    .review-icon{
+                        display:flex;
+                    }
+
 
                 </style>
             </head>
@@ -1195,43 +1235,65 @@
                         <p>Chưa có bình luận nào</p>
                     </c:if>
 
-                    <c:forEach var="entry" items="${userReviews}">
-                        <!-- Retrieve the user and review objects from the map entry -->
-                        <c:set var="user" value="${entry.key}" />
-                        <c:set var="review" value="${entry.value}" />
 
-                        <div class="review-container">
-                            <!-- User info -->
-                            <div class="user-info">
-                                <div class="avatar">
-                                    <img src="${user.avatarLink}" alt="${user.fullName}" />
+
+                    <div class="review-container" >
+                        <c:forEach var="entry" items="${userReviews}">
+                            <!-- Retrieve the user and review objects from the map entry -->
+                            <c:set var="user" value="${entry.key}" />
+                            <c:set var="review" value="${entry.value}" />
+                            <div class="block-review" style="padding:19px 8px">
+
+                                <!-- User info -->
+                                <div class="user-info">
+                                    <div class="avatar">
+                                        <img src="${user.avatarLink}" alt="${user.fullName}" />
+                                    </div>
+                                    <div class="user-name">
+                                        <strong>${user.fullName}</strong>
+                                    </div>
                                 </div>
-                                <div class="user-name">
-                                    <strong>${user.fullName}</strong>
+
+                                <!-- Review content -->
+                                <div class="review-content">
+                                    <div class="review-rating">
+                                        <img src="assets/images/yellow_star_icon.png" alt="Star" style="width: 20px;" />
+                                        <span>${review.rating}/5</span>
+                                    </div>
+                                    <div class="review-text">
+                                        <p>${review.content}</p>
+                                    </div>
+                                    <div class="review-icon" style="gap:40px">
+                                        <div class="review-time">
+                                            <small>Vào lúc: ${review.timeCreated}</small>
+                                        </div>
+                                        <div class="likeReview">
+                                            <input type="hidden" name="reviewID" value="${review.reviewID}">
+                                            <input type="hidden" name="userID" value="${userID}">
+                                            <input type="hidden" name="movieID" value="${movie.movieID}">
+                                            <button type="button" class="likeButton" style ="border-radius : 40px; padding: 5px 9px">
+                                                <i class="fas fa-thumbs-up" style="font-size:17px" ></i>
+                                            </button>
+                                            <p style="display: none;" class="likeCount">Like Count: 0</p>
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </div>
 
-                            <!-- Review content -->
-                            <div class="review-content">
-                                <div class="review-rating">
-                                    <img src="assets/images/yellow_star_icon.png" alt="Star" style="width: 20px;" />
-                                    <span>${review.rating}/5</span>
-                                </div>
-                                <div class="review-text">
-                                    <p>${review.content}</p>
-                                </div>
-                                <div class="review-time">
-                                    <small>Vào lúc: ${review.timeCreated}</small>
-                                </div>
-                            </div>
-                        </div>
-                        <hr />
-                    </c:forEach>
-                </div>
 
 
-                <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-                <script>
+
+
+                        </c:forEach>
+                    </div>
+
+
+
+
+                    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+                    <script>
                         AOS.init({
                             duration: 1000,
                             once: true,
@@ -1328,6 +1390,64 @@
                                     document.body.appendChild(form);
                                     form.submit();
                                 }
-                </script>
+                                document.querySelectorAll(".likeButton").forEach(button => {
+                                    button.addEventListener("click", function () {
+                                        const reviewContainer = button.closest(".likeReview"); // Find the container for this specific review
+                                        const likeCountElement = reviewContainer.querySelector(".likeCount");
+
+                                        const reviewID = reviewContainer.querySelector('input[name="reviewID"]').value;
+                                        const userID = reviewContainer.querySelector('input[name="userID"]').value;
+                                        const movieID = reviewContainer.querySelector('input[name="movieID"]').value;
+
+                                        // Check if the user is logged in
+                                        if (!userID) {
+                                            alert("Bạn cần đăng nhập để thực hiện hành động này!");
+                                            window.location.href = "login"; // Redirect to login page
+                                            return; // Stop execution if user is not logged in
+                                        }
+
+                                        // Toggle the like button state
+                                        button.classList.toggle("liked");
+
+                                        // Update like count display (this is a mock update until confirmed by the server)
+                                        let likeCount = parseInt(likeCountElement.textContent.split(": ")[1]);
+                                        if (button.classList.contains("liked")) {
+                                            likeCount++;
+                                        } else {
+                                            likeCount--;
+                                        }
+                                        likeCountElement.textContent = "Like Count: " + likeCount;
+
+                                        // Prepare data to send to the server
+                                        const params = new URLSearchParams();
+                                        params.append("reviewID", reviewID);
+                                        params.append("userID", userID);
+                                        params.append("movieID", movieID);
+
+                                        // Send POST request to servlet to update the like status
+                                        fetch("LikeReviewServlet", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/x-www-form-urlencoded"
+                                            },
+                                            body: params.toString()
+                                        })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error('Failed to update like status');
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    console.log("Server response:", data);
+                                                })
+                                                .catch(error => {
+                                                    console.error("Error updating like status:", error);
+                                                });
+                                    });
+                                });
+
+
+                    </script>
             </body>
         </html>
