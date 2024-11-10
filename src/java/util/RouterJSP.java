@@ -199,7 +199,9 @@ public class RouterJSP {
     public static String MANAGE_SEAT_PAGE = "/page/owner/seat/manageSeat.jsp";
 
     public static String WRITE_REVIEW_MOVIE = "/page/user/review/movieReview.jsp";
-    
+
     public static String HISTORY_ORDER = "/page/user/HistoryOrder.jsp";
+    
+    public static String HISTORY_ORDER_DETAIL = "/page/user/DetailHistoryOrder.jsp";
 
 }
