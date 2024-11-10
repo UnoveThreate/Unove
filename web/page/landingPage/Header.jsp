@@ -392,43 +392,43 @@
             z-index: 1050;
         }
         .navbar-brand {
-    display: flex;
-    align-items: center;
-    padding: 0;
-}
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
 
-.brand-text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    line-height: 1;
-}
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+        }
 
-.brand-name {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #ff4d8d;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-}
+        .brand-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ff4d8d;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
 
-.brand-subtitle {
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #ff8fb4;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-}
+        .brand-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ff8fb4;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
 
-/* Hover effect */
-.navbar-brand:hover .brand-name {
-    background: linear-gradient(45deg, #ff4d8d, #ff8fb4);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: all 0.3s ease;
-}
+        /* Hover effect */
+        .navbar-brand:hover .brand-name {
+            background: linear-gradient(45deg, #ff4d8d, #ff8fb4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
 
 
     </style>
@@ -439,11 +439,11 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light" >
         <div class="container-fluid">
             <a class="navbar-brand" href="${pageContext.request.contextPath}/">
-    <div class="brand-text">
-        <div class="brand-name">UNOVE</div>
-        <div class="brand-subtitle">CINEMA</div>
-    </div>
-</a>
+                <div class="brand-text">
+                    <div class="brand-name">UNOVE</div>
+                    <div class="brand-subtitle">CINEMA</div>
+                </div>
+            </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -538,13 +538,18 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/display">Xem hồ sơ</a></li>
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
-                                        <c:if test="${sessionScope.role eq 'OWNER'}">
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie">Phim đã yêu thích</a></li>
+
+                                    <!-- Liên kết mới đến trang HistoryOrder -->
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/history">Lịch sử đơn hàng</a></li>
+
+                                    <c:if test="${sessionScope.role eq 'OWNER'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản trị viên</a></li>
                                         </c:if>
-                                         <c:if test="${sessionScope.role eq 'ADMIN'}">
+                                        <c:if test="${sessionScope.role eq 'ADMIN'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard">Quản trị viên</a></li>
                                         </c:if>
+
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                 </ul>
