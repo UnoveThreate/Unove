@@ -60,9 +60,9 @@ public class MovieReviewDAO extends MySQLConnect {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
-                return count == 0; // Nếu count == 0, người dùng chưa đánh giá
+                return count > 0; // Nếu count > 0, người dùng đã đánh giá
             }
-            return true;
+            return false; // Nếu không có kết quả nào (người dùng chưa đánh giá)
         }
     }
 
@@ -251,6 +251,32 @@ public class MovieReviewDAO extends MySQLConnect {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, orderID);
             ps.executeUpdate();
+        }
+    }
+
+    public int deleteReview(int userID, int movieID) throws SQLException {
+        String sql = "DELETE FROM MovieReview WHERE UserID = ? AND MovieID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.setInt(2, movieID);
+
+            // Thực thi câu lệnh và trả về số dòng bị ảnh hưởng (dòng bị xóa)
+            return ps.executeUpdate();
+        }
+    }
+
+    public int updateReview(int userID, int movieID, int rating, String content) throws SQLException {
+        String sql = "UPDATE MovieReview SET Rating = ?, Content = ? WHERE UserID = ? AND MovieID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, rating);
+            ps.setString(2, content);
+            ps.setInt(3, userID);
+            ps.setInt(4, movieID);
+
+            // Thực thi câu lệnh và trả về số dòng bị ảnh hưởng (dòng được cập nhật)
+            return ps.executeUpdate();
         }
     }
 
