@@ -12,7 +12,6 @@
             background-color: #2c3e50 !important;
             border-right: 1px solid #dee2e6;
         }
-
         .sidebar {
             position: fixed;
         }
@@ -79,10 +78,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/logout" class="nav-link" id="logoutLink">
-                        <i class="nav-icon fa-solid fa-right-from-bracket"></i>
-                        <p>Đăng xuất</p>
-                    </a>
+                  <a href="${pageContext.request.contextPath}/admin/discount/movieDiscount" class="nav-link">
+                    <i class="nav-icon fas fa-tag"></i>
+                    <p>Quản Lí Giảm Giá Phim</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="${pageContext.request.contextPath}/logout" class="nav-link" id="logoutLink">
+                      <i class="nav-icon fa-solid fa-right-from-bracket"></i>
+                      <p>Đăng xuất</p>
+                  </a>
                 </li>
             </ul>
         </nav>

@@ -538,13 +538,18 @@
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/display">Xem hồ sơ</a></li>
-                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie?">Phim đã yêu thích</a></li>
-                                        <c:if test="${sessionScope.role eq 'OWNER'}">
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/myfavouritemovie">Phim đã yêu thích</a></li>
+
+                                    <!-- Liên kết mới đến trang HistoryOrder -->
+                                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/history">Lịch sử đơn hàng</a></li>
+
+                                    <c:if test="${sessionScope.role eq 'OWNER'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/owner/dashboard">Quản trị viên</a></li>
                                         </c:if>
                                         <c:if test="${sessionScope.role eq 'ADMIN'}">
                                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/admin/dashboard">Quản trị viên</a></li>
                                         </c:if>
+
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Đăng xuất</a></li>
                                 </ul>

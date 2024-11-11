@@ -918,6 +918,7 @@
                     /*                    Phần css Movie Review của Phong*/
                     .review-section {
                         margin-top: 20px;
+                        transform: translateX(30px); /* Di chuyển toàn bộ div sang phải 20px */
                     }
 
                     .review-container {
@@ -963,6 +964,123 @@
                         font-size: 12px;
                         color: #888;
                         margin-top: 5px;
+                    }
+
+                    .review-section button {
+                        background-color: #007bff; /* Màu nền xanh dương */
+                        color: white; /* Màu chữ trắng */
+                        border: none; /* Bỏ viền */
+                        padding: 10px 20px; /* Khoảng cách xung quanh chữ */
+                        font-size: 16px; /* Cỡ chữ */
+                        border-radius: 5px; /* Bo góc */
+                        cursor: pointer; /* Con trỏ chuột kiểu pointer khi di chuột vào */
+                        transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi hover */
+                    }
+
+                    .review-section button:hover {
+                        background-color: #0056b3; /* Màu nền khi hover */
+                    }
+
+                    .review-section button:focus {
+                        outline: none; /* Bỏ viền focus khi nhấn */
+                    }
+
+                    /* CSS for the popup overlay */
+                    .popup {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background overlay */
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 1000;
+                        transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+                    }
+
+                    /* Make sure to hide the popup */
+                    .popup.hidden {
+                        display: none; /* Hide the popup when it has the 'hidden' class */
+                        opacity: 0; /* Transparent when hidden */
+                    }
+
+                    /* CSS for the popup content box */
+                    .popup > div {
+                        background-color: #fff;
+                        padding: 30px;
+                        border-radius: 12px;
+                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                        width: 90%;
+                        max-width: 450px; /* Max width slightly bigger */
+                        text-align: center;
+                        animation: fadeIn 0.4s ease-out; /* Animation for popup */
+                    }
+
+                    /* Popup text styling */
+                    .popup p {
+                        font-size: 18px; /* Bigger font size for better readability */
+                        font-weight: 500;
+                        margin-bottom: 20px;
+                        color: #333;
+                    }
+
+                    /* Button styling */
+                    .popup button {
+                        padding: 12px 25px;
+                        font-size: 16px;
+                        color: #fff;
+                        background-color: #007bff;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth color and hover effect */
+                    }
+
+                    .popup button:hover {
+                        background-color: #0056b3; /* Darker blue on hover */
+                        transform: scale(1.05); /* Slightly enlarge the button on hover */
+                    }
+
+                    /* Button focus styling (for accessibility) */
+                    .popup button:focus {
+                        outline: none;
+                        box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.6); /* Blue glow when focused */
+                    }
+
+                    /* Animation for fading in the popup */
+                    @keyframes fadeIn {
+                        from {
+                            opacity: 0;
+                            transform: scale(0.95); /* Starts slightly smaller */
+                        }
+                        to {
+                            opacity: 1;
+                            transform: scale(1); /* Ends at normal size */
+                        }
+                    }
+
+                    /* Mobile responsiveness */
+                    @media screen and (max-width: 600px) {
+                        .popup > div {
+                            width: 90%; /* Adjust width for smaller screens */
+                            max-width: 350px; /* Make popup a bit smaller */
+                        }
+
+                        .popup p {
+                            font-size: 16px; /* Slightly smaller font size on mobile */
+                        }
+
+                        .popup button {
+                            width: 100%; /* Full-width button on mobile */
+                            font-size: 18px; /* Bigger button text for mobile */
+                        }
+                    }
+
+                    .delete-review-btn:hover {
+                        background-color: #0056b3; /* Darker blue on hover */
+                        transform: scale(1.05); /* Slightly enlarge the button on hover */
                     }
 
                 </style>
@@ -1166,9 +1284,18 @@
                             ></iframe>
                     </div>
                 </div>
-                <!--                                Phần display Movie review của Phong-->
                 <div class="review-section">
                     <h3 class="review-heading">Đánh giá của người dùng</h3>
+                    <!-- Nút Đánh giá phim -->
+                    <button id="reviewButton" data-movie-id="${movie.movieID}" onclick="checkReviewCondition(event)">Đánh giá phim</button>
+
+                    <!-- Popup thông báo lỗi nếu không thỏa điều kiện -->
+                    <div id="reviewPopup" class="popup hidden">
+                        <div>
+                            <p>Bạn chưa xem hoặc thời gian suất chiếu của bộ phim bạn xem chưa kết thúc</p>
+                            <button id="closePopupButton" onclick="closePopup()">Đóng</button>
+                        </div>
+                    </div>
 
                     <c:if test="${empty userReviews}">
                         <p>Chưa có bình luận nào</p>
@@ -1202,6 +1329,18 @@
                                 <div class="review-time">
                                     <small>Vào lúc: ${review.timeCreated}</small>
                                 </div>
+
+                                <!-- Buttons to update and delete the review -->
+                                <c:if test="${user.userID == sessionScope.userID}">
+                                    <div class="review-actions">
+                                        <!-- Delete Review Button -->
+                                        <form action="${pageContext.request.contextPath}/movie/deleteReview" method="post" style="display:inline;">
+                                            <input type="hidden" name="reviewID" value="${review.reviewID}" />
+                                            <input type="hidden" name="movieID" value="${movie.movieID}" />
+                                            <button type="submit" class="delete-review-btn" onclick="return confirm('Bạn có chắc chắn muốn xóa bài đánh giá này?')">Xóa</button>
+                                        </form>
+                                    </div>
+                                </c:if>
                             </div>
                         </div>
                         <hr />
@@ -1211,102 +1350,149 @@
 
                 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
                 <script>
-                                            AOS.init({
-                                                duration: 1000,
-                                                once: true,
-                                            });
+                                                AOS.init({
+                                                    duration: 1000,
+                                                    once: true,
+                                                });
 
-                                            const trailerBtn = document.getElementById("trailerBtn");
-                                            const posterPlayButton = document.getElementById("posterPlayButton");
-                                            const trailerModal = document.getElementById("trailerModal");
-                                            const closeBtn = document.querySelector(".close");
-                                            const trailerVideo = document.getElementById("trailerVideo");
+                                                const trailerBtn = document.getElementById("trailerBtn");
+                                                const posterPlayButton = document.getElementById("posterPlayButton");
+                                                const trailerModal = document.getElementById("trailerModal");
+                                                const closeBtn = document.querySelector(".close");
+                                                const trailerVideo = document.getElementById("trailerVideo");
 
-                                            function showTrailer() {
-                                                trailerModal.style.display = "flex";
-                                                trailerVideo.src += "?autoplay=1";
-                                            }
-
-                                            function hideTrailer() {
-                                                trailerModal.style.display = "none";
-                                                trailerVideo.src = trailerVideo.src.split("?")[0];
-                                            }
-
-                                            trailerBtn.onclick = showTrailer;
-                                            posterPlayButton.onclick = showTrailer;
-
-                                            closeBtn.onclick = hideTrailer;
-
-                                            window.onclick = function (event) {
-                                                if (event.target == trailerModal) {
-                                                    hideTrailer();
+                                                function showTrailer() {
+                                                    trailerModal.style.display = "flex";
+                                                    trailerVideo.src += "?autoplay=1";
                                                 }
-                                            };
 
-                                            function getCurrentDateTime() {
-                                                const now = new Date();
-                                                const year = now.getFullYear();
-                                                const month = String(now.getMonth() + 1).padStart(2, "0");
-                                                const day = String(now.getDate()).padStart(2, "0");
-                                                const hours = String(now.getHours()).padStart(2, "0");
-                                                const minutes = String(now.getMinutes()).padStart(2, "0");
-                                                const seconds = String(now.getSeconds()).padStart(2, "0");
-                                                const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
-                                                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                                                function hideTrailer() {
+                                                    trailerModal.style.display = "none";
+                                                    trailerVideo.src = trailerVideo.src.split("?")[0];
+                                                }
+
+                                                trailerBtn.onclick = showTrailer;
+                                                posterPlayButton.onclick = showTrailer;
+
+                                                closeBtn.onclick = hideTrailer;
+
+                                                window.onclick = function (event) {
+                                                    if (event.target == trailerModal) {
+                                                        hideTrailer();
                                                     }
+                                                };
 
-                                                    function addToFavorite() {
-                                                        let favoritedAtInput = document.getElementById("favoritedAtInput");
-                                                        favoritedAtInput.value = getCurrentDateTime();
-                                                        callServlet(
-                                                                "addToFavoriteForm",
-                                                                "HandleDisplayMovieInfo?movieID=" + movieID,
-                                                                "POST"
-                                                                );
-                                                    }
+                                                function getCurrentDateTime() {
+                                                    const now = new Date();
+                                                    const year = now.getFullYear();
+                                                    const month = String(now.getMonth() + 1).padStart(2, "0");
+                                                    const day = String(now.getDate()).padStart(2, "0");
+                                                    const hours = String(now.getHours()).padStart(2, "0");
+                                                    const minutes = String(now.getMinutes()).padStart(2, "0");
+                                                    const seconds = String(now.getSeconds()).padStart(2, "0");
+                                                    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+                                                    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                                                        }
 
-                                                    function deleteFavoriteMovie() {
-                                                        callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
-                                                    }
+                                                        function addToFavorite() {
+                                                            let favoritedAtInput = document.getElementById("favoritedAtInput");
+                                                            favoritedAtInput.value = getCurrentDateTime();
+                                                            callServlet(
+                                                                    "addToFavoriteForm",
+                                                                    "HandleDisplayMovieInfo?movieID=" + movieID,
+                                                                    "POST"
+                                                                    );
+                                                        }
 
-                                                    function viewFavouriteMovies() {
-                                                        callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
-                                                    }
-                                                    function selectCinemaChain(cinemaChainID) {
-                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
-                                                    }
+                                                        function deleteFavoriteMovie() {
+                                                            callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
+                                                        }
 
-                                                    function selectCinema(cinemaID) {
-                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-                                                    }
+                                                        function viewFavouriteMovies() {
+                                                            callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
+                                                        }
+                                                        function selectCinemaChain(cinemaChainID) {
+                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
+                                                        }
 
-                                                    function selectDate(date) {
-                                                        const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                                        const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                                                        window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-                                                    }
+                                                        function selectCinema(cinemaID) {
+                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                                        }
 
-                                                    function selectSlot(movieSlotID) {
-                                                        var form = document.createElement('form');
-                                                        form.method = "GET";
-                                                        form.action = "selectSeat";
+                                                        function selectDate(date) {
+                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                                        }
 
-                                                        var actionInput = document.createElement('input');
-                                                        actionInput.type = 'hidden';
-                                                        actionInput.name = 'action';
-                                                        actionInput.value = 'selectSlot';
-                                                        form.appendChild(actionInput);
+                                                        function selectSlot(movieSlotID) {
+                                                            var form = document.createElement('form');
+                                                            form.method = "GET";
+                                                            form.action = "selectSeat";
 
-                                                        var slotInput = document.createElement('input');
-                                                        slotInput.type = 'hidden';
-                                                        slotInput.name = 'movieSlotID';
-                                                        slotInput.value = movieSlotID;
-                                                        form.appendChild(slotInput);
+                                                            var actionInput = document.createElement('input');
+                                                            actionInput.type = 'hidden';
+                                                            actionInput.name = 'action';
+                                                            actionInput.value = 'selectSlot';
+                                                            form.appendChild(actionInput);
 
-                                                        document.body.appendChild(form);
-                                                        form.submit();
-                                                    }
+                                                            var slotInput = document.createElement('input');
+                                                            slotInput.type = 'hidden';
+                                                            slotInput.name = 'movieSlotID';
+                                                            slotInput.value = movieSlotID;
+                                                            form.appendChild(slotInput);
+
+                                                            document.body.appendChild(form);
+                                                            form.submit();
+                                                        }
+
+                                                        function checkReviewCondition(event) {
+                                                            const movieIDStr = event.target.dataset.movieId;
+                                                            console.log("movieID nhận được:", movieIDStr);
+
+                                                            if (!movieIDStr) {
+                                                                console.error('Movie ID không hợp lệ!');
+                                                                alert('Không thể xác định movieID.');
+                                                                return;
+                                                            }
+
+                                                            const path = `/Unove/movie/reviewMovie?movieID=` + encodeURIComponent(movieIDStr);
+                                                            console.log("Path URL:", path);
+
+                                                            fetch(path, {
+                                                                method: 'GET',
+                                                                headers: {
+                                                                    'Accept': 'application/json'
+                                                                }
+                                                            })
+                                                                    .then(response => {
+                                                                        if (response.ok) {
+                                                                            // Nếu điều kiện hợp lệ, chuyển hướng tới JSP (phía server sẽ xử lý điều này)
+                                                                            window.location.href = path;
+                                                                            return;
+                                                                        } else {
+                                                                            // Nếu điều kiện không hợp lệ, trả về JSON chứa thông báo lỗi
+                                                                            return response.json();
+                                                                        }
+                                                                    })
+                                                                    .then(data => {
+                                                                        if (data && data.message) {
+                                                                            // Hiển thị thông báo lỗi từ JSON trong popup
+                                                                            document.getElementById('reviewPopup').classList.remove('hidden');
+                                                                            document.getElementById('reviewPopupMessage').textContent = data.message;
+                                                                        }
+                                                                    });
+                                                        }
+                                                        function closePopup() {
+                                                            // Lấy phần tử popup bằng ID
+                                                            const popup = document.getElementById('reviewPopup');
+
+                                                            // Thêm lớp "hidden" để ẩn popup
+                                                            popup.classList.add('hidden');
+                                                        }
+
+
                 </script>
             </body>
         </html>
