@@ -201,6 +201,8 @@ public class RouterJSP {
     public static String WRITE_REVIEW_MOVIE = "/page/user/review/movieReview.jsp";
     
     public static String HISTORY_ORDER = "/page/user/HistoryOrder.jsp";
+    
+    public static String HISTORY_ORDER_DETAIL = "/page/user/DetailHistoryOrder.jsp";
 
     public static String MOVIE_DISCOUNT_PAGE ="/page/admin/ManageDiscount.jsp";
 }
