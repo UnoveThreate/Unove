@@ -21,6 +21,7 @@ import model.User;
 import util.RouterJSP;
 import util.RouterURL;
 import java.util.Enumeration;
+import util.common.FilterPattern;
 
 /**
  *
@@ -99,6 +100,7 @@ public class LoginServlet extends HttpServlet {
 
         Boolean ok = null;
         User user;
+
         String role = "";
 
         try {
@@ -108,6 +110,9 @@ public class LoginServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
+        String roleBefore = (String) session.getAttribute("role");
+        boolean isRoleConsistent = roleBefore == null;
+
         if (ok) {
 
             try {
@@ -121,6 +126,9 @@ public class LoginServlet extends HttpServlet {
                 System.out.println("user" + user.toString());
 
                 role = user.getRole();
+                if (roleBefore != null) {
+                    isRoleConsistent = roleBefore.equalsIgnoreCase(role);
+                }
 
                 session.setAttribute("userID", user.getUserID());
                 session.setAttribute("username", user.getUsername());
@@ -132,55 +140,28 @@ public class LoginServlet extends HttpServlet {
             } catch (SQLException ex) {
                 Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
+
+            boolean isValidRedirect = FilterPattern.isRedirectRequired(request);
+
+            if (isValidRedirect && isRoleConsistent) {
+                FilterPattern.reconstructAndRedirectWithStoredParams(request, response);
+                return;
+            }
+
             switch (role) {
                 case "USER" -> {
-                    //TEMP CODE FOR GETTING CHAINS & Username
-
-                    // Retrieve the originally requested URL
-                    String redirectTo = (String) session.getAttribute("redirectTo");
-                    System.out.println("redirect to: " + redirectTo);
-
-                    System.out.print("USSSSSSERRRR");
-
-                    if (redirectTo == null) {
-                        response.sendRedirect(RouterURL.LANDING_PAGE);
-                    } else {
-                        // Reconstruct the URL with stored parameters
-                        StringBuilder redirectUrlWithParams = new StringBuilder(redirectTo);
-                        boolean firstParam = true;
-                        Enumeration<String> attributeNames = session.getAttributeNames();
-
-                        while (attributeNames.hasMoreElements()) {
-                            String attributeName = attributeNames.nextElement();
-                            if (attributeName.startsWith("param_")) {
-                                String paramName = attributeName.substring(6);
-                                String paramValue = (String) session.getAttribute(attributeName);
-
-                                if (firstParam) {
-                                    redirectUrlWithParams.append("?");
-                                    firstParam = false;
-                                } else {
-                                    redirectUrlWithParams.append("&");
-                                }
-
-                                redirectUrlWithParams.append(paramName).append("=").append(paramValue);
-                                session.removeAttribute(attributeName);
-                            }
-                        }
-
-                        session.removeAttribute("redirectTo");
-                        response.sendRedirect(redirectUrlWithParams.toString());
-                    }
-
+                    System.out.print("USER LOGINED");
+                    response.sendRedirect(RouterURL.LANDING_PAGE);
                 }
                 case "OWNER" -> {
                     System.out.print("OWNER LOGINED");
-                    response.sendRedirect(RouterURL.OWNER_DASHBOARD_PAGE );
+                    response.sendRedirect(RouterURL.OWNER_DASHBOARD_PAGE);
 
                 }
-
-                case "ADMIN" ->
-                    response.sendRedirect(RouterURL.ADMIN_PAGE );
+                case "ADMIN" -> {
+                    System.out.print("ADMIn LOGINED");
+                    response.sendRedirect(RouterURL.ADMIN_PAGE);
+                }
             }
 
         } else {
