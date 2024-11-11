@@ -20,7 +20,7 @@ public class Pattern {
 
     public static final List<String> EXCLUDED_EXTENSIONS = Arrays.asList(
             ".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".svg",
-            ".woff", ".woff2", ".ttf"
+            ".woff", ".woff2", ".ttf", ".json"
     );
 
     public static final String PREFIX_SERVER = "Unove";

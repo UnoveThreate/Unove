@@ -4,8 +4,14 @@
  */
 package util;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import util.common.FilterPattern;
+import util.common.Key;
 
 /**
  *
@@ -83,6 +89,82 @@ public class Validation {
      */
     public static boolean isValidRoleAdmin(String roleInput) {
         return Role.isRoleValid(roleInput, Role.ADMIN);
+    }
+
+    /**
+     * Redirects to the login page if the user does not meet the required role.
+     *
+     * @param request the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @param roleRequired the role required to access the page
+     * @return true if the user meets the required role, false otherwise
+     * @throws IOException if an I/O error occurs during redirection
+     * @throws Exception if an error occurs while retrieving the user's role
+     */
+    public static boolean requireLogin(HttpServletRequest request, HttpServletResponse response, String roleRequired) throws IOException, Exception {
+
+        if (roleRequired == null) {
+            return true;
+        }
+
+        HttpSession session = request.getSession();
+        Integer userID = (Integer) session.getAttribute("userID");
+        String role = FilterPattern.getRole(request);
+
+        if (userID == null || role == null) {
+            FilterPattern.redirectToLogin(response);
+            return false;
+        }
+
+        // Validate the required role type
+        if (!isValidRoleType(roleRequired)) {
+            response.sendRedirect(RouterURL.ERROR_PAGE);
+            return false;
+        }
+
+        // Check role-specific access and redirect if the user does not meet the required role
+        return isUserAuthorizedForRole(roleRequired, role, request, response);
+    }
+
+    /**
+     * Checks if the provided roleRequired is a valid role type.
+     *
+     * @param roleRequired the role to validate
+     * @return true if roleRequired is a valid role, false otherwise
+     */
+    public static boolean isValidRoleType(String roleRequired) {
+        return roleRequired.equals(Role.USER) || roleRequired.equals(Role.OWNER) || roleRequired.equals(Role.ADMIN);
+    }
+
+    /**
+     * Checks if the user is authorized for the specified role and handles
+     * redirection if not.
+     *
+     * @param roleRequired the required role for access
+     * @param userRole the user's current role
+     * @param request the HTTP servlet request
+     * @param response the HTTP servlet response
+     * @return true if the user is authorized, false if redirection occurred
+     * @throws IOException if an I/O error occurs during redirection
+     */
+    public static boolean isUserAuthorizedForRole(String roleRequired, String userRole, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        boolean isAuthorized = switch (roleRequired) {
+            case Role.USER ->
+                Validation.isValidRoleUser(userRole);
+            case Role.OWNER ->
+                Validation.isValidRoleOwner(userRole);
+            case Role.ADMIN ->
+                Validation.isValidRoleAdmin(userRole);
+            default ->
+                false;
+        };
+
+        if (!isAuthorized) {
+            request.getSession().setAttribute(Key.ROLE_REQUIRE, roleRequired);
+            FilterPattern.redirectToLogin(response);
+        }
+
+        return isAuthorized;
     }
 
 }

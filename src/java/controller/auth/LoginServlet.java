@@ -20,8 +20,11 @@ import java.util.logging.Logger;
 import model.User;
 import util.RouterJSP;
 import util.RouterURL;
-import java.util.Enumeration;
+import util.Role;
+import util.Util;
 import util.common.FilterPattern;
+import util.common.Key;
+import util.common.Message;
 
 /**
  *
@@ -30,7 +33,6 @@ import util.common.FilterPattern;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
-    RouterJSP route = new RouterJSP();
     UserDAO userDAO;
 
     @Override
@@ -73,11 +75,32 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher(route.LOGIN).forward(request, response);
+        HttpSession session = request.getSession();
+        String currentRole = (String) session.getAttribute(Key.ROLE);
+        String roleRequire = (String) session.getAttribute(Key.ROLE_REQUIRE);
+
+        if (currentRole == null) {
+            request.getRequestDispatcher(RouterJSP.LOGIN).forward(request, response);
+            return;
+        }
+
+        if (roleRequire != null && !roleRequire.equalsIgnoreCase(currentRole)) {
+            session.removeAttribute(Key.ROLE_REQUIRE);
+            session.removeAttribute(Key.ROLE);
+            request.getRequestDispatcher(RouterJSP.LOGIN).forward(request, response);
+            return;
+        }
+
+        try {
+            FilterPattern.reconstructAndRedirectWithStoredParams(request, response);
+        } catch (Exception ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
-     * Handles the HTTP <code>POST</code> method.
+     * Handles the HTTP <code>POST</code> method for user login.
      *
      * @param request servlet request
      * @param response servlet response
@@ -88,85 +111,141 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String username_email = request.getParameter("username-email");
-        String password = request.getParameter("password");
-        if (username_email == null || password == null) {
-            request.setAttribute("ok", "bạn chưa nhâp tên đăng nhập hoặc password");
-            request.getRequestDispatcher(route.LOGIN).forward(request, response);
-            return;
-        }
-
-        String hash = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
-
-        Boolean ok = null;
-        User user;
-
-        String role = "";
-
         try {
-            ok = userDAO.checkLogin(username_email, hash);
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            // Retrieve login parameters
+            String usernameEmail = request.getParameter("username-email");
+            String password = request.getParameter("password");
 
-        HttpSession session = request.getSession();
-        String roleBefore = (String) session.getAttribute("role");
-        boolean isRoleConsistent = roleBefore == null;
-
-        if (ok) {
-
-            try {
-                user = userDAO.getUser(username_email);
-
-                if (user == null) {
-                    response.sendRedirect(RouterURL.LOGIN);
-                    return;
-                }
-
-                System.out.println("user" + user.toString());
-
-                role = user.getRole();
-                if (roleBefore != null) {
-                    isRoleConsistent = roleBefore.equalsIgnoreCase(role);
-                }
-
-                session.setAttribute("userID", user.getUserID());
-                session.setAttribute("username", user.getUsername());
-                session.setAttribute("email", user.getEmail());
-                session.setAttribute("role", role);
-
-                System.out.println("role after login: " + session.getAttribute("role"));
-
-            } catch (SQLException ex) {
-                Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            boolean isValidRedirect = FilterPattern.isRedirectRequired(request);
-
-            if (isValidRedirect && isRoleConsistent) {
-                FilterPattern.reconstructAndRedirectWithStoredParams(request, response);
+            // Check if parameters are provided
+            if (Util.isNullOrEmpty(usernameEmail) || Util.isNullOrEmpty(password)) {
+                setLoginError(request, "Please enter both username/email and password.");
+                forwardToLogin(request, response);
                 return;
             }
 
-            switch (role) {
-                case "USER" -> {
-                    System.out.print("USER LOGINED");
-                    response.sendRedirect(RouterURL.LANDING_PAGE);
-                }
-                case "OWNER" -> {
-                    System.out.print("OWNER LOGINED");
-                    response.sendRedirect(RouterURL.OWNER_DASHBOARD_PAGE);
+            // Hash password
+            String hashedPassword = Util.hashPassword(password);
 
-                }
-                case "ADMIN" -> {
-                    System.out.print("ADMIn LOGINED");
-                    response.sendRedirect(RouterURL.ADMIN_PAGE);
-                }
+            // Verify user credentials
+            User user = authenticateUser(usernameEmail, hashedPassword);
+            if (user == null) {
+                setLoginError(request, Message.INVALID_USER_LOGIN_AUTH);
+                forwardToLogin(request, response);
+                return;
             }
 
-        } else {
-            request.setAttribute("ok", ok);
-            request.getRequestDispatcher(RouterJSP.LOGIN).forward(request, response);
+            // Manage session and redirect if needed
+            manageSessionAndRedirect(request, response, user);
+        } catch (Exception ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Sets a login error message in the request attributes.
+     *
+     * @param request the HttpServletRequest
+     * @param errorText the error message to display
+     */
+    private void setLoginError(HttpServletRequest request, String errorText) {
+        request.setAttribute("ok", errorText);
+    }
+
+    /**
+     * Forwards the request to the login page.
+     *
+     * @param request the HttpServletRequest
+     * @param response the HttpServletResponse
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private void forwardToLogin(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher(RouterJSP.LOGIN).forward(request, response);
+    }
+
+    /**
+     * Authenticates the user by checking the username/email and hashed
+     * password.
+     *
+     * @param usernameEmail the username or email of the user
+     * @param hashedPassword the hashed password
+     * @return the User object if authentication is successful, null otherwise
+     */
+    private User authenticateUser(String usernameEmail, String hashedPassword) {
+        try {
+            boolean isUserValidLogin = userDAO.checkLogin(usernameEmail, hashedPassword);
+            if (isUserValidLogin) {
+                return userDAO.getUser(usernameEmail);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, "Database error during authentication", ex);
+        }
+        return null;
+    }
+
+    /**
+     * Manages session attributes and redirects based on user role.
+     *
+     * @param request the HttpServletRequest
+     * @param response the HttpServletResponse
+     * @param user the authenticated User object
+     * @throws IOException if an I/O error occurs during redirection
+     */
+    private void manageSessionAndRedirect(HttpServletRequest request, HttpServletResponse response, User user)
+            throws IOException, Exception {
+
+        HttpSession session = request.getSession();
+        String currentRole = user.getRole();
+        String previousRole = (String) session.getAttribute("role");
+
+        setUserSessionAttributes(request.getSession(), user);
+
+        boolean isRoleConsistent = previousRole == null || previousRole.equalsIgnoreCase(currentRole);
+
+        //if consistent role user and store url history to redirect-> accept  redirect to history page, 
+        boolean isValidRedirectHistoryURL = FilterPattern.isRedirectRequired(request) && isRoleConsistent;
+
+        // Handle redirection if a valid redirect URL exists and roles are consistent
+        if (isValidRedirectHistoryURL) {
+            FilterPattern.reconstructAndRedirectWithStoredParams(request, response);
+            return;
+        }
+
+        // Redirect to role-specific default page
+        redirectToRolePage(response, currentRole);
+    }
+
+    /**
+     * Sets session attributes for the authenticated user.
+     *
+     * @param session the HttpSession to store user information
+     * @param user the authenticated User object
+     */
+    private void setUserSessionAttributes(HttpSession session, User user) {
+        session.setAttribute("userID", user.getUserID());
+        session.setAttribute("username", user.getUsername());
+        session.setAttribute("email", user.getEmail());
+        session.setAttribute("role", user.getRole());
+    }
+
+    /**
+     * Redirects the user to a page based on their role.
+     *
+     * @param response the HttpServletResponse for redirection
+     * @param role the user's role
+     * @throws IOException if an I/O error occurs during redirection
+     */
+    private void redirectToRolePage(HttpServletResponse response, String role) throws IOException {
+        switch (role) {
+            case Role.USER ->
+                response.sendRedirect(RouterURL.LANDING_PAGE);
+            case Role.OWNER ->
+                response.sendRedirect(RouterURL.OWNER_DASHBOARD_PAGE);
+            case Role.ADMIN ->
+                response.sendRedirect(RouterURL.ADMIN_PAGE);
+            default ->
+                response.sendRedirect(RouterURL.LOGIN);
         }
     }
 

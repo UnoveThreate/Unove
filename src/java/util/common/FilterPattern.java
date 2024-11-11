@@ -16,6 +16,7 @@ import java.util.Map;
 import util.RouterURL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import util.Validation;
 
 /**
  *
@@ -54,14 +55,8 @@ public class FilterPattern {
             String urlStore = storeUrlAndParams(httpRequest);
             LOGGER.info("history url:  " + urlStore);
 
-            // Retrieve the user's role from session or database
-            String role = getRole(httpRequest);
-
-            // Get the requested URL path
-            String url = httpRequest.getServletPath();
-
             // if url doesn't require for roles -> accept redirect without login 
-            boolean isDenyAccessBeforeLogin = isRoleMismatch(url, role);
+            boolean isDenyAccessBeforeLogin = isRoleMismatch(httpRequest);
 
             if (!isDenyAccessBeforeLogin) {
                 return false;
@@ -78,19 +73,34 @@ public class FilterPattern {
 
     /**
      * Checks if the user's role matches the required role for the requested
-     * URL.
+     * URL. Invalidates the session if the role does not match the required role
+     * for the URL.
      *
-     * @param url the URL to check
-     * @param role the user's current role
-     * @return true if the role does not match the required role for the URL;
-     * false otherwise
+     * @param httpRequest the HttpServletRequest containing the URL and session
+     * @return true if there is a role mismatch; false otherwise
+     * @throws Exception if an error occurs during role retrieval
      */
-    private static boolean isRoleMismatch(String url, String role) {
+    private static boolean isRoleMismatch(HttpServletRequest httpRequest) throws Exception {
+        // Get the requested URL path and user's role
+        String url = httpRequest.getServletPath();
+        String role = getRole(httpRequest);
+
+        // Iterate over URL role mappings to check for a match
         for (Map.Entry<String, RoleEnum> entry : URL_ROLE_MAP.entrySet()) {
-            if (url.contains(entry.getKey()) && role != null && !role.equals(entry.getValue().name())) {
+            if (!url.contains(entry.getKey())) {
+                continue;
+            }
+            // Redirect if no role is found for protected URLs
+            if (role == null) {
+                return true;
+            }
+            // Invalidate session and redirect if role mismatch occurs
+            if (!role.equals(entry.getValue().name())) {
+                httpRequest.getSession().invalidate();
                 return true;
             }
         }
+        // No mismatch if the required role matches the user's role
         return false;
     }
 
@@ -102,7 +112,7 @@ public class FilterPattern {
      * @throws Exception if there is an error retrieving the role from the
      * database
      */
-    private static String getRole(HttpServletRequest httpRequest) throws Exception {
+    public static String getRole(HttpServletRequest httpRequest) throws Exception {
 
         HttpSession session = httpRequest.getSession();
 
@@ -110,7 +120,6 @@ public class FilterPattern {
         String email = (String) session.getAttribute("email");
         String role = (String) session.getAttribute("role");
 
-        //If user not login 
         if (username == null && email == null && role == null) {
             return null;
         }
@@ -189,7 +198,7 @@ public class FilterPattern {
      * @return true after performing the redirection
      * @throws IOException if an error occurs during the redirection process
      */
-    private static boolean redirectToLogin(HttpServletResponse httpResponse) throws IOException {
+    public static boolean redirectToLogin(HttpServletResponse httpResponse) throws IOException {
         httpResponse.sendRedirect(LOGIN_URI);
         return true;
     }
@@ -220,10 +229,15 @@ public class FilterPattern {
      * @param response the HttpServletResponse used to send the redirect
      * @throws IOException if an error occurs during redirection
      */
-    public static void reconstructAndRedirectWithStoredParams(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public static void reconstructAndRedirectWithStoredParams(HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
 
         HttpSession session = request.getSession();
         String redirectTo = (String) session.getAttribute("redirectTo");
+
+        if (!isRedirectRequired(request)) {
+            response.sendRedirect(RouterURL.LANDING_PAGE);
+            return;
+        }
 
         StringBuilder redirectUrlWithParams = new StringBuilder(redirectTo);
         boolean firstParam = true;

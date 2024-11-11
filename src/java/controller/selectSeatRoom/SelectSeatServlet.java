@@ -23,17 +23,18 @@ import java.util.logging.Logger;
 import model.BookingSession;
 import model.MovieSlot;
 import model.Seat;
+import util.Role;
 import util.RouterURL;
 import util.Validation;
 
 @WebServlet("/selectSeat")
 public class SelectSeatServlet extends HttpServlet {
-    
+
     private static final Logger LOGGER = Logger.getLogger(SelectSeatServlet.class.getName());
     private SeatDAO seatDAO;
     private MovieScheduleSlotDAO movieSlotDAO;
     private TicketDAO ticketDAO;
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -48,34 +49,33 @@ public class SelectSeatServlet extends HttpServlet {
             throw new ServletException("Không thể khởi tạo DAO", e);
         }
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         LOGGER.info("doGet method started");
         try {
             HttpSession session = request.getSession();
-            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
-            Integer userID = (Integer) session.getAttribute("userID");
-            String role = (String) session.getAttribute("role");
             
-            if (userID == null || !Validation.isValidRoleUser(role)) {
-                request.setAttribute("errorMessage", "Login de thuc hien dat ghe");
-                response.sendRedirect(RouterURL.LOGIN);
+            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
+        
+            boolean isValidate = Validation.requireLogin(request, response, Role.USER);
+            
+            if (!isValidate) {
                 return;
             }
             
             if (bookingSession != null) {
                 session.removeAttribute("bookingSession");
             }
-            
+
             String movieSlotIDParam = request.getParameter("movieSlotID");
             if (movieSlotIDParam != null) {
                 int movieSlotID = Integer.parseInt(movieSlotIDParam);
-                
+
                 MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
                 request.setAttribute("selectedSlot", selectedSlot);
-                
+
                 LOGGER.info("Retrieved MovieSlot: " + selectedSlot);
 
                 // Lấy danh sách tất cả ghế trong phòng
@@ -90,16 +90,16 @@ public class SelectSeatServlet extends HttpServlet {
                         seat.setAvailable(false);
                     }
                 }
-                
+
                 request.setAttribute("seats", seats);
                 request.setAttribute("movieSlotID", movieSlotID);
-                
+
                 request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
             } else {
                 request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
                 request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
             }
-            
+
         } catch (NumberFormatException e) {
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);
             handleError(request, response, "Suất chiếu không hợp lệ.");
@@ -108,40 +108,40 @@ public class SelectSeatServlet extends HttpServlet {
             handleError(request, response, "Đã xảy ra lỗi khi tải trang chọn ghế: " + e.getMessage());
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         LOGGER.info("doPost method started");
-        
+
         HttpSession session = request.getSession();
-        
+
         if (session == null) {
             LOGGER.warning("Session is null");
             handleError(request, response, "Phiên làm việc đã hết hạn. Vui lòng thử lại.");
             return;
         }
-        
+
         BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
-        
+
         if (bookingSession == null) {
             bookingSession = new BookingSession();
         }
-        
+
         String movieSlotIDParam = request.getParameter("movieSlotID");
         String selectedSeatIDsParam = request.getParameter("selectedSeatID");
         LOGGER.info("Received POST - movieSlotID: " + movieSlotIDParam + ", selectedSeatIDs: " + selectedSeatIDsParam);
-        
+
         if (movieSlotIDParam == null || movieSlotIDParam.isEmpty()) {
             LOGGER.warning("movieSlotID is null or empty");
             handleError(request, response, "Thiếu thông tin suất chiếu. Vui lòng thử lại.");
             return;
         }
-        
+
         try {
             int movieSlotID = Integer.parseInt(movieSlotIDParam);
             bookingSession.setMovieSlotID(movieSlotID);
-            
+
             MovieSlot movieSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
 
             // Gọi phương thức getCinemaIdByMovieSlotId để lấy CinemaID
@@ -154,10 +154,10 @@ public class SelectSeatServlet extends HttpServlet {
             if (selectedSeatIDsParam == null || selectedSeatIDsParam.isEmpty()) {
                 throw new ServletException("Vui lòng chọn ít nhất một ghế.");
             }
-            
+
             String[] selectedSeatIDs = selectedSeatIDsParam.split(",");
             List<Seat> selectedSeats = getSelectedSeats(selectedSeatIDs);
-            
+
             if (selectedSeats.isEmpty()) {
                 throw new ServletException("Không có ghế hợp lệ được chọn.");
             }
@@ -169,7 +169,7 @@ public class SelectSeatServlet extends HttpServlet {
                 }
                 bookingSession.addSelectedSeatID(seat.getSeatID());
             }
-            
+
             double totalPriceTicket = calculateTotalPrice(selectedSeats, movieSlot);
 
             // Cập nhật BookingSession trong session
@@ -182,7 +182,7 @@ public class SelectSeatServlet extends HttpServlet {
 
             // Điều hướng đến trang chọn đồ ăn với CinemaID trong đường dẫn
             response.sendRedirect(request.getContextPath() + RouterURL.SELECT_FOOD + "?cinemaID=" + cinemaID);
-            
+
         } catch (NumberFormatException e) {
             LOGGER.log(Level.WARNING, "Invalid movieSlotID", e);
             handleError(request, response, "Dữ liệu suất chiếu không hợp lệ.");
@@ -194,7 +194,7 @@ public class SelectSeatServlet extends HttpServlet {
             handleError(request, response, "Đã xảy ra lỗi khi xử lý đặt vé: " + e.getMessage());
         }
     }
-    
+
     private List<Seat> getSelectedSeats(String[] selectedSeatIDs) throws Exception {
         List<Seat> selectedSeats = new ArrayList<>();
         for (String seatID : selectedSeatIDs) {
@@ -212,12 +212,12 @@ public class SelectSeatServlet extends HttpServlet {
         }
         return selectedSeats;
     }
-    
+
     private double calculateTotalPrice(List<Seat> selectedSeats, MovieSlot movieSlot) {
         double basePrice = movieSlot.getPrice();
         return selectedSeats.size() * basePrice;
     }
-    
+
     private void handleError(HttpServletRequest request, HttpServletResponse response, String errorMessage)
             throws ServletException, IOException {
         if (!response.isCommitted()) { // Kiểm tra xem phản hồi đã được gửi chưa
@@ -228,5 +228,5 @@ public class SelectSeatServlet extends HttpServlet {
             LOGGER.warning("Response was already committed, cannot forward to error page");
         }
     }
-    
+
 }
