@@ -170,6 +170,7 @@ CREATE TABLE `Order` (
     FOREIGN KEY (PremiumTypeID) REFERENCES PremiumType(id)
 );
 
+
 -- Bảng Ticket: Lưu thông tin vé đã mua
 CREATE TABLE Ticket (
     TicketID INT AUTO_INCREMENT PRIMARY KEY,
@@ -257,6 +258,16 @@ CREATE TABLE MemberVIP (
     FOREIGN KEY (premium_type_id) REFERENCES PremiumType(id),
     FOREIGN KEY (user_id) REFERENCES User(UserID),
     FOREIGN KEY (cinema_id) REFERENCES Cinema(CinemaID)
+);
+
+CREATE TABLE MovieDiscount (
+    DiscountID INT AUTO_INCREMENT PRIMARY KEY,
+    discountCode VARCHAR(20) NOT NULL, -- Alphanumeric code, unique identifier for each discount
+    DiscountPercentage DECIMAL(5, 2) NOT NULL CHECK (DiscountPercentage BETWEEN 0 AND 100), -- Percentage between 0 and 100
+    StartDate DATE NOT NULL, -- Start date of discount validity
+    EndDate DATE NOT NULL,   -- End date of discount validity
+    Status ENUM('active', 'inactive') DEFAULT 'active', -- Status of the discount (active or inactive)
+    UNIQUE (discountCode) -- Ensures each discount code is unique
 );
 
 CREATE EVENT IF NOT EXISTS update_pending_orders
