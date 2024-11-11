@@ -1078,6 +1078,11 @@
                         }
                     }
 
+                    .delete-review-btn:hover {
+                        background-color: #0056b3; /* Darker blue on hover */
+                        transform: scale(1.05); /* Slightly enlarge the button on hover */
+                    }
+
                 </style>
             </head>
             <body>
@@ -1345,147 +1350,147 @@
 
                 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
                 <script>
-                                AOS.init({
-                                    duration: 1000,
-                                    once: true,
-                                });
+                                                AOS.init({
+                                                    duration: 1000,
+                                                    once: true,
+                                                });
 
-                                const trailerBtn = document.getElementById("trailerBtn");
-                                const posterPlayButton = document.getElementById("posterPlayButton");
-                                const trailerModal = document.getElementById("trailerModal");
-                                const closeBtn = document.querySelector(".close");
-                                const trailerVideo = document.getElementById("trailerVideo");
+                                                const trailerBtn = document.getElementById("trailerBtn");
+                                                const posterPlayButton = document.getElementById("posterPlayButton");
+                                                const trailerModal = document.getElementById("trailerModal");
+                                                const closeBtn = document.querySelector(".close");
+                                                const trailerVideo = document.getElementById("trailerVideo");
 
-                                function showTrailer() {
-                                    trailerModal.style.display = "flex";
-                                    trailerVideo.src += "?autoplay=1";
-                                }
-
-                                function hideTrailer() {
-                                    trailerModal.style.display = "none";
-                                    trailerVideo.src = trailerVideo.src.split("?")[0];
-                                }
-
-                                trailerBtn.onclick = showTrailer;
-                                posterPlayButton.onclick = showTrailer;
-
-                                closeBtn.onclick = hideTrailer;
-
-                                window.onclick = function (event) {
-                                    if (event.target == trailerModal) {
-                                        hideTrailer();
-                                    }
-                                };
-
-                                function getCurrentDateTime() {
-                                    const now = new Date();
-                                    const year = now.getFullYear();
-                                    const month = String(now.getMonth() + 1).padStart(2, "0");
-                                    const day = String(now.getDate()).padStart(2, "0");
-                                    const hours = String(now.getHours()).padStart(2, "0");
-                                    const minutes = String(now.getMinutes()).padStart(2, "0");
-                                    const seconds = String(now.getSeconds()).padStart(2, "0");
-                                    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
-                                    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
-                                        }
-
-                                        function addToFavorite() {
-                                            let favoritedAtInput = document.getElementById("favoritedAtInput");
-                                            favoritedAtInput.value = getCurrentDateTime();
-                                            callServlet(
-                                                    "addToFavoriteForm",
-                                                    "HandleDisplayMovieInfo?movieID=" + movieID,
-                                                    "POST"
-                                                    );
-                                        }
-
-                                        function deleteFavoriteMovie() {
-                                            callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
-                                        }
-
-                                        function viewFavouriteMovies() {
-                                            callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
-                                        }
-                                        function selectCinemaChain(cinemaChainID) {
-                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
-                                        }
-
-                                        function selectCinema(cinemaID) {
-                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
-                                        }
-
-                                        function selectDate(date) {
-                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
-                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
-                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
-                                        }
-
-                                        function selectSlot(movieSlotID) {
-                                            var form = document.createElement('form');
-                                            form.method = "GET";
-                                            form.action = "selectSeat";
-
-                                            var actionInput = document.createElement('input');
-                                            actionInput.type = 'hidden';
-                                            actionInput.name = 'action';
-                                            actionInput.value = 'selectSlot';
-                                            form.appendChild(actionInput);
-
-                                            var slotInput = document.createElement('input');
-                                            slotInput.type = 'hidden';
-                                            slotInput.name = 'movieSlotID';
-                                            slotInput.value = movieSlotID;
-                                            form.appendChild(slotInput);
-
-                                            document.body.appendChild(form);
-                                            form.submit();
-                                        }
-
-                                        function checkReviewCondition(event) {
-                                            const movieIDStr = event.target.dataset.movieId;
-                                            console.log("movieID nhận được:", movieIDStr);
-
-                                            if (!movieIDStr) {
-                                                console.error('Movie ID không hợp lệ!');
-                                                alert('Không thể xác định movieID.');
-                                                return;
-                                            }
-
-                                            const path = `/Unove/movie/reviewMovie?movieID=` + encodeURIComponent(movieIDStr);
-                                            console.log("Path URL:", path);
-
-                                            fetch(path, {
-                                                method: 'GET',
-                                                headers: {
-                                                    'Accept': 'application/json'
+                                                function showTrailer() {
+                                                    trailerModal.style.display = "flex";
+                                                    trailerVideo.src += "?autoplay=1";
                                                 }
-                                            })
-                                                    .then(response => {
-                                                        if (response.ok) {
-                                                            // Nếu điều kiện hợp lệ, chuyển hướng tới JSP (phía server sẽ xử lý điều này)
-                                                            window.location.href = path;
-                                                            return;
-                                                        } else {
-                                                            // Nếu điều kiện không hợp lệ, trả về JSON chứa thông báo lỗi
-                                                            return response.json();
-                                                        }
-                                                    })
-                                                    .then(data => {
-                                                        if (data && data.message) {
-                                                            // Hiển thị thông báo lỗi từ JSON trong popup
-                                                            document.getElementById('reviewPopup').classList.remove('hidden');
-                                                            document.getElementById('reviewPopupMessage').textContent = data.message;
-                                                        }
-                                                    });
-                                        }
-                                        function closePopup() {
-                                            // Lấy phần tử popup bằng ID
-                                            const popup = document.getElementById('reviewPopup');
 
-                                            // Thêm lớp "hidden" để ẩn popup
-                                            popup.classList.add('hidden');
-                                        }
+                                                function hideTrailer() {
+                                                    trailerModal.style.display = "none";
+                                                    trailerVideo.src = trailerVideo.src.split("?")[0];
+                                                }
+
+                                                trailerBtn.onclick = showTrailer;
+                                                posterPlayButton.onclick = showTrailer;
+
+                                                closeBtn.onclick = hideTrailer;
+
+                                                window.onclick = function (event) {
+                                                    if (event.target == trailerModal) {
+                                                        hideTrailer();
+                                                    }
+                                                };
+
+                                                function getCurrentDateTime() {
+                                                    const now = new Date();
+                                                    const year = now.getFullYear();
+                                                    const month = String(now.getMonth() + 1).padStart(2, "0");
+                                                    const day = String(now.getDate()).padStart(2, "0");
+                                                    const hours = String(now.getHours()).padStart(2, "0");
+                                                    const minutes = String(now.getMinutes()).padStart(2, "0");
+                                                    const seconds = String(now.getSeconds()).padStart(2, "0");
+                                                    const milliseconds = String(now.getMilliseconds()).padStart(3, "0");
+                                                    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}:${milliseconds}`;
+                                                        }
+
+                                                        function addToFavorite() {
+                                                            let favoritedAtInput = document.getElementById("favoritedAtInput");
+                                                            favoritedAtInput.value = getCurrentDateTime();
+                                                            callServlet(
+                                                                    "addToFavoriteForm",
+                                                                    "HandleDisplayMovieInfo?movieID=" + movieID,
+                                                                    "POST"
+                                                                    );
+                                                        }
+
+                                                        function deleteFavoriteMovie() {
+                                                            callServlet("deleteFavoriteMovieForm", "myfavouritemovie", "POST");
+                                                        }
+
+                                                        function viewFavouriteMovies() {
+                                                            callServlet("viewFavouriteMoviesForm", "myfavouritemovie", "GET");
+                                                        }
+                                                        function selectCinemaChain(cinemaChainID) {
+                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID;
+                                                        }
+
+                                                        function selectCinema(cinemaID) {
+                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID;
+                                                        }
+
+                                                        function selectDate(date) {
+                                                            const cinemaChainID = document.querySelector('#cinemaChainButtons .active').dataset.id;
+                                                            const cinemaID = document.querySelector('#cinemaButtons .active').dataset.id;
+                                                            window.location.href = 'HandleDisplayMovieInfo?movieID=${movie.movieID}&cinemaChainID=' + cinemaChainID + '&cinemaID=' + cinemaID + '&date=' + date;
+                                                        }
+
+                                                        function selectSlot(movieSlotID) {
+                                                            var form = document.createElement('form');
+                                                            form.method = "GET";
+                                                            form.action = "selectSeat";
+
+                                                            var actionInput = document.createElement('input');
+                                                            actionInput.type = 'hidden';
+                                                            actionInput.name = 'action';
+                                                            actionInput.value = 'selectSlot';
+                                                            form.appendChild(actionInput);
+
+                                                            var slotInput = document.createElement('input');
+                                                            slotInput.type = 'hidden';
+                                                            slotInput.name = 'movieSlotID';
+                                                            slotInput.value = movieSlotID;
+                                                            form.appendChild(slotInput);
+
+                                                            document.body.appendChild(form);
+                                                            form.submit();
+                                                        }
+
+                                                        function checkReviewCondition(event) {
+                                                            const movieIDStr = event.target.dataset.movieId;
+                                                            console.log("movieID nhận được:", movieIDStr);
+
+                                                            if (!movieIDStr) {
+                                                                console.error('Movie ID không hợp lệ!');
+                                                                alert('Không thể xác định movieID.');
+                                                                return;
+                                                            }
+
+                                                            const path = `/Unove/movie/reviewMovie?movieID=` + encodeURIComponent(movieIDStr);
+                                                            console.log("Path URL:", path);
+
+                                                            fetch(path, {
+                                                                method: 'GET',
+                                                                headers: {
+                                                                    'Accept': 'application/json'
+                                                                }
+                                                            })
+                                                                    .then(response => {
+                                                                        if (response.ok) {
+                                                                            // Nếu điều kiện hợp lệ, chuyển hướng tới JSP (phía server sẽ xử lý điều này)
+                                                                            window.location.href = path;
+                                                                            return;
+                                                                        } else {
+                                                                            // Nếu điều kiện không hợp lệ, trả về JSON chứa thông báo lỗi
+                                                                            return response.json();
+                                                                        }
+                                                                    })
+                                                                    .then(data => {
+                                                                        if (data && data.message) {
+                                                                            // Hiển thị thông báo lỗi từ JSON trong popup
+                                                                            document.getElementById('reviewPopup').classList.remove('hidden');
+                                                                            document.getElementById('reviewPopupMessage').textContent = data.message;
+                                                                        }
+                                                                    });
+                                                        }
+                                                        function closePopup() {
+                                                            // Lấy phần tử popup bằng ID
+                                                            const popup = document.getElementById('reviewPopup');
+
+                                                            // Thêm lớp "hidden" để ẩn popup
+                                                            popup.classList.add('hidden');
+                                                        }
 
 
                 </script>
