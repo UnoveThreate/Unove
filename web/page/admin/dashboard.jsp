@@ -121,7 +121,53 @@
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
 
-        <div class="wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/admin/dashboard" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/admin/cinemaChains" class="nav-link">
+              <i class="nav-icon fas fa-film"></i>
+              <p>Quản Lí Chuỗi Rạp</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/admin/cinemas" class="nav-link">
+              <i class="nav-icon fas fa-theater-masks"></i>
+              <p>Quản Lí Rạp</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/admin/movies" class="nav-link">
+              <i class="nav-icon fas fa-video"></i>
+              <p>Quản Lí Phim</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="${pageContext.request.contextPath}/admin/statistics" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              <p>Thống Kê Chi Tiết</p>
+            </a>
+          </li>
+            <li class="nav-item">
+          <a href="${pageContext.request.contextPath}/admin/discount/movieDiscount" class="nav-link">
+            <i class="nav-icon fas fa-tag"></i>
+            <p>Quản Lí Giảm Giá Phim</p>
+          </a>
+        </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
 
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand navbar-white navbar-light">
