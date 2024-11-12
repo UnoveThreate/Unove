@@ -9,7 +9,6 @@ import DAO.review.MovieReviewDAO;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,9 +29,10 @@ import util.RouterURL;
  */
 @WebServlet("/movie/reviewMovie")
 public class MovieReviewServlet extends HttpServlet {
-    
+
     private MovieReviewDAO mreviews;
     private MovieSlotDAO mslots;
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -43,71 +43,92 @@ public class MovieReviewServlet extends HttpServlet {
             throw new ServletException("Cannot initialize DAO", e);
         }
     }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Integer userID = (Integer) session.getAttribute("userID");
+        
+        response.setContentType("application/json;charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
-        // Kiểm tra người dùng
+        // Kiểm tra userID có hợp lệ không
         if (userID == null) {
             response.sendRedirect(RouterURL.LOGIN);
             return;
         }
-        
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+
+        // Kiểm tra movieID có hợp lệ không
         String movieIDStr = request.getParameter("movieID");
-        int movieID = Integer.parseInt(movieIDStr);
-        request.setAttribute("movieID", movieID);
-        
+        if (movieIDStr == null || movieIDStr.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"message\": \"Movie ID không hợp lệ\"}");
+            return;
+        }
+
+        int movieID;
         try {
-            Map<String, Object> movieDetails = mreviews.getMovieDetails(movieID); // Use Map<String, Object> here
-            if (movieDetails != null) {
-                // Retrieve movie details and set them as request attributes
+            movieID = Integer.parseInt(movieIDStr);
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"message\": \"Định dạng movie ID không đúng\"}");
+            return;
+        }
+
+        try {
+            // Lấy chi tiết phim
+            Map<String, Object> movieDetails = mreviews.getMovieDetails(movieID);
+            if (movieDetails == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.getWriter().write("{\"message\": \"Không tìm thấy thông tin phim\"}");
+                return;
+            }
+
+            boolean canReview = mreviews.canReview(userID, movieID);
+            boolean hasReviewed = mreviews.hasReviewed(userID, movieID);
+
+            if (canReview && !hasReviewed) {
+                // Nếu thỏa mãn điều kiện, chuyển hướng đến trang JSP
+                request.setAttribute("movieID", movieID);
                 request.setAttribute("movieTitle", movieDetails.get("title"));
                 request.setAttribute("movieImageURL", movieDetails.get("imageURL"));
                 request.setAttribute("movieRating", movieDetails.get("rating"));
-                request.setAttribute("genres", movieDetails.get("genres")); // Set genres as an attribute
-            }
-            boolean canReview = mreviews.canReview(userID, movieID);
-            boolean hasReview = mreviews.hasReviewed(userID, movieID);
-            
-            Logger.getLogger(MovieReviewServlet.class.getName()).log(Level.INFO, "Can review: " + canReview);
-            Logger.getLogger(MovieReviewServlet.class.getName()).log(Level.INFO, "Has reviewed: " + hasReview);
-            
-            // Nếu người dùng có quyền review và chưa review thì chuyển hướng đến trang viết review
-            if (canReview && hasReview) {
+                request.setAttribute("genres", movieDetails.get("genres"));
+
+                // Chuyển hướng tới trang JSP (không trả về JSON)
                 request.getRequestDispatcher(RouterJSP.WRITE_REVIEW_MOVIE).forward(request, response);
-                return;
+
+            } else {
+                // Nếu không thỏa mãn điều kiện, trả về JSON báo lỗi
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().write("{\"message\": \"Bạn chưa xem phim hoặc đã đánh giá phim này\"}");
             }
-            // Nếu người dùng đã review, điều hướng đến trang chi tiết phim
-            response.sendRedirect(RouterURL.DETAIL_MOVIE_PAGE + "?movieID=" + movieID);
         } catch (SQLException ex) {
             Logger.getLogger(MovieReviewServlet.class.getName()).log(Level.SEVERE, "Database error", ex);
-            response.sendRedirect(RouterJSP.ERROR_PAGE);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("{\"message\": \"Lỗi hệ thống, vui lòng thử lại sau\"}");
         }
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = (HttpSession) request.getSession();
         Integer userID = (Integer) session.getAttribute("userID");
-        
+
         if (userID == null) {
             response.sendRedirect(RouterURL.LOGIN);
             return;
         }
-        
+
         int movieID = Integer.parseInt(request.getParameter("movieID"));
         int rating = Integer.parseInt(request.getParameter("rating"));
         String content = request.getParameter("content");
-        
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String timeCreated = LocalDateTime.now().format(formatter);
-        
+
         try {
             mreviews.insertReview(userID, movieID, rating, timeCreated, content);
             mreviews.updateMovieRating(movieID);

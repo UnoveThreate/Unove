@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.Order;
+import model.Order_Update;
 import model.Review;
 import model.User;
 
@@ -51,7 +52,7 @@ public class MovieReviewDAO extends MySQLConnect {
     }
 
     public boolean hasReviewed(int userID, int movieID) throws SQLException {
-        String sqlQuery = "SELECT COUNT(*) FROM MovieReview WHERE UserID = ? AND MovieID = ? AND (EmailSent IS NULL OR EmailSent = 0)";
+        String sqlQuery = "SELECT COUNT(*) FROM MovieReview WHERE UserID = ? AND MovieID = ? ";
         try (PreparedStatement ps = connection.prepareStatement(sqlQuery)) {
             ps.setInt(1, userID);
             ps.setInt(2, movieID);
@@ -59,9 +60,9 @@ public class MovieReviewDAO extends MySQLConnect {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 int count = rs.getInt(1);
-                return count == 0; // Nếu count == 0, người dùng chưa đánh giá
+                return count > 0; // Nếu count > 0, người dùng đã đánh giá
             }
-            return true;
+            return false; // Nếu không có kết quả nào (người dùng chưa đánh giá)
         }
     }
 
@@ -198,53 +199,85 @@ public class MovieReviewDAO extends MySQLConnect {
         return null;
     }
 
-    public void markEmailSent(int userID, int movieID) throws SQLException {
-        // Kiểm tra xem bản ghi có tồn tại không
-        String checkQuery = "SELECT COUNT(*) FROM MovieReview WHERE UserID = ? AND MovieID = ?";
-        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
-            checkStmt.setInt(1, userID);
-            checkStmt.setInt(2, movieID);
-            ResultSet rs = checkStmt.executeQuery();
-            if (rs.next() && rs.getInt(1) == 0) {
-                // Nếu chưa có bản ghi, chèn mới
-                String insertQuery = "INSERT INTO MovieReview (UserID, MovieID, EmailSent) VALUES (?, ?, 1)";
-                try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
-                    insertStmt.setInt(1, userID);
-                    insertStmt.setInt(2, movieID);
-                    insertStmt.executeUpdate();
-                    return; // Đã chèn mới và đánh dấu EmailSent, không cần cập nhật tiếp
-                }
-            }
-        }
+//    public void markEmailSent(int userID, int movieID) throws SQLException {
+//        // Kiểm tra xem bản ghi có tồn tại không
+//        String checkQuery = "SELECT COUNT(*) FROM MovieReview WHERE UserID = ? AND MovieID = ?";
+//        try (PreparedStatement checkStmt = connection.prepareStatement(checkQuery)) {
+//            checkStmt.setInt(1, userID);
+//            checkStmt.setInt(2, movieID);
+//            ResultSet rs = checkStmt.executeQuery();
+//            if (rs.next() && rs.getInt(1) == 0) {
+//                // Nếu chưa có bản ghi, chèn mới
+//                String insertQuery = "INSERT INTO MovieReview (UserID, MovieID, EmailSent) VALUES (?, ?, 1)";
+//                try (PreparedStatement insertStmt = connection.prepareStatement(insertQuery)) {
+//                    insertStmt.setInt(1, userID);
+//                    insertStmt.setInt(2, movieID);
+//                    insertStmt.executeUpdate();
+//                    return; // Đã chèn mới và đánh dấu EmailSent, không cần cập nhật tiếp
+//                }
+//            }
+//        }
+//
+//        // Nếu đã có bản ghi, chỉ cần cập nhật EmailSent thành 1
+//        String updateQuery = "UPDATE MovieReview SET EmailSent = 1 WHERE UserID = ? AND MovieID = ?";
+//        try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
+//            updateStmt.setInt(1, userID);
+//            updateStmt.setInt(2, movieID);
+//            updateStmt.executeUpdate();
+//        }
+//    }
+    public List<Order_Update> getConfirmedOrders() throws SQLException {
+        List<Order_Update> orders = new ArrayList<>();
+        String sql = "SELECT OrderID, UserID, MovieSlotID, Status, ReviewRequestSent FROM `Order` WHERE Status = 'Confirmed'";
 
-        // Nếu đã có bản ghi, chỉ cần cập nhật EmailSent thành 1
-        String updateQuery = "UPDATE MovieReview SET EmailSent = 1 WHERE UserID = ? AND MovieID = ?";
-        try (PreparedStatement updateStmt = connection.prepareStatement(updateQuery)) {
-            updateStmt.setInt(1, userID);
-            updateStmt.setInt(2, movieID);
-            updateStmt.executeUpdate();
-        }
-    }
-
-    // Phương thức để lấy danh sách các đơn hàng đã xác nhận
-    public List<Order> getConfirmedOrders() throws SQLException {
-        List<Order> confirmedOrders = new ArrayList<>();
-        String sqlQuery = "SELECT * FROM `Order` WHERE Status = 'Confirmed'";
-
-        try (PreparedStatement ps = connection.prepareStatement(sqlQuery)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Order order = new Order();
+                Order_Update order = new Order_Update();
                 order.setOrderID(rs.getInt("OrderID"));
                 order.setUserID(rs.getInt("UserID"));
                 order.setMovieSlotID(rs.getInt("MovieSlotID"));
-                order.setTimeCreated(rs.getTimestamp("TimeCreated"));
-                order.setPremiumTypeID(rs.getInt("PremiumTypeID"));
                 order.setStatus(rs.getString("Status"));
-                confirmedOrders.add(order);
+                order.setReviewRequestSent(rs.getBoolean("ReviewRequestSent")); // Lấy trạng thái email
+
+                orders.add(order);
             }
         }
-
-        return confirmedOrders;
+        return orders;
     }
+
+    public void markReviewRequestSent(int orderID) throws SQLException {
+        String sql = "UPDATE `Order` SET ReviewRequestSent = 1 WHERE OrderID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            ps.executeUpdate();
+        }
+    }
+
+    public int deleteReview(int userID, int movieID) throws SQLException {
+        String sql = "DELETE FROM MovieReview WHERE UserID = ? AND MovieID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userID);
+            ps.setInt(2, movieID);
+
+            // Thực thi câu lệnh và trả về số dòng bị ảnh hưởng (dòng bị xóa)
+            return ps.executeUpdate();
+        }
+    }
+
+    public int updateReview(int userID, int movieID, int rating, String content) throws SQLException {
+        String sql = "UPDATE MovieReview SET Rating = ?, Content = ? WHERE UserID = ? AND MovieID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, rating);
+            ps.setString(2, content);
+            ps.setInt(3, userID);
+            ps.setInt(4, movieID);
+
+            // Thực thi câu lệnh và trả về số dòng bị ảnh hưởng (dòng được cập nhật)
+            return ps.executeUpdate();
+        }
+    }
+
 }

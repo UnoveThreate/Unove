@@ -242,11 +242,48 @@ public class OrderDAO extends MySQLConnect {
                 int canteenItemID = rs.getInt("CanteenItemID");
                 int quantity = rs.getInt("quantity");
 
-                canteenItems.add(new CanteenItemOrder(canteenItemID, quantity, orderID,name,price));
+                canteenItems.add(new CanteenItemOrder(canteenItemID, quantity, orderID, name, price));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return canteenItems;
+    }
+
+    public String getQRCodeUrlByOrderID(int orderID) {
+        String qrCodeUrl = null;
+        String sql = "SELECT QRCode FROM `order` WHERE OrderID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                qrCodeUrl = rs.getString("QRCode");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions as appropriate
+        }
+
+        return qrCodeUrl;
+    }
+     public String getStatusByOrderID(int orderID) {
+        String status = null ;
+        String sql = "SELECT Status FROM `order` WHERE OrderID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                status = rs.getString("Status");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exceptions as appropriate
+        }
+
+        return status;
     }
 }
