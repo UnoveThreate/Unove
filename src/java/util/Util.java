@@ -17,7 +17,6 @@ import java.security.SecureRandom;
 import java.util.Random;
 import javax.servlet.ServletException;
 
-
 /**
  *
  * @author PC
@@ -27,8 +26,8 @@ public class Util {
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int CODE_LENGTH = 8;
     private static final SecureRandom RANDOM = new SecureRandom();
-    
-    private static final String QR_CODE_IMAGE_PATH = "qrcode.png";
+
+    private static final String QR_CODE_IMAGE_PATH = "/tmp/qrcode.png";
 
     public static String getRanDom() {
         Random rnd = new Random();
@@ -68,5 +67,25 @@ public class Util {
         FileUploader cloudinaryUploader = new FileUploader();
         File qrCodeFile = new File(QR_CODE_IMAGE_PATH);
         return cloudinaryUploader.uploadAndReturnUrl(qrCodeFile, fileName, uploadFolder);
+    }
+
+    /**
+     * Checks if the provided string is null or empty.
+     *
+     * @param str the string to check
+     * @return true if null or empty, false otherwise
+     */
+    public static boolean isNullOrEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
+
+    /**
+     * Hashes the password using SHA-256.
+     *
+     * @param password the plaintext password
+     * @return the hashed password
+     */
+    public static String hashPassword(String password) {
+        return org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);
     }
 }

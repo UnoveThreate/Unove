@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 public class VnPayConfig {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_ReturnUrl = "http://localhost:8080/Unove/payment/vnpay/return";
+    public static String vnp_ReturnUrl = Config.DOMAIN + "/Unove/payment/vnpay/return";
     public static String vnp_TmnCode = "WVYF4TOH";
     public static String secretKey = "5CDNMBA880RB0SCU25SY8CWR1FVZI35H";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";

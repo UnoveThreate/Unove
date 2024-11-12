@@ -24,7 +24,7 @@
             }
 
             .canteen-page .container {
-                border: 4px dashed var(--momo-pink);
+                border: 0;
                 padding: 30px;
                 border-radius: 20px;
                 margin-top: 30px;
@@ -106,7 +106,7 @@
                 margin: 15px 0;
                 overflow: hidden;
                 box-shadow: 0 4px 15px rgba(165, 0, 100, 0.1);
-                border: 3px dashed var(--momo-pink-light) !important;
+                border: 3px solid var(--momo-pink-light) !important;
             }
 
             .canteen-page .card:hover {
@@ -160,7 +160,7 @@
                 appearance: none;
                 -webkit-appearance: none;
                 -moz-appearance: textfield;
-                border: 3px dashed #FF69B4;
+                border: 3px solid #FF69B4;
             }
 
             .canteen-page .quantity-controls {
@@ -203,10 +203,8 @@
                 border-radius: 50px;
                 font-size: 1.3rem;
                 font-weight: bold;
-                box-shadow: 0 5px 15px rgba(165, 0, 100, 0.2);
                 z-index: 1000;
                 animation: pulse 2s infinite;
-                border: 3px dashed #fff;
             }
 
             @keyframes pulse {
@@ -232,13 +230,13 @@
 
             .canteen-page .btn-next {
                 background: #ffe6ef;
-                border: 3px dashed var(--momo-pink-light);
+                border: 2px solid var(--momo-pink-light);
             }
 
             .canteen-page .btn-back {
                 background: white;
                 border: 2px solid #ffe6ef;
-                border: 3px dashed var(--momo-pink);
+                border: 2px solid var(--momo-pink);
             }
 
             .canteen-page .btn:hover {

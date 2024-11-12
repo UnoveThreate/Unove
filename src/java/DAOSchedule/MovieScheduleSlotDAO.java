@@ -110,7 +110,7 @@ public class MovieScheduleSlotDAO extends MySQLConnect {
                 + "FROM MovieSlot ms "
                 + "JOIN Room r ON ms.RoomID = r.RoomID "
                 + "WHERE ms.MovieSlotID = ? AND ms.Status = 'Active'";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
             pstmt.setInt(1, movieSlotID);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {

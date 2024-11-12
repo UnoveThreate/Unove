@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import util.RouterJSP;
+import util.RouterURL;
 
 /**
  *
@@ -16,18 +17,21 @@ import util.RouterJSP;
  */
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
+
     RouterJSP route = new RouterJSP();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // tao hoac lay session co san : 
-        HttpSession session = request.getSession();
+        try {
+            // tao hoac lay session co san : 
+            HttpSession session = request.getSession();
 
-        session.invalidate();
-
-        // quay ve trang chu : 
-        request.getRequestDispatcher(route.USER).forward(request, response);
-//        request.getRequestDispatcher("index.html").forward(request, response);
+            session.invalidate();
+            response.sendRedirect(RouterURL.LANDING_PAGE);
+        } catch (Exception e) {
+            response.sendRedirect(RouterURL.ERROR_PAGE);
+        }
 
     }
 
