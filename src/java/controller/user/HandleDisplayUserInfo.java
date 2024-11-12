@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
+import DAO.UserDAO;
 import util.RouterJSP;
 
 /**
@@ -25,13 +26,13 @@ import util.RouterJSP;
 public class HandleDisplayUserInfo extends HttpServlet {
 
     RouterJSP router = new RouterJSP();
-    DAO.UserDAO userDAO;
+    UserDAO userDAO;
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
-            userDAO = new DAO.UserDAO(getServletContext());
+            userDAO = new UserDAO(getServletContext());
         } catch (Exception ex) {
             Logger.getLogger(UpdateUserInfo.class.getName()).log(Level.SEVERE, null, ex);
         }

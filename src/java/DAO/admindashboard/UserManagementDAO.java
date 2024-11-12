@@ -81,7 +81,7 @@ public class UserManagementDAO extends MySQLConnect {
 
     public User getUserById(int userId) {
         String sql = "SELECT * FROM user WHERE UserID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -106,9 +106,10 @@ public class UserManagementDAO extends MySQLConnect {
         }
         return null;
     }
-public boolean updateUser(User user) {
+
+    public boolean updateUser(User user) {
         String sql = "UPDATE user SET Username = ?, Email = ?, Role = ?, Fullname = ?, Birthday = ?, Address = ?, Province = ?, District = ?, Commune = ?, Status = ? WHERE UserID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
             statement.setString(1, user.getUsername());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getRole());
@@ -130,40 +131,81 @@ public boolean updateUser(User user) {
 
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT * FROM User";
-        try (PreparedStatement pstmt = this.connection.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
+        String sql = "SELECT * FROM User ORDER BY UserID";
+        try (PreparedStatement pstmt = this.connection.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-                users.add(extractUserFromResultSet(rs));
+                User user = extractUserFromResultSet(rs);
+                users.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Error getting all users: " + e.getMessage());
         }
         return users;
     }
- public boolean banUser(int userId) {
-        String sql = "UPDATE user SET IsBanned = 1 WHERE UserID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
-            int affectedRows = statement.executeUpdate();
-            return affectedRows > 0;
+
+    public boolean banUser(int userId) {
+        String sql = "UPDATE user SET Status = 0 WHERE UserID = ? AND Role IN ('USER', 'OWNER')";
+        try {
+            connection.setAutoCommit(false);
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+                statement.setInt(1, userId);
+                int affectedRows = statement.executeUpdate();
+
+                if (affectedRows > 0) {
+                    connection.commit();
+                    return true;
+                } else {
+                    connection.rollback();
+                    return false;
+                }
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return false;
     }
 
     public boolean unbanUser(int userId) {
-        String sql = "UPDATE user SET IsBanned = 0 WHERE UserID = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, userId);
-            int affectedRows = statement.executeUpdate();
-            return affectedRows > 0;
+        String sql = "UPDATE user SET Status = 1 WHERE UserID = ? AND Role IN ('USER', 'OWNER')";
+        try {
+            connection.setAutoCommit(false);
+            try (PreparedStatement statement = this.connection.prepareStatement(sql)) {
+                statement.setInt(1, userId);
+                int affectedRows = statement.executeUpdate();
+
+                if (affectedRows > 0) {
+                    connection.commit();
+                    return true;
+                } else {
+                    connection.rollback();
+                    return false;
+                }
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-        return false;
     }
+
     private User extractUserFromResultSet(ResultSet rs) throws SQLException {
         User user = new User();
         user.setUserID(rs.getInt("UserID"));
@@ -178,7 +220,7 @@ public boolean updateUser(User user) {
         user.setProvince(rs.getString("Province"));
         user.setDistrict(rs.getString("District"));
         user.setCommune(rs.getString("Commune"));
-        
+        user.setStatus(rs.getInt("Status"));
         return user;
     }
 }

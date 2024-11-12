@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.CanteenItem;
 import model.canteenItemTotal.CanteenItemOrder;
+import util.Config;
 
 @WebServlet(name = "VnPayReturnServlet", urlPatterns = {"/payment/vnpay/return"})
 public class PaymentReturnServlet extends HttpServlet {
@@ -132,8 +133,7 @@ public class PaymentReturnServlet extends HttpServlet {
 
                 String code = Util.generateActivationCodeOrder();
                 LOGGER.log(Level.INFO, "Generated activation code: {0} for OrderID: {1}", new Object[]{code, orderID});
-
-                String qrCodeText = "http://localhost:8080/Unove/order/confirm?orderID=" + orderID + "&userID=" + userID + "&code=" + code;
+                String qrCodeText = Config.DOMAIN+"/Unove/order/confirm?orderID=" + orderID + "&userID=" + userID + "&code=" + code;
                 String fileName = "qrcode_" + orderID + "_" + userID;
                 String uploadFolder = "QRCode_F";
 

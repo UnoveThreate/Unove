@@ -1,5 +1,8 @@
 package service;
 
+import DAO.cinemaChainOwnerDAO.MovieSlotDAO;
+import DAO.payment.OrderDAO;
+import DAO.review.MovieReviewDAO;
 import DAO.ticket.TicketDAO;
 import java.util.Properties;
 import jakarta.mail.Authenticator;
@@ -10,12 +13,19 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
-import model.Order;
+import model.owner.MovieSlot;
+import model.Order_Update;
 import model.Seat;
 import model.Ticket;
 import model.User;
 import model.ticket.TicketOrderDetails;
+import util.Config;
 
 /**
  * Sends an email to the user.
@@ -23,12 +33,21 @@ import model.ticket.TicketOrderDetails;
 public class EmailService {
 
     private TicketDAO ticketDAO;
+    private OrderDAO orderDAO;
+    private MovieSlotDAO movieSlotDAO;
+    private MovieReviewDAO movieReviewDAO;
 
     public EmailService() {
     }
 
     public EmailService(TicketDAO ticketDAO) {
         this.ticketDAO = ticketDAO;
+    }
+
+    public EmailService(OrderDAO orderDAO, MovieSlotDAO movieSlotDAO, MovieReviewDAO movieReviewDAO) {
+        this.orderDAO = orderDAO;
+        this.movieSlotDAO = movieSlotDAO;
+        this.movieReviewDAO = movieReviewDAO;
     }
 
     public boolean sendEmail(String email, String code) {
@@ -284,5 +303,69 @@ public class EmailService {
             e.printStackTrace(); // In lỗi nếu có
         }
         return isEmailSent; // Trả về kết quả
+    }
+    // Method to send review request emails
+
+    public void sendReviewEmails() throws SQLException {
+        // Lấy danh sách các đơn hàng có trạng thái "Confirmed"
+        List<Order_Update> confirmedOrders = movieReviewDAO.getConfirmedOrders();
+
+        for (Order_Update order : confirmedOrders) {
+            // Kiểm tra xem email yêu cầu đánh giá đã được gửi chưa
+            if (!order.isReviewRequestSent()) {
+                MovieSlot movieSlot = movieSlotDAO.getMovieSlotById(order.getMovieSlotID());
+
+                // Kiểm tra thời gian kết thúc của phim, chỉ gửi email nếu phim đã kết thúc
+                if (movieSlot.getEndTime().isBefore(LocalDateTime.now())) {
+                    int userID = order.getUserID();
+                    int movieID = movieSlot.getMovieID();
+
+                    String email = movieReviewDAO.getUserEmail(userID);
+                    if (email != null && !email.isEmpty()) {
+                        sendReviewRequestEmail(email, movieID);  // Gửi email
+
+                        // Đánh dấu đã gửi email trong bảng `Order`
+                        movieReviewDAO.markReviewRequestSent(order.getOrderID());
+                    }
+                }
+            }
+        }
+    }
+
+    // Method to send a review request email
+    public void sendReviewRequestEmail(String toEmail, int movieID) throws SQLException {
+
+        String fromEmail = "dacphong2092003@gmail.com";  // your email
+        String password = "cbki yoeg hoqh usiq";  // your app password
+        String subject = "Yêu cầu đánh giá phim";
+        String reviewLink = Config.DOMAIN + "/Unove/movie/reviewMovie?movieID=" + movieID;
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        // Create a session
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(fromEmail, password);
+            }
+        });
+
+        try {
+            // Create a MimeMessage
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(fromEmail));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject(subject);
+            message.setText("Cảm ơn bạn đã xem phim. Hãy đánh giá bộ phim tại đây: " + reviewLink);
+
+            // Send the email
+            Transport.send(message);
+            System.out.println("Email đã được gửi thành công!");
+        } catch (MessagingException e) {
+            e.printStackTrace(); // Print any messaging errors
+        }
     }
 }

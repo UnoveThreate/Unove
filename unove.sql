@@ -87,6 +87,7 @@ CREATE TABLE MovieReview (
     Rating TINYINT,
     TimeCreated DATETIME,
     Content VARCHAR(255) CHARACTER SET utf8mb4,
+	EmailSent TINYINT,
     FOREIGN KEY (UserID) REFERENCES User(UserID),
     FOREIGN KEY (MovieID) REFERENCES Movie(MovieID)
 );
@@ -169,6 +170,7 @@ CREATE TABLE `Order` (
     FOREIGN KEY (PremiumTypeID) REFERENCES PremiumType(id)
 );
 
+
 -- Bảng Ticket: Lưu thông tin vé đã mua
 CREATE TABLE Ticket (
     TicketID INT AUTO_INCREMENT PRIMARY KEY,
@@ -202,6 +204,18 @@ CREATE TABLE CanteenItem (
     IsAvailable tinyint,
     FOREIGN KEY (CinemaID) REFERENCES Cinema(CinemaID)
 );
+
+CREATE TABLE `ordercanteenitem` (
+  `CanteenItemOrderID` int NOT NULL AUTO_INCREMENT,
+  `CanteenItemID` int DEFAULT NULL,
+  `OrderID` int DEFAULT NULL,
+  `Quantity` int DEFAULT NULL,
+  PRIMARY KEY (`CanteenItemOrderID`),
+  KEY `CanteenItemID` (`CanteenItemID`),
+  KEY `OrderID` (`OrderID`),
+  CONSTRAINT `ordercanteenitem_ibfk_1` FOREIGN KEY (`CanteenItemID`) REFERENCES `canteenitem` (`CanteenItemID`),
+  CONSTRAINT `ordercanteenitem_ibfk_2` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng LikedMovieReview: Lưu thông tin người dùng thích các đánh giá phim
 CREATE TABLE LikedMovieReview (
@@ -244,6 +258,16 @@ CREATE TABLE MemberVIP (
     FOREIGN KEY (premium_type_id) REFERENCES PremiumType(id),
     FOREIGN KEY (user_id) REFERENCES User(UserID),
     FOREIGN KEY (cinema_id) REFERENCES Cinema(CinemaID)
+);
+
+CREATE TABLE MovieDiscount (
+    DiscountID INT AUTO_INCREMENT PRIMARY KEY,
+    discountCode VARCHAR(20) NOT NULL, -- Alphanumeric code, unique identifier for each discount
+    DiscountPercentage DECIMAL(5, 2) NOT NULL CHECK (DiscountPercentage BETWEEN 0 AND 100), -- Percentage between 0 and 100
+    StartDate DATE NOT NULL, -- Start date of discount validity
+    EndDate DATE NOT NULL,   -- End date of discount validity
+    Status ENUM('active', 'inactive') DEFAULT 'active', -- Status of the discount (active or inactive)
+    UNIQUE (discountCode) -- Ensures each discount code is unique
 );
 
 CREATE EVENT IF NOT EXISTS update_pending_orders
