@@ -20,7 +20,7 @@ public class Config {
     static {
 
         //default to "development".
-        String env = System.getProperty("env", "development");
+        String env = System.getProperty("env", "production");
         logger.info("Current environment: " + env);
 
         // Check if the environment is set to "production".
