@@ -52,7 +52,7 @@ public class MySQLConnect {
             /**
              * Connection - URL : serverName / portNumber / databaseName
              */
-            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName;
+            String url = "jdbc:mysql://" + serverName + ":" + portNumber + "/" + databaseName + "?useSSL=false&serverTimezone=UTC";
 
             dataSource.setUrl(url);
             dataSource.setUsername(username);
