@@ -13,21 +13,25 @@ import java.util.regex.Pattern;
  */
 public class Validation {
 
-    private final String passwordPattern = "^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$";
-    
-    private final String EMAIL_PATTERN
-            = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-    private Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-zA-Z]).{8,}$";
+    private static final Pattern PASSWORD_COMPILED_PATTERN = Pattern.compile(PASSWORD_PATTERN);
 
-    public  boolean isPasswordPattern(String password) {
-        return (Boolean )password.matches(passwordPattern);
+    private static final String EMAIL_PATTERN = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+    private static final Pattern EMAIL_COMPILED_PATTERN = Pattern.compile(EMAIL_PATTERN);
+
+    public static boolean isPasswordPattern(String password) {
+        if (password == null) {
+            return false;
+        }
+        Matcher matcher = PASSWORD_COMPILED_PATTERN.matcher(password);
+        return matcher.matches();
     }
 
-    public boolean isEmailPattern(String email) {
+    public static boolean isEmailPattern(String email) {
         if (email == null) {
             return false;
         }
-        Matcher matcher = this.pattern.matcher(email);
+        Matcher matcher = EMAIL_COMPILED_PATTERN.matcher(email);
         return matcher.matches();
     }
 

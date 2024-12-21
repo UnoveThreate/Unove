@@ -31,7 +31,6 @@ public class RegisterServlet extends HttpServlet {
 
     UserServiceInteface userService;
     RouterJSP route = new RouterJSP();
-    Validation validate = new Validation();
 
     @Override
     public void init() throws ServletException {
@@ -98,7 +97,7 @@ public class RegisterServlet extends HttpServlet {
         String alertMsg = "";
 
         // Password validation
-        if (!validate.isPasswordPattern(password)) {
+        if (!Validation.isPasswordPattern(password)) {
             alertMsg = "Mật khẩu phải chứa ít nhất một số và một kí tự chữ cái, và có ít nhất 8 kí tự.";
             forwardToRegisterWithError(request, response, alertMsg);
             return;
