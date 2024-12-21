@@ -77,7 +77,7 @@
     <property name="prod.url" value="https://unove.store" />
 
     <property name="ec2.user" value="ubuntu" />
-    <property name="ec2.host" value="ec2-54-255-150-15.ap-southeast-1.compute.amazonaws.com" />
+    <property name="ec2.host" value="ec2-3-1-200-164.ap-southeast-1.compute.amazonaws.com" />
     <property name="ec2.tomcat.webapps.dir" value="/opt/tomcat/webapps" />
     <target name="-post-dist">
 
