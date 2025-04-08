@@ -2,9 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.movie;
+package controller.review;
 
-import DAO.movie.ReviewMovieDAO;
+import DAO.UserDAO;
+import DAO.payment.OrderDAO;
+import DAO.payment.PaymentDAO;
+import DAO.review.LikeReviewDAO;
+import DAO.ticket.TicketDAO;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,17 +17,34 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import util.RouterJSP;
+import util.Role;
+import util.RouterURL;
 
 /**
  *
- * @author ACER
+ * @author DELL
  */
-@WebServlet(name = "ReviewMovieServlet", urlPatterns = {"/ReviewMovieServlet"})
-public class ReviewMovieServlet extends HttpServlet {
-    ReviewMovieDAO rmd;
+@WebServlet(name = "LikeReviewServlet", urlPatterns = {"/LikeReviewServlet"})
+public class LikeReviewServlet extends HttpServlet {
+
+    private LikeReviewDAO likeReviewDAO;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+
+            likeReviewDAO = new LikeReviewDAO(getServletContext());
+
+        } catch (Exception ex) {
+
+            throw new ServletException("Failed to initialize DAOs.", ex);
+        }
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +63,10 @@ public class ReviewMovieServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ReviewMovieServlet</title>");            
+            out.println("<title>Servlet LikeReviewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ReviewMovieServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet LikeReviewServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,19 +82,9 @@ public class ReviewMovieServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            PrintWriter out = response.getWriter();
-            rmd = new ReviewMovieDAO(request.getServletContext());
-            int userID = 1;
-            int movieID = 1;
-            boolean canReview = rmd.canReview(userID, movieID);
-            out.println(canReview);
-            request.getRequestDispatcher(RouterJSP.REVIEW_MOVIE_PAGE).forward(request, response);
-        } catch (Exception ex) {
-            Logger.getLogger(ReviewMovieServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+
     }
 
     /**
@@ -83,10 +95,33 @@ public class ReviewMovieServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Lấy các tham số từ form
+        HttpSession session = request.getSession();
+
+        int reviewID = Integer.parseInt(request.getParameter("reviewID"));
+        int userID = (Integer) session.getAttribute("userID");
+        int movieID = Integer.parseInt(request.getParameter("movieID"));
+
+        // Kiểm tra xem người dùng đã thích bài đánh giá này chưa
+        boolean isLiked = likeReviewDAO.isUserLikedReview(userID, reviewID);
+
+        boolean success = false;
+
+        // Nếu người dùng chưa thích, thêm lượt thích vào bảng; nếu đã thích, xóa lượt thích khỏi bảng
+        if (isLiked) {
+            // Nếu đã thích, thì xóa lượt thích
+            success = likeReviewDAO.removeLike(userID, reviewID);
+        } else {
+            // Nếu chưa thích, thì thêm lượt thích
+            success = likeReviewDAO.addLike(userID, reviewID);
+        }
+
+        // Trả về kết quả cho client dưới dạng JSON
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print("{\"success\": " + success + "}");
+        out.flush();
     }
 
     /**

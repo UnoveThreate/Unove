@@ -14,6 +14,7 @@
                     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
                     />
                 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
                 <style>
                     @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
 
@@ -21,7 +22,7 @@
                     html {
                         margin: 0;
                         padding: 0;
-                        font-family: "Poppins", sans-serif;
+                        font-family: 'Source Sans Pro', sans-serif;
                         background: linear-gradient(135deg, #1c1c1c 0%, #2c2c2c 100%);
                         color: white;
                         min-height: 100vh;
@@ -31,11 +32,10 @@
                         display: flex;
                         background: rgba(255, 255, 255, 0.05);
                         backdrop-filter: blur(10px);
-                        border-radius: 30px;
                         padding: 50px;
                         max-width: 1200px;
                         margin: 40px auto;
-                        border: 5px dashed rgba(126, 96, 191, 0.2);
+                        border: 1px solid rgba(126, 96, 191, 0.2);
                     }
 
                     .poster {
@@ -153,7 +153,7 @@
                         background: #f8f0ff;
                         color: black;
                         margin-right: 20px;
-                        border: 3px dashed #c0a3ff;
+                        border: 1px solid #c0a3ff;
                     }
 
                     #trailerBtn:hover {
@@ -202,28 +202,37 @@
                         top: 0;
                         width: 100%;
                         height: 100%;
-                        background-color: rgba(0, 0, 0, 0.9);
+                        background-color: rgba(0, 0, 0, 0.8);
                         justify-content: center;
                         align-items: center;
                         transition: opacity 0.5s ease;
                     }
 
                     .modal-content {
-                        background-color: #1e1e1e;
-                        color: #f0f0f0;
-                        padding: 40px;
-                        border-radius: 20px;
+                        background-color: #fff;
+                        color: #333;
+                        padding: 20px;
+                        border-radius: 15px;
                         position: relative;
                         text-align: center;
-                        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+                        max-width: 800px;
+                        width: 90%;
+                    }
+
+                    .modal-content iframe {
+                        width: 100%;
+                        height: 450px;
+                        border: none;
+                        border-radius: 10px;
                     }
 
                     .close {
                         position: absolute;
                         top: 15px;
                         right: 25px;
-                        color: #ffffff;
-                        font-size: 40px;
+                        color: #333;
+                        font-size: 30px;
                         font-weight: bold;
                         cursor: pointer;
                         transition: all 0.3s ease;
@@ -231,9 +240,8 @@
 
                     .close:hover {
                         color: #ff416c;
-                        transform: scale(1.2) rotate(90deg);
+                        transform: scale(1.2);
                     }
-
                     @media (max-width: 768px) {
                         .container {
                             flex-direction: column;
@@ -314,29 +322,31 @@
                     }
 
                     .container {
+                        display: flex;
+                        flex-direction: column;
                         max-width: 1200px;
                         margin: auto;
                         padding: 30px;
                         background: rgba(255, 255, 255, 0.95);
                         border-radius: 20px;
-                        backdrop-filter: blur(10px);
-                        position: relative;
-                        z-index: 1;
+                        border: 1px solid #ebebeb;
                     }
 
                     .header {
-                        background: linear-gradient(135deg, #7E60BF, #7E60BF);
+                        background:#f8f0ff !important;
                         color: white;
                         padding: 20px;
                         border-radius: 10px;
                         margin-bottom: 30px;
+                        border: 1px solid #ebebeb;
                     }
 
                     .title {
                         font-size: 32px;
-                        color: #FCFAEE;
+                        color: #7E60BF;
                         text-align: center;
                         margin-bottom: 20px;
+                        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
                     }
 
                     .selector {
@@ -367,19 +377,19 @@
                         cursor: pointer;
                         transition: all 0.3s ease;
                         padding: 8px;
-                        border: 3px dashed #e0e0e0;
+                        border: 1px solid #ebebeb;
                     }
 
                     .selector-button:hover,
                     .selector-button.active {
                         border-color: #7E60BF;
                         transform: translateY(-2px);
-                        border: 3px dashed #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
 
                     .cinema-chain-avatar {
-                        width: 40px;
-                        height: 40px;
+                        width: 56px;
+                        height: 56px;
                         object-fit: contain;
                         margin-bottom: 5px;
                     }
@@ -418,17 +428,20 @@
                         cursor: pointer;
                         transition: all 0.3s ease;
                         min-width: 60px;
-                        border: 3px dashed #7e60bf;
+                        border: 1px solid #ebebeb;
                     }
 
                     .date-button:hover {
                         transform: translateY(-2px);
+                        border: 1px solid #7E60BF;
+
                     }
 
                     .date-button.active {
                         background-color: #f8f0ff;
                         color: black;
                         border-color: #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
 
                     .date-number {
@@ -443,51 +456,64 @@
                     .cinema-list {
                         display: flex;
                         flex-direction: column;
-                        gap: 10px;
-                        max-height: 300px;
-                        overflow-y: auto;
-                        padding: 10px;
-                        background: rgba(255, 255, 255, 0.5);
-                        border-radius: 10px;
-                        border: 3px dashed #e0e0e0;
+                        gap: 1px;
+                        background-color: #fff;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        padding: 0;
+                        box-shadow: none;
+                        max-height: none;
                     }
 
                     .cinema-item {
                         display: flex;
                         align-items: center;
-                        padding: 15px;
-                        background: white;
+                        padding: 16px;
+                        background: #fff;
                         border: none;
-                        border-radius: 8px;
+                        border-radius: 0;
                         cursor: pointer;
-                        transition: all 0.3s ease;
+                        transition: all 0.2s ease;
+                        box-shadow: none;
                         width: 100%;
                         text-align: left;
+                        color: #222222;
+                        position: relative;
+                        border-bottom: 1px solid #ebebeb;
                     }
 
                     .cinema-item:hover {
                         transform: translateX(10px);
                         background-color: #f8f0ff;
                     }
+                    .cinema-item::after {
+                        content: '›';
+                        position: absolute;
+                        right: 16px;
+                        color: #999;
+                        font-size: 20px;
+                    }
 
                     .cinema-item.active {
                         background-color: #f8f0ff;
                         color: black;
                     }
-
                     .cinema-name {
                         flex-grow: 1;
                         font-size: 14px;
+                        font-weight: 400;
+                        color: #222222;
                     }
 
                     .movie-list {
                         display: grid;
-                        gap: 20px;
-                        padding: 20px;
-                        background: rgba(255, 255, 255, 0.5);
-                        border-radius: 15px;
-                        backdrop-filter: blur(10px);
-                        border: 3px dashed rgba(126, 96, 191, 0.2);
+                        flex-direction: column;
+                        gap: 0;
+                        padding: 0;
+                        background: #fff;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        border: 1px solid #ebebeb;
                     }
 
                     .movie-item {
@@ -495,21 +521,21 @@
                         gap: 20px;
                         padding: 20px;
                         background: white;
-                        border-radius: 12px;
+                        border-radius: 0;
+                        box-shadow: none;
                         transition: all 0.3s ease;
-                        border: 3px dashed #e0e0e0;
+                        border: none;
+                        border-bottom: 1px solid #ebebeb;
+                    }
+
+
+                    .movie-item:last-child {
+                        border-bottom: none;
                     }
 
                     .movie-item:hover {
-                        transform: translateY(-5px);
-                    }
-
-                    .movie-poster {
-                        width: 120px;
-                        height: 180px;
-                        object-fit: cover;
-                        border-radius: 8px;
-                        transition: all 0.3s ease;
+                        background-color: #f8f0ff;
+                        transform: none;
                     }
 
                     .movie-info {
@@ -517,7 +543,7 @@
                     }
 
                     .movie-title {
-                        color: #7E60BF;
+                        color: #434343;
                         font-size: 20px;
                         margin-bottom: 10px;
                     }
@@ -537,7 +563,7 @@
                     }
 
                     .showtime-type {
-                        color: #7E60BF;
+                        color: #414141;
                         font-weight: 600;
                         margin-bottom: 8px;
                     }
@@ -551,7 +577,11 @@
                         margin: 0 10px 10px 0;
                         cursor: pointer;
                         transition: all 0.3s ease;
-                        border: 3px dashed #7e60bf;
+                        border: 1px solid #7E60BF;
+                        max-width: 120px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
                     }
 
                     .showtime-item:hover {
@@ -588,7 +618,6 @@
                         padding: 40px;
                         background: white;
                         border-radius: 15px;
-                        box-shadow: 0 5px 15px rgba(126, 96, 191, 0.1);
                         margin: 20px auto;
                         max-width: 400px;
                     }
@@ -610,7 +639,7 @@
                     }
 
                     .empty-state h2 {
-                        color: #7E60BF;
+                        color: #434343;
                         font-size: 24px;
                         margin-bottom: 10px;
                     }
@@ -626,7 +655,7 @@
                         background: #f8f0ff;
                         color: black;
                         margin-right: 20px;
-                        border: 3px dashed #c0a3ff;
+                        border: 1px solid #c0a3ff;
                     }
 
                     #favourite,
@@ -700,7 +729,7 @@
                         padding: 30px;
                         background: rgba(255, 255, 255, 0.95);
                         border-radius: 20px;
-                        border: 4px dashed #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
 
 
@@ -728,11 +757,7 @@
                         flex: 1;
                     }
 
-                    .movie-title {
-                        color: #7E60BF;
-                        font-size: 32px;
-                        margin-bottom: 20px;
-                    }
+
 
 
                     .movie-metadata {
@@ -760,7 +785,7 @@
                         background-color: #f8f0ff;
                         padding: 4px 12px;
                         border-radius: 15px;
-                        border: 2px dashed #7E60BF;
+                        border: 1px solid #7E60BF;
                     }
                     .movie-actions {
                         display: flex;
@@ -876,9 +901,227 @@
                             opacity: 0;
                         }
                     }
-                     .start-time strong {
-                color : #7e60bf;
-            }
+                    .start-time strong {
+                        color : #7e60bf;
+                    }
+                    .movie-poster {
+                        width: 120px;
+                        height: 180px;
+                        object-fit: cover;
+                        border-radius: 8px;
+                        margin-right: 20px;
+                    }
+
+                    .movie-info {
+                        flex: 1;
+                    }
+
+                    /*                    Phần css Movie Review của Phong*/
+                    .review-section {
+                        margin-top: 20px;
+                        transform: translateX(30px); /* Di chuyển toàn bộ div sang phải 20px */
+                    }
+
+                    .review-container {
+                        display: flex;
+                        flex-direction: column;
+                        padding: 15px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        margin-bottom: 20px;
+                    }
+
+                    .user-info {
+                        display: flex;
+                        align-items: center;
+                        margin-bottom: 10px;
+                    }
+
+                    .avatar img {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        margin-right: 10px;
+                    }
+
+                    .user-name strong {
+                        font-size: 16px;
+                        color: #333;
+                    }
+
+                    .review-content .review-rating {
+                        font-size: 14px;
+                        color: #ffcc00;
+                        margin-bottom: 5px;
+                    }
+
+                    .review-content .review-text p {
+                        margin: 0;
+                        font-size: 15px;
+                        color: #555;
+                    }
+
+                    .review-time {
+                        font-size: 12px;
+                        color: #888;
+                        margin-top: 5px;
+                    }
+
+                    .review-section button {
+                        background-color: #007bff; /* Màu nền xanh dương */
+                        color: white; /* Màu chữ trắng */
+                        border: none; /* Bỏ viền */
+                        padding: 10px 20px; /* Khoảng cách xung quanh chữ */
+                        font-size: 16px; /* Cỡ chữ */
+                        border-radius: 5px; /* Bo góc */
+                        cursor: pointer; /* Con trỏ chuột kiểu pointer khi di chuột vào */
+                        transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền khi hover */
+                    }
+
+                    .review-section button:hover {
+                        background-color: #0056b3; /* Màu nền khi hover */
+                    }
+
+                    .review-section button:focus {
+                        outline: none; /* Bỏ viền focus khi nhấn */
+                    }
+                    /* Cấu hình cơ bản của nút like */
+                    .likeButton {
+                        background: transparent;
+                        border: none;
+                        cursor: pointer;
+                        outline: none;
+                        padding: 10px;
+                        transition: transform 0.3s ease, color 0.3s ease;
+
+                    }
+
+
+                    /* Hiệu ứng khi hover vào nút like */
+                    .likeButton:hover i {
+                        color: red; /* Màu đỏ khi hover */
+                        transform: scale(1.1); /* Phóng to icon khi hover */
+                    }
+
+                    /* Màu xanh lá cây khi chưa like */
+                    .likeButton i {
+                        color: white;
+                        font-size: 24px;
+                        transition: color 0.3s ease, transform 0.2s ease;
+                    }
+
+                    /* Khi đã like, màu đỏ */
+                    .likeButton.liked i {
+                        color: red; /* Màu đỏ khi like */
+                    }
+
+                    /* Hiệu ứng nhấp nhảy khi nhấn vào like */
+                    .likeButton.liked:active i {
+                        transform: scale(0.9); /* Thu nhỏ icon khi nhấn */
+                    }
+
+                    .review-icon{
+                        display:flex;
+                    }
+
+
+                    /* CSS for the popup overlay */
+                    .popup {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background overlay */
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 1000;
+                        transition: opacity 0.3s ease-in-out; /* Smooth fade-in effect */
+                    }
+
+                    /* Make sure to hide the popup */
+                    .popup.hidden {
+                        display: none; /* Hide the popup when it has the 'hidden' class */
+                        opacity: 0; /* Transparent when hidden */
+                    }
+
+                    /* CSS for the popup content box */
+                    .popup > div {
+                        background-color: #fff;
+                        padding: 30px;
+                        border-radius: 12px;
+                        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                        width: 90%;
+                        max-width: 450px; /* Max width slightly bigger */
+                        text-align: center;
+                        animation: fadeIn 0.4s ease-out; /* Animation for popup */
+                    }
+
+                    /* Popup text styling */
+                    .popup p {
+                        font-size: 18px; /* Bigger font size for better readability */
+                        font-weight: 500;
+                        margin-bottom: 20px;
+                        color: #333;
+                    }
+
+                    /* Button styling */
+                    .popup button {
+                        padding: 12px 25px;
+                        font-size: 16px;
+                        color: #fff;
+                        background-color: #007bff;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth color and hover effect */
+                    }
+
+                    .popup button:hover {
+                        background-color: #0056b3; /* Darker blue on hover */
+                        transform: scale(1.05); /* Slightly enlarge the button on hover */
+                    }
+
+                    /* Button focus styling (for accessibility) */
+                    .popup button:focus {
+                        outline: none;
+                        box-shadow: 0 0 0 3px rgba(38, 143, 255, 0.6); /* Blue glow when focused */
+                    }
+
+                    /* Animation for fading in the popup */
+                    @keyframes fadeIn {
+                        from {
+                            opacity: 0;
+                            transform: scale(0.95); /* Starts slightly smaller */
+                        }
+                        to {
+                            opacity: 1;
+                            transform: scale(1); /* Ends at normal size */
+                        }
+                    }
+
+                    /* Mobile responsiveness */
+                    @media screen and (max-width: 600px) {
+                        .popup > div {
+                            width: 90%; /* Adjust width for smaller screens */
+                            max-width: 350px; /* Make popup a bit smaller */
+                        }
+
+                        .popup p {
+                            font-size: 16px; /* Slightly smaller font size on mobile */
+                        }
+
+                        .popup button {
+                            width: 100%; /* Full-width button on mobile */
+                            font-size: 18px; /* Bigger button text for mobile */
+                        }
+                    }
+
+                    .delete-review-btn:hover {
+                        background-color: #0056b3; /* Darker blue on hover */
+                        transform: scale(1.05); /* Slightly enlarge the button on hover */
+                    }
 
                 </style>
             </head>
@@ -977,12 +1220,11 @@
                 <!-- Booking Section -->
                 <div class="container">
                     <div class="header" data-aos="fade-down">
-                        <h1 class="title">Lịch chiếu ${movie.title}</h1>
+                        <h1 class="title">Lịch chiếu phim ${movie.title}</h1>
                     </div>
 
                     <!-- Chọn chuỗi rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="100">
-                        <!--                        <h3>Chọn chuỗi rạp:</h3>-->
                         <div class="button-group" id="cinemaChainButtons">
                             <c:forEach var="chain" items="${cinemaChains}">
                                 <button class="selector-button ${chain.cinemaChainID == selectedCinemaChainID ? 'active' : ''}" 
@@ -998,7 +1240,6 @@
 
                     <!-- Chọn rạp -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="200">
-                        <!--                        <h3>Chọn rạp:</h3>-->
                         <div class="cinema-list" id="cinemaButtons">
                             <c:forEach var="cinema" items="${chainCinemas[selectedCinemaChainID]}">
                                 <button class="cinema-item ${cinema.cinemaID == selectedCinemaID ? 'active' : ''}" 
@@ -1012,7 +1253,6 @@
 
                     <!-- Chọn ngày -->
                     <div class="selector" data-aos="fade-up" data-aos-delay="300">
-                        <!--                        <h3>Chọn ngày:</h3>-->
                         <div class="date-selector">
                             <c:forEach var="date" items="${availableDates}" varStatus="status">
                                 <button class="date-button ${date == selectedDate ? 'active' : ''}" 
@@ -1042,28 +1282,21 @@
                     <!-- Hiển thị suất chiếu -->
                     <div class="movie-list" data-aos="fade-up" data-aos-delay="400">
                         <c:if test="${not empty cinemaShowtimes[selectedCinemaID]}">
-                            <div class="movie-item">
-                                <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster" />
-                                <div class="movie-info">
-                                    <h3 class="movie-title">${movie.title}</h3>
-                                    <div class="movie-genres">
-                                        <c:forEach var="genre" items="${movie.genres}">
-                                            <span class="genre-tag">${genre}</span>
-                                        </c:forEach>
-                                    </div>
-                                    <div class="showtime-grid">
-                                        <c:forEach var="slot" items="${cinemaShowtimes[selectedCinemaID]}">
-                                            <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
-                                                <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
-                                                <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
-                                                <span class="start-time"><strong>${formattedStartTime}</strong></span>
-                                                <span class="time-separator">~</span>
-                                                <span class="end-time">${formattedEndTime}</span>
-                                            </div>
-                                        </c:forEach>
+                            <c:forEach var="slot" items="${cinemaShowtimes[selectedCinemaID]}">
+                                <div class="movie-item">
+                                    <img src="${movie.imageURL}" alt="${movie.title}" class="movie-poster" />
+                                    <div class="movie-info">
+                                        <h3 class="movie-title">${movie.title}</h3>
+                                        <div class="showtime-item" onclick="selectSlot(${slot.movieSlotID})">
+                                            <fmt:formatDate value="${slot.startTime}" pattern="HH:mm" var="formattedStartTime" />
+                                            <fmt:formatDate value="${slot.endTime}" pattern="HH:mm" var="formattedEndTime" />
+                                            <span class="start-time"><strong>${formattedStartTime}</strong></span>
+                                            <span class="time-separator">~</span>
+                                            <span class="end-time">${formattedEndTime}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </c:forEach>
                         </c:if>
                     </div>
 
@@ -1091,13 +1324,86 @@
                             ></iframe>
                     </div>
                 </div>
+                <div class="review-section">
+                    <h3 class="review-heading">Đánh giá của người dùng</h3>
+                    <!-- Nút Đánh giá phim -->
+                    <button id="reviewButton" data-movie-id="${movie.movieID}" onclick="checkReviewCondition(event)">Đánh giá phim</button>
 
-                <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-                <script>
-                                                AOS.init({
-                                                    duration: 1000,
-                                                    once: true,
-                                                });
+                    <!-- Popup thông báo lỗi nếu không thỏa điều kiện -->
+                    <div id="reviewPopup" class="popup hidden">
+                        <div>
+                            <p>Bạn chưa xem hoặc thời gian suất chiếu của bộ phim bạn xem chưa kết thúc</p>
+                            <button id="closePopupButton" onclick="closePopup()">Đóng</button>
+                        </div>
+                    </div>
+
+                    <c:if test="${empty userReviews}">
+                        <p>Chưa có bình luận nào</p>
+                    </c:if>
+
+
+
+                    <div class="review-container" >
+                        <c:forEach var="entry" items="${userReviews}">
+                            <!-- Retrieve the user and review objects from the map entry -->
+                            <c:set var="user" value="${entry.key}" />
+                            <c:set var="review" value="${entry.value}" />
+                            <div class="block-review" style="padding:19px 8px">
+
+                                <!-- User info -->
+                                <div class="user-info">
+                                    <div class="avatar">
+                                        <img src="${user.avatarLink}" alt="${user.fullName}" />
+                                    </div>
+                                    <div class="user-name">
+                                        <strong>${user.fullName}</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Review content -->
+                                <div class="review-content">
+                                    <div class="review-rating">
+                                        <img src="assets/images/yellow_star_icon.png" alt="Star" style="width: 20px;" />
+                                        <span>${review.rating}/5</span>
+                                    </div>
+                                    <div class="review-text">
+                                        <p>${review.content}</p>
+                                    </div>
+                                    <div class="review-icon" style="gap:40px">
+                                        <div class="review-time">
+                                            <small>Vào lúc: ${review.timeCreated}</small>
+                                        </div>
+                                        <div class="likeReview">
+                                            <input type="hidden" name="reviewID" value="${review.reviewID}">
+                                            <input type="hidden" name="userID" value="${userID}">
+                                            <input type="hidden" name="movieID" value="${movie.movieID}">
+                                            <button type="button" class="likeButton" style ="border-radius : 40px; padding: 5px 9px">
+                                                <i class="fas fa-thumbs-up" style="font-size:17px" ></i>
+                                            </button>
+                                            <p style="display: none;" class="likeCount">Like Count: 0</p>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+
+
+
+                        </c:forEach>
+                    </div>
+
+
+
+
+                    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+                    <script>
+                        AOS.init({
+                            duration: 1000,
+                            once: true,
+                        });
 
                                                 const trailerBtn = document.getElementById("trailerBtn");
                                                 const posterPlayButton = document.getElementById("posterPlayButton");
@@ -1190,6 +1496,112 @@
                                                             document.body.appendChild(form);
                                                             form.submit();
                                                         }
-                </script>
+
+                                                        function checkReviewCondition(event) {
+                                                            const movieIDStr = event.target.dataset.movieId;
+                                                            console.log("movieID nhận được:", movieIDStr);
+
+                                                            if (!movieIDStr) {
+                                                                console.error('Movie ID không hợp lệ!');
+                                                                alert('Không thể xác định movieID.');
+                                                                return;
+                                                            }
+
+                                                            const path = `/Unove/movie/reviewMovie?movieID=` + encodeURIComponent(movieIDStr);
+                                                            console.log("Path URL:", path);
+
+                                                            fetch(path, {
+                                                                method: 'GET',
+                                                                headers: {
+                                                                    'Accept': 'application/json'
+                                                                }
+                                                            })
+                                                                    .then(response => {
+                                                                        if (response.ok) {
+                                                                            // Nếu điều kiện hợp lệ, chuyển hướng tới JSP (phía server sẽ xử lý điều này)
+                                                                            window.location.href = path;
+                                                                            return;
+                                                                        } else {
+                                                                            // Nếu điều kiện không hợp lệ, trả về JSON chứa thông báo lỗi
+                                                                            return response.json();
+                                                                        }
+                                                                    })
+                                                                    .then(data => {
+                                                                        if (data && data.message) {
+                                                                            // Hiển thị thông báo lỗi từ JSON trong popup
+                                                                            document.getElementById('reviewPopup').classList.remove('hidden');
+                                                                            document.getElementById('reviewPopupMessage').textContent = data.message;
+                                                                        }
+                                                                    });
+                                                        }
+                                                        function closePopup() {
+                                                            // Lấy phần tử popup bằng ID
+                                                            const popup = document.getElementById('reviewPopup');
+
+                                                            // Thêm lớp "hidden" để ẩn popup
+                                                            popup.classList.add('hidden');
+                                                        }
+
+
+                           
+                                document.querySelectorAll(".likeButton").forEach(button => {
+                                    button.addEventListener("click", function () {
+                                        const reviewContainer = button.closest(".likeReview"); // Find the container for this specific review
+                                        const likeCountElement = reviewContainer.querySelector(".likeCount");
+
+                                        const reviewID = reviewContainer.querySelector('input[name="reviewID"]').value;
+                                        const userID = reviewContainer.querySelector('input[name="userID"]').value;
+                                        const movieID = reviewContainer.querySelector('input[name="movieID"]').value;
+
+                                        // Check if the user is logged in
+                                        if (!userID) {
+                                            alert("Bạn cần đăng nhập để thực hiện hành động này!");
+                                            window.location.href = "login"; // Redirect to login page
+                                            return; // Stop execution if user is not logged in
+                                        }
+
+                                        // Toggle the like button state
+                                        button.classList.toggle("liked");
+
+                                        // Update like count display (this is a mock update until confirmed by the server)
+                                        let likeCount = parseInt(likeCountElement.textContent.split(": ")[1]);
+                                        if (button.classList.contains("liked")) {
+                                            likeCount++;
+                                        } else {
+                                            likeCount--;
+                                        }
+                                        likeCountElement.textContent = "Like Count: " + likeCount;
+
+                                        // Prepare data to send to the server
+                                        const params = new URLSearchParams();
+                                        params.append("reviewID", reviewID);
+                                        params.append("userID", userID);
+                                        params.append("movieID", movieID);
+
+                                        // Send POST request to servlet to update the like status
+                                        fetch("LikeReviewServlet", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/x-www-form-urlencoded"
+                                            },
+                                            body: params.toString()
+                                        })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error('Failed to update like status');
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    console.log("Server response:", data);
+                                                })
+                                                .catch(error => {
+                                                    console.error("Error updating like status:", error);
+                                                });
+                                    });
+                                });
+
+
+                    </script>
             </body>
         </html>

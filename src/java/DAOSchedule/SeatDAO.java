@@ -232,7 +232,7 @@ public class SeatDAO extends MySQLConnect {
                     o.MovieSlotID = ?
                 """;
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
             stmt.setInt(1, movieSlotId);
             
             try (ResultSet rs = stmt.executeQuery()) {

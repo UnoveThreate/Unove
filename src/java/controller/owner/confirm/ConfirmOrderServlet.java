@@ -13,11 +13,15 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Seat;
 import util.Role;
 import util.RouterJSP;
 import util.RouterURL;
+import model.canteenItemTotal.CanteenItemOrder;
+import model.booking.OrderDetail;
 
 @WebServlet(name = "OrderConfirmServlet", urlPatterns = {"/order/confirm"})
 public class ConfirmOrderServlet extends HttpServlet {
@@ -41,32 +45,33 @@ public class ConfirmOrderServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             HttpSession session = request.getSession();
-            String userRole = (String) session.getAttribute("role");
+            String role = (String) session.getAttribute("role");
 
-            if (userRole == null) {
+            if (role == null) {
                 response.sendRedirect(RouterURL.LOGIN);
                 return;
             }
-            boolean isOwnerRole = Role.isRoleValid(userRole, Role.OWNER);
-            if (!isOwnerRole) {
+
+            boolean isValidRole = Role.isRoleValid(role, Role.OWNER);
+
+            if (!isValidRole) {
                 // Redirect to error page if role is invalid
                 response.sendRedirect(RouterURL.ERROR_PAGE);
                 return;
             }
 
-            // Retrieve parameters from the URL
             String orderIdParam = request.getParameter("orderID");
             String userIdParam = request.getParameter("userID");
-            String codeParam = request.getParameter("code");
+            String code = request.getParameter("code");
 
             int orderId = 0;
             int userId = 0;
-            boolean IsParametersValid = true;
+            boolean validParams = true;
 
             try {
                 orderId = Integer.parseInt(orderIdParam);
             } catch (NumberFormatException e) {
-                IsParametersValid = false;
+                validParams = false;
                 e.printStackTrace();
                 // Handle invalid orderID
             }
@@ -74,25 +79,47 @@ public class ConfirmOrderServlet extends HttpServlet {
             try {
                 userId = Integer.parseInt(userIdParam);
             } catch (NumberFormatException e) {
-                IsParametersValid = false;
+                validParams = false;
                 e.printStackTrace();
                 // Handle invalid userID
             }
-
-            if (!IsParametersValid) {
+            //
+            if (!validParams) {
                 response.sendRedirect(RouterURL.ERROR_PAGE);
                 return;
             }
+            boolean isValidQrCode = confirmDAO.isValidQRCodeOrder(orderId, userId, code);
 
-            // Forward to the confirmation JSP with order details
-            request.setAttribute("code", codeParam);
+            System.out.println("valid qrcode :" + isValidQrCode);
 
+            if (!isValidQrCode) {
+
+                request.setAttribute("message", "Mã QR Không Tồn Tại!");
+                request.getRequestDispatcher(RouterJSP.VIEW_RESULT_TICKET).forward(request, response);
+                return;
+
+            }
+            //
+            OrderDetail orderDetails = orderDAO.getOrderDetails(orderId);
+            List<Seat> seats = orderDAO.getSeatsByOrderID(orderId);
+            List<CanteenItemOrder> canteenItems = orderDAO.getCanteenItemsByOrderID(orderId);
+            System.out.println("seats" + seats);
+            System.out.println("canteenItems" + canteenItems);
+            request.setAttribute("orderDetails", orderDetails);
+            request.setAttribute("seats", seats);
+            request.setAttribute("canteenItems", canteenItems);
             request.setAttribute("orderID", orderId);
             request.setAttribute("userID", userId);
+            request.setAttribute("code", code);
+            
+            //
+
             request.getRequestDispatcher(RouterJSP.CONFIRM_TICKET).forward(request, response);
-        } catch (Exception ex) { // Catch general exceptions instead of SQLException
+
+        } catch (SQLException ex) {
             Logger.getLogger(ConfirmOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     @Override
@@ -101,6 +128,8 @@ public class ConfirmOrderServlet extends HttpServlet {
         String orderIdParam = request.getParameter("orderID");
         String userIdParam = request.getParameter("userID");
         String codeParam = request.getParameter("code");
+      
+    
 
         int orderID = 0;
         int userID = 0;
@@ -127,12 +156,16 @@ public class ConfirmOrderServlet extends HttpServlet {
             response.sendRedirect(RouterURL.ERROR_PAGE);
             return;
         }
+        System.out.println("OrderID: " + orderID);
+        System.out.println("UserID: " + userID);
+        System.out.println("Code: " + codeParam);
 
         boolean isOrderConfirmed = confirmDAO.checkConfirmOrder(orderID, userID, codeParam);
-        boolean isTicketConfirmed = confirmDAO.checkConfirmTicket(orderID);
+        System.out.println("isConfirmed:" + isOrderConfirmed);
+
         String resultMessage;
 
-        if (isOrderConfirmed || isTicketConfirmed) {
+        if (isOrderConfirmed) {
 
             resultMessage = "Xác nhận vé đặt thành công.";
         } else {

@@ -1,3 +1,4 @@
+<%@page import="util.RouterURL"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
@@ -109,10 +110,11 @@
                 </c:otherwise>
             </c:choose>
 
-            <div>
-                <button type="button" class="btn btn-primary" onclick="window.location.href = '${pageContext.request.contextPath}/page/landingPage/LandingPage.jsp'">
-                    Return to Home
-                </button>
+                    <form action="<%= RouterURL.LANDING_PAGE%>" method="get">
+                        <button type="submit" class="home" >
+                           Back Home
+                        </button>
+                    </form>
 
             </div>
         </div>

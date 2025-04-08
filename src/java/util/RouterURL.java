@@ -97,4 +97,6 @@ public class RouterURL {
     public static String CREATE_MOVIE_SLOT = "/Unove/owner/movieSlot/createMovieSlot";
 
     public static String SELECT_FOOD = "/canteenItem";
+    
+    public static String MOVIE_DISCOUNT_PAGE ="/admin/discount/movieDiscount";
 }

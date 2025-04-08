@@ -4,8 +4,6 @@
  */
 package filter;
 
-import DAO.UserDAO;
-import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -18,10 +16,8 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Enumeration;
-import util.RouterJSP;
-import util.RouterURL;
+
+import util.common.FilterPattern;
 
 /**
  *
@@ -44,7 +40,7 @@ public class AuthFilter implements Filter {
         if (debug) {
             log("AuthFilter:DoBeforeProcessing");
         }
-
+        
         // Write code here to process the request and/or response before
         // the rest of the filter chain is invoked.
         // For example, a logging filter might log items on the request object,
@@ -113,46 +109,8 @@ public class AuthFilter implements Filter {
 
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        String url = httpRequest.getServletPath();
-        HttpSession session = httpRequest.getSession();
 
-        String username = (String) session.getAttribute("username");
-        String role = (String) session.getAttribute("role");
-
-        if (role == null) {
-            UserDAO userDAO;
-            try {
-                userDAO = new UserDAO((ServletContext) httpRequest.getServletContext());
-                role = userDAO.getUserRole(username);
-            } catch (Exception ex) {
-
-            }
-        }
-//        session = httpRequest.getSession(true);
-//        String urlStore = (String) httpRequest.getRequestURI();
-//        if (!urlStore.equals(RouterURL.LOGIN) && !url.contains("/LoginGoogleServlet") && !url.contains("/notifications")) {
-//
-//            session.setAttribute("redirectTo", urlStore);
-//            // Store all request parameters in the session
-//            Enumeration<String> parameterNames = httpRequest.getParameterNames();
-//            while (parameterNames.hasMoreElements()) {
-//                String paramName = parameterNames.nextElement();
-//                String paramValue = httpRequest.getParameter(paramName);
-//                session.setAttribute("param_" + paramName, paramValue);
-//            }
-//        }
-
-        String loginURI = httpRequest.getContextPath() + "/login";
-        //Có thể phải coi lại đề phòng lỗi url
-        if (url.contains("/admin") && (!role.equals("ADMIN"))) {
-            httpResponse.sendRedirect(loginURI);
-        }
-        if (url.contains("/user") && (!role.equals("USER"))) {
-            httpResponse.sendRedirect(loginURI);
-        }
-        if (url.contains("/owner") && (!role.equals("OWNER"))) {
-            httpResponse.sendRedirect(loginURI);
-        }
+        FilterPattern.validationRoleForRedirect(httpRequest, httpResponse);
 
         Throwable problem = null;
 

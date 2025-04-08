@@ -15,6 +15,8 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/overlayscrollbars/1.13.0/css/OverlayScrollbars.min.css">
         <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css' rel='stylesheet' />
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <style>
             :root {
@@ -92,6 +94,32 @@
                 padding: 5px 10px;
                 border-radius: 15px;
             }
+            .swal2-popup {
+                border-radius: 15px !important;
+                padding: 2rem !important;
+            }
+
+            .swal2-title {
+                color: #9664dd !important;
+                font-size: 1.5rem !important;
+            }
+
+            .swal2-html-container {
+                color: #555 !important;
+                font-size: 1.1rem !important;
+                line-height: 1.8 !important;
+            }
+
+            .swal2-confirm {
+                background: #9664dd !important;
+                border-radius: 25px !important;
+                padding: 8px 25px !important;
+            }
+
+            .swal2-confirm:hover {
+                background: #7c4ddb !important;
+                box-shadow: 0 2px 8px rgba(150, 100, 221, 0.3) !important;
+            }
         </style>
     </head>
     <body class="hold-transition sidebar-mini layout-fixed">
@@ -122,7 +150,7 @@
                         </div>
                     </div>
                 </div>
-                                <!-- Main content -->
+                <!-- Main content -->
                 <section class="content">
                     <div class="container-fluid">
                         <!-- Small boxes (Stat box) -->
@@ -546,11 +574,16 @@
                     eventClick: function (info) {
                         var startTime = info.event.start ? info.event.start.toLocaleString() : 'Không có thời gian bắt đầu';
                         var endTime = info.event.end ? info.event.end.toLocaleString() : 'Không có thời gian kết thúc';
-                        alert('Phim: ' + info.event.title +
-                                '\nBắt đầu: ' + startTime +
-                                '\nKết thúc: ' + endTime +
-                                '\nRạp: ' + (info.event.extendedProps.cinemaName || 'Không có thông tin') +
-                                '\nPhòng: ' + (info.event.extendedProps.roomName || 'Không có thông tin'));
+
+                        Swal.fire({
+                            title: 'Phim: ' + info.event.title,
+                            html: 'Bắt đầu: ' + startTime +
+                                    '<br>Kết thúc: ' + endTime +
+                                    '<br>Rạp: ' + (info.event.extendedProps.cinemaName || 'Không có thông tin') +
+                                    '<br>Phòng: ' + (info.event.extendedProps.roomName || 'Không có thông tin'),
+                            icon: 'info',
+                            confirmButtonText: 'Đóng'
+                        });
                     },
                     eventContent: function (arg) {
                         var startTime = arg.event.start ? arg.event.start.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}) : '';

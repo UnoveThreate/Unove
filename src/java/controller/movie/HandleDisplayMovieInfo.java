@@ -4,6 +4,7 @@ import DAO.UserDAO;
 import DAO.movie.CinemaChainMovieDAO;
 import DAO.movie.FavouriteMoviesDAO;
 import DAO.movie.MovieDAO;
+import DAO.review.MovieReviewDAO;
 import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -26,6 +27,8 @@ import model.CinemaChain;
 import model.Cinema;
 import model.MovieSlot;
 import model.Movie;
+import model.Review;
+import model.User;
 import util.RouterJSP;
 import util.RouterURL;
 
@@ -138,6 +141,10 @@ public class HandleDisplayMovieInfo extends HttpServlet {
             request.setAttribute("selectedCinemaID", selectedCinemaID);
             request.setAttribute("selectedDate", selectedDate);
 
+            //Phần Phong display các review cuả người dùng 
+            MovieReviewDAO reviewDAO = new MovieReviewDAO(getServletContext());
+            Map<User, Review> userReviews = reviewDAO.getReviewsByMovieID(movieID);
+            request.setAttribute("userReviews", userReviews);
             // Forward to JSP
             request.getRequestDispatcher(RouterJSP.DETAIL_MOVIE_PAGE).forward(request, response);
 

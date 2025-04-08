@@ -52,9 +52,9 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="${pageContext.request.contextPath}/owner/statistics" class="nav-link" id="statisticsLink">
+                    <a href="${pageContext.request.contextPath}/owner/genre" class="nav-link" id="genreLink">
                         <i class="nav-icon fas fa-chart-bar"></i>
-                        <p>Thống kê</p>
+                        <p>Thể loại phim</p>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -90,8 +90,8 @@
             document.getElementById("manageMovieSlotLink").classList.add("active");
         } else if (currentUrl.endsWith("/manageSeat")) {
             document.getElementById("manageSeatLink").classList.add("active"); // Thêm đây
-        } else if (currentUrl.endsWith("/statistics")) {
-            document.getElementById("statisticsLink").classList.add("active");
+        } else if (currentUrl.endsWith("/genre")) {
+            document.getElementById("genreLink").classList.add("active");
         } else if (currentUrl.endsWith("/logout")) {
             document.getElementById("logoutLink").classList.add("active");
         }

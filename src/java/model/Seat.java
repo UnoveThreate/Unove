@@ -1,24 +1,24 @@
 package model;
 
 public class Seat {
+
     private int seatID;
     private int roomID;
     private String name;
     private int coordinateX;
     private int coordinateY;
     private boolean available;
-    private double price;
 
     // Constructor
-    public Seat() {}
+    public Seat() {
+    }
 
-    public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY, double price) {
+    public Seat(int seatID, int roomID, String name, int coordinateX, int coordinateY) {
         this.seatID = seatID;
         this.roomID = roomID;
         this.name = name;
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
-        this.price = price;
         this.available = true;
     }
 
@@ -71,11 +71,4 @@ public class Seat {
         this.available = available;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 }

@@ -67,6 +67,15 @@
     properties which you can use check the target you are overriding in 
     nbproject/build-impl.xml file. 
     -->
+    <!-- Environment properties -->
+    <property name="dev.env" value="development" />
+    <property name="prod.env" value="production" />
+
+
+    <!-- URLs for different environments -->
+    <property name="dev.url" value="http://localhost:8080" />
+    <property name="prod.url" value="https://unove.store" />
+
     <property name="ec2.user" value="ubuntu" />
     <property name="ec2.host" value="ec2-54-255-150-15.ap-southeast-1.compute.amazonaws.com" />
     <property name="ec2.tomcat.webapps.dir" value="/opt/tomcat/webapps" />
@@ -75,7 +84,7 @@
         <exec executable="scp">
             <arg value="-i" />
             <arg value="${ec2.key}" />
-            <arg value="${dist.dir}/${war.file.name}" />
+            <arg value="${dist.dir}/${war.name}" />
             <arg value="${ec2.user}@${ec2.host}:${ec2.tomcat.webapps.dir}" />
         </exec>
 

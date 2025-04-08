@@ -8,7 +8,7 @@ public class Movie {
 
     private int movieID;
     private int cinemaID;
-    private String title;
+    private String title;   
     private Date datePublished;
     private float rating;
     private String imageURL;

@@ -13,6 +13,8 @@ public class CanteenItemOrder {
     private int canteenItemID;
     private int quantity;
     private int orderID;
+    private String name;
+    private double price;
 
     public CanteenItemOrder() {
     }
@@ -31,6 +33,22 @@ public class CanteenItemOrder {
         this.canteenItemID = canteenItemID;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public int getQuantity() {
         return quantity;
     }
@@ -47,10 +65,12 @@ public class CanteenItemOrder {
         this.orderID = orderID;
     }
 
-    public CanteenItemOrder(int canteenItemID, int quantity, int orderID) {
+    public CanteenItemOrder(int canteenItemID, int quantity, int orderID, String name, double price) {
         this.canteenItemID = canteenItemID;
         this.quantity = quantity;
         this.orderID = orderID;
+        this.name = name;
+        this.price = price;
     }
 
     @Override

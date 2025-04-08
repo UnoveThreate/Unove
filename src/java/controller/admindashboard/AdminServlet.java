@@ -35,7 +35,6 @@ import org.cloudinary.json.JSONObject;
 import util.Role;
 import util.RouterURL;
 
-
 @WebServlet("/admin/*")
 public class AdminServlet extends HttpServlet {
 
@@ -93,7 +92,7 @@ public class AdminServlet extends HttpServlet {
             case "/getCinemasForMovie":
                 getCinemasForMovie(request, response);
                 break;
-                case "/users":
+            case "/users":
                 manageUsers(request, response, session);
                 break;
             default:
@@ -197,61 +196,61 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void manageMovies(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
-    try {
-        // handle phân trang
-        int page = 1;
-        int recordsPerPage = 5; // mỗi page hiện tối đa 5 phim
-        String pageStr = request.getParameter("page");
-        if (pageStr != null) {
-            page = Integer.parseInt(pageStr);
+        try {
+            // handle phân trang
+            int page = 1;
+            int recordsPerPage = 5; // mỗi page hiện tối đa 5 phim
+            String pageStr = request.getParameter("page");
+            if (pageStr != null) {
+                page = Integer.parseInt(pageStr);
+            }
+
+            // handle sắp xếp
+            String sortBy = request.getParameter("sortBy");
+            String sortOrder = request.getParameter("sortOrder");
+            if (sortBy == null) {
+                sortBy = "Title";
+            }
+            if (sortOrder == null) {
+                sortOrder = "ASC";
+            }
+
+            String keyword = request.getParameter("keyword");
+
+            int totalMovies;
+            List<Movie> movies;
+            if (keyword != null && !keyword.trim().isEmpty()) {
+                totalMovies = movieManagementDAO.getTotalSearchResults(keyword);
+                movies = movieManagementDAO.searchMovies(keyword, (page - 1) * recordsPerPage, recordsPerPage, sortBy, sortOrder);
+            } else {
+                totalMovies = movieManagementDAO.getTotalMovies();
+                movies = movieManagementDAO.getMovies((page - 1) * recordsPerPage, recordsPerPage, sortBy, sortOrder);
+            }
+
+            // Lấy thông tin về chuỗi rạp cho mỗi phim
+            Map<Integer, List<CinemaChain>> movieCinemaChains = new HashMap<>();
+            for (Movie movie : movies) {
+                List<CinemaChain> chains = cinemaChainManagementDAO.getCinemaChainsForMovie(movie.getMovieID());
+                movieCinemaChains.put(movie.getMovieID(), chains);
+            }
+
+            List<Cinema> cinemas = cinemaManagementDAO.getAllCinemas();
+            request.setAttribute("cinemas", cinemas);
+
+            request.setAttribute("movies", movies);
+            request.setAttribute("movieCinemaChains", movieCinemaChains);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", (int) Math.ceil((double) totalMovies / recordsPerPage));
+            request.setAttribute("sortBy", sortBy);
+            request.setAttribute("sortOrder", sortOrder);
+            request.setAttribute("keyword", keyword);
+
+            request.getRequestDispatcher("/page/admin/movies.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Có lỗi xảy ra khi tải danh sách phim: " + e.getMessage());
+            request.getRequestDispatcher("/page/admin/error.jsp").forward(request, response);
         }
-
-        // handle sắp xếp
-        String sortBy = request.getParameter("sortBy");
-        String sortOrder = request.getParameter("sortOrder");
-        if (sortBy == null) {
-            sortBy = "Title";
-        }
-        if (sortOrder == null) {
-            sortOrder = "ASC";
-        }
-
-        String keyword = request.getParameter("keyword");
-
-        int totalMovies;
-        List<Movie> movies;
-        if (keyword != null && !keyword.trim().isEmpty()) {
-            totalMovies = movieManagementDAO.getTotalSearchResults(keyword);
-            movies = movieManagementDAO.searchMovies(keyword, (page - 1) * recordsPerPage, recordsPerPage, sortBy, sortOrder);
-        } else {
-            totalMovies = movieManagementDAO.getTotalMovies();
-            movies = movieManagementDAO.getMovies((page - 1) * recordsPerPage, recordsPerPage, sortBy, sortOrder);
-        }
-
-        // Lấy thông tin về chuỗi rạp cho mỗi phim
-        Map<Integer, List<CinemaChain>> movieCinemaChains = new HashMap<>();
-        for (Movie movie : movies) {
-            List<CinemaChain> chains = cinemaChainManagementDAO.getCinemaChainsForMovie(movie.getMovieID());
-            movieCinemaChains.put(movie.getMovieID(), chains);
-        }
-
-        List<Cinema> cinemas = cinemaManagementDAO.getAllCinemas();
-        request.setAttribute("cinemas", cinemas);
-
-        request.setAttribute("movies", movies);
-        request.setAttribute("movieCinemaChains", movieCinemaChains);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", (int) Math.ceil((double) totalMovies / recordsPerPage));
-        request.setAttribute("sortBy", sortBy);
-        request.setAttribute("sortOrder", sortOrder);
-        request.setAttribute("keyword", keyword);
-
-        request.getRequestDispatcher("/page/admin/movies.jsp").forward(request, response);
-    } catch (Exception e) {
-        request.setAttribute("errorMessage", "Có lỗi xảy ra khi tải danh sách phim: " + e.getMessage());
-        request.getRequestDispatcher("/page/admin/error.jsp").forward(request, response);
     }
-}
 
     private void showStatistics(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
         Map<String, Double> revenueByCinemaChain = statisticsDAO.getRevenueByCinemaChain();
@@ -290,91 +289,32 @@ public class AdminServlet extends HttpServlet {
         Random random = new Random();
         return userIDs.get(random.nextInt(userIDs.size()));
     }
-private void manageUsers(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
+
+    private void manageUsers(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws ServletException, IOException {
         List<User> users = userManagementDAO.getAllUsers();
         request.setAttribute("users", users);
         request.getRequestDispatcher("/page/admin/usersmanager.jsp").forward(request, response);
     }
-private void processUserAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+
+    private void processUserAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
         JSONObject jsonResponse = new JSONObject();
+        PrintWriter out = null;
 
         try {
             String action = request.getParameter("action");
+            if (action == null) {
+                throw new IllegalArgumentException("Thiếu tham số action");
+            }
 
             switch (action) {
-                case "add":
-                    String username = request.getParameter("username");
-                    String email = request.getParameter("email");
-                    String password = request.getParameter("password");
-                    String role = request.getParameter("role");
-
-                    if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty() 
-                            || password == null || password.trim().isEmpty() || role == null || role.trim().isEmpty()) {
-                        throw new IllegalArgumentException("Vui lòng điền đầy đủ thông tin");
-                    }
-
-                    String hashedPassword = org.apache.commons.codec.digest.DigestUtils.sha256Hex(password);;
-
-                    User newUser = new User();
-                    newUser.setUsername(username);
-                    newUser.setEmail(email);
-                    newUser.setPassword(hashedPassword);
-                    newUser.setRole(role);
-
-                    int addedUserId = userManagementDAO.addUser(newUser);
-                    if (addedUserId != -1) {
-                        jsonResponse.put("success", true);
-                        jsonResponse.put("message", "Thêm người dùng thành công");
-                    } else {
-                        jsonResponse.put("success", false);
-                        jsonResponse.put("message", "Không thể thêm người dùng");
-                    }
-                    break;
-
-                case "update":
+                case "delete":
                     String userIdStr = request.getParameter("userId");
                     if (userIdStr == null || userIdStr.trim().isEmpty()) {
                         throw new IllegalArgumentException("ID người dùng không hợp lệ");
                     }
                     int userId = Integer.parseInt(userIdStr);
-                    User userToUpdate = userManagementDAO.getUserById(userId);
-                    if (userToUpdate == null) {
-                        throw new IllegalArgumentException("Không tìm thấy người dùng với ID: " + userId);
-                    }
-
-                    username = request.getParameter("username");
-                    email = request.getParameter("email");
-                    role = request.getParameter("role");
-
-                    if (username != null && !username.trim().isEmpty()) {
-                        userToUpdate.setUsername(username);
-                    }
-                    if (email != null && !email.trim().isEmpty()) {
-                        userToUpdate.setEmail(email);
-                    }
-                    if (role != null && !role.trim().isEmpty()) {
-                        userToUpdate.setRole(role);
-                    }
-
-                    boolean updateSuccess = userManagementDAO.updateUser(userToUpdate);
-                    if (updateSuccess) {
-                        jsonResponse.put("success", true);
-                        jsonResponse.put("message", "Cập nhật người dùng thành công");
-                    } else {
-                        jsonResponse.put("success", false);
-                        jsonResponse.put("message", "Không thể cập nhật người dùng");
-                    }
-                    break;
-
-                case "delete":
-                    userIdStr = request.getParameter("userId");
-                    if (userIdStr == null || userIdStr.trim().isEmpty()) {
-                        throw new IllegalArgumentException("ID người dùng không hợp lệ");
-                    }
-                    userId = Integer.parseInt(userIdStr);
                     boolean deleteSuccess = userManagementDAO.deleteUser(userId);
                     if (deleteSuccess) {
                         jsonResponse.put("success", true);
@@ -384,37 +324,39 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
                         jsonResponse.put("message", "Không thể xóa người dùng");
                     }
                     break;
-                case "ban":
-                String banUserIdStr = request.getParameter("userId");
-                if (banUserIdStr == null || banUserIdStr.trim().isEmpty()) {
-                    throw new IllegalArgumentException("ID người dùng không hợp lệ");
-                }
-                int banUserId = Integer.parseInt(banUserIdStr);
-                boolean banSuccess = userManagementDAO.banUser(banUserId);
-                if (banSuccess) {
-                    jsonResponse.put("success", true);
-                    jsonResponse.put("message", "Khóa tài khoản người dùng thành công");
-                } else {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("message", "Không thể khóa tài khoản người dùng");
-                }
-                break;
 
-            case "unban":
-                String unbanUserIdStr = request.getParameter("userId");
-                if (unbanUserIdStr == null || unbanUserIdStr.trim().isEmpty()) {
-                    throw new IllegalArgumentException("ID người dùng không hợp lệ");
-                }
-                int unbanUserId = Integer.parseInt(unbanUserIdStr);
-                boolean unbanSuccess = userManagementDAO.unbanUser(unbanUserId);
-                if (unbanSuccess) {
-                    jsonResponse.put("success", true);
-                    jsonResponse.put("message", "Mở khóa tài khoản người dùng thành công");
-                } else {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("message", "Không thể mở khóa tài khoản người dùng");
-                }
-                break;
+                case "ban":
+                    String banUserIdStr = request.getParameter("userId");
+                    if (banUserIdStr == null || banUserIdStr.trim().isEmpty()) {
+                        throw new IllegalArgumentException("ID người dùng không hợp lệ");
+                    }
+                    int banUserId = Integer.parseInt(banUserIdStr);
+                    boolean banSuccess = userManagementDAO.banUser(banUserId);
+                    if (banSuccess) {
+                        jsonResponse.put("success", true);
+                        jsonResponse.put("message", "Khóa tài khoản người dùng thành công");
+                    } else {
+                        jsonResponse.put("success", false);
+                        jsonResponse.put("message", "Không thể khóa tài khoản Admin chính bạn");
+                    }
+                    break;
+
+                case "unban":
+                    String unbanUserIdStr = request.getParameter("userId");
+                    if (unbanUserIdStr == null || unbanUserIdStr.trim().isEmpty()) {
+                        throw new IllegalArgumentException("ID người dùng không hợp lệ");
+                    }
+                    int unbanUserId = Integer.parseInt(unbanUserIdStr);
+                    boolean unbanSuccess = userManagementDAO.unbanUser(unbanUserId);
+                    if (unbanSuccess) {
+                        jsonResponse.put("success", true);
+                        jsonResponse.put("message", "Mở khóa tài khoản người dùng thành công");
+                    } else {
+                        jsonResponse.put("success", false);
+                        jsonResponse.put("message", "Không thể mở khóa tài khoản người dùng");
+                    }
+                    break;
+
                 default:
                     jsonResponse.put("success", false);
                     jsonResponse.put("message", "Hành động không hợp lệ");
@@ -429,11 +371,18 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
             jsonResponse.put("success", false);
             jsonResponse.put("message", "Lỗi: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                out = response.getWriter();
+                out.print(jsonResponse.toString());
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-
-        out.print(jsonResponse.toString());
-        out.flush();
     }
+
     private void processCinemaChainAction(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -941,42 +890,43 @@ private void processUserAction(HttpServletRequest request, HttpServletResponse r
     private String generateDefaultEmail(String chainName) {
         return chainName.replaceAll("\\s+", "").toLowerCase() + "@gmail.com";
     }
+
     private void getCinemasForMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json");
-    response.setCharacterEncoding("UTF-8");
-    PrintWriter out = response.getWriter();
-    JSONObject jsonResponse = new JSONObject();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+        JSONObject jsonResponse = new JSONObject();
 
-    try {
-        String movieIdStr = request.getParameter("movieId");
-        if (movieIdStr == null || movieIdStr.trim().isEmpty()) {
-            throw new IllegalArgumentException("ID phim không hợp lệ");
+        try {
+            String movieIdStr = request.getParameter("movieId");
+            if (movieIdStr == null || movieIdStr.trim().isEmpty()) {
+                throw new IllegalArgumentException("ID phim không hợp lệ");
+            }
+            int movieId = Integer.parseInt(movieIdStr);
+
+            List<Cinema> cinemas = cinemaManagementDAO.getCinemasShowingMovie(movieId);
+
+            JSONArray cinemasArray = new JSONArray();
+            for (Cinema cinema : cinemas) {
+                JSONObject cinemaObj = new JSONObject();
+                cinemaObj.put("id", cinema.getCinemaID());
+                cinemaObj.put("name", cinema.getName());
+                cinemaObj.put("address", cinema.getAddress());
+                cinemaObj.put("province", cinema.getProvince());
+                cinemaObj.put("district", cinema.getDistrict());
+                cinemaObj.put("commune", cinema.getCommune());
+                cinemasArray.put(cinemaObj);
+            }
+
+            jsonResponse.put("success", true);
+            jsonResponse.put("cinemas", cinemasArray);
+        } catch (Exception e) {
+            jsonResponse.put("success", false);
+            jsonResponse.put("message", "Lỗi: " + e.getMessage());
+            e.printStackTrace();
         }
-        int movieId = Integer.parseInt(movieIdStr);
 
-        List<Cinema> cinemas = cinemaManagementDAO.getCinemasShowingMovie(movieId);
-        
-        JSONArray cinemasArray = new JSONArray();
-        for (Cinema cinema : cinemas) {
-            JSONObject cinemaObj = new JSONObject();
-            cinemaObj.put("id", cinema.getCinemaID());
-            cinemaObj.put("name", cinema.getName());
-            cinemaObj.put("address", cinema.getAddress());
-            cinemaObj.put("province", cinema.getProvince());
-            cinemaObj.put("district", cinema.getDistrict());
-            cinemaObj.put("commune", cinema.getCommune());
-            cinemasArray.put(cinemaObj);
-        }
-
-        jsonResponse.put("success", true);
-        jsonResponse.put("cinemas", cinemasArray);
-    } catch (Exception e) {
-        jsonResponse.put("success", false);
-        jsonResponse.put("message", "Lỗi: " + e.getMessage());
-        e.printStackTrace();
+        out.print(jsonResponse.toString());
+        out.flush();
     }
-
-    out.print(jsonResponse.toString());
-    out.flush();
-}
 }

@@ -40,12 +40,11 @@ public class TicketDAO extends MySQLConnect {
         }
     }
 
-    public void updateTicketStatus(int orderID, int seatID, String status) {
-        String sql = "UPDATE ticket SET Status = ? WHERE OrderID = ? AND SeatID = ?";
+    public void updateTicketStatus(int orderID, String status) {
+        String sql = "UPDATE ticket SET Status = ? WHERE OrderID = ?";
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
             ps.setString(1, status);
             ps.setInt(2, orderID);
-            ps.setInt(3, seatID);
             ps.executeUpdate(); // Thực hiện cập nhật
         } catch (SQLException e) {
             e.printStackTrace();

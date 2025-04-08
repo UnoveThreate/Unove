@@ -129,7 +129,7 @@ public class CinemaChainManagementDAO extends MySQLConnect {
     }
     public boolean updateCinemaChainStatus(int cinemaChainID, String status) {
     String sql = "UPDATE cinemachain SET status = ? WHERE CinemaChainID = ?";
-    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+    try (PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
         pstmt.setString(1, status);
         pstmt.setInt(2, cinemaChainID);
         int affectedRows = pstmt.executeUpdate();
@@ -170,7 +170,7 @@ public List<CinemaChain> getCinemaChainsForMovie(int movieId) {
                  "WHERE ms.MovieID = ? " +
                  "AND ms.StartTime > CURRENT_TIMESTAMP"; 
     try (
-         PreparedStatement pstmt = connection.prepareStatement(sql)) {
+         PreparedStatement pstmt = this.connection.prepareStatement(sql)) {
         pstmt.setInt(1, movieId);
         try (ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {

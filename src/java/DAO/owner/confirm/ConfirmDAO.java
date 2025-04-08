@@ -9,6 +9,7 @@ import jakarta.servlet.ServletContext;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import model.Order;
 
 /**
  *
@@ -22,7 +23,7 @@ public class ConfirmDAO extends MySQLConnect {
     }
 
     public boolean confirmOrder(int orderID, String code) {
-        String sql = "UPDATE `order` SET status = 'Confirmed' WHERE orderID = ? AND code = ?";
+        String sql = "UPDATE `order` SET status = 'Confirmed' WHERE orderID = ? AND code = ? ";
 
         try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
 
@@ -46,11 +47,9 @@ public class ConfirmDAO extends MySQLConnect {
 
     public boolean checkConfirmOrder(int orderID, int userID, String code) {
         boolean isValid = false;
-        String sql = "SELECT * FROM `order` WHERE `OrderID` = ? AND `UserID` = ? AND `code` = ? ";
+        String sql = "SELECT * FROM `order` WHERE OrderID = ? AND UserID = ? AND code = ?";
 
-        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
-
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, orderID);
             preparedStatement.setInt(2, userID);
             preparedStatement.setString(3, code);
@@ -69,48 +68,72 @@ public class ConfirmDAO extends MySQLConnect {
         return isValid;
     }
 
-    public boolean checkConfirmTicket(int orderID) {
-        boolean isValid = false;
-        String sql = "SELECT * FROM ticket WHERE OrderID = ? and status = 'success'";
+//    public boolean checkConfirmTicket(int orderID) {
+//        boolean isValid = false;
+//        String sql = "SELECT * FROM ticket WHERE OrderID = ? and status = 'success'";
+//
+//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+//            ps.setInt(1, orderID);
+//            ResultSet resultSet = ps.executeQuery();
+//
+//            if (resultSet.next()) {
+//                // Valid order found
+//                isValid = true;
+//                // Update status to 'Confirmed'
+//                confirmOrderTicket(orderID);
+//            }
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return false; // Returns false if no matching ticket is found or an error occurs
+//    }
+//
+//    public boolean confirmOrderTicket(int orderID) {
+//        String sql = "UPDATE Ticket SET status = 'Confirmed' WHERE orderID = ? AND status = 'success'";
+//
+//        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
+//
+//            // Set the parameters for the prepared statement
+//            ps.setInt(1, orderID);
+//
+//            // Execute the update
+//            int rowsAffected = ps.executeUpdate();
+//
+//            // Check if the order was updated
+//            return rowsAffected > 0;
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace(); // Log the error
+//            // Return false if an error occurs
+//            return false;
+//        }
+//
+//    }
+    public boolean isValidQRCodeOrder(int orderID, int userID, String code) {
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, orderID);
-            ResultSet resultSet = ps.executeQuery();
+        String validateOrderSQL = "SELECT OrderID FROM `order` o WHERE OrderID = ? AND UserID = ? AND Code = ? AND o.Status = ?";
 
-            if (resultSet.next()) {
-                // Valid order found
-                isValid = true;
-                // Update status to 'Confirmed'
-                confirmOrderTicket(orderID);
+        try (PreparedStatement st = connection.prepareStatement(validateOrderSQL)) {
+
+            // Set parameters for validation query
+            st.setInt(1, orderID);
+            st.setInt(2, userID);
+            st.setString(3, code);
+            st.setString(4, "success");
+
+            try (ResultSet rs = st.executeQuery();) {
+                return rs.next(); // Returns true if a record is found, false otherwise
             }
+            // Set parameters for update query
 
         } catch (SQLException e) {
             e.printStackTrace();
+            // Handle exception or rethrow as needed
         }
-
-        return false; // Returns false if no matching ticket is found or an error occurs
-    }
-
-    public boolean confirmOrderTicket(int orderID) {
-        String sql = "UPDATE Ticket SET status = 'Confirmed' WHERE orderID = ? AND status = 'success'";
-
-        try (PreparedStatement ps = this.connection.prepareStatement(sql)) {
-
-            // Set the parameters for the prepared statement
-            ps.setInt(1, orderID);
-
-            // Execute the update
-            int rowsAffected = ps.executeUpdate();
-
-            // Check if the order was updated
-            return rowsAffected > 0;
-
-        } catch (SQLException e) {
-            e.printStackTrace(); // Log the error
-            // Return false if an error occurs
-            return false;
-        }
-
+        // Return false if the validation or update failed
+        return false;
     }
 
 }

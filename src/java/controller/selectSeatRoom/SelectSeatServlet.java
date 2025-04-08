@@ -23,7 +23,9 @@ import java.util.logging.Logger;
 import model.BookingSession;
 import model.MovieSlot;
 import model.Seat;
+import util.Role;
 import util.RouterURL;
+import util.Validation;
 
 @WebServlet("/selectSeat")
 public class SelectSeatServlet extends HttpServlet {
@@ -49,51 +51,51 @@ public class SelectSeatServlet extends HttpServlet {
     }
 
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    LOGGER.info("doGet method started");
-    try {
-        HttpSession session = request.getSession();
-        BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
-        Integer userID = (Integer) session.getAttribute("userID");
-
-        if (userID == null) {
-            request.setAttribute("errorMessage", "Login de thuc hien dat ghe");
-            response.sendRedirect(RouterURL.LOGIN);
-            return;
-        }
-        
-        if (bookingSession != null) {
-            session.removeAttribute("bookingSession");
-        }
-        
-        String movieSlotIDParam = request.getParameter("movieSlotID");
-        if (movieSlotIDParam != null) {
-            int movieSlotID = Integer.parseInt(movieSlotIDParam);
-
-            MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
-            request.setAttribute("selectedSlot", selectedSlot);
-
-            LOGGER.info("Retrieved MovieSlot: " + selectedSlot);
-
-            // Lấy danh sách tất cả ghế trong phòng
-            List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        LOGGER.info("doGet method started");
+        try {
+            HttpSession session = request.getSession();
             
-            // Lấy danh sách ghế đã đặt cho suất chiếu này
-            List<Integer> bookedSeatIds = seatDAO.getBookedSeatIds(movieSlotID);
+            BookingSession bookingSession = (BookingSession) session.getAttribute("bookingSession");
+        
+            boolean isValidate = Validation.requireLogin(request, response, Role.USER);
             
-            // Đánh dấu ghế đã đặt
-            for (Seat seat : seats) {
-                if (bookedSeatIds.contains(seat.getSeatID())) {
-                    seat.setAvailable(false);
-                }
+            if (!isValidate) {
+                return;
+            }
+            
+            if (bookingSession != null) {
+                session.removeAttribute("bookingSession");
             }
 
-            request.setAttribute("seats", seats);
-            request.setAttribute("movieSlotID", movieSlotID);
+            String movieSlotIDParam = request.getParameter("movieSlotID");
+            if (movieSlotIDParam != null) {
+                int movieSlotID = Integer.parseInt(movieSlotIDParam);
 
-            request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
-        } else {
+                MovieSlot selectedSlot = movieSlotDAO.getMovieSlotById(movieSlotID);
+                request.setAttribute("selectedSlot", selectedSlot);
+
+                LOGGER.info("Retrieved MovieSlot: " + selectedSlot);
+
+                // Lấy danh sách tất cả ghế trong phòng
+                List<Seat> seats = seatDAO.getSeatsByRoomId(selectedSlot.getRoomID());
+
+                // Lấy danh sách ghế đã đặt cho suất chiếu này
+                List<Integer> bookedSeatIds = seatDAO.getBookedSeatIds(movieSlotID);
+
+                // Đánh dấu ghế đã đặt
+                for (Seat seat : seats) {
+                    if (bookedSeatIds.contains(seat.getSeatID())) {
+                        seat.setAvailable(false);
+                    }
+                }
+
+                request.setAttribute("seats", seats);
+                request.setAttribute("movieSlotID", movieSlotID);
+
+                request.getRequestDispatcher(RouterJSP.SELECT_SEAT).forward(request, response);
+            } else {
                 request.setAttribute("errorMessage", "Thông tin suất chiếu không hợp lệ.");
                 request.getRequestDispatcher(RouterJSP.SCHEDULE_MOVIE).forward(request, response);
             }
@@ -162,11 +164,11 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
             // Kiểm tra lại tính khả dụng của ghế
             for (Seat seat : selectedSeats) {
-            if (seatDAO.isSeatBooked(seat.getSeatID(), movieSlotID)) {
-                throw new ServletException("Ghế " + seat.getName() + " đã được đặt cho suất chiếu này. Vui lòng chọn ghế khác.");
+                if (seatDAO.isSeatBooked(seat.getSeatID(), movieSlotID)) {
+                    throw new ServletException("Ghế " + seat.getName() + " đã được đặt cho suất chiếu này. Vui lòng chọn ghế khác.");
+                }
+                bookingSession.addSelectedSeatID(seat.getSeatID());
             }
-            bookingSession.addSelectedSeatID(seat.getSeatID());
-             }
 
             double totalPriceTicket = calculateTotalPrice(selectedSeats, movieSlot);
 
