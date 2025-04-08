@@ -574,7 +574,7 @@
                 <!-- QR Code Section -->
                 <div class="qr-section" data-aos="fade-left" data-aos-delay="200">
                     <h4 data-aos="fade-up" data-aos-delay="200">Quét mã QR bằng VNPay để thanh toán</h4>
-                    <img src="https://jeju.com.vn/wp-content/uploads/2020/05/vnpay-qr-23-06-2020-2.jpg" 
+                    <img src="https://kalite.vn/wp-content/uploads/2021/09/maqrkalite.jpg" 
                          alt="QR Code VNPay" 
                          data-aos="zoom-in" 
                          data-aos-delay="200">
